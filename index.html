@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Calculadora Master - Ferramentas Online Grátis</title>
+
+  <meta name="description" content="Calculadoras online grátis de IMC, combustível, lucro, juros e muito mais. Rápido, fácil e preciso.">
+
+  <link rel="canonical" href="https://www.calculadoramaster.com/">
+
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+<header class="header">
+  <div class="container nav-container">
+    <div class="logo">
+      <a href="/">
+        <img src="logo/logo.png" alt="Calculadora Master Logo" width="150" height="100">
+      </a>
+    </div>
+
+    <div class="menu-toggle" id="mobile-menu">
+      <span class="bar"></span>
+      <span class="bar"></span>
+      <span class="bar"></span>
+    </div>
+
+    <nav class="nav" id="nav-menu">
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="sobre.html">Sobre</a></li>
+        <li><a href="contato.html">Contato</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="container">
+    <h1>Calculadoras Online Grátis</h1> 
+    <p>Ferramentas simples, rápidas e precisas para o seu dia a dia.</p>
+  </div>
+</section>
+
+<section class="tools">
+  <div class="container">
+    <h2>Principais Calculadoras</h2>
+    <div class="grid">
+      <a href="tools/combustivel.html" class="card">Calculadora de Combustível</a>
+      <a href="tools/contador.html" class="card">Contador de Caracteres</a>
+      <a href="tools/desconto.html" class="card">Calculadora de Desconto</a>
+      <a href="tools/dividir-conta.html" class="card">Dividir Contas</a>
+      <a href="tools/idade.html" class="card">Calculadora de Idade</a>
+      <a href="tools/imc.html" class="card">Calculadora do IMC</a>
+      <a href="tools/juros.html" class="card">Calculadora de Juros</a>
+      <a href="tools/lucro.html" class="card">Calculadora de Lucros</a>
+      <a href="tools/porcentagem.html" class="card">Calculadora de Porcentagem</a>
+      <a href="tools/qr-code.html" class="card">Gerador de Código QR</a>
+      <a href="tools/senha.html" class="card">Gerador de Senha</a>
+      <a href="tools/whatsapp.html" class="card">Gerador de Links Whatsapp</a>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <p>© 2026 Calculadora Master - Todos os direitos reservados</p>
+    <div class="links">
+      <a href="politica.html">Política de Privacidade</a> |
+      <a href="termos.html">Termos de Uso</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const mobileMenu = document.querySelector('#mobile-menu');
+  const navMenu = document.querySelector('#nav-menu');
+
+  mobileMenu.addEventListener('click', function() {
+    mobileMenu.classList.toggle('is-active');
+    navMenu.classList.toggle('active');
+  });
+</script>
+
+</body>
+</html>

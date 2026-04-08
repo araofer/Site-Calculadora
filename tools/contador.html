@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Contador de Caracteres Online | Texto e Palavras</title>
+  <meta name="description" content="Conte caracteres, palavras e espaços de um texto online. Ferramenta gratuita e rápida para analisar textos.">
+  <meta name="keywords" content="contador de caracteres, contar palavras, contador de texto online">
+  <meta name="robots" content="index, follow">
+
+  <meta property="og:title" content="Contador de Caracteres Online">
+  <meta property="og:description" content="Conte caracteres e palavras facilmente">
+  <meta property="og:type" content="website">
+
+  <link rel="canonical" href="https://www.calculadoramaster.com/tools/contador">
+
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+
+<header class="header">
+  <div class="container nav-container">
+    <div class="logo">
+      <a href="/">
+        <img src="../logo/logo.png" alt="Calculadora Master Logo" width="150" height="100">
+      </a>
+    </div>
+
+    <div class="menu-toggle" id="mobile-menu">
+      <span class="bar"></span>
+      <span class="bar"></span>
+      <span class="bar"></span>
+    </div>
+
+    <nav class="nav" id="nav-menu">
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="../sobre.html">Sobre</a></li>
+        <li><a href="../contato.html">Contato</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main class="container">
+  <h1>Contador de Caracteres</h1>
+  <p>Conte caracteres, palavras e espaços do seu texto em tempo real.</p>
+
+  <div style="margin:20px 0;" class="card">
+    <h2>Digite ou cole seu texto</h2>
+    <textarea id="texto" rows="6" style="width:100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc;" placeholder="Digite seu texto aqui..." oninput="contarTexto()"></textarea>
+    <br><br>
+    <button type="button" onclick="limparCampos()">Limpar Texto</button>
+
+    <h3 id="resultado" style="margin-top: 20px; color: #008080;">Aguardando texto...</h3>
+  </div>
+
+  <section class="content">
+    <h2>O que é um contador de caracteres?</h2>
+    <p>Um contador de caracteres é uma ferramenta que analisa um texto e mostra quantos caracteres, palavras e espaços ele possui.</p>
+
+    <h2>Para que serve?</h2>
+    <ul>
+      <li><strong>Redes sociais:</strong> Ideal para posts com limite de caracteres (Twitter, Instagram).</li>
+      <li><strong>SEO:</strong> Ajuste títulos e meta descrições perfeitamente.</li>
+      <li><strong>Produção de conteúdo:</strong> Controle o tamanho de artigos e redações.</li>
+    </ul>
+
+    <h2>Como funciona?</h2>
+    <p>Basta digitar ou colar o texto que a ferramenta faz a contagem automaticamente em tempo real.</p>
+
+    <p style="margin-top: 30px;">
+      👉 <a href="/">Voltar para página inicial</a>
+    </p>
+  </section>
+</main>
+
+<script>
+function contarTexto() {
+  let texto = document.getElementById("texto").value;
+
+  let caracteres = texto.length;
+  let caracteresSemEspaco = texto.replace(/\s/g, "").length;
+  // Regex melhorada para contar palavras corretamente
+  let palavras = texto.trim() === "" ? 0 : texto.trim().split(/\s+/).length;
+
+  document.getElementById("resultado").innerText =
+    "Caracteres: " + caracteres +
+    " | Sem espaços: " + caracteresSemEspaco +
+    " | Palavras: " + palavras;
+}
+
+function limparCampos() {
+  document.getElementById("texto").value = "";
+  document.getElementById("resultado").innerText = "Aguardando texto...";
+}
+</script>
+
+<footer class="footer">
+    <div class="container">
+      <p>© 2026 Calculadora Master - Todos os direitos reservados</p>
+      <p>
+        <a href="../politica.html">Política de Privacidade</a> |
+        <a href="../termos.html">Termos de Uso</a> 
+      </p>
+    </div>
+</footer>
+
+<script>
+  const mobileMenu = document.querySelector('#mobile-menu');
+  const navMenu = document.querySelector('#nav-menu');
+
+  mobileMenu.addEventListener('click', function() {
+    mobileMenu.classList.toggle('is-active');
+    navMenu.classList.toggle('active');
+  });
+</script>
+
+</body>
+</html>
