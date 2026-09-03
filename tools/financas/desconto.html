@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Calculadora de Desconto Online Grátis | Calculadora Master</title>
+  <meta name="description" content="Calcule descontos online grátis. Descubra o valor final de produtos com desconto de forma rápida e fácil.">
+  <meta name="keywords" content="calculadora de desconto, calcular desconto, preço com desconto, promoção">
+  <meta name="robots" content="index, follow">
+
+  <meta property="og:title" content="Calculadora de Desconto Online">
+  <meta property="og:description" content="Descubra o valor final de produtos com desconto facilmente">
+  <meta property="og:type" content="website">
+
+  <link rel="canonical" href="https://www.calculadoramaster.com/tools/financas/desconto.html">
+
+  <link rel="stylesheet" href="../../css/style.css">
+
+  <link rel="icon" type="logo/png" sizes="32x32" href="../../logo/favicon.png">
+  <link rel="manifest" href="../../site.webmanifest">
+</head>
+
+<body>
+
+<header class="header">
+  <div class="container nav-container">
+    <div class="logo">
+      <a href="../../index.html">
+        <img src="../../logo/logo.png" alt="Calculadora Master Logo" width="150" height="100">
+      </a>
+    </div>
+
+    <div class="menu-toggle" id="mobile-menu">
+      <span class="bar"></span>
+      <span class="bar"></span>
+      <span class="bar"></span>
+    </div>
+
+    <nav class="nav" id="nav-menu">
+      <ul>
+        <li><a href="../../index.html">Home</a></li>
+        <li><a href="../../sobre.html">Sobre</a></li>
+        <li><a href="../../contato.html">Contato</a></li>
+        <li><a href="../../blog/index.html">Blog</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main class="container">
+  <h1>Calculadora de Desconto</h1>
+  <p>Calcule descontos de produtos de forma rápida e descubra o valor final a pagar.</p>
+
+  <section style="margin:20px 0;" class="card">
+    <h2>Calcular desconto</h2>
+    <input type="number" id="preco" placeholder="Preço original (Ex: 200)" style="margin-bottom: 10px; padding: 8px;">
+    <input type="number" id="desconto" placeholder="Desconto % (Ex: 10)" style="margin-bottom: 10px; padding: 8px;">
+    
+    <br>
+
+    <button type="button" onclick="calcularDesconto()">Calcular</button>
+    <button type="button" onclick="limparCampos()">Limpar</button>
+
+    <h3 id="resultado" style="margin-top: 20px; color: #008080;"></h3>
+  </section>
+
+  <section class="content">
+    <h2>Como calcular desconto?</h2>
+    <p>
+      Calcular desconto é essencial para entender quanto você realmente está economizando em uma compra. O desconto é aplicado sobre o valor original do produto.
+    </p>
+    <p>
+      Para calcular o desconto, você deve multiplicar o preço original pelo percentual de desconto e dividir por 100. Em seguida, subtrair esse valor do preço inicial.
+    </p>
+
+    <p><strong>Fórmula:</strong></p>
+    <ul>
+      <li>Valor do desconto = (preço × percentual) ÷ 100</li>
+      <li>Preço final = preço - desconto</li>
+    </ul>
+
+    <h2>Exemplo prático</h2>
+    <p>Se um produto custa R$ 200 e possui 10% de desconto:</p>
+    <p>
+      Desconto: (200 × 10) ÷ 100 = 20 <br>
+      Preço final: 200 - 20 = <strong>R$ 180,00</strong>
+    </p>
+
+    <h2>Quando usar a calculadora de desconto?</h2>
+    <ul>
+      <li>Compras em promoção e liquidações</li>
+      <li>Épocas de Black Friday</li>
+      <li>Planejamento financeiro mensal</li>
+    </ul>
+
+    <p style="margin-top: 30px;">
+      👉 <a href="../../index.html">Voltar para página inicial</a>
+    </p>
+  </section>
+</main>
+
+<script>
+function calcularDesconto() {
+  let preco = parseFloat(document.getElementById("preco").value);
+  let desconto = parseFloat(document.getElementById("desconto").value);
+
+  if (isNaN(preco) || isNaN(desconto)) {
+    document.getElementById("resultado").innerText = "Por favor, preencha os valores corretamente!";
+    return;
+  }
+
+  let valorDesconto = (preco * desconto) / 100;
+  let precoFinal = preco - valorDesconto;
+
+  document.getElementById("resultado").innerText =
+    "Você economiza R$ " + valorDesconto.toFixed(2) +
+    " | Preço final: R$ " + precoFinal.toFixed(2);
+}
+
+function limparCampos() {
+  document.getElementById("preco").value = "";
+  document.getElementById("desconto").value = "";
+  document.getElementById("resultado").innerText = "";
+}
+</script>
+
+<footer class="footer">
+    <div class="container">
+      <p>© 2026 Calculadora Master - Todos os direitos reservados</p>
+      <p>
+        <a href="../../politica.html">Política de Privacidade</a> |
+        <a href="../../termos.html">Termos de Uso</a> 
+      </p>
+    </div>
+</footer>
+
+<script>
+  const mobileMenu = document.querySelector('#mobile-menu');
+  const navMenu = document.querySelector('#nav-menu');
+
+  mobileMenu.addEventListener('click', function() {
+    mobileMenu.classList.toggle('is-active');
+    navMenu.classList.toggle('active');
+  });
+</script>
+
+</body>
+</html>

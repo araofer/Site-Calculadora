@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Gerador de QR Code Online Grátis | Criar QR Code para Links</title>
+  <meta name="description" content="Gere QR Codes gratuitamente em segundos. Crie códigos para links, textos, WhatsApp e redes sociais de forma rápida e fácil.">
+  <meta name="keywords" content="gerador de qr code, criar qr code, qr code online grátis, gerador de qr code para link">
+  <meta name="robots" content="index, follow">
+
+  <meta property="og:title" content="Gerador de QR Code Online - Calculadora Master">
+  <meta property="og:description" content="Crie e baixe seu QR Code gratuitamente em segundos.">
+  <meta property="og:type" content="website">
+
+  <link rel="canonical" href="https://www.calculadoramaster.com/tools/utilidades/gerador-qr-code.html">
+
+  <link rel="stylesheet" href="../../css/style.css">
+
+  <link rel="icon" type="logo/png" sizes="32x32" href="../../logo/favicon.png">
+  <link rel="manifest" href="../../site.webmanifest">
+</head>
+
+<body>
+
+<header class="header">
+  <div class="container nav-container">
+    <div class="logo">
+      <a href="../../index.html">
+        <img src="../../logo/logo.png" alt="Calculadora Master Logo" width="150" height="100">
+      </a>
+    </div>
+
+    <div class="menu-toggle" id="mobile-menu">
+      <span class="bar"></span>
+      <span class="bar"></span>
+      <span class="bar"></span>
+    </div>
+
+    <nav class="nav" id="nav-menu">
+      <ul>
+        <li><a href="../../index.html">Home</a></li>
+        <li><a href="../../sobre.html">Sobre</a></li>
+        <li><a href="../../contato.html">Contato</a></li>
+        <li><a href="../../blog/index.html">Blog</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main class="container">
+  <h1>Gerador de QR Code</h1>
+  <p>Transforme links, textos ou contatos em um QR Code pronto para uso.</p>
+
+  <div style="margin:20px 0;" class="card">
+    <h2>Conteúdo do QR Code</h2>
+
+    <label for="textoQR">Insira a URL ou o texto abaixo:</label><br>
+    <input type="text" id="textoQR" placeholder="https://exemplo.com.br" style="width:100%; max-width: 500px; padding: 12px; margin-bottom: 15px;" oninput="limparResultado()">
+    
+    <br>
+    <button type="button" onclick="gerarQRCode()" class="btn-destaque">Gerar QR Code</button>
+    <button type="button" onclick="limparCampos()">Limpar</button>
+
+    <div id="resultado-area" style="margin-top: 30px; display: none; text-align: center;">
+        <div id="qrcode" style="display: inline-block; padding: 15px; background: white; border: 1px solid #ddd;"></div>
+        <br><br>
+        <button id="btnDownload" type="button" onclick="baixarQR()" style="background-color: #28a745;">Baixar QR Code (PNG)</button>
+    </div>
+  </div>
+
+  <section class="content">
+    <h2>O que é um QR Code?</h2>
+    <p>
+      O QR Code (Quick Response Code) é um código de barras bidimensional que pode ser facilmente escaneado pela maioria dos celulares modernos. Ele é amplamente utilizado para direcionar usuários para sites sem a necessidade de digitar endereços longos.
+    </p>
+
+    <h2>Onde utilizar o QR Code?</h2>
+    <ul>
+      <li><strong>Marketing:</strong> Em cartões de visita, panfletos e cartazes.</li>
+      <li><strong>Restaurantes:</strong> Para cardápios digitais e pagamentos via PIX.</li>
+      <li><strong>Eventos:</strong> Para facilitar o check-in ou compartilhar a senha do Wi-Fi.</li>
+    </ul>
+
+    <h2>Dica de Ouro</h2>
+    <p>Sempre teste o QR Code gerado com a câmera do seu próprio celular antes de imprimir em grande escala, para garantir que o link está correto.</p>
+
+    <p style="margin-top: 30px;">
+      👉 <a href="../../index.html">Voltar para página inicial</a>
+    </p>
+  </section>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+<script>
+function gerarQRCode() {
+  let texto = document.getElementById("textoQR").value;
+  let container = document.getElementById("qrcode");
+  let areaResultado = document.getElementById("resultado-area");
+
+  if (texto.trim() === "") {
+    alert("Por favor, digite um link ou texto!");
+    return;
+  }
+
+  container.innerHTML = "";
+  areaResultado.style.display = "block";
+
+  new QRCode(container, {
+    text: texto,
+    width: 256,
+    height: 256,
+    colorDark : "#000000",
+    colorLight : "#ffffff",
+    correctLevel : QRCode.CorrectLevel.H
+  });
+}
+
+function baixarQR() {
+  const img = document.querySelector("#qrcode img");
+  if (img) {
+    const link = document.createElement("a");
+    link.href = img.src;
+    link.download = "qrcode-calculadora-master.png";
+    link.click();
+  } else {
+    // Caso a biblioteca ainda esteja renderizando no canvas
+    const canvas = document.querySelector("#qrcode canvas");
+    const link = document.createElement("a");
+    link.href = canvas.toDataURL("image/png");
+    link.download = "qrcode-calculadora-master.png";
+    link.click();
+  }
+}
+
+function limparCampos() {
+  document.getElementById("textoQR").value = "";
+  document.getElementById("qrcode").innerHTML = "";
+  document.getElementById("resultado-area").style.display = "none";
+}
+
+function limparResultado() {
+  // Opcional: manter o QR anterior até clicar em gerar novamente para evitar "piscada"
+}
+</script>
+
+<footer class="footer">
+    <div class="container">
+      <p>© 2026 Calculadora Master - Todos os direitos reservados</p>
+      <p>
+        <a href="../../politica.html">Política de Privacidade</a> |
+        <a href="../../termos.html">Termos de Uso</a> 
+      </p>
+    </div>
+</footer>
+
+<script>
+  const mobileMenu = document.querySelector('#mobile-menu');
+  const navMenu = document.querySelector('#nav-menu');
+
+  mobileMenu.addEventListener('click', function() {
+    mobileMenu.classList.toggle('is-active');
+    navMenu.classList.toggle('active');
+  });
+</script>
+
+</body>
+</html>

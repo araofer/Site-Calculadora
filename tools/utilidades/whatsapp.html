@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Gerador de Link para WhatsApp Online | Criar Link wa.me Grátis</title>
+  <meta name="description" content="Crie links personalizados para WhatsApp com mensagem automática em segundos. Facilite o contato de seus clientes no Instagram, Bio e anúncios.">
+  <meta name="keywords" content="link whatsapp, gerar link whatsapp, criar link wa.me, whatsapp com mensagem pronta, gerador de link zap">
+  <meta name="robots" content="index, follow">
+
+  <meta property="og:title" content="Gerador de Link para WhatsApp - Calculadora Master">
+  <meta property="og:description" content="Transforme seu número em um link direto com mensagem personalizada.">
+  <meta property="og:type" content="website">
+
+  <link rel="canonical" href="https://www.calculadoramaster.com/tools/utilidades/link-whatsapp.html">
+
+  <link rel="stylesheet" href="../../css/style.css">
+
+  <link rel="icon" type="logo/png" sizes="32x32" href="../../logo/favicon.png">
+  <link rel="manifest" href="../../site.webmanifest">
+</head>
+
+<body>
+
+<header class="header">
+  <div class="container nav-container">
+    <div class="logo">
+      <a href="../../index.html">
+        <img src="../../logo/logo.png" alt="Calculadora Master Logo" width="150" height="100">
+      </a>
+    </div>
+
+    <div class="menu-toggle" id="mobile-menu">
+      <span class="bar"></span>
+      <span class="bar"></span>
+      <span class="bar"></span>
+    </div>
+
+    <nav class="nav" id="nav-menu">
+      <ul>
+        <li><a href="../../index.html">Home</a></li>
+        <li><a href="../../sobre.html">Sobre</a></li>
+        <li><a href="../../contato.html">Contato</a></li>
+        <li><a href="../../blog/index.html">Blog</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main class="container">
+  <h1>Gerador de Link para WhatsApp</h1>
+  <p>Crie um link direto para o seu número e facilite o início de novas conversas.</p>
+
+  <div style="margin:20px 0;" class="card">
+    <h2>Configurar meu Link</h2>
+
+    <label for="numero">Número do WhatsApp (com DDD):</label><br>
+    <input type="text" id="numero" placeholder="Ex: 11 99999-9999" style="width:100%; max-width: 400px; padding: 12px; margin-bottom: 15px;" oninput="limparResultado()">
+    
+    <br>
+    <label for="mensagem">Mensagem automática (opcional):</label><br>
+    <textarea id="mensagem" rows="4" style="width:100%; max-width: 400px; padding: 10px;" placeholder="Ex: Olá, gostaria de saber mais sobre seus serviços!" oninput="limparResultado()"></textarea>
+
+    <br><br>
+    <button type="button" onclick="gerarLink()" class="btn-destaque">Gerar Link Personalizado</button>
+    <button type="button" onclick="limparCampos()">Limpar</button>
+
+    <div id="resultado-area" style="margin-top: 25px; display: none;">
+        <p><strong>Seu link pronto:</strong></p>
+        <div id="link-box" style="background: #f4f4f4; padding: 15px; border-radius: 5px; border: 1px dashed #25D366; word-break: break-all; color: #075E54; font-family: monospace;"></div>
+        <br>
+        <button type="button" onclick="copiarLink()" style="background-color: #25D366; border-color: #25D366;">Copiar Link</button>
+        <span id="msg-copiado" style="color: #28a745; margin-left: 10px; display: none;">Copiado!</span>
+    </div>
+  </div>
+
+  <section class="content">
+    <h2>O que é a API do WhatsApp (wa.me)?</h2>
+    <p>
+      É um recurso oficial que permite criar um link direto para qualquer conta ativa no WhatsApp. Ao clicar, o aplicativo abre automaticamente no celular do usuário (ou no WhatsApp Web) com o seu chat e a mensagem pré-definida.
+    </p>
+
+    <h2>Vantagens para o seu negócio</h2>
+    <ul>
+      <li><strong>Link na Bio do Instagram:</strong> Converta seguidores em clientes rapidamente.</li>
+      <li><strong>Anúncios:</strong> Use o link em campanhas de tráfego pago para agilizar o atendimento.</li>
+      <li><strong>Sem Salvar Contato:</strong> O cliente não precisa adicionar seu número à agenda para falar com você.</li>
+    </ul>
+
+    <h2>Dica de Formatação</h2>
+    <p>Nossa ferramenta limpa automaticamente espaços, traços e parênteses. Basta focar em colocar o DDD correto (ex: 11 para São Paulo).</p>
+
+    <p style="margin-top: 30px;">
+      👉 <a href="../../index.html">Voltar para página inicial</a>
+    </p>
+  </section>
+</main>
+
+<script>
+function gerarLink() {
+  let numeroInput = document.getElementById("numero").value;
+  let mensagem = document.getElementById("mensagem").value;
+  let areaResultado = document.getElementById("resultado-area");
+  let linkBox = document.getElementById("link-box");
+
+  // Limpa o número: remove tudo que não for dígito
+  let numeroLimpo = numeroInput.replace(/\D/g, '');
+
+  if (numeroLimpo.length < 10) {
+    alert("Por favor, digite um número válido com DDD.");
+    return;
+  }
+
+  // Garante o código do país (55 para Brasil)
+  if (!numeroLimpo.startsWith('55') && numeroLimpo.length <= 11) {
+    numeroLimpo = '55' + numeroLimpo;
+  }
+
+  let textoCodificado = encodeURIComponent(mensagem);
+  let linkFinal = `https://wa.me/${numeroLimpo}?text=${textoCodificado}`;
+
+  linkBox.innerText = linkFinal;
+  areaResultado.style.display = "block";
+  document.getElementById("msg-copiado").style.display = "none";
+}
+
+function copiarLink() {
+  const link = document.getElementById("link-box").innerText;
+  navigator.clipboard.writeText(link).then(() => {
+    document.getElementById("msg-copiado").style.display = "inline";
+    setTimeout(() => {
+        document.getElementById("msg-copiado").style.display = "none";
+    }, 2000);
+  });
+}
+
+function limparCampos() {
+  document.getElementById("numero").value = "";
+  document.getElementById("mensagem").value = "";
+  document.getElementById("resultado-area").style.display = "none";
+}
+
+function limparResultado() {
+  // Opcional
+}
+</script>
+
+<footer class="footer">
+    <div class="container">
+      <p>© 2026 Calculadora Master - Todos os direitos reservados</p>
+      <p>
+        <a href="../../politica.html">Política de Privacidade</a> |
+        <a href="../../termos.html">Termos de Uso</a> 
+      </p>
+    </div>
+</footer>
+
+<script>
+  const mobileMenu = document.querySelector('#mobile-menu');
+  const navMenu = document.querySelector('#nav-menu');
+
+  mobileMenu.addEventListener('click', function() {
+    mobileMenu.classList.toggle('is-active');
+    navMenu.classList.toggle('active');
+  });
+</script>
+
+</body>
+</html>

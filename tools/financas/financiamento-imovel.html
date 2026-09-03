@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Simulador de Financiamento Imobiliário Online | Calculadora Master</title>
+  <meta name="description" content="Simule o financiamento da sua casa ou apartamento online grátis. Descubra o valor das parcelas (SAC), total de juros e custo final do imóvel de forma rápida.">
+  <meta name="keywords" content="financiamento imobiliário, simulador de financiamento, calcular parcela de imóvel, simulador habitacional, tabela sac, juros caixa">
+  <meta name="robots" content="index, follow">
+
+  <meta property="og:title" content="Simulador de Financiamento Imobiliário - Calculadora Master">
+  <meta property="og:description" content="Calcule o valor das parcelas e a evolução dos juros do financiamento da sua casa ou apartamento pelo Sistema SAC.">
+  <meta property="og:type" content="website">
+
+  <link rel="canonical" href="https://www.calculadoramaster.com/tools/financas/financiamento-imovel.html">
+
+  <link rel="stylesheet" href="../../css/style.css">
+
+  <link class="icon" type="logo/png" sizes="32x32" href="../../logo/favicon.png">
+  <link rel="manifest" href="../../site.webmanifest">
+</head>
+
+<body>
+
+  <header class="header">
+    <div class="container nav-container">
+      <div class="logo">
+        <a href="../../index.html">
+          <img src="../../logo/logo.png" alt="Calculadora Master Logo" width="150" height="100">
+        </a>
+      </div>
+      <nav class="nav" id="nav-menu">
+        <ul>
+          <li><a href="../../index.html">Home</a></li>
+          <li><a href="../../sobre.html">Sobre</a></li>
+          <li><a href="../../contato.html">Contato</a></li>
+          <li><a href="../../blog/index.html">Blog</a></li>
+        </ul>
+      </nav>
+      <div class="menu-toggle" id="mobile-menu">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <h1>Simulador de Financiamento Imobiliário (SAC)</h1>
+    <p>Planeje a compra da sua casa ou apartamento. Calcule o valor da primeira e da última parcela usando o sistema de amortização constante.</p>
+
+    <div class="card">
+      <h2>Dados do Imóvel</h2>
+      
+      <div class="form-inline">
+        <div class="form-group-item">
+          <label for="valorImovel">Valor do Imóvel (R$):</label>
+          <input type="text" id="valorImovel" placeholder="Ex: 300.000,00" oninput="mascaraMoeda(this); limparResultado()">
+        </div>
+
+        <div class="form-group-item">
+          <label for="valorEntrada">Entrada (R$ - Mínimo 20%):</label>
+          <input type="text" id="valorEntrada" placeholder="Ex: 60.000,00" oninput="mascaraMoeda(this); limparResultado()">
+        </div>
+
+        <div class="form-group-item">
+          <label for="taxaAnual">Taxa de Juros Anual (%):</label>
+          <input type="text" id="taxaAnual" placeholder="Ex: 9,5" oninput="limparResultado()">
+        </div>
+
+        <div class="form-group-item">
+          <label for="prazoAnos">Prazo (Em Anos):</label>
+          <input type="number" id="prazoAnos" placeholder="Ex: 30" oninput="limparResultado()">
+        </div>
+      </div>
+
+      <div class="button-group">
+        <button type="button" onclick="calcularFinanciamentoImovel()">Calcular Financiamento</button>
+        <button type="button" onclick="limparCampos()" style="background-color: #666#00c3ff;">Limpar Tudo</button>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top: 20px;">
+      <h2>Resultado da Simulação</h2>
+      <div id="resultadoImovel">
+        <p style="color: #666; text-align: center;">Insira os dados do imóvel acima e clique em calcular para ver a evolução das parcelas.</p>
+      </div>
+    </div>
+
+    <section class="content" style="margin-top: 40px;">
+      <h2>Como funciona o Financiamento Imobiliário pelo Sistema SAC?</h2>
+      <p>O <strong>SAC (Sistema de Amortização Constante)</strong> é o modelo de financiamento habitacional mais utilizado no Brasil. A sua principal característica é que o valor da amortização da dívida permanece igual durante todo o contrato, fazendo com que as parcelas mensais sejam <strong>decrescentes</strong> (começam mais altas e terminam mais baixas).</p>
+
+      <h3>Vantagens do Modelo SAC:</h3>
+      <ul>
+        <li><strong>Parcelas Decrescentes:</strong> O valor que você paga diminui mês a mês, dando mais fôlego financeiro ao longo dos anos.</li>
+        <li><strong>Redução de Juros:</strong> Como o saldo devedor cai de forma constante desde o primeiro mês, o total pago em juros acumulados costuma ser menor do que no sistema Price.</li>
+        <li><strong>Segurança a Longo Prazo:</strong> Excelente para contratos longos, comuns em aquisições de imóveis que duram de 20 a 35 anos.</li>
+      </ul>
+
+      <p style="margin-top: 30px;">
+        👉 <a href="../../index.html">Voltar para página inicial</a>
+      </p>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; 2026 Calculadora Master - Todos os direitos reservados</p>
+      <p>
+        <a href="../../politica.html">Política de Privacidade</a> | 
+        <a href="../../termos.html">Termos de Uso</a>
+      </p>
+    </div>
+  </footer>
+
+  <script>
+    // 1. MÁSCARA DE MOEDA
+    function mascaraMoeda(campo) {
+        let valor = campo.value;
+        valor = valor.replace(/\D/g, "");
+        valor = (Number(valor) / 100).toFixed(2) + "";
+        valor = valor.replace(".", ",");
+        valor = valor.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
+        campo.value = valor;
+    }
+
+    // 2. LIMPA O TEXTO DO CARD DE RESULTADO
+    function limparResultado() {
+        let resultadoDiv = document.getElementById("resultadoImovel");
+        if (resultadoDiv) {
+            resultadoDiv.innerHTML = `<p style="color: #666; text-align: center;">Insira os dados do imóvel acima e clique em calcular para ver a evolução das parcelas.</p>`;
+        }
+    }
+
+    // 3. LIMPA TODOS OS INPUTS DA TELA
+    function limparCamposImovel() {
+        document.getElementById("valorImovel").value = "";
+        document.getElementById("valorEntrada").value = "";
+        document.getElementById("taxaAnual").value = "";
+        document.getElementById("prazoAnos").value = "";
+        limparResultado();
+    }
+
+    // 4. MOTOR DE CÁLCULO IMOBILIÁRIO (SISTEMA SAC)
+    function calcularFinanciamentoImovel() {
+        let campoImovel = document.getElementById("valorImovel").value;
+        let campoEntrada = document.getElementById("valorEntrada").value;
+        let campoTaxa = document.getElementById("taxaAnual").value;
+        let campoPrazo = document.getElementById("prazoAnos").value;
+
+        if (!campoImovel || !campoEntrada || !campoTaxa || !campoPrazo) {
+            alert("Por favor, preencha todos os campos obrigatórios.");
+            return;
+        }
+
+        let valorImovel = Number(campoImovel.replace(/\./g, "").replace(",", "."));
+        let valorEntrada = Number(campoEntrada.replace(/\./g, "").replace(",", "."));
+        let taxaAnual = parseFloat(campoTaxa.replace(/\./g, "").replace(",", "."));
+        let prazoAnos = parseInt(campoPrazo);
+
+        let valorFinanciado = valorImovel - valorEntrada;
+
+        if (valorFinanciado <= 0) {
+            alert("O valor da entrada não pode ser maior ou igual ao valor do imóvel.");
+            return;
+        }
+
+        let prazoMeses = prazoAnos * 12;
+        if (prazoMeses <= 0) {
+            alert("Por favor, insira um prazo válido em anos.");
+            return;
+        }
+
+        let taxaMensal = Math.pow(1 + (taxaAnual / 100), 1/12) - 1;
+        let amortizacaoMensal = valorFinanciado / prazoMeses;
+
+        let jurosPrimeiraParcela = valorFinanciado * taxaMensal;
+        let primeiraParcela = amortizacaoMensal + jurosPrimeiraParcela;
+
+        let jurosUltimaParcela = amortizacaoMensal * taxaMensal;
+        let ultimaParcela = amortizacaoMensal + jurosUltimaParcela;
+
+        let totalJuros = 0;
+        let saldoDevedorAtual = valorFinanciado;
+        for (let i = 0; i < prazoMeses; i++) {
+            totalJuros += saldoDevedorAtual * taxaMensal;
+            saldoDevedorAtual -= amortizacaoMensal;
+        }
+
+        let totalFinanciamento = valorFinanciado + totalJuros;
+        let custoTotalImovel = totalFinanciamento + valorEntrada;
+
+        let resultadoDiv = document.getElementById("resultadoImovel");
+        resultadoDiv.innerHTML = `
+            <div class="resultado-wrapper">
+                <div class="resultado-item principal">
+                    <span>Valor a Financiar:</span>
+                    <strong>R$ ${valorFinanciado.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong>
+                </div>
+                
+                <div class="resultado-duplo-destaque">
+                    <div class="resultado-destaque">
+                        <span>Primeira Parcela (Mais alta):</span>
+                        <h2 style="color: #2c3e50; font-size: 1.8rem; margin: 10px 0;">R$ ${primeiraParcela.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</h2>
+                    </div>
+                    <div class="resultado-destaque">
+                        <span>Última Parcela (Mais baixa):</span>
+                        <h2 style="color: #2e7d32; font-size: 1.8rem; margin: 10px 0;">R$ ${ultimaParcela.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</h2>
+                    </div>
+                </div>
+                
+                <div class="resultado-grid-detalhes">
+                    <div class="resultado-item">
+                        <span>Total estimado em Juros:</span>
+                        <span style="color: #c62828; font-weight: bold;">R$ ${totalJuros.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                    </div>
+                    <div class="resultado-item">
+                        <span>Total das Parcelas (${prazoMeses} meses):</span>
+                        <strong>R$ ${totalFinanciamento.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong>
+                    </div>
+                    <div class="resultado-item">
+                        <span>Custo Total do Imóvel (com a entrada):</span>
+                        <strong>R$ ${custoTotalImovel.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    // 5. LÓGICA DO MENU MOBILE
+    const mobileMenu = document.querySelector('#mobile-menu');
+    const navMenu = document.querySelector('#nav-menu');
+
+    if (mobileMenu && navMenu) {
+        mobileMenu.addEventListener('click', function() {
+            mobileMenu.classList.toggle('is-active');
+            navMenu.classList.toggle('active');
+        });
+    }
+  </script>
+</body>
+</html>

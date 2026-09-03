@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Contato | Calculadora Master</title>
+  <meta name="description" content="Entre em contato com o Calculadora Master. Envie dúvidas, sugestões ou reporte problemas em nossas calculadoras online gratuitas.">
+  <meta name="robots" content="index, follow">
+  <meta name="author" content="Calculadora Master">
+
+  <meta property="og:title" content="Contato - Calculadora Master">
+  <meta property="og:description" content="Fale conosco e envie sua mensagem.">
+  <meta property="og:type" content="website">
+
+  <link rel="canonical" href="https://www.calculadoramaster.com/contato">
+
+  <link rel="stylesheet" href="css/style.css">
+
+  <link rel="icon" type="image/png" sizes="32x32" href="logo/favicon.png">
+  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+  <link rel="manifest" href="/site.webmanifest">
+</head>
+
+<body>
+
+<header class="header">
+  <div class="container nav-container">
+    <div class="logo">
+      <a href="index.html">
+        <img src="logo/logo.png" alt="Calculadora Master Logo">
+      </a>
+    </div>
+
+    <div class="menu-toggle" id="mobile-menu">
+      <span class="bar"></span>
+      <span class="bar"></span>
+      <span class="bar"></span>
+    </div>
+
+    <nav class="nav" id="nav-menu">
+      <ul>
+        <li><a href="financeira.html">Financeira</a></li>
+        <li><a href="matematica.html">Matemática</a></li>
+        <li><a href="saude.html">Saúde</a></li>
+        <li><a href="conversores.html">Conversores</a></li>
+        <li><a href="trabalhista.html">Trabalhista</a></li>
+        <li><a href="blog/index.html">Blog</a></li>
+      </ul>
+    </nav>
+
+    <div class="nav-actions">
+      <a href="login.html" class="btn-login">Entrar</a>
+      <a href="cadastro.html" class="btn-signup">Cadastrar-se</a>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="contato">
+    <div class="container">
+      <h1>Fale Conosco</h1>
+      <p>
+        Se você tiver dúvidas, sugestões ou encontrar algum erro em nossas ferramentas,
+        entre em contato conosco. Estamos sempre buscando melhorar o 
+        <strong>Calculadora Master</strong>.
+      </p>
+
+      <div class="info-contato">
+        <p><strong>Email:</strong> afdigital.contato@gmail.com</p>
+        <p><strong>Tempo de resposta:</strong> até 48 horas úteis</p>
+        <p><strong>Atendimento:</strong> Segunda a Sexta</p>
+      </div>
+
+      <form class="form-contato">
+        <label for="nome">Nome</label>
+        <input type="text" id="nome" name="nome" placeholder="Seu nome" required>
+
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" placeholder="Seu email" required>
+
+        <label for="mensagem">Mensagem</label>
+        <textarea id="mensagem" name="mensagem" rows="5" placeholder="Digite sua mensagem..." required></textarea>
+
+        <button type="submit">Enviar Mensagem</button>
+      </form>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="footer-top">
+    <div class="container footer-columns">
+      <div class="footer-col">
+        <h3>Calculadoras</h3>
+        <ul>
+          <li><a href="financeira.html">Financeiras</a></li>
+          <li><a href="matematica.html">Matemáticas</a></li>
+          <li><a href="saude.html">Saúde e IMC</a></li>
+          <li><a href="conversores.html">Conversores de Medidas</a></li>
+          <li><a href="trabalhista.html">Trabalhistas</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h3>Suporte</h3>
+        <ul>
+          <li><a href="contato.html">Ajuda &amp; FAQ</a></li>
+          <li><a href="contato.html">Fale conosco</a></li>
+          <li><a href="contato.html">Sugerir Calculadora</a></li>
+          <li><a href="contato.html">Reportar um Erro</a></li>
+          <li><a href="#">Status do sistema</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h3>Empresa</h3>
+        <ul>
+          <li><a href="sobre.html">Sobre nós</a></li>
+          <li><a href="blog/index.html">Blog</a></li>
+          <li><a href="#">Carreiras</a></li>
+          <li><a href="#">Imprensa e Parcerias</a></li>
+          <li><a href="#">Programa de afiliados</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <div class="container footer-bottom-container">
+      <div class="lang-select">
+        <span>🌐 Português</span>
+      </div>
+
+      <div class="footer-legal">
+        <span>© 2026 Calculadora Master. Todos os direitos reservados</span>
+        <a href="termos.html">Termos de Serviço</a>
+        <a href="politica.html">Privacidade</a>
+        <a href="politica.html">Cookies</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const mobileMenu = document.querySelector('#mobile-menu');
+  const navMenu = document.querySelector('#nav-menu');
+
+  mobileMenu.addEventListener('click', function() {
+    mobileMenu.classList.toggle('is-active');
+    navMenu.classList.toggle('active');
+  });
+</script>
+
+<script type="module" src="js/header-auth.js"></script>
+
+</body>
+</html>

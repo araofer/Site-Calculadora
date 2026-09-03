@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Calculadora de Porcentagem Online Grátis | Calculadora Master</title>
+  <meta name="description" content="Calcule porcentagens online grátis. Descubra valores percentuais, descontos e aumentos de forma rápida e fácil com nossa ferramenta.">
+  <meta name="keywords" content="calculadora de porcentagem, calcular porcentagem, como calcular porcentagem, desconto percentual, aumento percentual">
+  <meta name="robots" content="index, follow">
+
+  <meta property="og:title" content="Calculadora de Porcentagem Online Gratuita">
+  <meta property="og:description" content="Calcule porcentagens, descontos e acréscimos em segundos.">
+  <meta property="og:type" content="website">
+
+  <link rel="canonical" href="https://www.calculadoramaster.com/tools/financas/porcentagem.html">
+
+  <link rel="stylesheet" href="../../css/style.css">
+
+  <link rel="icon" type="logo/png" sizes="32x32" href="../../logo/favicon.png">
+  <link rel="manifest" href="../../site.webmanifest">
+</head>
+
+<body>
+
+<header class="header">
+  <div class="container nav-container">
+    <div class="logo">
+      <a href="../../index.html">
+        <img src="../../logo/logo.png" alt="Calculadora Master Logo" width="150" height="100">
+      </a>
+    </div>
+
+    <div class="menu-toggle" id="mobile-menu">
+      <span class="bar"></span>
+      <span class="bar"></span>
+      <span class="bar"></span>
+    </div>
+
+    <nav class="nav" id="nav-menu">
+      <ul>
+        <li><a href="../../index.html">Home</a></li>
+        <li><a href="../../sobre.html">Sobre</a></li>
+        <li><a href="../../contato.html">Contato</a></li>
+        <li><a href="../../blog/index.html">Blog</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main class="container">
+  <h1>Calculadora de Porcentagem</h1>
+  <p>Calcule valores percentuais, descontos e aumentos de forma simples e precisa.</p>
+
+  <div style="margin:20px 0;" class="card">
+    <h2>Quanto é X% de Y?</h2>
+
+    <label for="percentual">Quanto é (%):</label><br>
+    <input type="number" id="percentual" oninput="limparResultado()" placeholder="Ex: 10" style="width: 80px;"> 
+    <span> de </span>
+    <input type="number" id="valor" oninput="limparResultado()" placeholder="Ex: 200">
+
+    <br><br>
+
+    <button type="button" onclick="calcular()">Calcular</button>
+    <button type="button" onclick="limparCampos()">Limpar</button>
+
+    <div id="resultado-container" style="margin-top: 20px; display: none;">
+        <h3 id="resultado" style="color: #008080;"></h3>
+        <p id="detalhes" style="font-size: 0.9em; color: #666;"></p>
+    </div>
+  </div>
+
+  <section class="content">
+    <h2>Como calcular porcentagem manualmente?</h2>
+    <p>
+      A porcentagem nada mais é do que uma razão com denominador 100. Saber calcular é essencial para conferir descontos em lojas ou aumentos salariais.
+    </p>
+
+    <p><strong>Fórmula Simples:</strong></p>
+    <p>$Resultado = \frac{Valor \times Porcentual}{100}$</p>
+
+    <h2>Exemplo Prático</h2>
+    <p>Se você quer saber quanto é 20% de R$ 500,00:</p>
+    <ul>
+        <li>Multiplique 500 por 20 = 10.000</li>
+        <li>Divida 10.000 por 100 = 100</li>
+        <li>O resultado é <strong>R$ 100,00</strong></li>
+    </ul>
+
+    <h2>Dicas de Uso</h2>
+    <ul>
+      <li><strong>Descontos:</strong> Calcule o valor e subtraia do preço original.</li>
+      <li><strong>Aumentos:</strong> Calcule o valor e some ao preço original.</li>
+      <li><strong>Comissões:</strong> Ideal para vendedores calcularem seus ganhos sobre vendas.</li>
+    </ul>
+
+    <p style="margin-top: 30px;">
+      👉 <a href="../../index.html">Voltar para página inicial</a>
+    </p>
+  </section>
+</main>
+
+<script>
+function calcular() {
+  let percentual = parseFloat(document.getElementById("percentual").value);
+  let valor = parseFloat(document.getElementById("valor").value);
+  let resContainer = document.getElementById("resultado-container");
+
+  if (isNaN(percentual) || isNaN(valor)) {
+    document.getElementById("resultado").innerText = "Preencha os campos corretamente!";
+    resContainer.style.display = "block";
+    return;
+  }
+
+  let parte = (valor * percentual) / 100;
+  let comDesconto = valor - parte;
+  let comAumento = valor + parte;
+
+  resContainer.style.display = "block";
+  document.getElementById("resultado").innerText = "Resultado: " + parte.toFixed(2);
+  
+  document.getElementById("detalhes").innerHTML = 
+    `Se for um <strong>desconto</strong>, o valor final é: R$ ${comDesconto.toFixed(2)}<br>` +
+    `Se for um <strong>aumento</strong>, o valor final é: R$ ${comAumento.toFixed(2)}`;
+}
+
+function limparCampos() {
+  document.getElementById("percentual").value = "";
+  document.getElementById("valor").value = "";
+  document.getElementById("resultado").innerText = "";
+  document.getElementById("resultado-container").style.display = "none";
+}
+
+function limparResultado() {
+  document.getElementById("resultado-container").style.display = "none";
+}
+</script>
+
+<footer class="footer">
+    <div class="container">
+      <p>© 2026 Calculadora Master - Todos os direitos reservados</p>
+      <p>
+        <a href="../../politica.html">Política de Privacidade</a> |
+        <a href="../../termos.html">Termos de Uso</a> 
+      </p>
+    </div>
+</footer>
+
+<script>
+  const mobileMenu = document.querySelector('#mobile-menu');
+  const navMenu = document.querySelector('#nav-menu');
+
+  mobileMenu.addEventListener('click', function() {
+    mobileMenu.classList.toggle('is-active');
+    navMenu.classList.toggle('active');
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Calculadora de IMC Online | Índice de Massa Corporal e Peso Ideal</title>
+  <meta name="description" content="Calcule seu IMC online gratuitamente. Descubra se você está no peso ideal com base na sua altura e peso com nossa tabela atualizada.">
+  <meta name="keywords" content="calculadora de imc, índice de massa corporal, peso ideal, tabela imc, calcular imc online">
+  <meta name="robots" content="index, follow">
+
+  <meta property="og:title" content="Calculadora de IMC - Calculadora Master">
+  <meta property="og:description" content="Descubra seu IMC e classificação de peso em segundos.">
+  <meta property="og:type" content="website">
+
+  <link rel="canonical" href="https://www.calculadoramaster.com/tools/saude/imc.html">
+
+  <link rel="stylesheet" href="../../css/style.css">
+
+  <link rel="icon" type="logo/png" sizes="32x32" href="../../logo/favicon.png">
+  <link rel="manifest" href="../../site.webmanifest">
+</head>
+
+<body>
+
+<header class="header">
+  <div class="container nav-container">
+    <div class="logo">
+      <a href="../../index.html">
+        <img src="../../logo/logo.png" alt="Calculadora Master Logo" width="150" height="100">
+      </a>
+    </div>
+
+    <div class="menu-toggle" id="mobile-menu">
+      <span class="bar"></span>
+      <span class="bar"></span>
+      <span class="bar"></span>
+    </div>
+
+    <nav class="nav" id="nav-menu">
+      <ul>
+        <li><a href="../../index.html">Home</a></li>
+        <li><a href="../../sobre.html">Sobre</a></li>
+        <li><a href="../../contato.html">Contato</a></li>ss
+        <li><a href="../../blog/index.html">Blog</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main class="container">
+  <h1>Calculadora de IMC</h1>
+  <p>Descubra seu Índice de Massa Corporal e veja sua classificação de saúde.</p>
+
+  <div style="margin:20px 0;" class="card">
+    <h2>Calcular meu IMC</h2>
+
+    <label for="peso">Seu peso (kg):</label><br>
+    <input type="text" id="peso" placeholder="Ex: 70" oninput="limparResultado()" style="padding: 10px; border-radius: 5px; border: 1px solid #ccc; width: 100%; max-width: 300px;">
+    <br><br>
+
+    <label for="altura">Sua altura (m):</label><br>
+    <input type="text" id="altura" placeholder="Ex: 1.75" oninput="limparResultado()" style="padding: 10px; border-radius: 5px; border: 1px solid #ccc; width: 100%; max-width: 300px;">
+    <br><br>
+
+    <button type="button" onclick="calcularIMC()">Calcular Agora</button>
+    <button type="button" onclick="limparCampos()">Limpar</button>
+
+    <h3 id="resultado" style="margin-top: 20px; color: #008080;"></h3>
+  </div>
+
+  <section class="content">
+    <h2>Tabela de Classificação do IMC</h2>
+    <div style="overflow-x: auto;">
+        <table style="width: 100%; border-collapse: collapse; margin-top: 10px;">
+            <tr style="background-color: #008080; color: white;">
+                <th style="padding: 10px; border: 1px solid #ddd;">Resultado</th>
+                <th style="padding: 10px; border: 1px solid #ddd;">Classificação</th>
+            </tr>
+            <tr><td style="padding: 10px; border: 1px solid #ddd;">Abaixo de 18.5</td><td style="padding: 10px; border: 1px solid #ddd;">Abaixo do peso</td></tr>
+            <tr><td style="padding: 10px; border: 1px solid #ddd;">18.5 a 24.9</td><td style="padding: 10px; border: 1px solid #ddd;">Peso normal</td></tr>
+            <tr><td style="padding: 10px; border: 1px solid #ddd;">25 a 29.9</td><td style="padding: 10px; border: 1px solid #ddd;">Sobrepeso</td></tr>
+            <tr><td style="padding: 10px; border: 1px solid #ddd;">30 a 34.9</td><td style="padding: 10px; border: 1px solid #ddd;">Obesidade Grau I</td></tr>
+            <tr><td style="padding: 10px; border: 1px solid #ddd;">35 a 39.9</td><td style="padding: 10px; border: 1px solid #ddd;">Obesidade Grau II</td></tr>
+            <tr><td style="padding: 10px; border: 1px solid #ddd;">Acima de 40</td><td style="padding: 10px; border: 1px solid #ddd;">Obesidade Grau III (Mórbida)</td></tr>
+        </table>
+    </div>
+
+    <h2>O que é IMC?</h2>
+    <p>O IMC (Índice de Massa Corporal) é uma medida internacional usada para avaliar se uma pessoa está no peso ideal com base na sua altura e peso.</p>
+    <p><strong>Fórmula:</strong> IMC = peso ÷ (altura × altura)</p>
+
+    <h2>Aviso Importante</h2>
+    <p>O IMC é uma ferramenta de triagem e não um diagnóstico. Atletas, idosos e gestantes podem ter interpretações diferentes. Consulte sempre um profissional de saúde.</p>
+
+    <p style="margin-top: 30px;">
+      👉 <a href="../../index.html">Voltar para página inicial</a>
+    </p>
+  </section>
+</main>
+
+<script>
+function calcularIMC() {
+  // Substitui vírgula por ponto para garantir o cálculo correto
+  let pesoVal = document.getElementById("peso").value.replace(',', '.');
+  let alturaVal = document.getElementById("altura").value.replace(',', '.');
+
+  let peso = parseFloat(pesoVal);
+  let altura = parseFloat(alturaVal);
+
+  if (isNaN(peso) || isNaN(altura) || peso <= 0 || altura <= 0) {
+    document.getElementById("resultado").innerText = "Informe valores válidos para peso e altura!";
+    return;
+  }
+
+  // Ajuste caso o usuário digite altura em cm (ex: 175 em vez de 1.75)
+  if (altura > 3) {
+      altura = altura / 100;
+  }
+
+  let imc = peso / (altura * altura);
+  let classificacao = "";
+
+  if (imc < 18.5) {
+    classificacao = "Abaixo do peso";
+  } else if (imc < 25) {
+    classificacao = "Peso normal";
+  } else if (imc < 30) {
+    classificacao = "Sobrepeso";
+  } else if (imc < 35) {
+    classificacao = "Obesidade Grau I";
+  } else if (imc < 40) {
+    classificacao = "Obesidade Grau II";
+  } else {
+    classificacao = "Obesidade Grau III (Mórbida)";
+  }
+
+  document.getElementById("resultado").innerText =
+    "Seu IMC é " + imc.toFixed(2) + " | " + classificacao;
+}
+
+function limparCampos() {
+  document.getElementById("peso").value = "";
+  document.getElementById("altura").value = "";
+  document.getElementById("resultado").innerText = "";
+}
+
+function limparResultado() {
+  document.getElementById("resultado").innerText = "";
+}
+</script>
+
+<footer class="footer">
+    <div class="container">
+      <p>© 2026 Calculadora Master - Todos os direitos reservados</p>
+      <p>
+        <a href="../../politica.html">Política de Privacidade</a> |
+        <a href="../../termos.html">Termos de Uso</a> 
+      </p>
+    </div>
+</footer>
+
+<script>
+  const mobileMenu = document.querySelector('#mobile-menu');
+  const navMenu = document.querySelector('#nav-menu');
+
+  mobileMenu.addEventListener('click', function() {
+    mobileMenu.classList.toggle('is-active');
+    navMenu.classList.toggle('active');
+  });
+</script>
+
+</body>
+</html>

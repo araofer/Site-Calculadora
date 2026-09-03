@@ -1,0 +1,41 @@
+# Credenciais e configurações privadas
+arquivo.json
+.env
+.env.*
+!.env.example
+
+# Chaves e certificados privados
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Dependências / builds, caso existam futuramente
+node_modules/
+dist/
+build/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Sistema operacional
+.DS_Store
+Thumbs.db
+
+# Arquivos temporários
+*.tmp
+*.temp
+*~
+
+# IDE
+.vscode/
+.idea/
+
+# Firebase / GCP Service Account (prevenção futura)
+*service-account*.json
+*serviceAccount*.json
+*firebase-admin*.json
+*credentials*.json

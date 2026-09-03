@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Gerador de Senha Segura Online | Criar Senhas Fortes e Aleatórias</title>
+  <meta name="description" content="Gere senhas seguras e fortes online gratuitamente. Proteja suas contas com combinações aleatórias de letras, números e símbolos.">
+  <meta name="keywords" content="gerador de senha, criar senha forte, password generator, senha aleatória, segurança digital">
+  <meta name="robots" content="index, follow">
+
+  <meta property="og:title" content="Gerador de Senha Segura - Calculadora Master">
+  <meta property="og:description" content="Crie senhas impossíveis de quebrar em segundos.">
+  <meta property="og:type" content="website">
+
+  <link rel="canonical" href="https://www.calculadoramaster.com/tools/utilidades/gerador-senha.html">
+
+  <link rel="stylesheet" href="../../css/style.css">
+
+  <link rel="icon" type="logo/png" sizes="32x32" href="../../logo/favicon.png">
+  <link rel="manifest" href="../../site.webmanifest">
+</head>
+
+<body>
+
+<header class="header">
+  <div class="container nav-container">
+    <div class="logo">
+      <a href="../../index.html">
+        <img src="../../logo/logo.png" alt="Calculadora Master Logo" width="150" height="100">
+      </a>
+    </div>
+
+    <div class="menu-toggle" id="mobile-menu">
+      <span class="bar"></span>
+      <span class="bar"></span>
+      <span class="bar"></span>
+    </div>
+
+    <nav class="nav" id="nav-menu">
+      <ul>
+        <li><a href="../../index.html">Home</a></li>
+        <li><a href="../../sobre.html">Sobre</a></li>
+        <li><a href="../../contato.html">Contato</a></li>
+        <li><a href="../../blog/index.html">Blog</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main class="container">
+  <h1>Gerador de Senha Segura</h1>
+  <p>Crie senhas robustas para proteger seus e-mails, redes sociais e contas bancárias.</p>
+
+  <div style="margin:20px 0;" class="card">
+    <h2>Configurações da Senha</h2>
+
+    <div style="margin-bottom: 15px;">
+        <label for="tamanho">Comprimento da senha: <span id="val_tamanho">12</span> caracteres</label><br>
+        <input type="range" id="tamanho" min="6" max="32" value="12" oninput="atualizarLabel(); limparResultado()" style="width: 100%; max-width: 300px;">
+    </div>
+
+    <div style="text-align: left; display: inline-block;">
+        <label><input type="checkbox" id="maiusculas" checked> Incluir Letras Maiúsculas (A-Z)</label><br>
+        <label><input type="checkbox" id="minusculas" checked> Incluir Letras Minúsculas (a-z)</label><br>
+        <label><input type="checkbox" id="numeros" checked> Incluir Números (0-9)</label><br>
+        <label><input type="checkbox" id="especiais" checked> Incluir Símbolos (!@#$%&*)</label>
+    </div>
+
+    <br><br>
+
+    <button type="button" onclick="gerarSenha()" class="btn-destaque">Gerar Senha Forte</button>
+    <button type="button" onclick="limparCampos()">Resetar</button>
+
+    <div id="resultado-area" style="margin-top: 25px; display: none;">
+        <div style="background: #f4f4f4; padding: 15px; border-radius: 5px; border: 1px dashed #008080; font-family: monospace; font-size: 1.2em; word-break: break-all;" id="senha-gerada"></div>
+        <br>
+        <button type="button" onclick="copiarSenha()" style="background-color: #007bff;">Copiar Senha</button>
+        <span id="msg-copiado" style="color: #28a745; margin-left: 10px; display: none;">Copiado!</span>
+    </div>
+  </div>
+
+  <section class="content">
+    <h2>Por que usar um gerador de senhas?</h2>
+    <p>
+      Senhas comuns como "123456" ou datas de nascimento são facilmente quebradas por ataques de força bruta. Um gerador aleatório cria uma entropia maior, tornando a senha virtualmente impossível de ser adivinhada por humanos ou softwares.
+    </p>
+
+    <h2>O que torna uma senha forte?</h2>
+    <ul>
+      <li><strong>Comprimento:</strong> O ideal é que tenha pelo menos 12 caracteres.</li>
+      <li><strong>Variedade:</strong> Misturar diferentes tipos de caracteres aumenta exponencialmente as combinações possíveis.</li>
+      <li><strong>Exclusividade:</strong> Nunca use a mesma senha para mais de um site.</li>
+    </ul>
+
+    <p style="margin-top: 30px;">
+      👉 <a href="../../index.html">Voltar para página inicial</a>
+    </p>
+  </section>
+</main>
+
+<script>
+function atualizarLabel() {
+    document.getElementById("val_tamanho").innerText = document.getElementById("tamanho").value;
+}
+
+function gerarSenha() {
+  let tamanho = document.getElementById("tamanho").value;
+  let maiusculas = document.getElementById("maiusculas").checked;
+  let minusculas = document.getElementById("minusculas").checked;
+  let numeros = document.getElementById("numeros").checked;
+  let especiais = document.getElementById("especiais").checked;
+
+  let caracteres = "";
+  if (maiusculas) caracteres += "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  if (minusculas) caracteres += "abcdefghijklmnopqrstuvwxyz";
+  if (numeros) caracteres += "0123456789";
+  if (especiais) caracteres += "!@#$%&*()_+{}[]<>?-=";
+
+  if (caracteres === "") {
+    alert("Selecione pelo menos um tipo de caractere!");
+    return;
+  }
+
+  let senha = "";
+  for (let i = 0; i < tamanho; i++) {
+    let random = Math.floor(Math.random() * caracteres.length);
+    senha += caracteres[random];
+  }
+
+  document.getElementById("senha-gerada").innerText = senha;
+  document.getElementById("resultado-area").style.display = "block";
+  document.getElementById("msg-copiado").style.display = "none";
+}
+
+function copiarSenha() {
+  const senha = document.getElementById("senha-gerada").innerText;
+  navigator.clipboard.writeText(senha).then(() => {
+    document.getElementById("msg-copiado").style.display = "inline";
+    setTimeout(() => {
+        document.getElementById("msg-copiado").style.display = "none";
+    }, 2000);
+  });
+}
+
+function limparCampos() {
+  document.getElementById("tamanho").value = 12;
+  atualizarLabel();
+  document.getElementById("maiusculas").checked = true;
+  document.getElementById("minusculas").checked = true;
+  document.getElementById("numeros").checked = true;
+  document.getElementById("especiais").checked = true;
+  document.getElementById("resultado-area").style.display = "none";
+}
+
+function limparResultado() {
+  document.getElementById("resultado-area").style.display = "none";
+}
+</script>
+
+<footer class="footer">
+    <div class="container">
+      <p>© 2026 Calculadora Master - Todos os direitos reservados</p>
+      <p>
+        <a href="../../politica.html">Política de Privacidade</a> |
+        <a href="../../termos.html">Termos de Uso</a> 
+      </p>
+    </div>
+</footer>
+
+<script>
+  const mobileMenu = document.querySelector('#mobile-menu');
+  const navMenu = document.querySelector('#nav-menu');
+
+  mobileMenu.addEventListener('click', function() {
+    mobileMenu.classList.toggle('is-active');
+    navMenu.classList.toggle('active');
+  });
+</script>
+
+</body>
+</html>

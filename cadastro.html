@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Cadastrar-se - Calculadora Master</title>
+  <meta name="description" content="Crie sua conta gratuita na Calculadora Master.">
+
+  <link rel="stylesheet" href="css/style.css">
+
+  <link rel="icon" type="image/png" sizes="32x32" href="logo/favicon.png">
+  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+</head>
+
+<body>
+
+<header class="header">
+  <div class="container nav-container">
+    <div class="logo">
+      <a href="index.html">
+        <img src="logo/logo.png" alt="Calculadora Master Logo">
+      </a>
+    </div>
+
+    <div class="menu-toggle" id="mobile-menu">
+      <span class="bar"></span>
+      <span class="bar"></span>
+      <span class="bar"></span>
+    </div>
+
+    <nav class="nav" id="nav-menu">
+      <ul>
+        <li><a href="financeira.html">Financeira</a></li>
+        <li><a href="matematica.html">Matemática</a></li>
+        <li><a href="saude.html">Saúde</a></li>
+        <li><a href="conversores.html">Conversores</a></li>
+        <li><a href="trabalhista.html">Trabalhista</a></li>
+        <li><a href="blog/index.html">Blog</a></li>
+      </ul>
+    </nav>
+
+    <div class="nav-actions">
+      <a href="login.html" class="btn-login">Entrar</a>
+      <a href="cadastro.html" class="btn-signup">Cadastrar-se</a>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="auth-section">
+    <div class="container auth-container">
+      <div class="auth-card">
+        <h1>Criar sua conta</h1>
+        <p class="auth-subtitle">É rápido, fácil e gratuito.</p>
+
+        <div id="auth-message" class="auth-message"></div>
+
+        <form id="form-cadastro">
+          <label for="nome">Nome</label>
+          <input type="text" id="nome" name="nome" placeholder="Seu nome completo" required>
+
+          <label for="email">E-mail</label>
+          <input type="email" id="email" name="email" placeholder="seuemail@exemplo.com" required>
+
+          <label for="senha">Senha</label>
+          <input type="password" id="senha" name="senha" placeholder="Mínimo 6 caracteres" minlength="6" required>
+
+          <button type="submit" id="btn-cadastro">Cadastrar-se</button>
+        </form>
+
+        <p class="auth-footer-text">
+          Já tem uma conta? <a href="login.html">Entrar</a>
+        </p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="footer-bottom">
+    <div class="container footer-bottom-container">
+      <div class="lang-select">
+        <span>🌐 Português</span>
+      </div>
+
+      <div class="footer-legal">
+        <span>© 2026 Calculadora Master. Todos os direitos reservados</span>
+        <a href="termos.html">Termos de Serviço</a>
+        <a href="politica.html">Privacidade</a>
+        <a href="politica.html">Cookies</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const mobileMenu = document.querySelector('#mobile-menu');
+  const navMenu = document.querySelector('#nav-menu');
+
+  mobileMenu.addEventListener('click', function() {
+    mobileMenu.classList.toggle('is-active');
+    navMenu.classList.toggle('active');
+  });
+</script>
+
+<script type="module">
+  import { cadastrarUsuario, traduzirErroFirebase } from "./js/auth.js";
+
+  const form = document.getElementById("form-cadastro");
+  const messageBox = document.getElementById("auth-message");
+  const btnCadastro = document.getElementById("btn-cadastro");
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const nome = document.getElementById("nome").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const senha = document.getElementById("senha").value;
+
+    messageBox.textContent = "";
+    messageBox.className = "auth-message";
+    btnCadastro.disabled = true;
+    btnCadastro.textContent = "Criando conta...";
+
+    try {
+      await cadastrarUsuario(nome, email, senha);
+      messageBox.textContent = "Conta criada com sucesso! Redirecionando...";
+      messageBox.classList.add("success");
+      setTimeout(() => {
+        window.location.href = "index.html";
+      }, 1000);
+    } catch (err) {
+      messageBox.textContent = traduzirErroFirebase(err.code);
+      messageBox.classList.add("error");
+      btnCadastro.disabled = false;
+      btnCadastro.textContent = "Cadastrar-se";
+    }
+  });
+</script>
+
+<script type="module" src="js/header-auth.js"></script>
+
+</body>
+</html>

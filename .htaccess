@@ -1,0 +1,3 @@
+# Configuração de erro 404 - Calculadora Master
+# Garante que URLs inexistentes retornem a página personalizada com status HTTP 404 Not Found
+ErrorDocument 404 /404.html

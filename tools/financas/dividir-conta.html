@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Dividir Conta Online | Calculadora por Pessoa</title>
+  <meta name="description" content="Divida contas facilmente entre amigos. Calcule valores diferentes por pessoa e confira se a conta fecha corretamente.">
+  <meta name="keywords" content="dividir conta, dividir restaurante, dividir despesas, calcular conta por pessoa">
+  <meta name="robots" content="index, follow">
+
+  <meta property="og:title" content="Dividir Conta Online">
+  <meta property="og:description" content="Divida contas com valores diferentes entre amigos">
+  <meta property="og:type" content="website">
+
+  <link rel="canonical" href="https://www.calculadoramaster.com/tools/financas/dividir-conta.html">
+
+  <link rel="stylesheet" href="../../css/style.css">
+
+  <link rel="icon" type="logo/png" sizes="32x32" href="../../logo/favicon.png">
+  <link rel="manifest" href="../../site.webmanifest">
+</head>
+
+<body>
+
+<header class="header">
+  <div class="container nav-container">
+    <div class="logo">
+      <a href="../../index.html">
+        <img src="../../logo/logo.png" alt="Calculadora Master Logo" width="150" height="100">
+      </a>
+    </div>
+
+    <div class="menu-toggle" id="mobile-menu">
+      <span class="bar"></span>
+      <span class="bar"></span>
+      <span class="bar"></span>
+    </div>
+
+    <nav class="nav" id="nav-menu">
+      <ul>
+        <li><a href="../../index.html">Home</a></li>
+        <li><a href="../../sobre.html">Sobre</a></li>
+        <li><a href="../../contato.html">Contato</a></li>
+        <li><a href="../../blog/index.html">Blog</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main class="container">
+  <h1>Dividir Conta</h1>
+  <p>Calcule e confira a divisão de contas entre amigos de forma simples.</p>
+
+  <div style="margin:20px 0;" class="card">
+    <h2>Dados da Conta</h2>
+
+    <label for="total">Valor Total da Conta (R$):</label><br>
+    <input type="number" id="total" placeholder="Ex: 200.00" oninput="limparResultado()" step="0.01">
+    <br><br>
+
+    <label for="pessoas">Quantas pessoas vão dividir?</label><br>
+    <input type="number" id="pessoas" placeholder="Ex: 4" oninput="limparResultado()">
+    <br><br>
+
+    <button type="button" onclick="gerarCampos()">Inserir valores individuais</button>
+
+    <div id="camposPessoas" style="margin-top:20px;"></div>
+
+    <br>
+    <button type="button" onclick="calcularDivisao()" class="btn-destaque">Calcular Fechamento</button>
+    <button type="button" onclick="limparCampos()">Limpar Tudo</button>
+
+    <h3 id="resultado" style="margin-top: 20px; color: #008080;"></h3>
+  </div>
+
+  <section class="content">
+    <h2>Como dividir uma conta de restaurante?</h2>
+    <p>
+      Dividir uma conta entre amigos pode ser complicado, principalmente quando cada um consome itens de valores diferentes. 
+      Com nossa calculadora, você garante uma divisão justa e confere se o somatório bate com o total da nota.
+    </p>
+
+    <h2>Passo a passo</h2>
+    <ul>
+      <li><strong>Total:</strong> Informe o valor que veio na nota fiscal.</li>
+      <li><strong>Pessoas:</strong> Digite a quantidade de amigos na mesa.</li>
+      <li><strong>Valores:</strong> Clique em "Inserir valores" para abrir os campos de cada pessoa.</li>
+      <li><strong>Confira:</strong> O sistema dirá se falta dinheiro ou se o valor passou do total.</li>
+    </ul>
+
+    <h2>Dica para Gorjetas</h2>
+    <p>Se a conta já inclui os 10% (ou 12%), use o valor final da nota no campo "Valor Total". Caso queira adicionar por fora, some a porcentagem ao valor antes de inserir aqui.</p>
+
+    <p style="margin-top: 30px;">
+      👉 <a href="../../index.html">Voltar para página inicial</a>
+    </p>
+  </section>
+</main>
+
+<script>
+function gerarCampos() {
+  let pessoas = parseInt(document.getElementById("pessoas").value);
+  let container = document.getElementById("camposPessoas");
+
+  container.innerHTML = "";
+
+  if (!pessoas || pessoas <= 0) {
+    container.innerHTML = "<p style='color:red;'>Digite um número de pessoas válido!</p>";
+    return;
+  }
+
+  if (pessoas > 50) {
+    container.innerHTML = "<p style='color:red;'>Limite máximo de 50 pessoas por vez.</p>";
+    return;
+  }
+
+  for (let i = 1; i <= pessoas; i++) {
+    container.innerHTML += `
+      <div style="margin-bottom:10px;">
+        <label>Pessoa ${i}: </label>
+        <input type="number" class="valores" placeholder="Valor gasto" oninput="limparResultado()" step="0.01">
+      </div>
+    `;
+  }
+}
+
+function calcularDivisao() {
+  let totalInput = document.getElementById("total").value;
+  let total = parseFloat(totalInput);
+  let valores = document.querySelectorAll(".valores");
+
+  let soma = 0;
+  valores.forEach(input => {
+    soma += parseFloat(input.value) || 0;
+  });
+
+  let resultado = document.getElementById("resultado");
+
+  if (!total || total <= 0) {
+    resultado.innerText = "Por favor, informe o valor total da conta.";
+    return;
+  }
+
+  if (valores.length === 0) {
+    resultado.innerText = "Informe o número de pessoas e gere os campos primeiro.";
+    return;
+  }
+
+  let diferenca = total - soma;
+
+  // Usando margem de erro para centavos (ponto flutuante)
+  if (Math.abs(diferenca) < 0.01) {
+    resultado.style.color = "green";
+    resultado.innerText = "Tudo certo! O somatório bate com o total da conta. 👍";
+  } else if (diferenca > 0) {
+    resultado.style.color = "orange";
+    resultado.innerText = "Atenção: Ainda faltam R$ " + diferenca.toFixed(2) + " para fechar a conta.";
+  } else {
+    resultado.style.color = "red";
+    resultado.innerText = "Atenção: O total dos gastos passou em R$ " + Math.abs(diferenca).toFixed(2) + " do valor da conta.";
+  }
+}
+
+function limparCampos() {
+  document.getElementById("total").value = "";
+  document.getElementById("pessoas").value = "";
+  document.getElementById("camposPessoas").innerHTML = "";
+  document.getElementById("resultado").innerText = "";
+}
+
+function limparResultado() {
+  document.getElementById("resultado").innerText = "";
+}
+</script>
+
+<footer class="footer">
+    <div class="container">
+      <p>© 2026 Calculadora Master - Todos os direitos reservados</p>
+      <p>
+        <a href="../../politica.html">Política de Privacidade</a> |
+        <a href="../../termos.html">Termos de Uso</a> 
+      </p>
+    </div>
+</footer>
+
+<script>
+  const mobileMenu = document.querySelector('#mobile-menu');
+  const navMenu = document.querySelector('#nav-menu');
+
+  mobileMenu.addEventListener('click', function() {
+    mobileMenu.classList.toggle('is-active');
+    navMenu.classList.toggle('active');
+  });
+</script>
+
+</body>
+</html>

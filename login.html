@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Entrar - Calculadora Master</title>
+  <meta name="description" content="Entre na sua conta Calculadora Master para acessar suas ferramentas favoritas.">
+
+  <link rel="stylesheet" href="css/style.css">
+
+  <link rel="icon" type="image/png" sizes="32x32" href="logo/favicon.png">
+  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+</head>
+
+<body>
+
+<header class="header">
+  <div class="container nav-container">
+    <div class="logo">
+      <a href="index.html">
+        <img src="logo/logo.png" alt="Calculadora Master Logo">
+      </a>
+    </div>
+
+    <div class="menu-toggle" id="mobile-menu">
+      <span class="bar"></span>
+      <span class="bar"></span>
+      <span class="bar"></span>
+    </div>
+
+    <nav class="nav" id="nav-menu">
+      <ul>
+        <li><a href="financeira.html">Financeira</a></li>
+        <li><a href="matematica.html">Matemática</a></li>
+        <li><a href="saude.html">Saúde</a></li>
+        <li><a href="conversores.html">Conversores</a></li>
+        <li><a href="trabalhista.html">Trabalhista</a></li>
+        <li><a href="blog/index.html">Blog</a></li>
+      </ul>
+    </nav>
+
+    <div class="nav-actions">
+      <a href="login.html" class="btn-login">Entrar</a>
+      <a href="cadastro.html" class="btn-signup">Cadastrar-se</a>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="auth-section">
+    <div class="container auth-container">
+      <div class="auth-card">
+        <h1>Entrar na sua conta</h1>
+        <p class="auth-subtitle">Acesse para salvar e gerenciar seus cálculos favoritos.</p>
+
+        <div id="auth-message" class="auth-message"></div>
+
+        <form id="form-login">
+          <label for="email">E-mail</label>
+          <input type="email" id="email" name="email" placeholder="seuemail@exemplo.com" required>
+
+          <label for="senha">Senha</label>
+          <input type="password" id="senha" name="senha" placeholder="Sua senha" required>
+
+          <button type="submit" id="btn-login">Entrar</button>
+        </form>
+
+        <p class="auth-footer-text">
+          Não tem uma conta? <a href="cadastro.html">Cadastre-se</a>
+        </p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="footer-bottom">
+    <div class="container footer-bottom-container">
+      <div class="lang-select">
+        <span>🌐 Português</span>
+      </div>
+
+      <div class="footer-legal">
+        <span>© 2026 Calculadora Master. Todos os direitos reservados</span>
+        <a href="termos.html">Termos de Serviço</a>
+        <a href="politica.html">Privacidade</a>
+        <a href="politica.html">Cookies</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const mobileMenu = document.querySelector('#mobile-menu');
+  const navMenu = document.querySelector('#nav-menu');
+
+  mobileMenu.addEventListener('click', function() {
+    mobileMenu.classList.toggle('is-active');
+    navMenu.classList.toggle('active');
+  });
+</script>
+
+<script type="module">
+  import { loginUsuario, traduzirErroFirebase } from "./js/auth.js";
+
+  const form = document.getElementById("form-login");
+  const messageBox = document.getElementById("auth-message");
+  const btnLogin = document.getElementById("btn-login");
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const email = document.getElementById("email").value.trim();
+    const senha = document.getElementById("senha").value;
+
+    messageBox.textContent = "";
+    messageBox.className = "auth-message";
+    btnLogin.disabled = true;
+    btnLogin.textContent = "Entrando...";
+
+    try {
+      await loginUsuario(email, senha);
+      messageBox.textContent = "Login realizado com sucesso! Redirecionando...";
+      messageBox.classList.add("success");
+      setTimeout(() => {
+        window.location.href = "index.html";
+      }, 1000);
+    } catch (err) {
+      messageBox.textContent = traduzirErroFirebase(err.code);
+      messageBox.classList.add("error");
+      btnLogin.disabled = false;
+      btnLogin.textContent = "Entrar";
+    }
+  });
+</script>
+
+<script type="module" src="js/header-auth.js"></script>
+
+</body>
+</html>
