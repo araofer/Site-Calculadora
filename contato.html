@@ -82,15 +82,16 @@
 
       <form class="form-contato">
         <label for="nome">Nome</label>
-        <input type="text" id="nome" name="nome" placeholder="Seu nome" required>
+        <input type="text" id="nome" placeholder="Seu nome" autocomplete="name" required>
 
         <label for="email">Email</label>
-        <input type="email" id="email" name="email" placeholder="Seu email" required>
+        <input type="email" id="email" placeholder="Seu email" autocomplete="email" required>
 
         <label for="mensagem">Mensagem</label>
-        <textarea id="mensagem" name="mensagem" rows="5" placeholder="Digite sua mensagem..." required></textarea>
+        <textarea id="mensagem" rows="5" placeholder="Digite sua mensagem..." required></textarea>
 
         <button type="submit">Enviar Mensagem</button>
+        <p id="contato-status" role="status" aria-live="polite" hidden></p>
       </form>
     </div>
   </section>
@@ -158,6 +159,17 @@
     mobileMenu.classList.toggle('is-active');
     navMenu.classList.toggle('active');
   });
+
+  const formContato = document.querySelector('.form-contato');
+  const statusContato = document.getElementById('contato-status');
+
+  if (formContato && statusContato) {
+    formContato.addEventListener('submit', function(e) {
+      e.preventDefault();
+      statusContato.textContent = 'O envio pelo formulário ainda não está disponível. Entre em contato pelo e-mail afdigital.contato@gmail.com.';
+      statusContato.hidden = false;
+    });
+  }
 </script>
 
 <script type="module" src="js/header-auth.js"></script>
