@@ -3,7 +3,11 @@
 
   const STORAGE_KEY = 'cm_cookie_consent';
   const GA_MEASUREMENT_ID = 'G-KRDLTF5GBP';
-  let gaCarregado = false;
+  const GA_DISABLE_KEY = 'ga-disable-' + GA_MEASUREMENT_ID;
+  let timerFechar = null;
+
+  // Define ga-disable true por padrão até haver consentimento explícito
+  window[GA_DISABLE_KEY] = true;
 
   // Inicialização segura e local do dataLayer e gtag
   window.dataLayer = window.dataLayer || [];
@@ -20,22 +24,34 @@
     ad_personalization: 'denied'
   });
 
-  // Função isolada para carregar GA4 com proteção anti-duplicação dupla
-  function carregarGA4() {
-    if (gaCarregado || document.getElementById('cm-ga4-script')) {
+  // Aplica o estado de consentimento e controla ga-disable
+  function aplicarConsentimentoAnalytics(concedido) {
+    if (concedido) {
+      window[GA_DISABLE_KEY] = false;
+      gtag('consent', 'update', {
+        analytics_storage: 'granted',
+        ad_storage: 'denied',
+        ad_user_data: 'denied',
+        ad_personalization: 'denied'
+      });
+      garantirGA4Carregado();
+    } else {
+      window[GA_DISABLE_KEY] = true;
+      gtag('consent', 'update', {
+        analytics_storage: 'denied',
+        ad_storage: 'denied',
+        ad_user_data: 'denied',
+        ad_personalization: 'denied'
+      });
+    }
+  }
+
+  // Garante a injeção única da tag do Google Analytics 4
+  function garantirGA4Carregado() {
+    if (document.getElementById('cm-ga4-script')) {
       return;
     }
-    gaCarregado = true;
 
-    // Atualiza o sinal de consentimento para granted apenas para analytics
-    gtag('consent', 'update', {
-      analytics_storage: 'granted',
-      ad_storage: 'denied',
-      ad_user_data: 'denied',
-      ad_personalization: 'denied'
-    });
-
-    // Injeção dinâmica do script oficial do Google Analytics
     const script = document.createElement('script');
     script.id = 'cm-ga4-script';
     script.async = true;
@@ -66,11 +82,25 @@
   function fecharBanner(banner) {
     if (!banner) return;
     banner.classList.add('cm-cookie-banner--hidden');
-    setTimeout(function () {
+    timerFechar = setTimeout(function () {
       if (banner.parentNode) {
         banner.parentNode.removeChild(banner);
       }
+      timerFechar = null;
     }, 300);
+  }
+
+  function abrirGerenciador() {
+    if (timerFechar) {
+      clearTimeout(timerFechar);
+      timerFechar = null;
+    }
+    const bannerExistente = document.getElementById('cm-cookie-banner');
+    if (bannerExistente) {
+      bannerExistente.classList.remove('cm-cookie-banner--hidden');
+      return;
+    }
+    criarBanner();
   }
 
   function obterCaminhoPolitica() {
@@ -97,7 +127,7 @@
     banner.className = 'cm-cookie-banner';
     banner.setAttribute('role', 'dialog');
     banner.setAttribute('aria-live', 'polite');
-    banner.setAttribute('aria-label', 'Consentimento de Cookies');
+    banner.setAttribute('aria-label', 'Preferências de privacidade');
 
     const container = document.createElement('div');
     container.className = 'cm-cookie-container';
@@ -124,6 +154,7 @@
     btnReject.className = 'cm-cookie-btn cm-cookie-btn-reject';
     btnReject.textContent = 'Recusar';
     btnReject.addEventListener('click', function () {
+      aplicarConsentimentoAnalytics(false);
       salvarConsentimento('rejected');
       fecharBanner(banner);
     });
@@ -134,7 +165,7 @@
     btnAccept.textContent = 'Aceitar';
     btnAccept.addEventListener('click', function () {
       salvarConsentimento('accepted');
-      carregarGA4();
+      aplicarConsentimentoAnalytics(true);
       fecharBanner(banner);
     });
 
@@ -151,10 +182,11 @@
   function inicializar() {
     const consent = obterConsentimento();
     if (consent === 'accepted') {
-      carregarGA4();
+      aplicarConsentimentoAnalytics(true);
       return;
     }
     if (consent === 'rejected') {
+      aplicarConsentimentoAnalytics(false);
       return;
     }
     if (document.readyState === 'loading') {
@@ -163,6 +195,15 @@
       criarBanner();
     }
   }
+
+  // Listener delegado para acionadores de gerenciamento de preferências
+  document.addEventListener('click', function (e) {
+    const trigger = e.target && e.target.closest('.cm-cookie-manage');
+    if (trigger) {
+      e.preventDefault();
+      abrirGerenciador();
+    }
+  });
 
   inicializar();
 })();
