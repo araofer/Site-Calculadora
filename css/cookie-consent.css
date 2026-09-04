@@ -1,0 +1,169 @@
+/* ==========================================================================
+   BANNER DE CONSENTIMENTO DE COOKIES (LGPD) - CALCULADORA MASTER
+   ========================================================================== */
+
+.cm-cookie-banner {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  background-color: #ffffff;
+  border-top: 1px solid #e2e8f0;
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.08);
+  z-index: 10000;
+  padding: 16px 0;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.cm-cookie-banner.cm-cookie-banner--hidden {
+  opacity: 0;
+  transform: translateY(100%);
+  pointer-events: none;
+}
+
+.cm-cookie-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 15px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  box-sizing: border-box;
+}
+
+.cm-cookie-text {
+  flex: 1;
+}
+
+.cm-cookie-text p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #333333;
+}
+
+.cm-cookie-link {
+  color: #1e2a38;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: color 0.2s ease;
+}
+
+.cm-cookie-link:hover {
+  color: #008080;
+}
+
+.cm-cookie-buttons {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+/* Isolamento de especificidade contra regras globais de button */
+.cm-cookie-banner button.cm-cookie-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: auto;
+  min-width: 110px;
+  min-height: 42px;
+  padding: 10px 18px;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.2;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  box-sizing: border-box;
+  text-align: center;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Botão Recusar */
+.cm-cookie-banner button.cm-cookie-btn-reject {
+  background-color: #ffffff;
+  color: #4a5568;
+  border: 1.5px solid #cbd5e1;
+}
+
+.cm-cookie-banner button.cm-cookie-btn-reject:hover {
+  background-color: #f1f5f9;
+  color: #1e2a38;
+  border-color: #94a3b8;
+}
+
+/* Botão Aceitar */
+.cm-cookie-banner button.cm-cookie-btn-accept {
+  background-color: #1e2a38;
+  color: #ffffff;
+  border: 1.5px solid #1e2a38;
+}
+
+.cm-cookie-banner button.cm-cookie-btn-accept:hover {
+  background-color: #354254;
+  border-color: #354254;
+}
+
+/* Foco acessível */
+.cm-cookie-banner button.cm-cookie-btn:focus-visible,
+.cm-cookie-link:focus-visible {
+  outline: 3px solid #1e2a38;
+  outline-offset: 2px;
+}
+
+/* ==========================================================================
+   RESPONSIVIDADE (MOBILE-FIRST)
+   ========================================================================== */
+
+@media (max-width: 768px) {
+  .cm-cookie-banner {
+    padding: 14px 0;
+  }
+
+  .cm-cookie-container {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 14px;
+  }
+
+  .cm-cookie-text p {
+    font-size: 13.5px;
+    text-align: left;
+  }
+
+  .cm-cookie-buttons {
+    display: flex;
+    width: 100%;
+    gap: 10px;
+  }
+
+  /* Sobrescreve com alta especificidade a regra global 'input, button { width: 90%; }' */
+  .cm-cookie-banner button.cm-cookie-btn {
+    flex: 1 1 50%;
+    width: 50%;
+    min-width: 0;
+    min-height: 44px;
+  }
+}
+
+@media (max-width: 360px) {
+  .cm-cookie-banner {
+    padding: 12px 0;
+  }
+
+  .cm-cookie-text p {
+    font-size: 13px;
+    line-height: 1.45;
+  }
+
+  .cm-cookie-banner button.cm-cookie-btn {
+    padding: 9px 12px;
+    font-size: 13.5px;
+  }
+}
