@@ -2,6 +2,49 @@
   'use strict';
 
   const STORAGE_KEY = 'cm_cookie_consent';
+  const GA_MEASUREMENT_ID = 'G-KRDLTF5GBP';
+  let gaCarregado = false;
+
+  // Inicialização segura e local do dataLayer e gtag
+  window.dataLayer = window.dataLayer || [];
+  function gtag() {
+    window.dataLayer.push(arguments);
+  }
+  window.gtag = gtag;
+
+  // Consentimento padrão em memória (Zero requisições de rede)
+  gtag('consent', 'default', {
+    analytics_storage: 'denied',
+    ad_storage: 'denied',
+    ad_user_data: 'denied',
+    ad_personalization: 'denied'
+  });
+
+  // Função isolada para carregar GA4 com proteção anti-duplicação dupla
+  function carregarGA4() {
+    if (gaCarregado || document.getElementById('cm-ga4-script')) {
+      return;
+    }
+    gaCarregado = true;
+
+    // Atualiza o sinal de consentimento para granted apenas para analytics
+    gtag('consent', 'update', {
+      analytics_storage: 'granted',
+      ad_storage: 'denied',
+      ad_user_data: 'denied',
+      ad_personalization: 'denied'
+    });
+
+    // Injeção dinâmica do script oficial do Google Analytics
+    const script = document.createElement('script');
+    script.id = 'cm-ga4-script';
+    script.async = true;
+    script.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA_MEASUREMENT_ID;
+    document.head.appendChild(script);
+
+    gtag('js', new Date());
+    gtag('config', GA_MEASUREMENT_ID);
+  }
 
   function obterConsentimento() {
     try {
@@ -91,6 +134,7 @@
     btnAccept.textContent = 'Aceitar';
     btnAccept.addEventListener('click', function () {
       salvarConsentimento('accepted');
+      carregarGA4();
       fecharBanner(banner);
     });
 
@@ -106,7 +150,11 @@
 
   function inicializar() {
     const consent = obterConsentimento();
-    if (consent === 'accepted' || consent === 'rejected') {
+    if (consent === 'accepted') {
+      carregarGA4();
+      return;
+    }
+    if (consent === 'rejected') {
       return;
     }
     if (document.readyState === 'loading') {
