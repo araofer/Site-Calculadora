@@ -104,19 +104,7 @@
   }
 
   function obterCaminhoPolitica() {
-    var path = window.location.pathname;
-    if (path.indexOf('/blog/artigos/') !== -1) {
-      return '../../politica.html';
-    }
-    if (path.indexOf('/blog/') !== -1 || path.indexOf('/tools/') !== -1) {
-      if (path.indexOf('/tools/financas/') !== -1 ||
-          path.indexOf('/tools/saude/') !== -1 ||
-          path.indexOf('/tools/utilidades/') !== -1) {
-        return '../../politica.html';
-      }
-      return '../politica.html';
-    }
-    return 'politica.html';
+    return '/politica.html';
   }
 
   function criarBanner() {
