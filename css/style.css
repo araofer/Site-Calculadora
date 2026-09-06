@@ -572,6 +572,7 @@ button:hover {
 
   .menu-toggle {
     display: block;
+    position: relative;
     z-index: 1001;
   }
 
