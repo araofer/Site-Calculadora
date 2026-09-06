@@ -1,3 +1,26 @@
-# Configuração de erro 404 - Calculadora Master
-# Garante que URLs inexistentes retornem a página personalizada com status HTTP 404 Not Found
+# 1. Define o arquivo principal
+DirectoryIndex index.html
+
+# 2. Impede a listagem de diretórios (Segurança)
+Options -Indexes
+
+# 3. Ativa URLs Amigáveis (Remove o .html dos links)
+RewriteEngine On
+
+# Redireciona para tirar o .html da URL (SEO)
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}\.html -f
+RewriteRule ^([^\.]+)$ $1.html [NC,L]
+
+RewriteEngine On
+
+# 1. Redireciona de HTTP para HTTPS (Segurança)
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# 2. Redireciona de Sem-WWW para WWW (Padronização)
+RewriteCond %{HTTP_HOST} !^www\. [NC]
+RewriteRule ^(.*)$ https://www.calculadoramaster.com/$1 [L,R=301]
+
+# Página 404 personalizada - Calculadora Master
 ErrorDocument 404 /404.html
