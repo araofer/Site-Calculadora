@@ -71,15 +71,15 @@
     <h2>Calcular meu IMC</h2>
 
     <label for="peso">Seu peso (kg):</label><br>
-    <input type="text" id="peso" placeholder="Ex: 70" oninput="limparResultado()" style="padding: 10px; border-radius: 5px; border: 1px solid #ccc; width: 100%; max-width: 300px;">
+    <input type="text" id="peso" placeholder="Ex: 70" style="padding: 10px; border-radius: 5px; border: 1px solid #ccc; width: 100%; max-width: 300px;">
     <br><br>
 
     <label for="altura">Sua altura (m):</label><br>
-    <input type="text" id="altura" placeholder="Ex: 1.75" oninput="limparResultado()" style="padding: 10px; border-radius: 5px; border: 1px solid #ccc; width: 100%; max-width: 300px;">
+    <input type="text" id="altura" placeholder="Ex: 1.75" style="padding: 10px; border-radius: 5px; border: 1px solid #ccc; width: 100%; max-width: 300px;">
     <br><br>
 
-    <button type="button" onclick="calcularIMC()">Calcular Agora</button>
-    <button type="button" onclick="limparCampos()">Limpar</button>
+    <button type="button" data-action="calculate">Calcular Agora</button>
+    <button type="button" data-action="clear">Limpar</button>
 
     <h3 id="resultado" style="margin-top: 20px; color: #008080;"></h3>
   </div>
@@ -131,56 +131,7 @@
   </section>
 </main>
 
-<script>
-function calcularIMC() {
-  // Substitui vírgula por ponto para garantir o cálculo correto
-  let pesoVal = document.getElementById("peso").value.replace(',', '.');
-  let alturaVal = document.getElementById("altura").value.replace(',', '.');
-
-  let peso = parseFloat(pesoVal);
-  let altura = parseFloat(alturaVal);
-
-  if (isNaN(peso) || isNaN(altura) || peso <= 0 || altura <= 0) {
-    document.getElementById("resultado").innerText = "Informe valores válidos para peso e altura!";
-    return;
-  }
-
-  // Ajuste caso o usuário digite altura em cm (ex: 175 em vez de 1.75)
-  if (altura > 3) {
-      altura = altura / 100;
-  }
-
-  let imc = peso / (altura * altura);
-  let classificacao = "";
-
-  if (imc < 18.5) {
-    classificacao = "Abaixo do peso";
-  } else if (imc < 25) {
-    classificacao = "Peso normal";
-  } else if (imc < 30) {
-    classificacao = "Sobrepeso";
-  } else if (imc < 35) {
-    classificacao = "Obesidade Grau I";
-  } else if (imc < 40) {
-    classificacao = "Obesidade Grau II";
-  } else {
-    classificacao = "Obesidade Grau III (Mórbida)";
-  }
-
-  document.getElementById("resultado").innerText =
-    "Seu IMC é " + imc.toFixed(2) + " | " + classificacao;
-}
-
-function limparCampos() {
-  document.getElementById("peso").value = "";
-  document.getElementById("altura").value = "";
-  document.getElementById("resultado").innerText = "";
-}
-
-function limparResultado() {
-  document.getElementById("resultado").innerText = "";
-}
-</script>
+<script type="module" src="../../js/tools/imc.js"></script>
 
 <footer class="footer">
     <div class="container">

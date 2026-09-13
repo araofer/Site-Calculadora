@@ -71,19 +71,19 @@
     <h2>Simular Horas Extras</h2>
 
     <label for="salario">Salário mensal (R$):</label><br>
-    <input type="text" id="salario" inputmode="decimal" placeholder="Ex: 2500,00" oninput="limparResultado()"><br><br>
+    <input type="text" id="salario" inputmode="decimal" placeholder="Ex: 2500,00"><br><br>
 
     <label for="jornada">Jornada mensal em horas:</label><br>
-    <input type="text" id="jornada" inputmode="decimal" placeholder="Ex: 220" oninput="limparResultado()"><br><br>
+    <input type="text" id="jornada" inputmode="decimal" placeholder="Ex: 220"><br><br>
 
     <label for="horas-extras">Quantidade de horas extras:</label><br>
-    <input type="text" id="horas-extras" inputmode="decimal" placeholder="Ex: 10" oninput="limparResultado()"><br><br>
+    <input type="text" id="horas-extras" inputmode="decimal" placeholder="Ex: 10"><br><br>
 
     <label for="adicional">Adicional de hora extra (%):</label><br>
-    <input type="text" id="adicional" inputmode="decimal" placeholder="Ex: 50" oninput="limparResultado()"><br><br>
+    <input type="text" id="adicional" inputmode="decimal" placeholder="Ex: 50"><br><br>
 
-    <button type="button" onclick="calcular()">Calcular</button>
-    <button type="button" onclick="limparCampos()">Limpar</button>
+    <button type="button" data-action="calculate">Calcular</button>
+    <button type="button" data-action="clear">Limpar</button>
 
     <p id="mensagem-erro" style="color: #c00; margin-top: 15px; display: none; font-weight: bold;"></p>
 
@@ -188,149 +188,7 @@
   </section>
 </main>
 
-<script>
-function parseNumero(valorStr) {
-  if (typeof valorStr !== 'string') return NaN;
-
-  const limpo = valorStr.trim();
-
-  if (!limpo) return NaN;
-
-  let normalizado;
-
-  // Formato brasileiro com milhar e decimal:
-  // 2.500,50
-  // -2.500,50
-  if (/^-?\d{1,3}(\.\d{3})+,\d+$/.test(limpo)) {
-    normalizado = limpo.replace(/\./g, '').replace(',', '.');
-
-  // Decimal com vírgula:
-  // 2500,50
-  // -2500,50
-  } else if (/^-?\d+,\d+$/.test(limpo)) {
-    normalizado = limpo.replace(',', '.');
-
-  // Inteiro ou decimal com ponto:
-  // 2500
-  // 2500.50
-  // -5
-  // -10.5
-  } else if (/^-?\d+(\.\d+)?$/.test(limpo)) {
-    normalizado = limpo;
-
-  } else {
-    return NaN;
-  }
-
-  const numero = Number(normalizado);
-
-  return Number.isFinite(numero) ? numero : NaN;
-}
-
-function calcular() {
-  const salarioInput = document.getElementById("salario").value;
-  const jornadaInput = document.getElementById("jornada").value;
-  const horasExtrasInput = document.getElementById("horas-extras").value;
-  const adicionalInput = document.getElementById("adicional").value;
-
-  const resContainer = document.getElementById("resultado-container");
-  const erroEl = document.getElementById("mensagem-erro");
-
-  erroEl.style.display = "none";
-  erroEl.innerText = "";
-  resContainer.style.display = "none";
-
-  if (!salarioInput.trim() || !jornadaInput.trim() || !horasExtrasInput.trim() || !adicionalInput.trim()) {
-    erroEl.innerText = "Por favor, preencha todos os campos para realizar o cálculo.";
-    erroEl.style.display = "block";
-    return;
-  }
-
-  const salario = parseNumero(salarioInput);
-  const jornada = parseNumero(jornadaInput);
-  const horasExtras = parseNumero(horasExtrasInput);
-  const adicional = parseNumero(adicionalInput);
-
-  if (isNaN(salario) || isNaN(jornada) || isNaN(horasExtras) || isNaN(adicional)) {
-    erroEl.innerText = "Por favor, informe valores numéricos válidos em todos os campos.";
-    erroEl.style.display = "block";
-    return;
-  }
-
-  if (salario <= 0) {
-    erroEl.innerText = "O salário mensal deve ser maior que zero.";
-    erroEl.style.display = "block";
-    return;
-  }
-
-  if (jornada <= 0) {
-    erroEl.innerText = "A jornada mensal em horas deve ser maior que zero.";
-    erroEl.style.display = "block";
-    return;
-  }
-
-  if (horasExtras < 0) {
-    erroEl.innerText = "A quantidade de horas extras não pode ser negativa.";
-    erroEl.style.display = "block";
-    return;
-  }
-
-  if (adicional < 0) {
-    erroEl.innerText = "O adicional de hora extra não pode ser negativo.";
-    erroEl.style.display = "block";
-    return;
-  }
-
-  const valorHora = salario / jornada;
-  const valorHoraExtra = valorHora * (1 + adicional / 100);
-  const totalHorasExtras = valorHoraExtra * horasExtras;
-
-  const fmtBRL = new Intl.NumberFormat('pt-BR', {
-    style: 'currency',
-    currency: 'BRL'
-  });
-
-  const horasFormatadas = new Intl.NumberFormat('pt-BR', {
-    maximumFractionDigits: 10
-  }).format(horasExtras);
-
-  document.getElementById("resultado").innerText =
-    "Total estimado das horas extras: " + fmtBRL.format(totalHorasExtras);
-
-  document.getElementById("detalhes").innerHTML =
-    `Valor da hora normal: <strong>${fmtBRL.format(valorHora)}</strong><br>` +
-    `Valor de cada hora extra: <strong>${fmtBRL.format(valorHoraExtra)}</strong><br>` +
-    `Quantidade considerada: <strong>${horasFormatadas} horas</strong><br>` +
-    `Adicional informado: <strong>${adicional}%</strong>`;
-
-  resContainer.style.display = "block";
-}
-
-function limparCampos() {
-  document.getElementById("salario").value = "";
-  document.getElementById("jornada").value = "";
-  document.getElementById("horas-extras").value = "";
-  document.getElementById("adicional").value = "";
-
-  const erroEl = document.getElementById("mensagem-erro");
-  erroEl.innerText = "";
-  erroEl.style.display = "none";
-
-  const resContainer = document.getElementById("resultado-container");
-  document.getElementById("resultado").innerText = "";
-  document.getElementById("detalhes").innerHTML = "";
-  resContainer.style.display = "none";
-}
-
-function limparResultado() {
-  const erroEl = document.getElementById("mensagem-erro");
-  erroEl.innerText = "";
-  erroEl.style.display = "none";
-
-  const resContainer = document.getElementById("resultado-container");
-  resContainer.style.display = "none";
-}
-</script>
+<script type="module" src="../../js/tools/horas-extras.js"></script>
 
 <footer class="footer">
   <div class="footer-top">

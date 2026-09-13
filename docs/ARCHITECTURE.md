@@ -132,6 +132,10 @@ js/
     juros.js                 # ESM: Juros simples e compostos + bindings data-action
     desconto.js              # ESM: Desconto percentual + bindings data-action
     lucro.js                 # ESM: Lucro bruto e margem + bindings data-action
+    porcentagem.js           # ESM: Cálculo de porcentagem + bindings data-action
+    dividir-conta.js         # ESM: Fechamento de conta entre pessoas + bindings data-action
+    imc.js                   # ESM: Índice de Massa Corporal + bindings data-action
+    horas-extras.js          # ESM: Horas extras trabalhistas + bindings data-action
     idade.js                 # ESM: Idade exata local + bindings data-action
     senha.js                 # ESM: Web Crypto API + rejection sampling + bindings data-action
 
@@ -146,6 +150,10 @@ tests/
   juros.test.js
   desconto.test.js
   lucro.test.js
+  porcentagem.test.js
+  dividir-conta.test.js
+  imc.test.js
+  horas-extras.test.js
   idade.test.js
   senha.test.js
 ```
@@ -170,9 +178,10 @@ tests/
 ### Eventos Semânticos (`data-action`) vs. Inspeção de Texto Visível
 
 Para eliminar a fragilidade de seletores baseados em texto visível dos botões (`textContent.includes("limpar")`), estabeleceu-se o padrão obrigatório de atributos semânticos:
-- `data-action="calculate"`: Ações de cálculo principal (ex: Calcular Idade, Calcular Financiamento).
+- `data-action="calculate"`: Ações de cálculo principal (ex: Calcular Idade, Calcular Financiamento, Calcular Horas Extras).
 - `data-action="clear"`: Ações de limpeza e redefinição de campos.
 - `data-action="generate"`: Ações de geração de dados (ex: Gerar Senha Forte).
+- `data-action="generate-fields"`: Geração de campos dinâmicos (ex: Dividir Conta).
 - `data-action="copy"`: Ações de cópia para a área de transferência.
 
 Vantagens:
@@ -200,7 +209,7 @@ Para manter a filosofia de **Zero Frameworks e Zero Dependências NPM**, todos o
 - Framework: `node:test`
 - Asserções: `node:assert/strict`
 - Execução: `npm test` (dispara `node --test tests/*.test.js`)
-- Execução instantânea (menos de 250ms para a suíte completa com 27 testes).
+- Execução instantânea (menos de 550ms para a suíte completa com 77 testes).
 
 ### Como Migrar as Próximas 12 Ferramentas (Checklist Oficial)
 
@@ -271,10 +280,10 @@ Cada calculadora individual em `tools/` possui seu próprio script inline com su
 | `mascaraMoeda` / `limparCampos` / `calcularFinanciamento` | **Obsoleta (Substituída)** | Substituída com testes por [`js/core/currency.js`](file:///home/araofer/Documentos/github/CalculadoraMaster/js/core/currency.js) e [`js/tools/financiamento-carro.js`](file:///home/araofer/Documentos/github/CalculadoraMaster/js/tools/financiamento-carro.js). A versão legada em `script.js` não tratava campos vazios e carecia de proteção contra divisão por zero em taxa 0%. |
 | `calcularIdade` | **Obsoleta (Substituída)** | Substituída com testes por [`js/tools/idade.js`](file:///home/araofer/Documentos/github/CalculadoraMaster/js/tools/idade.js). A versão em `script.js` apenas subtraía anos, ignorando dias e meses e sujeita a bugs de fuso UTC. |
 | `gerarSenha` | **Obsoleta e Insegura** | Substituída com testes por [`js/tools/senha.js`](file:///home/araofer/Documentos/github/CalculadoraMaster/js/tools/senha.js). A versão em `script.js` utilizava `Math.random()` inseguro e comprimento fixo em 12 caracteres. |
-| `calcularPorcentagem` | **Obsoleta** | [`tools/financas/porcentagem.html`](file:///home/araofer/Documentos/github/CalculadoraMaster/tools/financas/porcentagem.html) possui implementação própria com suporte a 3 tipos de cálculos percentuais. |
-| `gerarCampos` / `calcularDivisao` | **Duplicada** | [`tools/financas/dividir-conta.html`](file:///home/araofer/Documentos/github/CalculadoraMaster/tools/financas/dividir-conta.html) possui versão idêntica inline. |
+| `calcularPorcentagem` | **Obsoleta (Substituída)** | Substituída com testes por [`js/tools/porcentagem.js`](file:///home/araofer/Documentos/github/CalculadoraMaster/js/tools/porcentagem.js). A versão legada em `script.js` calculava apenas porcentagem simples, enquanto o novo módulo calcula projeção de acréscimo e desconto. |
+| `gerarCampos` / `calcularDivisao` | **Obsoleta (Substituída)** | Substituída com testes por [`js/tools/dividir-conta.js`](file:///home/araofer/Documentos/github/CalculadoraMaster/js/tools/dividir-conta.js). Suporta tolerância de ponto flutuante para centavos e validação de até 50 pessoas. |
 | `contarCaracteres` | **Obsoleta / Reduzida** | Em `script.js`, apenas conta `texto.length`. Em [`tools/utilidades/contador.html`](file:///home/araofer/Documentos/github/CalculadoraMaster/tools/utilidades/contador.html), conta palavras, caracteres, espaços e quebras de linha. |
-| `calcularIMC` | **Duplicada** | [`tools/saude/imc.html`](file:///home/araofer/Documentos/github/CalculadoraMaster/tools/saude/imc.html) possui versão com classificação completa de obesidade. |
+| `calcularIMC` | **Obsoleta (Substituída)** | Substituída com testes por [`js/tools/imc.js`](file:///home/araofer/Documentos/github/CalculadoraMaster/js/tools/imc.js). Normaliza altura digitada em cm (> 3m) e classifica todas as 6 faixas da OMS. |
 | `calcularDesconto` | **Obsoleta (Substituída)** | Substituída com testes por [`js/tools/desconto.js`](file:///home/araofer/Documentos/github/CalculadoraMaster/js/tools/desconto.js). A versão legada em `script.js` utilizava IDs desatualizados (`valor` em vez de `preco`). |
 | `calcularJuros` | **Obsoleta (Substituída)** | Substituída com testes por [`js/tools/juros.js`](file:///home/araofer/Documentos/github/CalculadoraMaster/js/tools/juros.js). A versão legada em `script.js` calculava apenas juros simples sob IDs obsoletos, enquanto o novo módulo suporta juros simples e compostos isoladamente. |
 | `gerarLinkWhats` | **Duplicada / Desconectada** | [`tools/utilidades/whatsapp.html`](file:///home/araofer/Documentos/github/CalculadoraMaster/tools/utilidades/whatsapp.html) possui a função `gerarLink()`. |

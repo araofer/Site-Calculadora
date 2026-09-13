@@ -71,20 +71,20 @@
     <h2>Dados da Conta</h2>
 
     <label for="total">Valor Total da Conta (R$):</label><br>
-    <input type="number" id="total" placeholder="Ex: 200.00" oninput="limparResultado()" step="0.01">
+    <input type="number" id="total" placeholder="Ex: 200.00" step="0.01">
     <br><br>
 
     <label for="pessoas">Quantas pessoas vão dividir?</label><br>
-    <input type="number" id="pessoas" placeholder="Ex: 4" oninput="limparResultado()">
+    <input type="number" id="pessoas" placeholder="Ex: 4">
     <br><br>
 
-    <button type="button" onclick="gerarCampos()">Inserir valores individuais</button>
+    <button type="button" data-action="generate-fields">Inserir valores individuais</button>
 
     <div id="camposPessoas" style="margin-top:20px;"></div>
 
     <br>
-    <button type="button" onclick="calcularDivisao()" class="btn-destaque">Calcular Fechamento</button>
-    <button type="button" onclick="limparCampos()">Limpar Tudo</button>
+    <button type="button" data-action="calculate" class="btn-destaque">Calcular Fechamento</button>
+    <button type="button" data-action="clear">Limpar Tudo</button>
 
     <h3 id="resultado" style="margin-top: 20px; color: #008080;"></h3>
   </div>
@@ -150,81 +150,7 @@
   </section>
 </main>
 
-<script>
-function gerarCampos() {
-  let pessoas = parseInt(document.getElementById("pessoas").value);
-  let container = document.getElementById("camposPessoas");
-
-  container.innerHTML = "";
-
-  if (!pessoas || pessoas <= 0) {
-    container.innerHTML = "<p style='color:red;'>Digite um número de pessoas válido!</p>";
-    return;
-  }
-
-  if (pessoas > 50) {
-    container.innerHTML = "<p style='color:red;'>Limite máximo de 50 pessoas por vez.</p>";
-    return;
-  }
-
-  for (let i = 1; i <= pessoas; i++) {
-    container.innerHTML += `
-      <div style="margin-bottom:10px;">
-        <label>Pessoa ${i}: </label>
-        <input type="number" class="valores" placeholder="Valor gasto" oninput="limparResultado()" step="0.01">
-      </div>
-    `;
-  }
-}
-
-function calcularDivisao() {
-  let totalInput = document.getElementById("total").value;
-  let total = parseFloat(totalInput);
-  let valores = document.querySelectorAll(".valores");
-
-  let soma = 0;
-  valores.forEach(input => {
-    soma += parseFloat(input.value) || 0;
-  });
-
-  let resultado = document.getElementById("resultado");
-
-  if (!total || total <= 0) {
-    resultado.innerText = "Por favor, informe o valor total da conta.";
-    return;
-  }
-
-  if (valores.length === 0) {
-    resultado.innerText = "Informe o número de pessoas e gere os campos primeiro.";
-    return;
-  }
-
-  let diferenca = total - soma;
-
-  // Usando margem de erro para centavos (ponto flutuante)
-  if (Math.abs(diferenca) < 0.01) {
-    resultado.style.color = "green";
-    resultado.innerText = "Tudo certo! O somatório bate com o total da conta. 👍";
-  } else if (diferenca > 0) {
-    resultado.style.color = "orange";
-    resultado.innerText = "Atenção: Ainda faltam R$ " + diferenca.toFixed(2) + " para fechar a conta.";
-  } else {
-    resultado.style.color = "red";
-    resultado.innerText = "Atenção: O total dos gastos passou em R$ " + Math.abs(diferenca).toFixed(2) + " do valor da conta.";
-  }
-}
-
-function limparCampos() {
-  document.getElementById("total").value = "";
-  document.getElementById("pessoas").value = "";
-  document.getElementById("camposPessoas").innerHTML = "";
-  document.getElementById("resultado").innerText = "";
-}
-
-function limparResultado() {
-  document.getElementById("resultado").innerText = "";
-}
-</script>
+<script type="module" src="../../js/tools/dividir-conta.js"></script>
 
 <footer class="footer">
     <div class="container">

@@ -71,14 +71,14 @@
     <h2>Quanto é X% de Y?</h2>
 
     <label for="percentual">Quanto é (%):</label><br>
-    <input type="number" id="percentual" oninput="limparResultado()" placeholder="Ex: 10" style="width: 80px;"> 
+    <input type="number" id="percentual" placeholder="Ex: 10" style="width: 80px;"> 
     <span> de </span>
-    <input type="number" id="valor" oninput="limparResultado()" placeholder="Ex: 200">
+    <input type="number" id="valor" placeholder="Ex: 200">
 
     <br><br>
 
-    <button type="button" onclick="calcular()">Calcular</button>
-    <button type="button" onclick="limparCampos()">Limpar</button>
+    <button type="button" data-action="calculate">Calcular</button>
+    <button type="button" data-action="clear">Limpar</button>
 
     <div id="resultado-container" style="margin-top: 20px; display: none;">
         <h3 id="resultado" style="color: #008080;"></h3>
@@ -153,41 +153,7 @@
   </section>
 </main>
 
-<script>
-function calcular() {
-  let percentual = parseFloat(document.getElementById("percentual").value);
-  let valor = parseFloat(document.getElementById("valor").value);
-  let resContainer = document.getElementById("resultado-container");
-
-  if (isNaN(percentual) || isNaN(valor)) {
-    document.getElementById("resultado").innerText = "Preencha os campos corretamente!";
-    resContainer.style.display = "block";
-    return;
-  }
-
-  let parte = (valor * percentual) / 100;
-  let comDesconto = valor - parte;
-  let comAumento = valor + parte;
-
-  resContainer.style.display = "block";
-  document.getElementById("resultado").innerText = "Resultado: " + parte.toFixed(2);
-  
-  document.getElementById("detalhes").innerHTML = 
-    `Se for um <strong>desconto</strong>, o valor final é: R$ ${comDesconto.toFixed(2)}<br>` +
-    `Se for um <strong>aumento</strong>, o valor final é: R$ ${comAumento.toFixed(2)}`;
-}
-
-function limparCampos() {
-  document.getElementById("percentual").value = "";
-  document.getElementById("valor").value = "";
-  document.getElementById("resultado").innerText = "";
-  document.getElementById("resultado-container").style.display = "none";
-}
-
-function limparResultado() {
-  document.getElementById("resultado-container").style.display = "none";
-}
-</script>
+<script type="module" src="../../js/tools/porcentagem.js"></script>
 
 <footer class="footer">
     <div class="container">
