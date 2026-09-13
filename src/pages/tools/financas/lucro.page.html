@@ -1,0 +1,90 @@
+---
+title: Calculadora de Lucro e Margem Online | Calcule seu Ganho
+description: Calcule lucro bruto, custo, preço de venda e margem de lucro facilmente. Ferramenta ideal para precificação de produtos e gestão de negócios.
+keywords: calculadora de lucro, margem de lucro, preço de venda, lucro por produto, markup
+canonical: https://www.calculadoramaster.com/tools/financas/lucro.html
+layout: tool
+pageScripts: <script type="module" src="{{ROOT_PREFIX}}js/tools/lucro.js"></script>
+---
+  <h1>Calculadora de Lucro e Margem</h1>
+  <p>Analise a viabilidade do seu preço de venda e descubra sua margem de lucro real.</p>
+
+  <div style="margin:20px 0;" class="card">
+    <h2>Dados do Produto</h2>
+
+    <label for="custo">Custo Total do Produto (R$):</label><br>
+    <input type="number" id="custo" placeholder="Ex: 50.00" step="0.01">
+    <br><br>
+
+    <label for="preco">Preço de Venda Final (R$):</label><br>
+    <input type="number" id="preco" placeholder="Ex: 80.00" step="0.01">
+    <br><br>
+
+    <button type="button" data-action="calculate">Calcular Lucro</button>
+    <button type="button" data-action="clear">Limpar</button>
+
+    <h3 id="resultado" style="margin-top: 20px; color: #008080;"></h3>
+  </div>
+
+  <section class="content">
+    <h2>Como Calcular o Lucro e a Margem?</h2>
+    <p>
+      Muitos empreendedores confundem Lucro com Margem de Lucro. Embora relacionados, eles representam dados diferentes sobre a saúde do seu negócio.
+    </p>
+
+    <h3>Lucro Bruto</h3>
+    <p>É o valor absoluto que sobra após subtrair o custo do preço de venda.</p>
+    <p><strong>Fórmula:</strong> Lucro = Preço de Venda - Custo</p>
+
+    <h3>Margem de Lucro</h3>
+    <p>É a porcentagem do preço de venda que corresponde ao lucro. Ela indica a eficiência da sua operação.</p>
+    <p><strong>Fórmula:</strong> Margem % = (Lucro ÷ Preço de Venda) × 100</p>
+
+    <h2>Por que usar esta calculadora?</h2>
+    <ul>
+      <li><strong>Precificação Correta:</strong> Garanta que você não está vendendo produtos com prejuízo.</li>
+      <li><strong>Competitividade:</strong> Saiba quanto você pode dar de desconto sem zerar seu ganho.</li>
+      <li><strong>Gestão:</strong> Ideal para lojistas, artesãos e prestadores de serviço.</li>
+    </ul>
+
+    <!-- FERRAMENTAS RELACIONADAS -->
+    <section class="related-tools">
+      <h2>Você também pode precisar</h2>
+      <div class="related-tools-grid">
+        <article class="tool-card">
+          <div class="tool-card-header">
+            <span class="tool-card-category">Matemática</span>
+          </div>
+          <h3 class="tool-card-title">Calculadora de Porcentagem</h3>
+          <p class="tool-card-desc">Calcule percentuais, aumentos, reduções e proporções de forma simples e rápida.</p>
+          <div class="tool-card-footer">
+            <a href="../financas/porcentagem.html" class="tool-card-btn" aria-label="Acessar Calculadora de Porcentagem">Calcular agora &rarr;</a>
+          </div>
+        </article>
+        <article class="tool-card">
+          <div class="tool-card-header">
+            <span class="tool-card-category">Financeira</span>
+          </div>
+          <h3 class="tool-card-title">Calculadora de Desconto</h3>
+          <p class="tool-card-desc">Descubra o valor final com desconto e a economia real nas suas compras.</p>
+          <div class="tool-card-footer">
+            <a href="../financas/desconto.html" class="tool-card-btn" aria-label="Acessar Calculadora de Desconto">Calcular agora &rarr;</a>
+          </div>
+        </article>
+        <article class="tool-card">
+          <div class="tool-card-header">
+            <span class="tool-card-category">Financeira</span>
+          </div>
+          <h3 class="tool-card-title">Calculadora de Juros</h3>
+          <p class="tool-card-desc">Calcule juros simples e compostos para investimentos, empréstimos e rendimentos.</p>
+          <div class="tool-card-footer">
+            <a href="../financas/juros.html" class="tool-card-btn" aria-label="Acessar Calculadora de Juros">Calcular agora &rarr;</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <p style="margin-top: 30px;">
+      👉 <a href="{{ROOT_PREFIX}}index.html">Voltar para página inicial</a>
+    </p>
+  </section>

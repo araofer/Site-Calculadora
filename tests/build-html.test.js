@@ -6,7 +6,16 @@ import { fileURLToPath } from 'node:url';
 
 // Importa funções do motor SSG CommonJS
 import ssg from '../scripts/build-html.js';
-const { calculateRootPrefix, parsePageSource, renderPage, buildPilot } = ssg;
+const {
+  calculateRootPrefix,
+  parsePageSource,
+  renderPage,
+  buildPilot,
+  buildPages,
+  DEFAULT_PAGES,
+  DEFAULT_ASSETS,
+  copyPilotAssets
+} = ssg;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -141,4 +150,120 @@ test('SSG Piloto - Caminhos relativos de CSS, JS e imagens estão consistentes',
   assert.doesNotMatch(html, /href="undefined"/);
   assert.doesNotMatch(html, /src="undefined"/);
   assert.doesNotMatch(html, /file:\/\/\//);
+});
+
+/* ==================================================
+ * NOVOS TESTES - SSG MULTIPÁGINA (LOTE 1 FINANCEIRO)
+ * ================================================== */
+
+test('SSG Multipage - buildPages compila com sucesso as 4 ferramentas financeiras do Lote 1', () => {
+  const results = buildPages();
+  assert.equal(results.length, 4, 'Devem ser geradas exatamente 4 páginas no Lote 1');
+
+  const expectedPaths = [
+    'tools/financas/desconto.html',
+    'tools/financas/juros.html',
+    'tools/financas/lucro.html',
+    'tools/financas/porcentagem.html'
+  ];
+
+  expectedPaths.forEach(expectedRel => {
+    const fullPath = path.join(ROOT_DIR, 'dist-pilot', expectedRel);
+    assert.ok(fs.existsSync(fullPath), `Arquivo ${expectedRel} deve existir em dist-pilot`);
+    const content = fs.readFileSync(fullPath, 'utf-8');
+    assert.ok(content.length > 500, `Arquivo ${expectedRel} deve ter conteúdo substancial`);
+  });
+});
+
+test('SSG Multipage - Juros: title, canonical, H1, módulo ESM e elementos do formulário', () => {
+  const filePath = path.join(ROOT_DIR, 'dist-pilot', 'tools', 'financas', 'juros.html');
+  const html = fs.readFileSync(filePath, 'utf-8');
+
+  assert.match(html, /<title>Calculadora de Juros Simples e Compostos Online \| Calculadora Master<\/title>/);
+  assert.match(html, /<link rel="canonical" href="https:\/\/www\.calculadoramaster\.com\/tools\/financas\/juros\.html">/);
+  assert.match(html, /<h1>Calculadora de Juros<\/h1>/);
+  assert.match(html, /<script type="module" src="\.\.\/\.\.\/js\/tools\/juros\.js"><\/script>/);
+
+  // Elementos do formulário e botões semânticos
+  assert.match(html, /id="capitalSimples"/);
+  assert.match(html, /id="taxaSimples"/);
+  assert.match(html, /id="tempoSimples"/);
+  assert.match(html, /data-action="calculate-simple"/);
+  assert.match(html, /id="resultadoSimples"/);
+
+  assert.match(html, /id="capitalComposto"/);
+  assert.match(html, /id="taxaComposta"/);
+  assert.match(html, /id="tempoComposto"/);
+  assert.match(html, /data-action="calculate-compound"/);
+  assert.match(html, /id="resultadoComposto"/);
+});
+
+test('SSG Multipage - Lucro: title, canonical, H1, módulo ESM e elementos do formulário', () => {
+  const filePath = path.join(ROOT_DIR, 'dist-pilot', 'tools', 'financas', 'lucro.html');
+  const html = fs.readFileSync(filePath, 'utf-8');
+
+  assert.match(html, /<title>Calculadora de Lucro e Margem Online \| Calcule seu Ganho<\/title>/);
+  assert.match(html, /<link rel="canonical" href="https:\/\/www\.calculadoramaster\.com\/tools\/financas\/lucro\.html">/);
+  assert.match(html, /<h1>Calculadora de Lucro e Margem<\/h1>/);
+  assert.match(html, /<script type="module" src="\.\.\/\.\.\/js\/tools\/lucro\.js"><\/script>/);
+
+  // Elementos do formulário e botões semânticos
+  assert.match(html, /id="custo"/);
+  assert.match(html, /id="preco"/);
+  assert.match(html, /data-action="calculate"/);
+  assert.match(html, /data-action="clear"/);
+  assert.match(html, /id="resultado"/);
+});
+
+test('SSG Multipage - Porcentagem: title, canonical, H1, módulo ESM e elementos do formulário', () => {
+  const filePath = path.join(ROOT_DIR, 'dist-pilot', 'tools', 'financas', 'porcentagem.html');
+  const html = fs.readFileSync(filePath, 'utf-8');
+
+  assert.match(html, /<title>Calculadora de Porcentagem Online Grátis \| Calculadora Master<\/title>/);
+  assert.match(html, /<link rel="canonical" href="https:\/\/www\.calculadoramaster\.com\/tools\/financas\/porcentagem\.html">/);
+  assert.match(html, /<h1>Calculadora de Porcentagem<\/h1>/);
+  assert.match(html, /<script type="module" src="\.\.\/\.\.\/js\/tools\/porcentagem\.js"><\/script>/);
+
+  // Elementos do formulário e botões semânticos
+  assert.match(html, /id="percentual"/);
+  assert.match(html, /id="valor"/);
+  assert.match(html, /data-action="calculate"/);
+  assert.match(html, /data-action="clear"/);
+  assert.match(html, /id="resultado"/);
+  assert.match(html, /id="detalhes"/);
+});
+
+test('SSG Multipage - Ausência de placeholders {{...}} em todas as páginas geradas', () => {
+  const pages = [
+    'tools/financas/desconto.html',
+    'tools/financas/juros.html',
+    'tools/financas/lucro.html',
+    'tools/financas/porcentagem.html'
+  ];
+
+  for (const pageRel of pages) {
+    const filePath = path.join(ROOT_DIR, 'dist-pilot', pageRel);
+    const html = fs.readFileSync(filePath, 'utf-8');
+    const leftover = html.match(/\{\{([A-Z0-9_]+)\}\}/);
+    assert.equal(leftover, null, `Nenhum placeholder não resolvido deve restar em ${pageRel}: ${leftover?.[0]}`);
+    assert.doesNotMatch(html, /href="undefined"/, `${pageRel} não deve conter href="undefined"`);
+    assert.doesNotMatch(html, /src="undefined"/, `${pageRel} não deve conter src="undefined"`);
+  }
+});
+
+test('SSG Multipage - Todos os 11 assets obrigatórios são copiados para dist-pilot', () => {
+  for (const item of DEFAULT_ASSETS) {
+    const destPath = path.join(ROOT_DIR, 'dist-pilot', item.dest);
+    assert.ok(fs.existsSync(destPath), `Asset copiado deve existir em dist-pilot: ${item.dest}`);
+  }
+});
+
+test('SSG Multipage - copyPilotAssets lança erro explícito se um asset obrigatório não existir', () => {
+  const mockAssets = [
+    { src: 'arquivo-que-nao-existe-jamais.xyz', dest: 'arquivo.xyz' }
+  ];
+
+  assert.throws(() => {
+    copyPilotAssets(path.join(ROOT_DIR, 'dist-pilot'), mockAssets);
+  }, /Asset obrigatório não encontrado no disco/);
 });

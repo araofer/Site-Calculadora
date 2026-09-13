@@ -1,0 +1,95 @@
+---
+title: Calculadora de Porcentagem Online Grátis | Calculadora Master
+description: Calcule porcentagens online grátis. Descubra valores percentuais, descontos e aumentos de forma rápida e fácil com nossa ferramenta.
+keywords: calculadora de porcentagem, calcular porcentagem, como calcular porcentagem, desconto percentual, aumento percentual
+canonical: https://www.calculadoramaster.com/tools/financas/porcentagem.html
+layout: tool
+pageScripts: <script type="module" src="{{ROOT_PREFIX}}js/tools/porcentagem.js"></script>
+---
+  <h1>Calculadora de Porcentagem</h1>
+  <p>Calcule valores percentuais, descontos e aumentos de forma simples e precisa.</p>
+
+  <div style="margin:20px 0;" class="card">
+    <h2>Quanto é X% de Y?</h2>
+
+    <label for="percentual">Quanto é (%):</label><br>
+    <input type="number" id="percentual" placeholder="Ex: 10" style="width: 80px;">
+    <span> de </span>
+    <input type="number" id="valor" placeholder="Ex: 200">
+
+    <br><br>
+
+    <button type="button" data-action="calculate">Calcular</button>
+    <button type="button" data-action="clear">Limpar</button>
+
+    <div id="resultado-container" style="margin-top: 20px; display: none;">
+        <h3 id="resultado" style="color: #008080;"></h3>
+        <p id="detalhes" style="font-size: 0.9em; color: #666;"></p>
+    </div>
+  </div>
+
+  <section class="content">
+    <h2>Como calcular porcentagem manualmente?</h2>
+    <p>
+      A porcentagem nada mais é do que uma razão com denominador 100. Saber calcular é essencial para conferir descontos em lojas ou aumentos salariais.
+    </p>
+
+    <p><strong>Fórmula Simples:</strong></p>
+    <p>$Resultado = \frac{Valor \times Porcentual}{100}$</p>
+
+    <h2>Exemplo Prático</h2>
+    <p>Se você quer saber quanto é 20% de R$ 500,00:</p>
+    <ul>
+        <li>Multiplique 500 por 20 = 10.000</li>
+        <li>Divida 10.000 por 100 = 100</li>
+        <li>O resultado é <strong>R$ 100,00</strong></li>
+    </ul>
+
+    <h2>Dicas de Uso</h2>
+    <ul>
+      <li><strong>Descontos:</strong> Calcule o valor e subtraia do preço original.</li>
+      <li><strong>Aumentos:</strong> Calcule o valor e some ao preço original.</li>
+      <li><strong>Comissões:</strong> Ideal para vendedores calcularem seus ganhos sobre vendas.</li>
+    </ul>
+
+    <!-- FERRAMENTAS RELACIONADAS -->
+    <section class="related-tools">
+      <h2>Você também pode precisar</h2>
+      <div class="related-tools-grid">
+        <article class="tool-card">
+          <div class="tool-card-header">
+            <span class="tool-card-category">Financeira</span>
+          </div>
+          <h3 class="tool-card-title">Calculadora de Desconto</h3>
+          <p class="tool-card-desc">Descubra o valor final com desconto e a economia real nas suas compras.</p>
+          <div class="tool-card-footer">
+            <a href="../financas/desconto.html" class="tool-card-btn" aria-label="Acessar Calculadora de Desconto">Calcular agora &rarr;</a>
+          </div>
+        </article>
+        <article class="tool-card">
+          <div class="tool-card-header">
+            <span class="tool-card-category">Financeira</span>
+          </div>
+          <h3 class="tool-card-title">Calculadora de Lucros</h3>
+          <p class="tool-card-desc">Calcule lucro bruto, margem de lucro e a precificação ideal para seus produtos.</p>
+          <div class="tool-card-footer">
+            <a href="../financas/lucro.html" class="tool-card-btn" aria-label="Acessar Calculadora de Lucros">Calcular agora &rarr;</a>
+          </div>
+        </article>
+        <article class="tool-card">
+          <div class="tool-card-header">
+            <span class="tool-card-category">Financeira</span>
+          </div>
+          <h3 class="tool-card-title">Calculadora de Juros</h3>
+          <p class="tool-card-desc">Calcule juros simples e compostos para investimentos, empréstimos e rendimentos.</p>
+          <div class="tool-card-footer">
+            <a href="../financas/juros.html" class="tool-card-btn" aria-label="Acessar Calculadora de Juros">Calcular agora &rarr;</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <p style="margin-top: 30px;">
+      👉 <a href="{{ROOT_PREFIX}}index.html">Voltar para página inicial</a>
+    </p>
+  </section>

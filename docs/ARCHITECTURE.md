@@ -350,17 +350,17 @@ Uma conversão cega em massa de todos os arquivos do repositório geraria:
 ## 8. Próximos Passos Recomendados
 
 1. **Fase 2 — Modularização de Scripts (Concluída)**: 15/15 ferramentas migradas para ES Modules nativos com testes automatizados e script legado removido.
-2. **Fase 3 — Motor de Build SSG (Piloto em Andamento)**: Piloto implementado com sucesso para Desconto em dist-pilot/; expansão para as demais páginas planejada após validação.
+2. **Fase 3 — Motor de Build SSG (Lote 1 Financeiro Concluído / Em Andamento)**: Motor multipágina implementado com sucesso para o Lote 1 de Finanças (4 ferramentas: Desconto, Juros, Lucro, Porcentagem) gerando artefatos em `dist-pilot/`; expansão para os próximos lotes de ferramentas planejada após validação contínua.
 3. **Fase 4 — Normalização de Git e Line Endings**: Aplicar `.gitattributes` e `.git-blame-ignore-revs` em commit exclusivo.
 
 ---
 
-## 9. Fase 3 — SSG Piloto (Geração Estática em Tempo de Build)
+## 9. Fase 3 — Motor SSG Multipágina (Lote 1 Financeiro)
 
 ### Objetivo e Visão Geral
-Implementar um piloto mínimo, seguro e reversível de Static Site Generation (SSG) em Node.js vanilla para eliminar progressivamente a duplicação estrutural de cabeçalho, rodapé e casca HTML entre as ferramentas, sem uso de frameworks e sem substituição imediata dos arquivos de produção.
+Evoluir o piloto mínimo de Static Site Generation (SSG) em Node.js vanilla para um motor multipágina flexível e reversível, eliminando progressivamente a duplicação estrutural de cabeçalho, rodapé e casca HTML entre as ferramentas, sem uso de frameworks, sem bundlers e sem substituição imediata dos arquivos de produção.
 
-### Estrutura Implementada no Piloto
+### Estrutura Implementada no Lote 1 Financeiro
 ```text
 src/
   components/
@@ -371,16 +371,26 @@ src/
   pages/
     tools/
       financas/
-        desconto.page.html # Conteúdo e metadados exclusivos da ferramenta piloto
+        desconto.page.html    # Conteúdo e metadados exclusivos da ferramenta Desconto
+        juros.page.html       # Conteúdo e metadados exclusivos da ferramenta Juros
+        lucro.page.html       # Conteúdo e metadados exclusivos da ferramenta Lucro
+        porcentagem.page.html # Conteúdo e metadados exclusivos da ferramenta Porcentagem
 scripts/
-  build-html.js           # Motor de build SSG em Node.js Vanilla CommonJS
-dist-pilot/               # Diretório isolado de saída de teste do piloto
+  build-html.js           # Motor de build SSG multipágina em Node.js Vanilla CommonJS
+dist-pilot/               # Diretório isolado de saída de teste (ignorado no .gitignore)
 ```
 
 ### Características Técnicas do Motor
-1. **Composição em Build-Time**: A injeção de layouts e componentes ocorre exclusivamente durante o build (`npm run build:html:pilot`). O navegador recebe HTML estático 100% puro e completo, sem chamadas `fetch()` ou injeção dinâmica de templates em runtime.
-2. **Zero Frameworks e Dependências**: Implementado estritamente com módulos nativos `fs` e `path` do Node.js, plenamente compatível com o ecossistema CommonJS existente.
-3. **Resolução Dinâmica de Caminhos Relativos (`rootPrefix`)**: O motor calcula a profundidade do arquivo em relação à raiz (`../../` para ferramentas em `tools/<categoria>/`, `../` para categorias e `./` para a raiz), garantindo que CSS, scripts, imagens e links funcionem perfeitamente em qualquer nível de diretório.
-4. **Validação Defensiva**: O build falha expressamente se qualquer campo de metadado obrigatório estiver ausente ou se restar qualquer placeholder `{{...}}` não resolvido no artefato gerado.
-5. **Página Piloto Controlada**: Apenas `tools/financas/desconto.html` foi utilizada como piloto, gerando o artefato de validação em `dist-pilot/tools/financas/desconto.html`. Os HTMLs atuais de produção não foram alterados nem deletados, mantendo URLs públicas e SEO 100% preservados.
-6. **Escopo e Limitações**: O SSG piloto ainda não foi adotado para as demais páginas do site, servindo como prova de conceito controlada e validada antes da expansão geral.
+1. **Motor Multipágina (`buildPages`)**: A função `buildPages(pages, options)` itera sobre coleções de páginas declaradas, compilando cada template com base no seu arquivo fonte `.page.html` e gerando os artefatos correspondentes no diretório de destino (`dist-pilot/`). Mantém a função retrocompatível `buildPilot(options)`.
+2. **Composição em Build-Time**: A injeção de layouts e componentes ocorre exclusivamente durante o build (`npm run build:html:pilot` ou `npm run build:html:financeiro`). O navegador recebe HTML estático 100% puro e completo, sem chamadas `fetch()` ou injeção dinâmica de templates em runtime.
+3. **Zero Frameworks e Dependências**: Implementado estritamente com módulos nativos `fs` e `path` do Node.js, plenamente compatível com o ecossistema CommonJS existente.
+4. **Resolução Dinâmica de Caminhos Relativos (`rootPrefix`)**: O motor calcula a profundidade do arquivo em relação à raiz (`../../` para ferramentas em `tools/<categoria>/`, `../` para categorias e `./` para a raiz), garantindo que CSS, scripts, imagens e links funcionem perfeitamente em qualquer nível de diretório.
+5. **Cópia Defensiva de Assets**: Todos os assets estáticos necessários (estilos, logos, scripts centrais e módulos ESM das ferramentas compiladas) são copiados para `dist-pilot/`. Se qualquer asset obrigatório não for encontrado no disco, o build falha imediatamente com erro explícito, impedindo compilações silenciosamente corrompidas.
+6. **Validação Defensiva de Placeholders**: O build falha expressamente se qualquer campo de metadado obrigatório estiver ausente ou se restar qualquer placeholder `{{...}}` não resolvido no artefato gerado.
+7. **Páginas do Lote 1 e Isolamento de Produção**:
+   - `tools/financas/desconto.html`
+   - `tools/financas/juros.html`
+   - `tools/financas/lucro.html`
+   - `tools/financas/porcentagem.html`
+   Os HTMLs de produção atuais permanecem 100% intactos e inalterados no repositório, garantindo preservação absoluta de SEO e estabilidade funcional.
+8. **Status e Limitações**: A Fase 3 NÃO está finalizada para todo o site. Apenas o Lote 1 de Finanças (4 ferramentas) foi migrado para templates de build. Demais ferramentas (financiamento de carro/imóvel, dividir conta, saúde, trabalhista, utilidades) e páginas de categorias/blog/institucionais permanecem como HTMLs estáticos para serem integradas nos próximos lotes.

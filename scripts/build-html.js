@@ -14,6 +14,39 @@ const LAYOUTS_DIR = path.join(SRC_DIR, 'layouts');
 const PAGES_DIR = path.join(SRC_DIR, 'pages');
 const DEFAULT_OUTPUT_DIR = path.join(ROOT_DIR, 'dist-pilot');
 
+const DEFAULT_PAGES = [
+  {
+    sourceFile: path.join(PAGES_DIR, 'tools', 'financas', 'desconto.page.html'),
+    relativeOutputPath: 'tools/financas/desconto.html'
+  },
+  {
+    sourceFile: path.join(PAGES_DIR, 'tools', 'financas', 'juros.page.html'),
+    relativeOutputPath: 'tools/financas/juros.html'
+  },
+  {
+    sourceFile: path.join(PAGES_DIR, 'tools', 'financas', 'lucro.page.html'),
+    relativeOutputPath: 'tools/financas/lucro.html'
+  },
+  {
+    sourceFile: path.join(PAGES_DIR, 'tools', 'financas', 'porcentagem.page.html'),
+    relativeOutputPath: 'tools/financas/porcentagem.html'
+  }
+];
+
+const DEFAULT_ASSETS = [
+  { src: 'css/style.css', dest: 'css/style.css' },
+  { src: 'css/cookie-consent.css', dest: 'css/cookie-consent.css' },
+  { src: 'js/tools/desconto.js', dest: 'js/tools/desconto.js' },
+  { src: 'js/tools/juros.js', dest: 'js/tools/juros.js' },
+  { src: 'js/tools/lucro.js', dest: 'js/tools/lucro.js' },
+  { src: 'js/tools/porcentagem.js', dest: 'js/tools/porcentagem.js' },
+  { src: 'js/header-auth.js', dest: 'js/header-auth.js' },
+  { src: 'js/cookie-consent.js', dest: 'js/cookie-consent.js' },
+  { src: 'logo/logo.png', dest: 'logo/logo.png' },
+  { src: 'logo/favicon.png', dest: 'logo/favicon.png' },
+  { src: 'logo/banner.png', dest: 'logo/banner.png' }
+];
+
 /**
  * Calcula o prefixo de caminho relativo até a raiz do projeto baseado na profundidade do arquivo.
  * Ex: 'tools/financas/desconto.html' -> '../../'
@@ -136,71 +169,88 @@ function renderPage({ sourceFile, relativeOutputPath, componentsDir = COMPONENTS
 }
 
 /**
- * Copia os assets mínimos necessários para que a página piloto seja testável via HTTP
+ * Copia os assets mínimos necessários para que as páginas geradas sejam testáveis via HTTP
  * sem erros 404 e sem copiar o repositório inteiro.
+ * Falha defensivamente se algum asset declarado/obrigatório não existir no disco.
  *
- * @param {string} outputDir Diretório raiz de saída do piloto
+ * @param {string} [outputDir] Diretório raiz de saída do piloto
+ * @param {Array<{src: string, dest: string}>} [assets] Lista de assets a copiar
  */
-function copyPilotAssets(outputDir = DEFAULT_OUTPUT_DIR) {
-  const minimalAssets = [
-    { src: 'css/style.css', dest: 'css/style.css' },
-    { src: 'css/cookie-consent.css', dest: 'css/cookie-consent.css' },
-    { src: 'js/tools/desconto.js', dest: 'js/tools/desconto.js' },
-    { src: 'js/header-auth.js', dest: 'js/header-auth.js' },
-    { src: 'js/cookie-consent.js', dest: 'js/cookie-consent.js' },
-    { src: 'logo/logo.png', dest: 'logo/logo.png' },
-    { src: 'logo/favicon.png', dest: 'logo/favicon.png' },
-    { src: 'logo/banner.png', dest: 'logo/banner.png' }
-  ];
-
-  for (const item of minimalAssets) {
+function copyPilotAssets(outputDir = DEFAULT_OUTPUT_DIR, assets = DEFAULT_ASSETS) {
+  for (const item of assets) {
     const srcPath = path.join(ROOT_DIR, item.src);
     const destPath = path.join(outputDir, item.dest);
-    if (fs.existsSync(srcPath)) {
-      fs.mkdirSync(path.dirname(destPath), { recursive: true });
-      fs.copyFileSync(srcPath, destPath);
+
+    if (!fs.existsSync(srcPath)) {
+      throw new Error(`Asset obrigatório não encontrado no disco: ${item.src} (${srcPath})`);
     }
+
+    fs.mkdirSync(path.dirname(destPath), { recursive: true });
+    fs.copyFileSync(srcPath, destPath);
   }
 }
 
 /**
+ * Executa o build de uma coleção de páginas e copia os assets necessários.
+ *
+ * @param {Array<{sourceFile: string, relativeOutputPath: string}>} [pages] Lista de páginas a compilar
+ * @param {Object} [options]
+ * @param {string} [options.outputDir] Diretório raiz de saída
+ * @param {Array<{src: string, dest: string}>} [options.assets] Lista de assets a copiar
+ * @returns {Array<{targetFile: string, relativeOutputPath: string, html: string}>}
+ */
+function buildPages(pages = DEFAULT_PAGES, { outputDir = DEFAULT_OUTPUT_DIR, assets = DEFAULT_ASSETS } = {}) {
+  const results = [];
+
+  for (const page of pages) {
+    const targetFile = path.join(outputDir, page.relativeOutputPath);
+    const html = renderPage({
+      sourceFile: page.sourceFile,
+      relativeOutputPath: page.relativeOutputPath
+    });
+
+    fs.mkdirSync(path.dirname(targetFile), { recursive: true });
+    fs.writeFileSync(targetFile, html, 'utf-8');
+    results.push({ targetFile, relativeOutputPath: page.relativeOutputPath, html });
+    console.log(`✓ Página gerada com sucesso: ${page.relativeOutputPath}`);
+  }
+
+  copyPilotAssets(outputDir, assets);
+  console.log(`✓ ${assets.length} assets copiados para: ${outputDir}`);
+
+  return results;
+}
+
+/**
  * Executa o build da página piloto de Desconto e copia os assets necessários.
+ * Mantido para compatibilidade retroativa com a suite de testes inicial.
  *
  * @param {Object} [options]
  * @param {string} [options.outputDir] Diretório de saída
  * @returns {{targetFile: string, relativeOutputPath: string, html: string}}
  */
 function buildPilot({ outputDir = DEFAULT_OUTPUT_DIR } = {}) {
-  const relativeOutputPath = 'tools/financas/desconto.html';
-  const sourceFile = path.join(PAGES_DIR, 'tools', 'financas', 'desconto.page.html');
-  const targetFile = path.join(outputDir, relativeOutputPath);
-
-  const html = renderPage({ sourceFile, relativeOutputPath });
-
-  fs.mkdirSync(path.dirname(targetFile), { recursive: true });
-  fs.writeFileSync(targetFile, html, 'utf-8');
-
-  copyPilotAssets(outputDir);
-
-  console.log(`✓ Página piloto gerada com sucesso: ${targetFile}`);
-  console.log(`✓ Assets mínimos copiados para: ${outputDir}`);
-
-  return { targetFile, relativeOutputPath, html };
+  const results = buildPages([DEFAULT_PAGES[0]], { outputDir });
+  return results[0];
 }
 
 if (require.main === module) {
   try {
-    buildPilot();
+    const results = buildPages();
+    console.log(`\nBuild SSG concluído com sucesso: ${results.length} página(s) gerada(s).`);
   } catch (err) {
-    console.error('Falha na execução do build SSG piloto:', err.message);
+    console.error('Falha na execução do build SSG multipágina:', err.message);
     process.exit(1);
   }
 }
 
 module.exports = {
+  DEFAULT_PAGES,
+  DEFAULT_ASSETS,
   calculateRootPrefix,
   parsePageSource,
   renderPage,
   copyPilotAssets,
-  buildPilot
+  buildPilot,
+  buildPages
 };

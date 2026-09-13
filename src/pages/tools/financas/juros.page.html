@@ -1,0 +1,110 @@
+---
+title: Calculadora de Juros Simples e Compostos Online | Calculadora Master
+description: Calcule juros simples e compostos online grátis. Descubra o valor final de investimentos, empréstimos e financiamentos de forma rápida.
+keywords: calculadora de juros, juros simples, juros compostos, calcular juros online, simulador de investimentos
+canonical: https://www.calculadoramaster.com/tools/financas/juros.html
+layout: tool
+pageScripts: <script type="module" src="{{ROOT_PREFIX}}js/tools/juros.js"></script>
+---
+  <h1>Calculadora de Juros</h1>
+  <p>Compare juros simples e compostos para planejar seus investimentos ou entender o custo de um empréstimo.</p>
+
+  <div class="grid-juros"> <section class="card" style="margin-bottom: 20px;">
+      <h2>Juros Simples</h2>
+      <label>Capital Inicial (R$):</label>
+      <input type="number" id="capitalSimples" placeholder="Ex: 1000">
+      <label>Taxa de Juros (%):</label>
+      <input type="number" id="taxaSimples" placeholder="Ex: 5">
+      <label>Período (Meses):</label>
+      <input type="number" id="tempoSimples" placeholder="Ex: 12">
+
+      <div style="margin-top: 15px;">
+        <button type="button" data-action="calculate-simple">Calcular Simples</button>
+      </div>
+      <h3 id="resultadoSimples" style="margin-top: 15px; color: #008080;"></h3>
+    </section>
+
+    <section class="card">
+      <h2>Juros Compostos</h2>
+      <label>Capital Inicial (R$):</label>
+      <input type="number" id="capitalComposto" placeholder="Ex: 1000">
+      <label>Taxa de Juros (%):</label>
+      <input type="number" id="taxaComposta" placeholder="Ex: 5">
+      <label>Período (Meses):</label>
+      <input type="number" id="tempoComposto" placeholder="Ex: 12">
+
+      <div style="margin-top: 15px;">
+        <button type="button" class="btn-destaque" data-action="calculate-compound">Calcular Compostos</button>
+      </div>
+      <h3 id="resultadoComposto" style="margin-top: 15px; color: #008080;"></h3>
+    </section>
+
+  </div>
+
+  <div style="text-align: center; margin-top: 20px;">
+    <button type="button" data-action="clear" style="background-color: #666;">Limpar Tudo</button>
+  </div>
+
+  <section class="content">
+    <h2>Entenda a Diferença entre Juros Simples e Compostos</h2>
+    <p>Os juros são o "aluguel" do dinheiro. A principal diferença entre eles reside na base de cálculo ao longo do tempo.</p>
+
+    <h3>Juros Simples</h3>
+    <p>Nesta modalidade, o juro incide apenas sobre o valor original (Capital). É muito comum em situações de curto prazo ou atrasos de contas simples.</p>
+    <p><strong>Fórmula:</strong> $J = C \cdot i \cdot t$ (Juros = Capital $\times$ Taxa $\times$ Tempo)</p>
+
+    <h3>Juros Compostos</h3>
+    <p>Conhecidos como "juros sobre juros", o valor da taxa é aplicado sobre o montante acumulado do período anterior. É o motor do crescimento de investimentos como a Renda Fixa e o terror dos cartões de crédito.</p>
+    <p><strong>Fórmula:</strong> $M = C \cdot (1 + i)^t$</p>
+
+    <!-- FERRAMENTAS RELACIONADAS -->
+    <section class="related-tools">
+      <h2>Você também pode precisar</h2>
+      <div class="related-tools-grid">
+        <article class="tool-card">
+          <div class="tool-card-header">
+            <span class="tool-card-category">Financeira</span>
+          </div>
+          <h3 class="tool-card-title">Financiamento de Carros</h3>
+          <p class="tool-card-desc">Simule as parcelas e os juros do financiamento do seu carro pela Tabela Price.</p>
+          <div class="tool-card-footer">
+            <a href="../financas/financiamento-carro.html" class="tool-card-btn" aria-label="Acessar Financiamento de Carros">Calcular agora &rarr;</a>
+          </div>
+        </article>
+        <article class="tool-card">
+          <div class="tool-card-header">
+            <span class="tool-card-category">Financeira</span>
+          </div>
+          <h3 class="tool-card-title">Financiamento de Imóveis</h3>
+          <p class="tool-card-desc">Simule o financiamento imobiliário pelo Sistema SAC com parcelas decrescentes.</p>
+          <div class="tool-card-footer">
+            <a href="../financas/financiamento-imovel.html" class="tool-card-btn" aria-label="Acessar Financiamento de Imóveis">Calcular agora &rarr;</a>
+          </div>
+        </article>
+        <article class="tool-card">
+          <div class="tool-card-header">
+            <span class="tool-card-category">Matemática</span>
+          </div>
+          <h3 class="tool-card-title">Calculadora de Porcentagem</h3>
+          <p class="tool-card-desc">Calcule percentuais, aumentos, reduções e proporções de forma simples e rápida.</p>
+          <div class="tool-card-footer">
+            <a href="../financas/porcentagem.html" class="tool-card-btn" aria-label="Acessar Calculadora de Porcentagem">Calcular agora &rarr;</a>
+          </div>
+        </article>
+        <article class="tool-card">
+          <div class="tool-card-header">
+            <span class="tool-card-category">Financeira</span>
+          </div>
+          <h3 class="tool-card-title">Calculadora de Lucros</h3>
+          <p class="tool-card-desc">Calcule lucro bruto, margem de lucro e a precificação ideal para seus produtos.</p>
+          <div class="tool-card-footer">
+            <a href="../financas/lucro.html" class="tool-card-btn" aria-label="Acessar Calculadora de Lucros">Calcular agora &rarr;</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <p style="margin-top: 30px;">
+      👉 <a href="{{ROOT_PREFIX}}index.html">Voltar para página inicial</a>
+    </p>
+  </section>
