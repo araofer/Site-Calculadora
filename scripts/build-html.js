@@ -13,6 +13,7 @@ const COMPONENTS_DIR = path.join(SRC_DIR, 'components');
 const LAYOUTS_DIR = path.join(SRC_DIR, 'layouts');
 const PAGES_DIR = path.join(SRC_DIR, 'pages');
 const DEFAULT_OUTPUT_DIR = path.join(ROOT_DIR, 'dist-pilot');
+const PROD_OUTPUT_DIR = path.join(ROOT_DIR, 'dist');
 
 const FINANCEIRO_LOTE1_PAGES = [
   {
@@ -534,8 +535,12 @@ if (require.main === module) {
     const scopeArg = process.argv.find(arg => arg.startsWith('--scope='));
     const scope = scopeArg ? scopeArg.split('=')[1] : (process.env.SSG_SCOPE || 'all');
 
+    const destArg = process.argv.find(arg => arg.startsWith('--dest=') || arg.startsWith('--output=') || arg.startsWith('--out='));
+    const customOutputDir = destArg ? path.resolve(ROOT_DIR, destArg.split('=')[1]) : null;
+
     let pagesToBuild = DEFAULT_PAGES;
     let assetsToCopy = DEFAULT_ASSETS;
+    let outputDir = customOutputDir || DEFAULT_OUTPUT_DIR;
 
     if (scope === 'pilot') {
       pagesToBuild = [FINANCEIRO_LOTE1_PAGES[0]];
@@ -558,9 +563,13 @@ if (require.main === module) {
     } else if (scope === 'institucional') {
       pagesToBuild = INSTITUCIONAL_PAGES;
       assetsToCopy = SITE_ASSETS;
+    } else if (scope === 'prod') {
+      pagesToBuild = SITE_PAGES;
+      assetsToCopy = SITE_ASSETS;
+      outputDir = customOutputDir || PROD_OUTPUT_DIR;
     }
 
-    const results = buildPages(pagesToBuild, { assets: assetsToCopy });
+    const results = buildPages(pagesToBuild, { outputDir, assets: assetsToCopy });
     console.log(`\nBuild SSG concluído com sucesso: ${results.length} página(s) gerada(s).`);
   } catch (err) {
     console.error('Falha na execução do build SSG multipágina:', err.message);
@@ -569,6 +578,8 @@ if (require.main === module) {
 }
 
 module.exports = {
+  DEFAULT_OUTPUT_DIR,
+  PROD_OUTPUT_DIR,
   FINANCEIRO_LOTE1_PAGES,
   FINANCEIRO_LOTE2_PAGES,
   FINANCEIRO_PAGES,

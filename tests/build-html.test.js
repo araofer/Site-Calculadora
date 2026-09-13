@@ -37,7 +37,8 @@ const {
   BLOG_ASSETS,
   SITE_ASSETS,
   DEFAULT_ASSETS,
-  copyPilotAssets
+  copyPilotAssets,
+  PROD_OUTPUT_DIR
 } = ssg;
 
 const __filename = fileURLToPath(import.meta.url);
@@ -1119,5 +1120,49 @@ test('SSG Institucional - Validação detalhada das 7 páginas: metadados, canon
     assert.equal(html.match(/\{\{([A-Z0-9_]+)\}\}/), null, `${spec.file} não deve conter placeholders não resolvidos`);
     assert.ok(!html.includes('href="undefined"'), `${spec.file} não deve conter href undefined`);
     assert.ok(!html.includes('src="undefined"'), `${spec.file} não deve conter src undefined`);
+  }
+});
+
+test('PROD - buildPages com PROD_OUTPUT_DIR gera todas as 43 páginas e 58 assets em dist/', () => {
+  const result = buildPages(SITE_PAGES, { outputDir: PROD_OUTPUT_DIR, assets: SITE_ASSETS });
+  assert.equal(result.length, 43, 'build:prod deve compilar exatamente 43 páginas');
+
+  for (const page of SITE_PAGES) {
+    const pagePath = path.join(PROD_OUTPUT_DIR, page.relativeOutputPath);
+    assert.ok(fs.existsSync(pagePath), `Página de produção deve existir: ${page.relativeOutputPath}`);
+    const html = fs.readFileSync(pagePath, 'utf-8');
+    assert.equal(html.match(/\{\{([A-Z0-9_]+)\}\}/), null, `Página ${page.relativeOutputPath} não deve conter placeholders`);
+    assert.ok(!html.includes('href="undefined"'), `Página ${page.relativeOutputPath} não deve conter href="undefined"`);
+  }
+
+  for (const asset of SITE_ASSETS) {
+    const assetPath = path.join(PROD_OUTPUT_DIR, asset.dest);
+    assert.ok(fs.existsSync(assetPath), `Asset de produção deve existir: ${asset.dest}`);
+  }
+});
+
+test('PROD - Todas as 43 páginas e 58 assets em dist/ são idênticos a dist-pilot/', () => {
+  const pilotDir = path.join(ROOT_DIR, 'dist-pilot');
+  // Assegura que dist-pilot está compilado
+  buildPages(SITE_PAGES, { outputDir: pilotDir, assets: SITE_ASSETS });
+
+  for (const page of SITE_PAGES) {
+    const prodFile = path.join(PROD_OUTPUT_DIR, page.relativeOutputPath);
+    const pilotFile = path.join(pilotDir, page.relativeOutputPath);
+    assert.ok(fs.existsSync(prodFile), `Arquivo prod deve existir: ${page.relativeOutputPath}`);
+    assert.ok(fs.existsSync(pilotFile), `Arquivo pilot deve existir: ${page.relativeOutputPath}`);
+    const prodHtml = fs.readFileSync(prodFile, 'utf-8');
+    const pilotHtml = fs.readFileSync(pilotFile, 'utf-8');
+    assert.equal(prodHtml, pilotHtml, `Conteúdo divergente entre dist/ e dist-pilot/ em: ${page.relativeOutputPath}`);
+  }
+
+  for (const asset of SITE_ASSETS) {
+    const prodAsset = path.join(PROD_OUTPUT_DIR, asset.dest);
+    const pilotAsset = path.join(pilotDir, asset.dest);
+    assert.ok(fs.existsSync(prodAsset), `Asset prod deve existir: ${asset.dest}`);
+    assert.ok(fs.existsSync(pilotAsset), `Asset pilot deve existir: ${asset.dest}`);
+    const prodBuffer = fs.readFileSync(prodAsset);
+    const pilotBuffer = fs.readFileSync(pilotAsset);
+    assert.ok(prodBuffer.equals(pilotBuffer), `Asset divergente entre dist/ e dist-pilot/: ${asset.dest}`);
   }
 });
