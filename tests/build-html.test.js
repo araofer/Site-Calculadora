@@ -12,7 +12,12 @@ const {
   renderPage,
   buildPilot,
   buildPages,
+  FINANCEIRO_LOTE1_PAGES,
+  FINANCEIRO_LOTE2_PAGES,
+  FINANCEIRO_PAGES,
   DEFAULT_PAGES,
+  COMMON_ASSETS,
+  FINANCEIRO_ASSETS,
   DEFAULT_ASSETS,
   copyPilotAssets
 } = ssg;
@@ -153,18 +158,21 @@ test('SSG Piloto - Caminhos relativos de CSS, JS e imagens estão consistentes',
 });
 
 /* ==================================================
- * NOVOS TESTES - SSG MULTIPÁGINA (LOTE 1 FINANCEIRO)
+ * TESTES - SSG MULTIPÁGINA (7 FERRAMENTAS FINANCEIRAS)
  * ================================================== */
 
-test('SSG Multipage - buildPages compila com sucesso as 4 ferramentas financeiras do Lote 1', () => {
+test('SSG Multipage - buildPages compila com sucesso as 7 ferramentas financeiras (Lotes 1 e 2)', () => {
   const results = buildPages();
-  assert.equal(results.length, 4, 'Devem ser geradas exatamente 4 páginas no Lote 1');
+  assert.equal(results.length, 7, 'Devem ser geradas exatamente 7 páginas financeiras no total');
 
   const expectedPaths = [
     'tools/financas/desconto.html',
     'tools/financas/juros.html',
     'tools/financas/lucro.html',
-    'tools/financas/porcentagem.html'
+    'tools/financas/porcentagem.html',
+    'tools/financas/financiamento-carro.html',
+    'tools/financas/financiamento-imovel.html',
+    'tools/financas/dividir-conta.html'
   ];
 
   expectedPaths.forEach(expectedRel => {
@@ -184,7 +192,6 @@ test('SSG Multipage - Juros: title, canonical, H1, módulo ESM e elementos do fo
   assert.match(html, /<h1>Calculadora de Juros<\/h1>/);
   assert.match(html, /<script type="module" src="\.\.\/\.\.\/js\/tools\/juros\.js"><\/script>/);
 
-  // Elementos do formulário e botões semânticos
   assert.match(html, /id="capitalSimples"/);
   assert.match(html, /id="taxaSimples"/);
   assert.match(html, /id="tempoSimples"/);
@@ -207,7 +214,6 @@ test('SSG Multipage - Lucro: title, canonical, H1, módulo ESM e elementos do fo
   assert.match(html, /<h1>Calculadora de Lucro e Margem<\/h1>/);
   assert.match(html, /<script type="module" src="\.\.\/\.\.\/js\/tools\/lucro\.js"><\/script>/);
 
-  // Elementos do formulário e botões semânticos
   assert.match(html, /id="custo"/);
   assert.match(html, /id="preco"/);
   assert.match(html, /data-action="calculate"/);
@@ -224,7 +230,6 @@ test('SSG Multipage - Porcentagem: title, canonical, H1, módulo ESM e elementos
   assert.match(html, /<h1>Calculadora de Porcentagem<\/h1>/);
   assert.match(html, /<script type="module" src="\.\.\/\.\.\/js\/tools\/porcentagem\.js"><\/script>/);
 
-  // Elementos do formulário e botões semânticos
   assert.match(html, /id="percentual"/);
   assert.match(html, /id="valor"/);
   assert.match(html, /data-action="calculate"/);
@@ -233,12 +238,69 @@ test('SSG Multipage - Porcentagem: title, canonical, H1, módulo ESM e elementos
   assert.match(html, /id="detalhes"/);
 });
 
-test('SSG Multipage - Ausência de placeholders {{...}} em todas as páginas geradas', () => {
+test('SSG Multipage - Financiamento de Carro: title, canonical, H1, módulo ESM e formulário', () => {
+  const filePath = path.join(ROOT_DIR, 'dist-pilot', 'tools', 'financas', 'financiamento-carro.html');
+  const html = fs.readFileSync(filePath, 'utf-8');
+
+  assert.match(html, /<title>Simulador de Financiamento de Carro Online \| Calculadora Master<\/title>/);
+  assert.match(html, /<link rel="canonical" href="https:\/\/www\.calculadoramaster\.com\/tools\/financas\/financiamento-carro\.html">/);
+  assert.match(html, /<h1>Simulador de Financiamento de Carro<\/h1>/);
+  assert.match(html, /<script type="module" src="\.\.\/\.\.\/js\/tools\/financiamento-carro\.js"><\/script>/);
+
+  assert.match(html, /id="valorVeiculo"/);
+  assert.match(html, /id="valorEntrada"/);
+  assert.match(html, /id="taxaMensal"/);
+  assert.match(html, /id="prazoMeses"/);
+  assert.match(html, /data-action="calculate"/);
+  assert.match(html, /data-action="clear"/);
+  assert.match(html, /id="resultadoFinanciamento"/);
+});
+
+test('SSG Multipage - Financiamento Imobiliário: title, canonical, H1, módulo ESM e formulário', () => {
+  const filePath = path.join(ROOT_DIR, 'dist-pilot', 'tools', 'financas', 'financiamento-imovel.html');
+  const html = fs.readFileSync(filePath, 'utf-8');
+
+  assert.match(html, /<title>Simulador de Financiamento Imobiliário Online \| Calculadora Master<\/title>/);
+  assert.match(html, /<link rel="canonical" href="https:\/\/www\.calculadoramaster\.com\/tools\/financas\/financiamento-imovel\.html">/);
+  assert.match(html, /<h1>Simulador de Financiamento Imobiliário \(SAC\)<\/h1>/);
+  assert.match(html, /<script type="module" src="\.\.\/\.\.\/js\/tools\/financiamento-imovel\.js"><\/script>/);
+
+  assert.match(html, /id="valorImovel"/);
+  assert.match(html, /id="valorEntrada"/);
+  assert.match(html, /id="taxaAnual"/);
+  assert.match(html, /id="prazoAnos"/);
+  assert.match(html, /data-action="calculate"/);
+  assert.match(html, /data-action="clear"/);
+  assert.match(html, /id="resultadoImovel"/);
+});
+
+test('SSG Multipage - Dividir Conta: title, canonical, H1, módulo ESM, formulário e container dinâmico', () => {
+  const filePath = path.join(ROOT_DIR, 'dist-pilot', 'tools', 'financas', 'dividir-conta.html');
+  const html = fs.readFileSync(filePath, 'utf-8');
+
+  assert.match(html, /<title>Dividir Conta Online \| Calculadora por Pessoa<\/title>/);
+  assert.match(html, /<link rel="canonical" href="https:\/\/www\.calculadoramaster\.com\/tools\/financas\/dividir-conta\.html">/);
+  assert.match(html, /<h1>Dividir Conta<\/h1>/);
+  assert.match(html, /<script type="module" src="\.\.\/\.\.\/js\/tools\/dividir-conta\.js"><\/script>/);
+
+  assert.match(html, /id="total"/);
+  assert.match(html, /id="pessoas"/);
+  assert.match(html, /data-action="generate-fields"/);
+  assert.match(html, /id="camposPessoas"/);
+  assert.match(html, /data-action="calculate"/);
+  assert.match(html, /data-action="clear"/);
+  assert.match(html, /id="resultado"/);
+});
+
+test('SSG Multipage - Ausência de placeholders {{...}} em todas as 7 páginas geradas', () => {
   const pages = [
     'tools/financas/desconto.html',
     'tools/financas/juros.html',
     'tools/financas/lucro.html',
-    'tools/financas/porcentagem.html'
+    'tools/financas/porcentagem.html',
+    'tools/financas/financiamento-carro.html',
+    'tools/financas/financiamento-imovel.html',
+    'tools/financas/dividir-conta.html'
   ];
 
   for (const pageRel of pages) {
@@ -251,11 +313,80 @@ test('SSG Multipage - Ausência de placeholders {{...}} em todas as páginas ger
   }
 });
 
-test('SSG Multipage - Todos os 11 assets obrigatórios são copiados para dist-pilot', () => {
+test('SSG Multipage - Todos os 17 assets obrigatórios são copiados para dist-pilot', () => {
+  assert.equal(DEFAULT_ASSETS.length, 17, 'Devem existir exatamente 17 assets declarados no lote financeiro');
   for (const item of DEFAULT_ASSETS) {
     const destPath = path.join(ROOT_DIR, 'dist-pilot', item.dest);
     assert.ok(fs.existsSync(destPath), `Asset copiado deve existir em dist-pilot: ${item.dest}`);
   }
+});
+
+test('SSG Multipage - Dependência compartilhada js/core/currency.js está presente e válida em dist-pilot', () => {
+  const currencyDest = path.join(ROOT_DIR, 'dist-pilot', 'js', 'core', 'currency.js');
+  assert.ok(fs.existsSync(currencyDest), 'js/core/currency.js deve existir em dist-pilot');
+  const content = fs.readFileSync(currencyDest, 'utf-8');
+  assert.ok(content.includes('export function parseBRLCurrency'), 'currency.js deve conter exports essenciais');
+});
+
+test('SSG Multipage - Dependências transitivas de autenticação (auth.js e firebase-config.js) existem em dist-pilot', () => {
+  const authDest = path.join(ROOT_DIR, 'dist-pilot', 'js', 'auth.js');
+  assert.ok(fs.existsSync(authDest), 'js/auth.js deve existir em dist-pilot');
+  const authContent = fs.readFileSync(authDest, 'utf-8');
+  assert.ok(authContent.includes('./firebase-config.js'), 'auth.js deve referenciar ./firebase-config.js');
+  assert.ok(authContent.includes('export async function logoutUsuario'), 'auth.js deve exportar logoutUsuario');
+  assert.ok(authContent.includes('export function observarLogin'), 'auth.js deve exportar observarLogin');
+
+  const fbDest = path.join(ROOT_DIR, 'dist-pilot', 'js', 'firebase-config.js');
+  assert.ok(fs.existsSync(fbDest), 'js/firebase-config.js deve existir em dist-pilot');
+  const fbContent = fs.readFileSync(fbDest, 'utf-8');
+  assert.ok(fbContent.includes('initializeApp'), 'firebase-config.js deve inicializar Firebase');
+  assert.ok(fbContent.includes('export const auth'), 'firebase-config.js deve exportar auth');
+  assert.ok(fbContent.includes('export const db'), 'firebase-config.js deve exportar db');
+});
+
+test('SSG Multipage - Todos os imports ESM locais de scripts copiados resolvem para arquivos existentes em dist-pilot', () => {
+  function collectJsFiles(dir) {
+    const entries = fs.readdirSync(dir, { withFileTypes: true });
+    const results = [];
+    for (const entry of entries) {
+      const fullPath = path.join(dir, entry.name);
+      if (entry.isDirectory()) {
+        results.push(...collectJsFiles(fullPath));
+      } else if (entry.isFile() && entry.name.endsWith('.js')) {
+        results.push(fullPath);
+      }
+    }
+    return results;
+  }
+
+  const jsDir = path.join(ROOT_DIR, 'dist-pilot', 'js');
+  const jsFiles = collectJsFiles(jsDir);
+  assert.ok(jsFiles.length > 0, 'Devem existir arquivos JS compilados em dist-pilot/js');
+
+  const localImportRegex = /(?:(?:import|export)\s+(?:[\w*\s{},]*\s+from\s+)?|import\s*\()\s*['"](\.[^'"]+)['"]/g;
+  let totalLocalImportsVerified = 0;
+
+  for (const filePath of jsFiles) {
+    const content = fs.readFileSync(filePath, 'utf-8');
+    let match;
+    while ((match = localImportRegex.exec(content)) !== null) {
+      const importSpecifier = match[1];
+      const targetPath = path.resolve(path.dirname(filePath), importSpecifier);
+      const relSource = path.relative(ROOT_DIR, filePath);
+      const relTarget = path.relative(ROOT_DIR, targetPath);
+
+      assert.ok(
+        fs.existsSync(targetPath),
+        `Dependência ESM transitiva não encontrada: "${importSpecifier}" importada em "${relSource}" não existe em "${relTarget}"`
+      );
+      totalLocalImportsVerified++;
+    }
+  }
+
+  assert.ok(
+    totalLocalImportsVerified >= 4,
+    `Esperado verificar ao menos 4 dependências locais no lote financeiro, verificadas: ${totalLocalImportsVerified}`
+  );
 });
 
 test('SSG Multipage - copyPilotAssets lança erro explícito se um asset obrigatório não existir', () => {

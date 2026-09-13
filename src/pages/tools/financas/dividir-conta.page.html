@@ -1,0 +1,92 @@
+---
+title: Dividir Conta Online | Calculadora por Pessoa
+description: Divida contas facilmente entre amigos. Calcule valores diferentes por pessoa e confira se a conta fecha corretamente.
+keywords: dividir conta, dividir restaurante, dividir despesas, calcular conta por pessoa
+canonical: https://www.calculadoramaster.com/tools/financas/dividir-conta.html
+layout: tool
+pageScripts: <script type="module" src="{{ROOT_PREFIX}}js/tools/dividir-conta.js"></script>
+---
+  <h1>Dividir Conta</h1>
+  <p>Calcule e confira a divisão de contas entre amigos de forma simples.</p>
+
+  <div style="margin:20px 0;" class="card">
+    <h2>Dados da Conta</h2>
+
+    <label for="total">Valor Total da Conta (R$):</label><br>
+    <input type="number" id="total" placeholder="Ex: 200.00" step="0.01">
+    <br><br>
+
+    <label for="pessoas">Quantas pessoas vão dividir?</label><br>
+    <input type="number" id="pessoas" placeholder="Ex: 4">
+    <br><br>
+
+    <button type="button" data-action="generate-fields">Inserir valores individuais</button>
+
+    <div id="camposPessoas" style="margin-top:20px;"></div>
+
+    <br>
+    <button type="button" data-action="calculate" class="btn-destaque">Calcular Fechamento</button>
+    <button type="button" data-action="clear">Limpar Tudo</button>
+
+    <h3 id="resultado" style="margin-top: 20px; color: #008080;"></h3>
+  </div>
+
+  <section class="content">
+    <h2>Como dividir uma conta de restaurante?</h2>
+    <p>
+      Dividir uma conta entre amigos pode ser complicado, principalmente quando cada um consome itens de valores diferentes.
+      Com nossa calculadora, você garante uma divisão justa e confere se o somatório bate com o total da nota.
+    </p>
+
+    <h2>Passo a passo</h2>
+    <ul>
+      <li><strong>Total:</strong> Informe o valor que veio na nota fiscal.</li>
+      <li><strong>Pessoas:</strong> Digite a quantidade de amigos na mesa.</li>
+      <li><strong>Valores:</strong> Clique em "Inserir valores" para abrir os campos de cada pessoa.</li>
+      <li><strong>Confira:</strong> O sistema dirá se falta dinheiro ou se o valor passou do total.</li>
+    </ul>
+
+    <h2>Dica para Gorjetas</h2>
+    <p>Se a conta já inclui os 10% (ou 12%), use o valor final da nota no campo "Valor Total". Caso queira adicionar por fora, some a porcentagem ao valor antes de inserir aqui.</p>
+
+    <!-- FERRAMENTAS RELACIONADAS -->
+    <section class="related-tools">
+      <h2>Você também pode precisar</h2>
+      <div class="related-tools-grid">
+        <article class="tool-card">
+          <div class="tool-card-header">
+            <span class="tool-card-category">Financeira</span>
+          </div>
+          <h3 class="tool-card-title">Calculadora de Desconto</h3>
+          <p class="tool-card-desc">Descubra o valor final com desconto e a economia real nas suas compras.</p>
+          <div class="tool-card-footer">
+            <a href="../financas/desconto.html" class="tool-card-btn" aria-label="Acessar Calculadora de Desconto">Calcular agora &rarr;</a>
+          </div>
+        </article>
+        <article class="tool-card">
+          <div class="tool-card-header">
+            <span class="tool-card-category">Matemática</span>
+          </div>
+          <h3 class="tool-card-title">Calculadora de Porcentagem</h3>
+          <p class="tool-card-desc">Calcule percentuais, aumentos, reduções e proporções de forma simples e rápida.</p>
+          <div class="tool-card-footer">
+            <a href="../financas/porcentagem.html" class="tool-card-btn" aria-label="Acessar Calculadora de Porcentagem">Calcular agora &rarr;</a>
+          </div>
+        </article>
+        <article class="tool-card">
+          <div class="tool-card-header">
+            <span class="tool-card-category">Utilidades</span>
+          </div>
+          <h3 class="tool-card-title">Calculadora de Combustível</h3>
+          <p class="tool-card-desc">Calcule o consumo em litros e o custo total estimado de combustível em viagens.</p>
+          <div class="tool-card-footer">
+            <a href="../utilidades/combustivel.html" class="tool-card-btn" aria-label="Acessar Calculadora de Combustível">Calcular agora &rarr;</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <p style="margin-top: 30px;">
+      👉 <a href="{{ROOT_PREFIX}}index.html">Voltar para página inicial</a>
+    </p>
+  </section>

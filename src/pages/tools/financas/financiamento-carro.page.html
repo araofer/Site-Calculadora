@@ -1,0 +1,103 @@
+---
+title: Simulador de Financiamento de Carro Online | Calculadora Master
+description: Simule o financiamento do seu carro online grátis. Descubra o valor das parcelas, o total de juros pago e o custo final do veículo de forma rápida.
+keywords: financiamento de carro, simulador de financiamento, calcular parcela de veículo, simulador auto, juros financiamento
+canonical: https://www.calculadoramaster.com/tools/financas/financiamento-carro.html
+layout: tool
+pageScripts: <script type="module" src="{{ROOT_PREFIX}}js/tools/financiamento-carro.js"></script>
+---
+  <h1>Simulador de Financiamento de Carro</h1>
+  <p>Descubra o valor aproximado das parcelas e o custo total dos juros para planejar a compra do seu veículo.</p>
+
+  <div class="grid-juros">
+    <section class="card" style="margin-bottom: 20px;">
+      <h2>Dados do Financiamento</h2>
+
+      <label for="valorVeiculo">Valor do Veículo (R$):</label>
+      <input type="text" id="valorVeiculo" placeholder="Ex: 50.000,00">
+
+      <label for="valorEntrada">Valor da Entrada (R$ - opcional):</label>
+      <input type="text" id="valorEntrada" placeholder="Ex: 15.000,00"><br>
+
+      <label for="taxaMensal">Taxa de Juros Mensal (%):</label>
+      <input type="number" id="taxaMensal" placeholder="Ex: 1.5" step="0.01">
+
+      <label for="prazoMeses">Prazo (Meses):</label>
+      <input type="number" id="prazoMeses" placeholder="Ex: 48">
+
+      <div style="margin-top: 15px;">
+        <button type="button" class="btn-destaque" data-action="calculate">Calcular Financiamento</button>
+        <button type="button" style="background-color: #666;" data-action="clear">Limpar Tudo</button>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Resultado da Simulação</h2>
+      <div id="resultadoFinanciamento" style="margin-top: 15px; color: #333; line-height: 1.6;">
+        <p style="color: #666;">Insira os dados ao lado e clique em calcular para ver o resultado.</p>
+      </div>
+    </section>
+  </div>
+
+  <section class="content">
+    <h2>Como funciona o Cálculo de Financiamento de Veículos?</h2>
+    <p>A maioria das instituições financeiras utiliza a <strong>Tabela Price</strong> para calcular as parcelas do financiamento de carros. Nesse sistema, todas as parcelas têm o mesmo valor do início ao fim.</p>
+
+    <h3>O que compõe o custo do financiamento?</h3>
+    <ul>
+      <li><strong>Valor a Financiar:</strong> É o preço total do carro subtraindo o valor que você deu de entrada.</li>
+      <li><strong>Taxa de Juros:</strong> Cobrada mensalmente sobre o saldo devedor. Pequenas variações na taxa podem gerar grandes diferenças no total pago ao final de prazos longos (como 48 ou 60 meses).</li>
+      <li><strong>CET (Custo Efetivo Total):</strong> Além dos juros, os bancos aplicam taxas administrativas (TAC) e impostos (IOF). Esta calculadora foca no cálculo matemático dos juros e amortização.</li>
+    </ul>
+
+    <!-- FERRAMENTAS RELACIONADAS -->
+    <section class="related-tools">
+      <h2>Você também pode precisar</h2>
+      <div class="related-tools-grid">
+        <article class="tool-card">
+          <div class="tool-card-header">
+            <span class="tool-card-category">Financeira</span>
+          </div>
+          <h3 class="tool-card-title">Calculadora de Juros</h3>
+          <p class="tool-card-desc">Calcule juros simples e compostos para investimentos, empréstimos e rendimentos.</p>
+          <div class="tool-card-footer">
+            <a href="../financas/juros.html" class="tool-card-btn" aria-label="Acessar Calculadora de Juros">Calcular agora &rarr;</a>
+          </div>
+        </article>
+        <article class="tool-card">
+          <div class="tool-card-header">
+            <span class="tool-card-category">Financeira</span>
+          </div>
+          <h3 class="tool-card-title">Financiamento de Imóveis</h3>
+          <p class="tool-card-desc">Simule o financiamento imobiliário pelo Sistema SAC com parcelas decrescentes.</p>
+          <div class="tool-card-footer">
+            <a href="../financas/financiamento-imovel.html" class="tool-card-btn" aria-label="Acessar Financiamento de Imóveis">Calcular agora &rarr;</a>
+          </div>
+        </article>
+        <article class="tool-card">
+          <div class="tool-card-header">
+            <span class="tool-card-category">Matemática</span>
+          </div>
+          <h3 class="tool-card-title">Calculadora de Porcentagem</h3>
+          <p class="tool-card-desc">Calcule percentuais, aumentos, reduções e proporções de forma simples e rápida.</p>
+          <div class="tool-card-footer">
+            <a href="../financas/porcentagem.html" class="tool-card-btn" aria-label="Acessar Calculadora de Porcentagem">Calcular agora &rarr;</a>
+          </div>
+        </article>
+        <article class="tool-card">
+          <div class="tool-card-header">
+            <span class="tool-card-category">Utilidades</span>
+          </div>
+          <h3 class="tool-card-title">Calculadora de Combustível</h3>
+          <p class="tool-card-desc">Calcule o consumo em litros e o custo total estimado de combustível em viagens.</p>
+          <div class="tool-card-footer">
+            <a href="../utilidades/combustivel.html" class="tool-card-btn" aria-label="Acessar Calculadora de Combustível">Calcular agora &rarr;</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <p style="margin-top: 30px;">
+      👉 <a href="{{ROOT_PREFIX}}index.html">Voltar para página inicial</a>
+    </p>
+  </section>

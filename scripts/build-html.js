@@ -14,7 +14,7 @@ const LAYOUTS_DIR = path.join(SRC_DIR, 'layouts');
 const PAGES_DIR = path.join(SRC_DIR, 'pages');
 const DEFAULT_OUTPUT_DIR = path.join(ROOT_DIR, 'dist-pilot');
 
-const DEFAULT_PAGES = [
+const FINANCEIRO_LOTE1_PAGES = [
   {
     sourceFile: path.join(PAGES_DIR, 'tools', 'financas', 'desconto.page.html'),
     relativeOutputPath: 'tools/financas/desconto.html'
@@ -33,19 +33,53 @@ const DEFAULT_PAGES = [
   }
 ];
 
-const DEFAULT_ASSETS = [
+const FINANCEIRO_LOTE2_PAGES = [
+  {
+    sourceFile: path.join(PAGES_DIR, 'tools', 'financas', 'financiamento-carro.page.html'),
+    relativeOutputPath: 'tools/financas/financiamento-carro.html'
+  },
+  {
+    sourceFile: path.join(PAGES_DIR, 'tools', 'financas', 'financiamento-imovel.page.html'),
+    relativeOutputPath: 'tools/financas/financiamento-imovel.html'
+  },
+  {
+    sourceFile: path.join(PAGES_DIR, 'tools', 'financas', 'dividir-conta.page.html'),
+    relativeOutputPath: 'tools/financas/dividir-conta.html'
+  }
+];
+
+const FINANCEIRO_PAGES = [
+  ...FINANCEIRO_LOTE1_PAGES,
+  ...FINANCEIRO_LOTE2_PAGES
+];
+
+const DEFAULT_PAGES = FINANCEIRO_PAGES;
+
+const COMMON_ASSETS = [
   { src: 'css/style.css', dest: 'css/style.css' },
   { src: 'css/cookie-consent.css', dest: 'css/cookie-consent.css' },
-  { src: 'js/tools/desconto.js', dest: 'js/tools/desconto.js' },
-  { src: 'js/tools/juros.js', dest: 'js/tools/juros.js' },
-  { src: 'js/tools/lucro.js', dest: 'js/tools/lucro.js' },
-  { src: 'js/tools/porcentagem.js', dest: 'js/tools/porcentagem.js' },
   { src: 'js/header-auth.js', dest: 'js/header-auth.js' },
+  { src: 'js/auth.js', dest: 'js/auth.js' },
+  { src: 'js/firebase-config.js', dest: 'js/firebase-config.js' },
   { src: 'js/cookie-consent.js', dest: 'js/cookie-consent.js' },
   { src: 'logo/logo.png', dest: 'logo/logo.png' },
   { src: 'logo/favicon.png', dest: 'logo/favicon.png' },
   { src: 'logo/banner.png', dest: 'logo/banner.png' }
 ];
+
+const FINANCEIRO_ASSETS = [
+  ...COMMON_ASSETS,
+  { src: 'js/tools/desconto.js', dest: 'js/tools/desconto.js' },
+  { src: 'js/tools/juros.js', dest: 'js/tools/juros.js' },
+  { src: 'js/tools/lucro.js', dest: 'js/tools/lucro.js' },
+  { src: 'js/tools/porcentagem.js', dest: 'js/tools/porcentagem.js' },
+  { src: 'js/tools/financiamento-carro.js', dest: 'js/tools/financiamento-carro.js' },
+  { src: 'js/tools/financiamento-imovel.js', dest: 'js/tools/financiamento-imovel.js' },
+  { src: 'js/tools/dividir-conta.js', dest: 'js/tools/dividir-conta.js' },
+  { src: 'js/core/currency.js', dest: 'js/core/currency.js' }
+];
+
+const DEFAULT_ASSETS = FINANCEIRO_ASSETS;
 
 /**
  * Calcula o prefixo de caminho relativo até a raiz do projeto baseado na profundidade do arquivo.
@@ -245,7 +279,12 @@ if (require.main === module) {
 }
 
 module.exports = {
+  FINANCEIRO_LOTE1_PAGES,
+  FINANCEIRO_LOTE2_PAGES,
+  FINANCEIRO_PAGES,
   DEFAULT_PAGES,
+  COMMON_ASSETS,
+  FINANCEIRO_ASSETS,
   DEFAULT_ASSETS,
   calculateRootPrefix,
   parsePageSource,

@@ -1,0 +1,101 @@
+---
+title: Simulador de Financiamento Imobiliário Online | Calculadora Master
+description: Simule o financiamento da sua casa ou apartamento online grátis. Descubra o valor das parcelas (SAC), total de juros e custo final do imóvel de forma rápida.
+keywords: financiamento imobiliário, simulador de financiamento, calcular parcela de imóvel, simulador habitacional, tabela sac, juros caixa
+canonical: https://www.calculadoramaster.com/tools/financas/financiamento-imovel.html
+layout: tool
+pageScripts: <script type="module" src="{{ROOT_PREFIX}}js/tools/financiamento-imovel.js"></script>
+---
+    <h1>Simulador de Financiamento Imobiliário (SAC)</h1>
+    <p>Planeje a compra da sua casa ou apartamento. Calcule o valor da primeira e da última parcela usando o sistema de amortização constante.</p>
+
+    <div class="card">
+      <h2>Dados do Imóvel</h2>
+
+      <div class="form-inline">
+        <div class="form-group-item">
+          <label for="valorImovel">Valor do Imóvel (R$):</label>
+          <input type="text" id="valorImovel" placeholder="Ex: 300.000,00">
+        </div>
+
+        <div class="form-group-item">
+          <label for="valorEntrada">Entrada (R$ - Mínimo 20%):</label>
+          <input type="text" id="valorEntrada" placeholder="Ex: 60.000,00">
+        </div>
+
+        <div class="form-group-item">
+          <label for="taxaAnual">Taxa de Juros Anual (%):</label>
+          <input type="text" id="taxaAnual" placeholder="Ex: 9,5">
+        </div>
+
+        <div class="form-group-item">
+          <label for="prazoAnos">Prazo (Em Anos):</label>
+          <input type="number" id="prazoAnos" placeholder="Ex: 30">
+        </div>
+      </div>
+
+      <div class="button-group">
+        <button type="button" data-action="calculate">Calcular Financiamento</button>
+        <button type="button" data-action="clear" style="background-color: #666;">Limpar Tudo</button>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top: 20px;">
+      <h2>Resultado da Simulação</h2>
+      <div id="resultadoImovel">
+        <p style="color: #666; text-align: center;">Insira os dados do imóvel acima e clique em calcular para ver a evolução das parcelas.</p>
+      </div>
+    </div>
+
+    <section class="content" style="margin-top: 40px;">
+      <h2>Como funciona o Financiamento Imobiliário pelo Sistema SAC?</h2>
+      <p>O <strong>SAC (Sistema de Amortização Constante)</strong> é o modelo de financiamento habitacional mais utilizado no Brasil. A sua principal característica é que o valor da amortização da dívida permanece igual durante todo o contrato, fazendo com que as parcelas mensais sejam <strong>decrescentes</strong> (começam mais altas e terminam mais baixas).</p>
+
+      <h3>Vantagens do Modelo SAC:</h3>
+      <ul>
+        <li><strong>Parcelas Decrescentes:</strong> O valor que você paga diminui mês a mês, dando mais fôlego financeiro ao longo dos anos.</li>
+        <li><strong>Redução de Juros:</strong> Como o saldo devedor cai de forma constante desde o primeiro mês, o total pago em juros acumulados costuma ser menor do que no sistema Price.</li>
+        <li><strong>Segurança a Longo Prazo:</strong> Excelente para contratos longos, comuns em aquisições de imóveis que duram de 20 a 35 anos.</li>
+      </ul>
+
+      <!-- FERRAMENTAS RELACIONADAS -->
+      <section class="related-tools">
+        <h2>Você também pode precisar</h2>
+        <div class="related-tools-grid">
+          <article class="tool-card">
+            <div class="tool-card-header">
+              <span class="tool-card-category">Financeira</span>
+            </div>
+            <h3 class="tool-card-title">Calculadora de Juros</h3>
+            <p class="tool-card-desc">Calcule juros simples e compostos para investimentos, empréstimos e rendimentos.</p>
+            <div class="tool-card-footer">
+              <a href="../financas/juros.html" class="tool-card-btn" aria-label="Acessar Calculadora de Juros">Calcular agora &rarr;</a>
+            </div>
+          </article>
+          <article class="tool-card">
+            <div class="tool-card-header">
+              <span class="tool-card-category">Financeira</span>
+            </div>
+            <h3 class="tool-card-title">Financiamento de Carros</h3>
+            <p class="tool-card-desc">Simule as parcelas e os juros do financiamento do seu carro pela Tabela Price.</p>
+            <div class="tool-card-footer">
+              <a href="../financas/financiamento-carro.html" class="tool-card-btn" aria-label="Acessar Financiamento de Carros">Calcular agora &rarr;</a>
+            </div>
+          </article>
+          <article class="tool-card">
+            <div class="tool-card-header">
+              <span class="tool-card-category">Matemática</span>
+            </div>
+            <h3 class="tool-card-title">Calculadora de Porcentagem</h3>
+            <p class="tool-card-desc">Calcule percentuais, aumentos, reduções e proporções de forma simples e rápida.</p>
+            <div class="tool-card-footer">
+              <a href="../financas/porcentagem.html" class="tool-card-btn" aria-label="Acessar Calculadora de Porcentagem">Calcular agora &rarr;</a>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <p style="margin-top: 30px;">
+        👉 <a href="{{ROOT_PREFIX}}index.html">Voltar para página inicial</a>
+      </p>
+    </section>
