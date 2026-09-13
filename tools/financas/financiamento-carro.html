@@ -84,8 +84,8 @@
       <input type="number" id="prazoMeses" placeholder="Ex: 48">
 
       <div style="margin-top: 15px;">
-        <button type="button" class="btn-destaque">Calcular Financiamento</button>
-        <button type="button" style="background-color: #666;">Limpar Tudo</button>
+        <button type="button" class="btn-destaque" data-action="calculate">Calcular Financiamento</button>
+        <button type="button" style="background-color: #666;" data-action="clear">Limpar Tudo</button>
       </div>
     </section>
 
@@ -155,14 +155,13 @@
       </div>
     </section>
 
-    <p style="margin-top: 30px;">
-      👉 <a href="../../index.html">Voltar para página inicial</a>
+    <p style="margin-top: 30px;">
+      👉 <a href="../../index.html">Voltar para página inicial</a>
     </p>
   </section>
 </main>
 
-<script src="../../js/core/currency.js"></script>
-<script src="../../js/tools/financiamento-carro.js"></script>
+<script type="module" src="../../js/tools/financiamento-carro.js"></script>
 
 <footer class="footer">
     <div class="container">

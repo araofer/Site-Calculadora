@@ -94,10 +94,10 @@ Executa a validação, gera o catálogo JS, gera o sitemap e valida novamente a 
 
 ---
 
-## 4. Piloto de Modularização JavaScript
+## 4. Piloto de Modularização JavaScript (ES Modules Nativos)
 
-Na Fase 2 da arquitetura, implementamos a modularização piloto para 3 ferramentas representativas:
-1. **Financiamento de Carro** (`tools/financas/financiamento-carro.html`) ➔ [`js/tools/financiamento-carro.js`](file:///home/araofer/Documentos/github/CalculadoraMaster/js/tools/financiamento-carro.js) + [`js/core/currency.js`](file:///home/araofer/Documentos/github/CalculadoraMaster/js/core/currency.js)
+Após auditoria técnica de governança, o piloto de modularização foi atualizado para utilizar **ECMAScript Modules (ESM) nativos**. Migramos estritamente 3 ferramentas piloto:
+1. **Financiamento de Carro** (`tools/financas/financiamento-carro.html`) ➔ [`js/tools/financiamento-carro.js`](file:///home/araofer/Documentos/github/CalculadoraMaster/js/tools/financiamento-carro.js) (importa [`js/core/currency.js`](file:///home/araofer/Documentos/github/CalculadoraMaster/js/core/currency.js))
 2. **Calculadora de Idade** (`tools/saude/idade.html`) ➔ [`js/tools/idade.js`](file:///home/araofer/Documentos/github/CalculadoraMaster/js/tools/idade.js)
 3. **Gerador de Senha** (`tools/utilidades/senha.html`) ➔ [`js/tools/senha.js`](file:///home/araofer/Documentos/github/CalculadoraMaster/js/tools/senha.js)
 
@@ -106,56 +106,92 @@ Na Fase 2 da arquitetura, implementamos a modularização piloto para 3 ferramen
 ```text
 js/
   core/
-    currency.js       # Utilitários de moeda pt-BR (parseBRLCurrency, formatBRLCurrencyInput, formatBRL)
+    package.json      # {"type": "module"} - escopo ESM isolado
+    currency.js       # Módulo ES puro: parseBRLCurrency, formatBRLCurrencyInput, formatBRL
 
   tools/
-    financiamento-carro.js  # Cálculo Price puro + bindings de DOM
-    idade.js                # Cálculo de idade preciso (sem UTC) + bindings de DOM
-    senha.js                # Geração criptograficamente segura Web Crypto + bindings de DOM
+    package.json      # {"type": "module"} - escopo ESM isolado
+    financiamento-carro.js  # ESM: import currency.js + cálculo Price + bindings data-action
+    idade.js                # ESM: cálculo de idade local exato + bindings data-action
+    senha.js                # ESM: Web Crypto API + rejection sampling + bindings data-action
 
   home-search.js      # Controlador de busca universal da página inicial
   tools-catalog.js    # Catálogo central compilado
+
+tests/
+  package.json        # {"type": "module"} - escopo ESM de testes
+  currency.test.js    # Testes unitários com node:test e node:assert
+  financiamento-carro.test.js
+  idade.test.js
+  senha.test.js
 ```
 
-### Responsabilidades de Cada Diretório
-- **`js/core/`**: Funções utilitárias universais e puras, compartilháveis entre múltiplas calculadoras.
-  - Não deve conter regras de negócio de nenhuma ferramenta específica.
-  - Deve possuir 100% de cobertura de testes unitários.
-  - Atualmente abriga `currency.js`, que padroniza o tratamento de moeda em todo o site.
-- **`js/tools/`**: Módulos específicos de cada calculadora.
-  - Cada arquivo contém a função de cálculo pura desacoplada (ex: `calcularFinanciamentoPrice`, `calcularIdadePrecisa`, `gerarSenhaSegura`) e a camada de controle de eventos de interface (`inicializarEventos`).
-  - Suporta execução no navegador e importação direta via `require()` no Node.js para testes automatizados.
+### Decisão Arquitetural: Adoção de ES Modules Nativos e Isolamento de Escopo
 
-### Padrão Adotado para Eventos: Separação entre Estrutura e Comportamento
-Nas páginas migradas, todos os atributos inline de evento foram eliminados do HTML:
-- Removidos: `onclick="..."`, `oninput="..."`.
-- Implementados via JavaScript: `addEventListener("input", ...)`, `addEventListener("click", ...)`, `addEventListener("change", ...)`.
-- Inicialização segura: os listeners são registrados em `DOMContentLoaded` (ou imediatamente se o documento já estiver pronto).
-- Suporte a acessibilidade e usabilidade: inputs numéricos disparam cálculo também com a tecla `Enter`.
+1. **Eliminação Total de Atalhos Globais (`window.*`)**:
+   - Foram completamente banidos atalhos como `window.limparCampos`, `window.gerarSenha`, `window.calcularIdade` e `window.calcularFinanciamento`.
+   - Cada ferramenta é um módulo isolado. Não há poluição de escopo global nem risco de colisão de nomes entre ferramentas distintas.
+2. **Isolamento de Escopo com Subdiretórios `package.json`**:
+   - A raiz do repositório (`package.json`) e a pasta `scripts/` permanecem em CommonJS tradicional, garantindo que o pipeline existente (`npm run build:data`, `validate-tools.js`, etc.) continue funcionando sem necessidade de transpiladores.
+   - Os subdiretórios `js/core/`, `js/tools/` e `tests/` possuem arquivos `package.json` individuais com `{"type": "module"}`, permitindo que o Node.js e os navegadores tratem esses arquivos diretamente como ES Modules (`import`/`export`).
+3. **Servidor HTTP Local para Desenvolvimento**:
+   - Por especificação dos padrões web, módulos ES (`<script type="module">`) estão sujeitos a políticas de CORS e segurança do navegador e não carregam sobre o protocolo direto `file:///`.
+   - Para rodar o ambiente de desenvolvimento local, basta subir qualquer servidor estático HTTP simples:
+     ```bash
+     npx serve .
+     # ou
+     python3 -m http.server 8000
+     ```
 
-### Padrão de Moeda Brasileira (`js/core/currency.js`)
-Padronizamos o ecossistema financeiro do site com três operações essenciais:
-1. `parseBRLCurrency(valor)`: Converte `"50.000,00"` para `50000`, `"15.000,00"` para `15000` e campo vazio para `0`.
-2. `formatBRLCurrencyInput(input)`: Máscara monetária dinâmica em tempo real para campos `<input>`. Se o usuário apagar completamente os dígitos, o campo permanece vazio (`""`), sem travar com `"0,00"`.
-3. `formatBRL(valor, incluirSimbolo)`: Formata números para o padrão visual `1.250,00` ou `R$ 1.250,00`.
+### Eventos Semânticos (`data-action`) vs. Inspeção de Texto Visível
 
-### Decisão Arquitetural: Scripts Tradicionais vs. ES Modules
-**Decisão**: Adotamos scripts tradicionais com padrão UMD/IIFE em vez de `<script type="module">`.
-**Motivação**:
-1. **Compatibilidade Universal**: Scripts tradicionais funcionam sem erros de CORS tanto em servidores HTTP (`http://localhost`, produção) quanto na abertura direta de arquivos via protocolo local (`file:///`), comum para desenvolvedores que inspecionam páginas sem subir servidores Node/Python.
-2. **Zero Overhead e Sem Bundler**: Não requer Webpack, Vite, Rollup ou transpiladores.
-3. **Isolamento de Escopo e Testabilidade**: O padrão UMD/IIFE encapsula variáveis privadas protegendo o `window`, expõe métodos necessários e permite `module.exports` direto para suítes de teste em Node.js.
+Para eliminar a fragilidade de seletores baseados em texto visível dos botões (`textContent.includes("limpar")`), estabeleceu-se o padrão obrigatório de atributos semânticos:
+- `data-action="calculate"`: Ações de cálculo principal (ex: Calcular Idade, Calcular Financiamento).
+- `data-action="clear"`: Ações de limpeza e redefinição de campos.
+- `data-action="generate"`: Ações de geração de dados (ex: Gerar Senha Forte).
+- `data-action="copy"`: Ações de cópia para a área de transferência.
 
-### Como Migrar uma Ferramenta Futura (Passo a Passo)
-Para migrar uma das próximas 12 ferramentas:
-1. Crie `js/tools/<id>.js`.
-2. Isole a regra matemática ou de negócio em uma função pura exportável (ex: `calcularDescontoMatematico(preco, taxa)`).
-3. Crie a função `inicializarEventos()` registrando listeners via `addEventListener` nos IDs do HTML.
-4. Na página `tools/<categoria>/<slug>.html`:
-   - Remova os atributos inline `onclick` e `oninput`.
-   - Remova o bloco `<script>` inline de cálculo.
-   - Adicione `<script src="../../js/core/currency.js"></script>` (se usar moeda) e `<script src="../../js/tools/<id>.js"></script>`.
-5. Crie testes unitários chamando a função pura do módulo via Node.js.
+Vantagens:
+- Desacopla completamente a lógica JavaScript da redação ou tradução dos textos dos botões.
+- Previne quebras se o texto for alterado por copywriting ou testes A/B.
+- Não requer atributos inline legados (`onclick="..."`, `oninput="..."`).
+
+### Padronização Monetária Brasileira e Suporte a Negativos (`js/core/currency.js`)
+
+O módulo central de moeda foi blindado com:
+1. `parseBRLCurrency(valor, opcoes)`: Converte formatos como `"50.000,00"`, `"1.234,56"`, `1500` para número real. Trata defensivamente `NaN`, `Infinity`, `-Infinity`, strings vazias e `null`.
+   - **Suporte arquitetural a negativos**: Possui `{ allowNegative: false }` por padrão (retornando `0` para entradas negativas não autorizadas). Quando `{ allowNegative: true }`, preserva e calcula valores negativos (ex: `"-50,00"` ➔ `-50`).
+2. `formatBRLCurrencyInput(input, opcoes)`: Máscara dinâmica em tempo real para campos `<input>`. Se os dígitos forem apagados, o campo permanece vazio (`""`), sem forçar `"0,00"`. Suporta sinal negativo quando `allowNegative: true`.
+3. `formatBRL(valor, opcoes)`: Formatação visual no padrão brasileiro (`1.250,00` ou `R$ 1.250,00`).
+
+### Criptografia Segura e Tratamento Defensivo (`js/tools/senha.js`)
+
+- Utiliza exclusivamente a **Web Crypto API** (`crypto.getRandomValues`) com algoritmo de amostragem por rejeição (*rejection sampling*) sobre módulo $2^{32}$ (`range = 4294967296`), garantindo distribuição uniforme sem viés de módulo.
+- **Zero uso de `Math.random()`**.
+- Tratamento defensivo caso o ambiente não possua Web Crypto API ou suporte à Clipboard API (com fallback de cópia via `document.execCommand`).
+
+### Testes Automatizados Nativos (`node:test`)
+
+Para manter a filosofia de **Zero Frameworks e Zero Dependências NPM**, todos os testes utilizam os módulos nativos do Node.js:
+- Framework: `node:test`
+- Asserções: `node:assert/strict`
+- Execução: `npm test` (dispara `node --test tests/*.test.js`)
+- Execução instantânea (menos de 250ms para a suíte completa com 27 testes).
+
+### Como Migrar as Próximas 12 Ferramentas (Checklist Oficial)
+
+Para migrar cada uma das ferramentas restantes:
+1. Crie `js/tools/<id>.js` como ES Module nativo.
+2. Isole a regra de cálculo em uma função pura exportável (ex: `export function calcularX(params) { ... }`).
+3. Crie a função de setup da interface (ex: `export function setupX() { ... }`) utilizando seletores semânticos:
+   - `document.querySelector('[data-action="calculate"]')`
+   - `document.querySelector('[data-action="clear"]')`
+4. Na página HTML `tools/<categoria>/<slug>.html`:
+   - Adicione os atributos `data-action` aos botões correspondentes.
+   - Remova todos os atributos inline `onclick` e `oninput`.
+   - Substitua scripts legados por `<script type="module" src="../../js/tools/<id>.js"></script>`.
+5. Crie a suíte de testes em `tests/<id>.test.js` importando a função pura e validando casos felizes e de borda via `node:test`.
+6. Execute `npm test` e `npm run build:data`.
 
 ---
 

@@ -84,13 +84,13 @@
 
     <br><br>
 
-    <button type="button" class="btn-destaque">Gerar Senha Forte</button>
-    <button type="button">Resetar</button>
+    <button type="button" class="btn-destaque" data-action="generate">Gerar Senha Forte</button>
+    <button type="button" data-action="clear">Resetar</button>
 
     <div id="resultado-area" style="margin-top: 25px; display: none;">
         <div style="background: #f4f4f4; padding: 15px; border-radius: 5px; border: 1px dashed #008080; font-family: monospace; font-size: 1.2em; word-break: break-all;" id="senha-gerada"></div>
         <br>
-        <button type="button" style="background-color: #007bff;">Copiar Senha</button>
+        <button type="button" style="background-color: #007bff;" data-action="copy">Copiar Senha</button>
         <span id="msg-copiado" style="color: #28a745; margin-left: 10px; display: none;">Copiado!</span>
     </div>
   </div>
@@ -145,13 +145,13 @@
       </div>
     </section>
 
-    <p style="margin-top: 30px;">
-      👉 <a href="../../index.html">Voltar para página inicial</a>
+    <p style="margin-top: 30px;">
+      👉 <a href="../../index.html">Voltar para página inicial</a>
     </p>
   </section>
 </main>
 
-<script src="../../js/tools/senha.js"></script>
+<script type="module" src="../../js/tools/senha.js"></script>
 
 <footer class="footer">
     <div class="container">
