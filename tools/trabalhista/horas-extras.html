@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Calculadora de Horas Extras Online Grátis | Calculadora Master</title>
+  <meta name="description" content="Faça uma estimativa das suas horas extras online. Calcule o valor da hora normal, da hora extra e o total com o adicional informado.">
+  <meta name="keywords" content="calculadora horas extras, calcular hora extra, valor hora extra, adicional hora extra, cálculo hora extra online">
+  <meta name="robots" content="index, follow">
+
+  <link rel="canonical" href="https://www.calculadoramaster.com/tools/trabalhista/horas-extras.html">
+  <link rel="icon" type="image/png" href="../../logo/favicon.png">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Calculadora Master">
+  <meta property="og:locale" content="pt_BR">
+  <meta property="og:url" content="https://www.calculadoramaster.com/tools/trabalhista/horas-extras.html">
+  <meta property="og:title" content="Calculadora de Horas Extras Online Grátis | Calculadora Master">
+  <meta property="og:description" content="Faça uma estimativa das suas horas extras online. Calcule o valor da hora normal, da hora extra e o total com o adicional informado.">
+  <meta property="og:image" content="https://www.calculadoramaster.com/logo/banner.png">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Calculadora de Horas Extras Online Grátis | Calculadora Master">
+  <meta name="twitter:description" content="Faça uma estimativa das suas horas extras online. Calcule o valor da hora normal, da hora extra e o total com o adicional informado.">
+  <meta name="twitter:image" content="https://www.calculadoramaster.com/logo/banner.png">
+
+  <link rel="stylesheet" href="../../css/style.css">
+  <link rel="stylesheet" href="../../css/cookie-consent.css">
+</head>
+
+<body>
+
+<header class="header">
+  <div class="container nav-container">
+    <div class="logo">
+      <a href="../../index.html">
+        <img src="../../logo/logo.png" alt="Calculadora Master Logo" width="150" height="124">
+      </a>
+    </div>
+
+    <div class="menu-toggle" id="mobile-menu">
+      <span class="bar"></span>
+      <span class="bar"></span>
+      <span class="bar"></span>
+    </div>
+
+    <nav class="nav" id="nav-menu">
+      <ul>
+        <li><a href="../../index.html">Home</a></li>
+        <li><a href="../../sobre.html">Sobre</a></li>
+        <li><a href="../../contato.html">Contato</a></li>
+        <li><a href="../../blog/index.html">Blog</a></li>
+      </ul>
+    </nav>
+
+    <div class="nav-actions">
+      <a href="../../login.html" class="btn-login">Entrar</a>
+      <a href="../../cadastro.html" class="btn-signup">Cadastrar-se</a>
+    </div>
+  </div>
+</header>
+
+<main class="container">
+  <h1>Calculadora de Horas Extras</h1>
+  <p>Estime o valor das suas horas extras a partir do seu salário mensal, jornada e adicional informados.</p>
+
+  <div style="margin:20px 0;" class="card">
+    <h2>Simular Horas Extras</h2>
+
+    <label for="salario">Salário mensal (R$):</label><br>
+    <input type="text" id="salario" inputmode="decimal" placeholder="Ex: 2500,00" oninput="limparResultado()"><br><br>
+
+    <label for="jornada">Jornada mensal em horas:</label><br>
+    <input type="text" id="jornada" inputmode="decimal" placeholder="Ex: 220" oninput="limparResultado()"><br><br>
+
+    <label for="horas-extras">Quantidade de horas extras:</label><br>
+    <input type="text" id="horas-extras" inputmode="decimal" placeholder="Ex: 10" oninput="limparResultado()"><br><br>
+
+    <label for="adicional">Adicional de hora extra (%):</label><br>
+    <input type="text" id="adicional" inputmode="decimal" placeholder="Ex: 50" oninput="limparResultado()"><br><br>
+
+    <button type="button" onclick="calcular()">Calcular</button>
+    <button type="button" onclick="limparCampos()">Limpar</button>
+
+    <p id="mensagem-erro" style="color: #c00; margin-top: 15px; display: none; font-weight: bold;"></p>
+
+    <div id="resultado-container" style="margin-top: 20px; display: none;">
+      <h3 id="resultado" style="color: #008080;"></h3>
+      <div id="detalhes" style="font-size: 0.95em; color: #444; margin-top: 10px; line-height: 1.6;"></div>
+    </div>
+  </div>
+
+  <section class="content">
+    <h2>Como calcular horas extras</h2>
+    <p>O cálculo de horas extras consiste em três etapas básicas:</p>
+
+    <h3>1. Como encontrar o valor da hora normal</h3>
+    <p>Divide-se o salário base mensal pelo total de horas que compõem a jornada normal do mês.</p>
+    <p><strong>Fórmula:</strong> Valor da Hora Normal = Salário Mensal ÷ Jornada Mensal</p>
+
+    <h3>2. Como aplicar o adicional informado</h3>
+    <p>Aplica-se o percentual de adicional à hora normal para descobrir o valor unitário de cada hora extra.</p>
+    <p><strong>Fórmula:</strong> Valor da Hora Extra = Valor da Hora Normal × (1 + Adicional ÷ 100)</p>
+
+    <h3>3. Como calcular o total das horas extras</h3>
+    <p>Multiplica-se o valor de cada hora extra pela quantidade de horas extras trabalhadas.</p>
+    <p><strong>Fórmula:</strong> Total das Horas Extras = Valor da Hora Extra × Quantidade de Horas Extras</p>
+
+    <h2>Exemplo didático</h2>
+    <p>Considere o seguinte cenário meramente ilustrativo:</p>
+    <ul>
+      <li>Salário mensal: <strong>R$ 2.200,00</strong></li>
+      <li>Jornada mensal: <strong>220 horas</strong></li>
+      <li>Horas extras realizadas: <strong>10 horas</strong></li>
+      <li>Adicional informado: <strong>50%</strong></li>
+    </ul>
+
+    <p><strong>Etapas do cálculo:</strong></p>
+    <ol style="padding-left: 24px; margin-bottom: 20px;">
+      <li>Valor da hora normal: R$ 2.200,00 ÷ 220 = R$ 10,00</li>
+      <li>Valor de cada hora extra: R$ 10,00 × (1 + 50 ÷ 100) = R$ 15,00</li>
+      <li>Total das horas extras: R$ 15,00 × 10 = <strong>R$ 150,00</strong></li>
+    </ol>
+    <p><em>Nota: Os valores acima são estritamente didáticos para exemplificar a metodologia das fórmulas.</em></p>
+
+    <h2>O que esta calculadora não considera</h2>
+    <p>Esta ferramenta é um simulador matemático direto e não inclui automaticamente em seu resultado:</p>
+    <ul>
+      <li>Descanso Semanal Remunerado (DSR) sobre horas extras;</li>
+      <li>Reflexos em férias proporcionais, 13º salário ou FGTS;</li>
+      <li>Descontos tributários e previdenciários (INSS e IRRF);</li>
+      <li>Adicionais noturnos ou de periculosidade/insalubridade;</li>
+      <li>Outras verbas contratuais ou rescisórias.</li>
+    </ul>
+
+    <h2>Aviso importante</h2>
+    <div class="card" style="background-color: #f9f9f9; border-left: 4px solid #008080; padding: 15px; margin: 15px 0;">
+      <p style="margin: 0;">
+        Os valores apresentados são estimativas matemáticas baseadas exclusivamente nos dados informados pelo usuário.
+        Regras de jornada, adicionais e outras verbas podem variar conforme contrato, acordo, convenção coletiva, categoria profissional e situação individual.
+        A ferramenta não substitui cálculo contábil, jurídico, departamento pessoal ou orientação profissional.
+      </p>
+    </div>
+
+    <p style="margin-top: 30px;">
+      👉 <a href="../../trabalhista.html">Voltar para Calculadoras Trabalhistas</a>
+    </p>
+  </section>
+</main>
+
+<script>
+function parseNumero(valorStr) {
+  if (typeof valorStr !== 'string') return NaN;
+
+  const limpo = valorStr.trim();
+
+  if (!limpo) return NaN;
+
+  let normalizado;
+
+  // Formato brasileiro com milhar e decimal:
+  // 2.500,50
+  // -2.500,50
+  if (/^-?\d{1,3}(\.\d{3})+,\d+$/.test(limpo)) {
+    normalizado = limpo.replace(/\./g, '').replace(',', '.');
+
+  // Decimal com vírgula:
+  // 2500,50
+  // -2500,50
+  } else if (/^-?\d+,\d+$/.test(limpo)) {
+    normalizado = limpo.replace(',', '.');
+
+  // Inteiro ou decimal com ponto:
+  // 2500
+  // 2500.50
+  // -5
+  // -10.5
+  } else if (/^-?\d+(\.\d+)?$/.test(limpo)) {
+    normalizado = limpo;
+
+  } else {
+    return NaN;
+  }
+
+  const numero = Number(normalizado);
+
+  return Number.isFinite(numero) ? numero : NaN;
+}
+
+function calcular() {
+  const salarioInput = document.getElementById("salario").value;
+  const jornadaInput = document.getElementById("jornada").value;
+  const horasExtrasInput = document.getElementById("horas-extras").value;
+  const adicionalInput = document.getElementById("adicional").value;
+
+  const resContainer = document.getElementById("resultado-container");
+  const erroEl = document.getElementById("mensagem-erro");
+
+  erroEl.style.display = "none";
+  erroEl.innerText = "";
+  resContainer.style.display = "none";
+
+  if (!salarioInput.trim() || !jornadaInput.trim() || !horasExtrasInput.trim() || !adicionalInput.trim()) {
+    erroEl.innerText = "Por favor, preencha todos os campos para realizar o cálculo.";
+    erroEl.style.display = "block";
+    return;
+  }
+
+  const salario = parseNumero(salarioInput);
+  const jornada = parseNumero(jornadaInput);
+  const horasExtras = parseNumero(horasExtrasInput);
+  const adicional = parseNumero(adicionalInput);
+
+  if (isNaN(salario) || isNaN(jornada) || isNaN(horasExtras) || isNaN(adicional)) {
+    erroEl.innerText = "Por favor, informe valores numéricos válidos em todos os campos.";
+    erroEl.style.display = "block";
+    return;
+  }
+
+  if (salario <= 0) {
+    erroEl.innerText = "O salário mensal deve ser maior que zero.";
+    erroEl.style.display = "block";
+    return;
+  }
+
+  if (jornada <= 0) {
+    erroEl.innerText = "A jornada mensal em horas deve ser maior que zero.";
+    erroEl.style.display = "block";
+    return;
+  }
+
+  if (horasExtras < 0) {
+    erroEl.innerText = "A quantidade de horas extras não pode ser negativa.";
+    erroEl.style.display = "block";
+    return;
+  }
+
+  if (adicional < 0) {
+    erroEl.innerText = "O adicional de hora extra não pode ser negativo.";
+    erroEl.style.display = "block";
+    return;
+  }
+
+  const valorHora = salario / jornada;
+  const valorHoraExtra = valorHora * (1 + adicional / 100);
+  const totalHorasExtras = valorHoraExtra * horasExtras;
+
+  const fmtBRL = new Intl.NumberFormat('pt-BR', {
+    style: 'currency',
+    currency: 'BRL'
+  });
+
+  const horasFormatadas = new Intl.NumberFormat('pt-BR', {
+    maximumFractionDigits: 10
+  }).format(horasExtras);
+
+  document.getElementById("resultado").innerText =
+    "Total estimado das horas extras: " + fmtBRL.format(totalHorasExtras);
+
+  document.getElementById("detalhes").innerHTML =
+    `Valor da hora normal: <strong>${fmtBRL.format(valorHora)}</strong><br>` +
+    `Valor de cada hora extra: <strong>${fmtBRL.format(valorHoraExtra)}</strong><br>` +
+    `Quantidade considerada: <strong>${horasFormatadas} horas</strong><br>` +
+    `Adicional informado: <strong>${adicional}%</strong>`;
+
+  resContainer.style.display = "block";
+}
+
+function limparCampos() {
+  document.getElementById("salario").value = "";
+  document.getElementById("jornada").value = "";
+  document.getElementById("horas-extras").value = "";
+  document.getElementById("adicional").value = "";
+
+  const erroEl = document.getElementById("mensagem-erro");
+  erroEl.innerText = "";
+  erroEl.style.display = "none";
+
+  const resContainer = document.getElementById("resultado-container");
+  document.getElementById("resultado").innerText = "";
+  document.getElementById("detalhes").innerHTML = "";
+  resContainer.style.display = "none";
+}
+
+function limparResultado() {
+  const erroEl = document.getElementById("mensagem-erro");
+  erroEl.innerText = "";
+  erroEl.style.display = "none";
+
+  const resContainer = document.getElementById("resultado-container");
+  resContainer.style.display = "none";
+}
+</script>
+
+<footer class="footer">
+  <div class="footer-top">
+    <div class="container footer-columns">
+      <div class="footer-col">
+        <h3>Calculadoras</h3>
+        <ul>
+          <li><a href="../../financeira.html">Financeiras</a></li>
+          <li><a href="../../matematica.html">Matemáticas</a></li>
+          <li><a href="../../saude.html">Saúde e IMC</a></li>
+          <li><a href="../../conversores.html">Conversores de Medidas</a></li>
+          <li><a href="../../trabalhista.html">Trabalhistas</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h3>Suporte</h3>
+        <ul>
+          <li><a href="../../contato.html">Ajuda &amp; FAQ</a></li>
+          <li><a href="../../contato.html">Fale conosco</a></li>
+          <li><a href="../../contato.html">Sugerir Calculadora</a></li>
+          <li><a href="../../contato.html">Reportar um Erro</a></li>
+          <li><a href="#">Status do sistema</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h3>Empresa</h3>
+        <ul>
+          <li><a href="../../sobre.html">Sobre nós</a></li>
+          <li><a href="../../blog/index.html">Blog</a></li>
+          <li><a href="#">Carreiras</a></li>
+          <li><a href="#">Imprensa e Parcerias</a></li>
+          <li><a href="#">Programa de afiliados</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <div class="container footer-bottom-container">
+      <div class="lang-select">
+        <span>🌐 Português</span>
+      </div>
+
+      <div class="footer-legal">
+        <span>© 2026 Calculadora Master. Todos os direitos reservados</span>
+        <a href="../../termos.html">Termos de Serviço</a>
+        <a href="../../politica.html">Privacidade</a>
+        <a href="../../politica.html" class="cm-cookie-manage">Cookies</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const mobileMenu = document.querySelector('#mobile-menu');
+  const navMenu = document.querySelector('#nav-menu');
+
+  mobileMenu.addEventListener('click', function() {
+    mobileMenu.classList.toggle('is-active');
+    navMenu.classList.toggle('active');
+  });
+</script>
+
+<script type="module" src="../../js/header-auth.js"></script>
+<script src="../../js/cookie-consent.js"></script>
+
+</body>
+</html>
