@@ -11,7 +11,8 @@ const TOOLS_CATALOG = [
     descricao: "Calcule o valor da hora normal, hora extra e o total com adicional informado.",
     url: "tools/trabalhista/horas-extras.html",
     termos: ["horas extras", "hora extra", "trabalhista", "adicional hora extra", "salario", "jornada", "clt", "trabalho", "rescisao", "banco de horas"],
-    destaque: true
+    destaque: true,
+    related: ["porcentagem", "desconto", "juros"]
   },
   {
     id: "financiamento-carro",
@@ -20,7 +21,8 @@ const TOOLS_CATALOG = [
     descricao: "Simule as parcelas e os juros do financiamento do seu carro pela Tabela Price.",
     url: "tools/financas/financiamento-carro.html",
     termos: ["financiamento carro", "carro", "veiculo", "auto", "parcela carro", "simulador auto", "automovel", "moto", "tabela price", "juros"],
-    destaque: true
+    destaque: true,
+    related: ["juros", "financiamento-imovel", "porcentagem", "combustivel"]
   },
   {
     id: "financiamento-imovel",
@@ -29,7 +31,8 @@ const TOOLS_CATALOG = [
     descricao: "Simule o financiamento imobiliário pelo Sistema SAC com parcelas decrescentes.",
     url: "tools/financas/financiamento-imovel.html",
     termos: ["financiamento imovel", "imovel", "casa", "apartamento", "habitacional", "sistema sac", "parcela decrescente", "caixa", "financiamento"],
-    destaque: false
+    destaque: false,
+    related: ["juros", "financiamento-carro", "porcentagem"]
   },
   {
     id: "desconto",
@@ -38,7 +41,8 @@ const TOOLS_CATALOG = [
     descricao: "Descubra o valor final com desconto e a economia real nas suas compras.",
     url: "tools/financas/desconto.html",
     termos: ["desconto", "porcentagem de desconto", "promocao", "liquidacao", "preco final", "compras", "cupom", "off"],
-    destaque: true
+    destaque: true,
+    related: ["porcentagem", "lucro", "dividir-conta", "juros"]
   },
   {
     id: "juros",
@@ -47,7 +51,8 @@ const TOOLS_CATALOG = [
     descricao: "Calcule juros simples e compostos para investimentos, empréstimos e rendimentos.",
     url: "tools/financas/juros.html",
     termos: ["juros", "juros compostos", "juros simples", "rendimento", "investimento", "emprestimo", "taxa de juros", "capital", "rentabilidade"],
-    destaque: false
+    destaque: false,
+    related: ["financiamento-carro", "financiamento-imovel", "porcentagem", "lucro"]
   },
   {
     id: "lucro",
@@ -56,7 +61,8 @@ const TOOLS_CATALOG = [
     descricao: "Calcule lucro bruto, margem de lucro e a precificação ideal para seus produtos.",
     url: "tools/financas/lucro.html",
     termos: ["lucro", "margem de lucro", "markup", "precificacao", "custo e venda", "ganho", "comercio", "vendas", "empresa"],
-    destaque: false
+    destaque: false,
+    related: ["porcentagem", "desconto", "juros"]
   },
   {
     id: "porcentagem",
@@ -65,7 +71,8 @@ const TOOLS_CATALOG = [
     descricao: "Calcule percentuais, aumentos, reduções e proporções de forma simples e rápida.",
     url: "tools/financas/porcentagem.html",
     termos: ["porcentagem", "percentual", "por cento", "fracao", "aumento percentual", "regra de tres", "desconto", "porcentagens"],
-    destaque: true
+    destaque: true,
+    related: ["desconto", "lucro", "juros"]
   },
   {
     id: "dividir-conta",
@@ -74,7 +81,8 @@ const TOOLS_CATALOG = [
     descricao: "Divida contas entre amigos de forma igual ou com consumos diferentes por pessoa.",
     url: "tools/financas/dividir-conta.html",
     termos: ["dividir conta", "divisao de conta", "restaurante", "bar", "rachar conta", "amigos", "dividir despesas", "churrasco", "conta"],
-    destaque: false
+    destaque: false,
+    related: ["desconto", "porcentagem", "combustivel"]
   },
   {
     id: "imc",
@@ -83,7 +91,8 @@ const TOOLS_CATALOG = [
     descricao: "Calcule seu Índice de Massa Corporal e veja a classificação do seu peso ideal.",
     url: "tools/saude/imc.html",
     termos: ["imc", "indice de massa corporal", "peso ideal", "obesidade", "saude", "tabela imc", "peso e altura", "emagrecer", "massa corporal"],
-    destaque: true
+    destaque: true,
+    related: ["idade"]
   },
   {
     id: "idade",
@@ -92,7 +101,8 @@ const TOOLS_CATALOG = [
     descricao: "Descubra sua idade exata em anos, meses e dias a partir da data de nascimento.",
     url: "tools/saude/idade.html",
     termos: ["idade", "quantos anos tenho", "data de nascimento", "dias de vida", "tempo de vida", "aniversario", "calcular idade", "nascimento"],
-    destaque: false
+    destaque: false,
+    related: ["imc"]
   },
   {
     id: "combustivel",
@@ -101,7 +111,8 @@ const TOOLS_CATALOG = [
     descricao: "Calcule o consumo em litros e o custo total estimado de combustível em viagens.",
     url: "tools/utilidades/combustivel.html",
     termos: ["combustivel", "gasolina", "etanol", "alcool", "consumo km por litro", "gasto de viagem", "custo combustivel", "carro", "viagem"],
-    destaque: false
+    destaque: false,
+    related: ["financiamento-carro", "dividir-conta", "desconto"]
   },
   {
     id: "contador",
@@ -110,7 +121,8 @@ const TOOLS_CATALOG = [
     descricao: "Conte caracteres, palavras, espaços e linhas em qualquer texto instantaneamente.",
     url: "tools/utilidades/contador.html",
     termos: ["contador", "contar caracteres", "contar palavras", "texto", "tamanho do texto", "redacao", "caracteres", "palavras"],
-    destaque: false
+    destaque: false,
+    related: ["whatsapp", "qr-code", "senha"]
   },
   {
     id: "senha",
@@ -119,7 +131,8 @@ const TOOLS_CATALOG = [
     descricao: "Gere senhas fortes, seguras e personalizadas com criptografia Web Crypto.",
     url: "tools/utilidades/senha.html",
     termos: ["senha", "gerador de senha", "senha forte", "password generator", "seguranca", "criar senha", "senha segura", "gerador senha"],
-    destaque: true
+    destaque: true,
+    related: ["qr-code", "whatsapp", "contador"]
   },
   {
     id: "qr-code",
@@ -128,7 +141,8 @@ const TOOLS_CATALOG = [
     descricao: "Crie códigos QR personalizados para links, textos, WhatsApp e redes em segundos.",
     url: "tools/utilidades/qr-code.html",
     termos: ["qr code", "gerador qr code", "codigo qr", "qrcode", "criar qr code", "link qr", "pix", "wifi"],
-    destaque: false
+    destaque: false,
+    related: ["whatsapp", "senha", "contador"]
   },
   {
     id: "whatsapp",
@@ -137,7 +151,8 @@ const TOOLS_CATALOG = [
     descricao: "Gere links diretos de WhatsApp (wa.me) com mensagem personalizada sem cadastro.",
     url: "tools/utilidades/whatsapp.html",
     termos: ["whatsapp", "link whatsapp", "gerador whatsapp", "wa.me", "link na bio", "zap", "mensagem direta", "contato whatsapp"],
-    destaque: false
+    destaque: false,
+    related: ["qr-code", "contador", "senha"]
   }
 ];
 
@@ -228,6 +243,24 @@ function searchToolsCatalog(query) {
 }
 
 /**
+ * Retorna uma ferramenta do catalogo pelo seu ID.
+ */
+function getToolById(id) {
+  return TOOLS_CATALOG.find(tool => tool.id === id) || null;
+}
+
+/**
+ * Retorna as ferramentas relacionadas de uma ferramenta pelo seu ID.
+ */
+function getRelatedTools(toolId) {
+  const current = getToolById(toolId);
+  if (!current || !Array.isArray(current.related)) return [];
+  return current.related
+    .map(relId => getToolById(relId))
+    .filter(Boolean);
+}
+
+/**
  * Preparacao de arquitetura de eventos analiticos (sem acionar GA4 diretamente nesta etapa)
  */
 function trackToolSearch(query, resultCount) {
@@ -247,6 +280,8 @@ if (typeof window !== "undefined") {
   window.searchToolsCatalog = searchToolsCatalog;
   window.trackToolSearch = trackToolSearch;
   window.trackToolResultClick = trackToolResultClick;
+  window.getToolById = getToolById;
+  window.getRelatedTools = getRelatedTools;
 }
 
 if (typeof module !== "undefined" && module.exports) {
@@ -255,6 +290,8 @@ if (typeof module !== "undefined" && module.exports) {
     normalizeSearchText,
     searchToolsCatalog,
     trackToolSearch,
-    trackToolResultClick
+    trackToolResultClick,
+    getToolById,
+    getRelatedTools
   };
 }
