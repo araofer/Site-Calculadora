@@ -129,10 +129,80 @@ const CATEGORIA_PAGES = [
   }
 ];
 
+const BLOG_INDEX_PAGE = {
+  sourceFile: path.join(PAGES_DIR, 'blog', 'index.page.html'),
+  relativeOutputPath: 'blog/index.html'
+};
+
+const BLOG_ARTIGOS_PAGES = [
+  {
+    sourceFile: path.join(PAGES_DIR, 'blog', 'artigos', 'como-calcular-combustivel.page.html'),
+    relativeOutputPath: 'blog/artigos/como-calcular-combustivel.html'
+  },
+  {
+    sourceFile: path.join(PAGES_DIR, 'blog', 'artigos', 'como-calcular-contador.page.html'),
+    relativeOutputPath: 'blog/artigos/como-calcular-contador.html'
+  },
+  {
+    sourceFile: path.join(PAGES_DIR, 'blog', 'artigos', 'como-calcular-desconto.page.html'),
+    relativeOutputPath: 'blog/artigos/como-calcular-desconto.html'
+  },
+  {
+    sourceFile: path.join(PAGES_DIR, 'blog', 'artigos', 'como-calcular-financiamento-carro.page.html'),
+    relativeOutputPath: 'blog/artigos/como-calcular-financiamento-carro.html'
+  },
+  {
+    sourceFile: path.join(PAGES_DIR, 'blog', 'artigos', 'como-calcular-financiamento-imovel.page.html'),
+    relativeOutputPath: 'blog/artigos/como-calcular-financiamento-imovel.html'
+  },
+  {
+    sourceFile: path.join(PAGES_DIR, 'blog', 'artigos', 'como-calcular-idade.page.html'),
+    relativeOutputPath: 'blog/artigos/como-calcular-idade.html'
+  },
+  {
+    sourceFile: path.join(PAGES_DIR, 'blog', 'artigos', 'como-calcular-imc.page.html'),
+    relativeOutputPath: 'blog/artigos/como-calcular-imc.html'
+  },
+  {
+    sourceFile: path.join(PAGES_DIR, 'blog', 'artigos', 'como-calcular-juros.page.html'),
+    relativeOutputPath: 'blog/artigos/como-calcular-juros.html'
+  },
+  {
+    sourceFile: path.join(PAGES_DIR, 'blog', 'artigos', 'como-calcular-lucro.page.html'),
+    relativeOutputPath: 'blog/artigos/como-calcular-lucro.html'
+  },
+  {
+    sourceFile: path.join(PAGES_DIR, 'blog', 'artigos', 'como-calcular-porcentagem.page.html'),
+    relativeOutputPath: 'blog/artigos/como-calcular-porcentagem.html'
+  },
+  {
+    sourceFile: path.join(PAGES_DIR, 'blog', 'artigos', 'como-dividir-conta.page.html'),
+    relativeOutputPath: 'blog/artigos/como-dividir-conta.html'
+  },
+  {
+    sourceFile: path.join(PAGES_DIR, 'blog', 'artigos', 'como-gerar-link-whatsapp.page.html'),
+    relativeOutputPath: 'blog/artigos/como-gerar-link-whatsapp.html'
+  },
+  {
+    sourceFile: path.join(PAGES_DIR, 'blog', 'artigos', 'como-gerar-qr.page.html'),
+    relativeOutputPath: 'blog/artigos/como-gerar-qr.html'
+  },
+  {
+    sourceFile: path.join(PAGES_DIR, 'blog', 'artigos', 'como-gerar-senha.page.html'),
+    relativeOutputPath: 'blog/artigos/como-gerar-senha.html'
+  }
+];
+
+const BLOG_PAGES = [
+  BLOG_INDEX_PAGE,
+  ...BLOG_ARTIGOS_PAGES
+];
+
 const SITE_PAGES = [
   ...TOOL_PAGES,
   HOME_PAGE,
-  ...CATEGORIA_PAGES
+  ...CATEGORIA_PAGES,
+  ...BLOG_PAGES
 ];
 
 const DEFAULT_PAGES = TOOL_PAGES;
@@ -191,9 +261,43 @@ const SITE_SPECIFIC_ASSETS = [
   { src: 'js/home-search.js', dest: 'js/home-search.js' }
 ];
 
+const BLOG_ASSETS = [
+  { src: 'blog/img/blog-calculadora.png', dest: 'blog/img/blog-calculadora.png' },
+  { src: 'blog/img/blog-calculadora.webp', dest: 'blog/img/blog-calculadora.webp' },
+  { src: 'blog/img/carro.png', dest: 'blog/img/carro.png' },
+  { src: 'blog/img/carro.webp', dest: 'blog/img/carro.webp' },
+  { src: 'blog/img/combustivel.png', dest: 'blog/img/combustivel.png' },
+  { src: 'blog/img/combustivel.webp', dest: 'blog/img/combustivel.webp' },
+  { src: 'blog/img/contador.png', dest: 'blog/img/contador.png' },
+  { src: 'blog/img/contador.webp', dest: 'blog/img/contador.webp' },
+  { src: 'blog/img/desconto.png', dest: 'blog/img/desconto.png' },
+  { src: 'blog/img/desconto.webp', dest: 'blog/img/desconto.webp' },
+  { src: 'blog/img/dividir.png', dest: 'blog/img/dividir.png' },
+  { src: 'blog/img/dividir.webp', dest: 'blog/img/dividir.webp' },
+  { src: 'blog/img/idade.png', dest: 'blog/img/idade.png' },
+  { src: 'blog/img/idade.webp', dest: 'blog/img/idade.webp' },
+  { src: 'blog/img/imc.png', dest: 'blog/img/imc.png' },
+  { src: 'blog/img/imc.webp', dest: 'blog/img/imc.webp' },
+  { src: 'blog/img/imovel.png', dest: 'blog/img/imovel.png' },
+  { src: 'blog/img/imovel.webp', dest: 'blog/img/imovel.webp' },
+  { src: 'blog/img/juros.png', dest: 'blog/img/juros.png' },
+  { src: 'blog/img/juros.webp', dest: 'blog/img/juros.webp' },
+  { src: 'blog/img/lucro.png', dest: 'blog/img/lucro.png' },
+  { src: 'blog/img/lucro.webp', dest: 'blog/img/lucro.webp' },
+  { src: 'blog/img/porcentagem.png', dest: 'blog/img/porcentagem.png' },
+  { src: 'blog/img/porcentagem.webp', dest: 'blog/img/porcentagem.webp' },
+  { src: 'blog/img/qr-code.png', dest: 'blog/img/qr-code.png' },
+  { src: 'blog/img/qr-code.webp', dest: 'blog/img/qr-code.webp' },
+  { src: 'blog/img/senha.png', dest: 'blog/img/senha.png' },
+  { src: 'blog/img/senha.webp', dest: 'blog/img/senha.webp' },
+  { src: 'blog/img/whatsapp.png', dest: 'blog/img/whatsapp.png' },
+  { src: 'blog/img/whatsapp.webp', dest: 'blog/img/whatsapp.webp' }
+];
+
 const SITE_ASSETS = [
   ...TOOL_ASSETS,
-  ...SITE_SPECIFIC_ASSETS
+  ...SITE_SPECIFIC_ASSETS,
+  ...BLOG_ASSETS
 ];
 
 const DEFAULT_ASSETS = TOOL_ASSETS;
@@ -310,7 +414,10 @@ function renderPage({ sourceFile, relativeOutputPath, componentsDir = COMPONENTS
   template = template.replace(/\{\{META_DESCRIPTION\}\}/g, meta.description);
   template = template.replace(/\{\{META_KEYWORDS\}\}/g, meta.keywords || '');
   template = template.replace(/\{\{CANONICAL\}\}/g, meta.canonical);
+  template = template.replace(/\{\{OG_TYPE\}\}/g, meta.ogType || 'website');
+  template = template.replace(/\{\{OG_IMAGE\}\}/g, meta.ogImage || 'https://www.calculadoramaster.com/logo/banner.png');
   template = template.replace(/\{\{ROOT_PREFIX\}\}/g, rootPrefix);
+  template = template.replace(/\{\{EXTRA_HEAD\}\}\n?/g, meta.extraHead ? `  ${meta.extraHead}\n` : '');
 
   // Validação defensiva: falha se houver qualquer placeholder não resolvido
   const leftover = template.match(/\{\{([A-Z0-9_]+)\}\}/);
@@ -412,6 +519,9 @@ if (require.main === module) {
     } else if (scope === 'categories') {
       pagesToBuild = CATEGORIA_PAGES;
       assetsToCopy = SITE_ASSETS;
+    } else if (scope === 'blog') {
+      pagesToBuild = BLOG_PAGES;
+      assetsToCopy = [...COMMON_ASSETS, ...BLOG_ASSETS];
     }
 
     const results = buildPages(pagesToBuild, { assets: assetsToCopy });
@@ -432,6 +542,9 @@ module.exports = {
   TOOL_PAGES,
   HOME_PAGE,
   CATEGORIA_PAGES,
+  BLOG_INDEX_PAGE,
+  BLOG_ARTIGOS_PAGES,
+  BLOG_PAGES,
   SITE_PAGES,
   DEFAULT_PAGES,
   COMMON_ASSETS,
@@ -441,6 +554,7 @@ module.exports = {
   UTILIDADES_ASSETS,
   TOOL_ASSETS,
   SITE_SPECIFIC_ASSETS,
+  BLOG_ASSETS,
   SITE_ASSETS,
   DEFAULT_ASSETS,
   calculateRootPrefix,

@@ -21,6 +21,9 @@ const {
   TOOL_PAGES,
   HOME_PAGE,
   CATEGORIA_PAGES,
+  BLOG_INDEX_PAGE,
+  BLOG_ARTIGOS_PAGES,
+  BLOG_PAGES,
   SITE_PAGES,
   DEFAULT_PAGES,
   COMMON_ASSETS,
@@ -30,6 +33,7 @@ const {
   UTILIDADES_ASSETS,
   TOOL_ASSETS,
   SITE_SPECIFIC_ASSETS,
+  BLOG_ASSETS,
   SITE_ASSETS,
   DEFAULT_ASSETS,
   copyPilotAssets
@@ -622,9 +626,10 @@ test('SSG Multipage - Contrato estrutural e ordem dos elementos em .nav-containe
   }
 });
 
-test('SSG Site - buildPages(SITE_PAGES) compila 21 páginas e copia 28 assets', () => {
+test('SSG Site - buildPages(SITE_PAGES) compila 36 páginas e copia 58 assets', () => {
   const results = buildPages(SITE_PAGES, { assets: SITE_ASSETS });
-  assert.equal(results.length, 21, 'SITE_PAGES deve gerar exatamente 21 páginas (15 ferramentas + Home + 5 categorias)');
+  assert.equal(results.length, 36, 'SITE_PAGES deve gerar exatamente 36 páginas (15 ferramentas + Home + 5 categorias + 15 blog)');
+  assert.equal(SITE_ASSETS.length, 58, 'SITE_ASSETS deve conter exatamente 58 assets');
 
   for (const page of SITE_PAGES) {
     const fullPath = path.join(ROOT_DIR, 'dist-pilot', page.relativeOutputPath);
@@ -773,5 +778,203 @@ test('SSG Site - Páginas de categorias: testes parametrizados de integridade, m
     // Footer institucional de 3 colunas
     assert.match(html, /<div class="container footer-columns">/, `${spec.file} deve conter footer estruturado`);
     assert.match(html, /<div class="footer-bottom">/, `${spec.file} deve conter footer-bottom`);
+  }
+});
+
+test('SSG Blog - buildPages(BLOG_PAGES) compila 15 páginas e copia assets do blog', () => {
+  const results = buildPages(BLOG_PAGES, { assets: [...COMMON_ASSETS, ...BLOG_ASSETS] });
+  assert.equal(results.length, 15, 'BLOG_PAGES deve gerar exatamente 15 páginas (1 index + 14 artigos)');
+  assert.equal(BLOG_ARTIGOS_PAGES.length, 14, 'BLOG_ARTIGOS_PAGES deve conter 14 artigos');
+  assert.equal(BLOG_ASSETS.length, 30, 'BLOG_ASSETS deve conter exatamente 30 imagens');
+
+  for (const page of BLOG_PAGES) {
+    const fullPath = path.join(ROOT_DIR, 'dist-pilot', page.relativeOutputPath);
+    assert.ok(fs.existsSync(fullPath), `Página ${page.relativeOutputPath} deve existir no output`);
+    const content = fs.readFileSync(fullPath, 'utf-8');
+    assert.ok(content.length > 500, `Página ${page.relativeOutputPath} deve ter tamanho substancial`);
+    assert.equal(content.match(/\{\{([A-Z0-9_]+)\}\}/), null, `Página ${page.relativeOutputPath} não deve conter placeholders não resolvidos`);
+    assert.ok(!content.includes('href="undefined"'), `Página ${page.relativeOutputPath} não deve conter href undefined`);
+    assert.ok(!content.includes('src="undefined"'), `Página ${page.relativeOutputPath} não deve conter src undefined`);
+  }
+});
+
+test('SSG Blog - blog/index.html: metadados, H1, cards de artigos, footer e scripts', () => {
+  const filePath = path.join(ROOT_DIR, 'dist-pilot', 'blog', 'index.html');
+  assert.ok(fs.existsSync(filePath), 'blog/index.html deve existir em dist-pilot');
+
+  const html = fs.readFileSync(filePath, 'utf-8');
+
+  // Metadados
+  assert.match(html, /<title>Blog Calculadora Master \| Artigos, Dicas e Guias Práticos<\/title>/);
+  assert.match(html, /<link rel="canonical" href="https:\/\/www\.calculadoramaster\.com\/blog\/index\.html">/);
+  assert.match(html, /<meta property="og:type" content="website">/);
+  assert.match(html, /<meta property="og:image" content="https:\/\/www\.calculadoramaster\.com\/blog\/img\/blog-calculadora\.png">/);
+
+  // H1
+  assert.match(html, /<h1>Blog Calculadora Master<\/h1>/);
+
+  // Links para todos os 14 artigos
+  const expectedArticleSlugs = [
+    'como-calcular-combustivel',
+    'como-calcular-contador',
+    'como-calcular-desconto',
+    'como-calcular-financiamento-carro',
+    'como-calcular-financiamento-imovel',
+    'como-calcular-idade',
+    'como-calcular-imc',
+    'como-calcular-juros',
+    'como-calcular-lucro',
+    'como-calcular-porcentagem',
+    'como-dividir-conta',
+    'como-gerar-link-whatsapp',
+    'como-gerar-qr',
+    'como-gerar-senha'
+  ];
+
+  for (const slug of expectedArticleSlugs) {
+    assert.match(html, new RegExp(`href="\\.\\.\/blog\/artigos\/${slug}\\.html"`), `blog/index.html deve conter link para artigo ${slug}`);
+  }
+
+  // Footer institucional de 3 colunas
+  assert.match(html, /<div class="container footer-columns">/, 'blog/index.html deve utilizar site-footer com 3 colunas');
+  assert.match(html, /<div class="footer-bottom">/, 'blog/index.html deve conter footer-bottom');
+
+  // Scripts essenciais
+  assert.match(html, /<script type="module" src="\.\.\/js\/header-auth\.js"><\/script>/);
+  assert.match(html, /<script src="\.\.\/js\/cookie-consent\.js"><\/script>/);
+});
+
+test('SSG Blog - 14 artigos: metadados, canonical, H1, og:type=article, og:image e scripts', () => {
+  const articleSpecs = [
+    {
+      file: 'blog/artigos/como-calcular-combustivel.html',
+      title: 'Como Calcular Consumo de Combustível por Km | Calculadora Master',
+      canonical: 'https://www.calculadoramaster.com/blog/artigos/como-calcular-combustivel.html',
+      image: 'combustivel.png',
+      hasMathJax: false
+    },
+    {
+      file: 'blog/artigos/como-calcular-contador.html',
+      title: 'Como Contar Caracteres e Palavras de um Texto | Calculadora Master',
+      canonical: 'https://www.calculadoramaster.com/blog/artigos/como-calcular-contador.html',
+      image: 'contador.png',
+      hasMathJax: false
+    },
+    {
+      file: 'blog/artigos/como-calcular-desconto.html',
+      title: 'Como Calcular Desconto em Compras e Promoções | Calculadora Master',
+      canonical: 'https://www.calculadoramaster.com/blog/artigos/como-calcular-desconto.html',
+      image: 'desconto.png',
+      hasMathJax: false
+    },
+    {
+      file: 'blog/artigos/como-calcular-financiamento-carro.html',
+      title: 'Como Calcular Financiamento de Carros e Parcelas | Calculadora Master',
+      canonical: 'https://www.calculadoramaster.com/blog/artigos/como-calcular-financiamento-carro.html',
+      image: 'carro.png',
+      hasMathJax: false
+    },
+    {
+      file: 'blog/artigos/como-calcular-financiamento-imovel.html',
+      title: 'Como Calcular Financiamento Imobiliário e Parcelas | Calculadora Master',
+      canonical: 'https://www.calculadoramaster.com/blog/artigos/como-calcular-financiamento-imovel.html',
+      image: 'imovel.png',
+      hasMathJax: false
+    },
+    {
+      file: 'blog/artigos/como-calcular-idade.html',
+      title: 'Como Calcular Idade Exata em Anos, Meses e Dias | Calculadora Master',
+      canonical: 'https://www.calculadoramaster.com/blog/artigos/como-calcular-idade.html',
+      image: 'idade.png',
+      hasMathJax: false
+    },
+    {
+      file: 'blog/artigos/como-calcular-imc.html',
+      title: 'Como Calcular o IMC e Classificação de Peso | Calculadora Master',
+      canonical: 'https://www.calculadoramaster.com/blog/artigos/como-calcular-imc.html',
+      image: 'imc.png',
+      hasMathJax: true
+    },
+    {
+      file: 'blog/artigos/como-calcular-juros.html',
+      title: 'Como Calcular Juros Simples e Compostos | Calculadora Master',
+      canonical: 'https://www.calculadoramaster.com/blog/artigos/como-calcular-juros.html',
+      image: 'juros.png',
+      hasMathJax: false
+    },
+    {
+      file: 'blog/artigos/como-calcular-lucro.html',
+      title: 'Como Calcular Margem de Lucro e Preço de Venda | Calculadora Master',
+      canonical: 'https://www.calculadoramaster.com/blog/artigos/como-calcular-lucro.html',
+      image: 'lucro.png',
+      hasMathJax: false
+    },
+    {
+      file: 'blog/artigos/como-calcular-porcentagem.html',
+      title: 'Como Calcular Porcentagem Passo a Passo | Calculadora Master',
+      canonical: 'https://www.calculadoramaster.com/blog/artigos/como-calcular-porcentagem.html',
+      image: 'porcentagem.png',
+      hasMathJax: true
+    },
+    {
+      file: 'blog/artigos/como-dividir-conta.html',
+      title: 'Como Dividir a Conta do Restaurante por Pessoa | Calculadora Master',
+      canonical: 'https://www.calculadoramaster.com/blog/artigos/como-dividir-conta.html',
+      image: 'dividir.png',
+      hasMathJax: false
+    },
+    {
+      file: 'blog/artigos/como-gerar-link-whatsapp.html',
+      title: 'Como Criar Link para WhatsApp com Mensagem Personalizada | Calculadora Master',
+      canonical: 'https://www.calculadoramaster.com/blog/artigos/como-gerar-link-whatsapp.html',
+      image: 'whatsapp.png',
+      hasMathJax: false
+    },
+    {
+      file: 'blog/artigos/como-gerar-qr.html',
+      title: 'Como Criar QR Code Personalizado Online Grátis | Calculadora Master',
+      canonical: 'https://www.calculadoramaster.com/blog/artigos/como-gerar-qr.html',
+      image: 'qr-code.png',
+      hasMathJax: false
+    },
+    {
+      file: 'blog/artigos/como-gerar-senha.html',
+      title: 'Como Criar Senhas Fortes e Seguras Online | Calculadora Master',
+      canonical: 'https://www.calculadoramaster.com/blog/artigos/como-gerar-senha.html',
+      image: 'senha.png',
+      hasMathJax: false
+    }
+  ];
+
+  for (const spec of articleSpecs) {
+    const filePath = path.join(ROOT_DIR, 'dist-pilot', spec.file);
+    assert.ok(fs.existsSync(filePath), `Artigo ${spec.file} deve existir em dist-pilot`);
+
+    const html = fs.readFileSync(filePath, 'utf-8');
+    assert.ok(html.length > 500, `${spec.file} deve ter tamanho substancial`);
+
+    // Title
+    assert.match(html, new RegExp(`<title>${spec.title.replace(/\|/g, '\\|')}<\/title>`), `${spec.file} deve ter title correto`);
+
+    // Canonical
+    assert.match(html, new RegExp(`<link rel="canonical" href="${spec.canonical}">`), `${spec.file} deve ter canonical correta`);
+
+    // OG Tags
+    assert.match(html, /<meta property="og:type" content="article">/, `${spec.file} deve ter og:type=article`);
+    assert.match(html, new RegExp(`<meta property="og:image" content="https:\/\/www\\.calculadoramaster\\.com\/blog\/img\/${spec.image}">`), `${spec.file} deve ter og:image correspondente`);
+
+    // Scripts essenciais
+    assert.match(html, /<script type="module" src="\.\.\/\.\.\/js\/header-auth\.js"><\/script>/, `${spec.file} deve carregar header-auth.js com prefixo correto`);
+    assert.match(html, /<script src="\.\.\/\.\.\/js\/cookie-consent\.js"><\/script>/, `${spec.file} deve carregar cookie-consent.js com prefixo correto`);
+
+    // MathJax condicional
+    if (spec.hasMathJax) {
+      assert.match(html, /mathjax/, `${spec.file} deve conter script MathJax`);
+    }
+
+    // Ausência de placeholders e undefined
+    assert.equal(html.match(/\{\{([A-Z0-9_]+)\}\}/), null, `${spec.file} não deve conter placeholders não resolvidos`);
+    assert.ok(!html.includes('href="undefined"'), `${spec.file} não deve conter href undefined`);
+    assert.ok(!html.includes('src="undefined"'), `${spec.file} não deve conter src undefined`);
   }
 });

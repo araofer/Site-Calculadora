@@ -102,12 +102,12 @@ async function runAudit() {
     const ssgSiteMatch = ssgSiteOutput.match(/Build SSG concluído com sucesso: (\d+) página\(s\) gerada\(s\)/);
     summary.pagesCount = ssgSiteMatch ? parseInt(ssgSiteMatch[1], 10) : 0;
 
-    if (toolsCount === 15 && summary.pagesCount === 21) {
+    if (toolsCount === 15 && summary.pagesCount === 36) {
       summary.ssgPages = 'PASS';
     } else {
       summary.ssgPages = 'FAIL';
       allOk = false;
-      console.error(`Contagem incorreta de páginas: tools=${toolsCount} (esperado 15), site=${summary.pagesCount} (esperado 21)`);
+      console.error(`Contagem incorreta de páginas: tools=${toolsCount} (esperado 15), site=${summary.pagesCount} (esperado 36)`);
     }
   } catch (err) {
     summary.ssgPages = 'FAIL';
@@ -157,7 +157,7 @@ async function runAudit() {
     console.error('Erro na validação ESM:', err.message);
   }
 
-  // 5. Verificação de integridade das 21 páginas geradas e ausência de placeholders
+  // 5. Verificação de integridade das 36 páginas geradas e ausência de placeholders
   try {
     let pagesOk = true;
     for (const page of SITE_PAGES) {
@@ -310,6 +310,11 @@ async function runAudit() {
             let msgId = 1;
             const pending = new Map();
 
+            ws.onerror = (err) => {
+              console.error(`WebSocket error em ${page.relativeOutputPath}:`, err.message || err);
+              resolve();
+            };
+
             ws.onopen = () => {
               send('Page.enable');
               send('Runtime.enable');
@@ -324,15 +329,22 @@ async function runAudit() {
               setTimeout(async () => {
                 try {
                   const evalRes = await evalExpr(`({
-                    clientWidth: document.documentElement.clientWidth,
-                    scrollWidth: document.documentElement.scrollWidth,
-                    bodyScrollWidth: document.body.scrollWidth,
-                    menuToggleDisplay: window.getComputedStyle(document.querySelector("#mobile-menu")).display,
+                    clientWidth: document.documentElement ? document.documentElement.clientWidth : 0,
+                    scrollWidth: document.documentElement ? document.documentElement.scrollWidth : 0,
+                    bodyScrollWidth: document.body ? document.body.scrollWidth : 0,
+                    menuToggleDisplay: document.querySelector("#mobile-menu") ? window.getComputedStyle(document.querySelector("#mobile-menu")).display : "none",
                     logoFound: !!document.querySelector(".logo"),
                     navFound: !!document.querySelector(".nav"),
                     menuToggleFound: !!document.querySelector(".menu-toggle"),
                     actionsFound: !!document.querySelector(".nav-actions")
                   })`);
+
+                  if (!evalRes) {
+                    console.error(`Métricas mobile não retornadas em ${page.relativeOutputPath}`);
+                    mobileAllOk = false;
+                    resolve();
+                    return;
+                  }
 
                   if (evalRes.scrollWidth > evalRes.clientWidth) {
                     console.error(`Overflow horizontal mobile detectado em ${page.relativeOutputPath}`);
@@ -366,13 +378,20 @@ async function runAudit() {
               const id = msgId++;
               return new Promise(res => {
                 pending.set(id, res);
-                ws.send(JSON.stringify({ id, method, params }));
+                if (ws.readyState === 1) {
+                  ws.send(JSON.stringify({ id, method, params }));
+                } else {
+                  res({});
+                }
               });
             }
 
             async function evalExpr(expression) {
-              const res = await send('Runtime.evaluate', { expression, returnByValue: true });
-              return res.result?.result?.value;
+              const res = await send('Runtime.evaluate', { expression, returnByValue: true, awaitPromise: true });
+              if (!res || !res.result || !res.result.result) {
+                return null;
+              }
+              return res.result.result.value;
             }
           });
 

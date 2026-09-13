@@ -350,27 +350,28 @@ Uma conversão cega em massa de todos os arquivos do repositório geraria:
 ## 8. Próximos Passos Recomendados
 
 1. **Fase 2 — Modularização de Scripts (Concluída)**: 15/15 ferramentas migradas para ES Modules nativos com testes automatizados e script legado removido.
-2. **Fase 3 — Motor de Build SSG (15/15 Ferramentas + Home + 5 Categorias Concluídas / Em Andamento)**: Motor multipágina expandido com sucesso para 100% das 15 ferramentas do projeto e páginas do site geral (Home `index.html` e as 5 páginas de categorias: `financeira.html`, `matematica.html`, `saude.html`, `conversores.html` e `trabalhista.html`), gerando 21 páginas compiladas e 28 assets em `dist-pilot/`. As páginas do blog (`blog/`) e páginas institucionais permanecem como HTMLs estáticos para serem integradas na próxima etapa.
+2. **Fase 3 — Motor de Build SSG (15/15 Ferramentas + Home + 5 Categorias + 15 Páginas de Blog Concluídos / Em Andamento)**: Motor multipágina expandido com sucesso para 100% das 15 ferramentas do projeto, páginas do site geral (Home `index.html` e as 5 páginas de categorias: `financeira.html`, `matematica.html`, `saude.html`, `conversores.html` e `trabalhista.html`) e todo o Blog (`blog/index.html` + 14 artigos sob `blog/artigos/`), gerando 36 páginas compiladas e 58 assets em `dist-pilot/`. As páginas institucionais permanecem como HTMLs estáticos para serem integradas na próxima etapa.
 3. **Fase 4 — Normalização de Git e Line Endings**: Aplicar `.gitattributes` e `.git-blame-ignore-revs` em commit exclusivo.
 
 ---
 
-## 9. Fase 3 — Motor SSG Multipágina (15 Ferramentas, Home e Categorias)
+## 9. Fase 3 — Motor SSG Multipágina (15 Ferramentas, Home, Categorias e Blog)
 
 ### Objetivo e Visão Geral
-Evoluir o piloto de Static Site Generation (SSG) em Node.js vanilla para um motor multipágina flexível, robusto e reversível, eliminando progressivamente a duplicação estrutural de cabeçalho, rodapé e casca HTML entre as ferramentas e páginas de navegação, sem uso de frameworks, sem bundlers e sem substituição imediata dos arquivos de produção.
+Evoluir o piloto de Static Site Generation (SSG) em Node.js vanilla para um motor multipágina flexível, robusto e reversível, eliminando progressivamente a duplicação estrutural de cabeçalho, rodapé e casca HTML entre as ferramentas, páginas de navegação e blog, sem uso de frameworks, sem bundlers e sem substituição imediata dos arquivos de produção.
 
 ### Estrutura Implementada no SSG
 ```text
 src/
   components/
-    header.html           # Componente de cabeçalho padrão para ferramentas
-    footer.html           # Componente de rodapé simples para ferramentas
+    header.html           # Componente de cabeçalho padrão para ferramentas e artigos do blog
+    footer.html           # Componente de rodapé simples para ferramentas e artigos do blog
     site-header.html      # Componente de cabeçalho com menu de categorias para Home e categorias
-    site-footer.html      # Componente de rodapé completo com 3 colunas para Home e categorias
+    site-footer.html      # Componente de rodapé completo com 3 colunas para Home, categorias e blog/index.html
   layouts/
     tool.html             # Layout shell para páginas de ferramentas com placeholders simples
-    site.html             # Layout shell para páginas institucionais/navegação (Home e Categorias)
+    site.html             # Layout shell para páginas de navegação/geral (Home e Categorias)
+    blog.html             # Layout shell para páginas do Blog (índice e artigos)
   pages/
     index.page.html       # Fonte da Home (Busca Universal, Destaques, Categorias e Catálogo)
     categorias/
@@ -379,6 +380,23 @@ src/
       saude.page.html        # Fonte da categoria Saúde
       conversores.page.html  # Fonte da categoria Conversores e Utilidades
       trabalhista.page.html  # Fonte da categoria Trabalhista
+    blog/
+      index.page.html        # Fonte do índice do Blog
+      artigos/
+        como-calcular-combustivel.page.html
+        como-calcular-contador.page.html
+        como-calcular-desconto.page.html
+        como-calcular-financiamento-carro.page.html
+        como-calcular-financiamento-imovel.page.html
+        como-calcular-idade.page.html
+        como-calcular-imc.page.html
+        como-calcular-juros.page.html
+        como-calcular-lucro.page.html
+        como-calcular-porcentagem.page.html
+        como-dividir-conta.page.html
+        como-gerar-link-whatsapp.page.html
+        como-gerar-qr.page.html
+        como-gerar-senha.page.html
     tools/
       financas/
         desconto.page.html             # Lote 1: Conteúdo e metadados de Desconto
@@ -406,13 +424,13 @@ dist-pilot/               # Diretório isolado de saída de teste (ignorado no .
 ```
 
 ### Características Técnicas do Motor
-1. **Motor Multipágina Declarativo (`buildPages`)**: A função `buildPages(pages, options)` itera sobre coleções estruturadas (`FINANCEIRO_LOTE1_PAGES`, `FINANCEIRO_LOTE2_PAGES`, `FINANCEIRO_PAGES`, `SAUDE_PAGES`, `TRABALHISTA_PAGES`, `UTILIDADES_PAGES`, `TOOL_PAGES`, `CATEGORIA_PAGES`, `SITE_PAGES`), compilando cada template com base no seu arquivo fonte `.page.html` e gerando os artefatos correspondentes no diretório de destino (`dist-pilot/`). Mantém a função retrocompatível `buildPilot(options)`.
-2. **Composição em Build-Time**: A injeção de layouts e componentes ocorre exclusivamente durante o build (`npm run build:html:pilot`, `npm run build:html:financeiro`, `npm run build:html:tools` para 15 ferramentas ou `npm run build:html:site` para 21 páginas). O navegador recebe HTML estático 100% puro e completo, sem chamadas `fetch()` ou injeção dinâmica de templates em runtime.
+1. **Motor Multipágina Declarativo (`buildPages`)**: A função `buildPages(pages, options)` itera sobre coleções estruturadas (`FINANCEIRO_LOTE1_PAGES`, `FINANCEIRO_LOTE2_PAGES`, `FINANCEIRO_PAGES`, `SAUDE_PAGES`, `TRABALHISTA_PAGES`, `UTILIDADES_PAGES`, `TOOL_PAGES`, `CATEGORIA_PAGES`, `BLOG_INDEX_PAGE`, `BLOG_ARTIGOS_PAGES`, `BLOG_PAGES`, `SITE_PAGES`), compilando cada template com base no seu arquivo fonte `.page.html` e gerando os artefatos correspondentes no diretório de destino (`dist-pilot/`). Mantém a função retrocompatível `buildPilot(options)`.
+2. **Composição em Build-Time**: A injeção de layouts e componentes ocorre exclusivamente durante o build (`npm run build:html:pilot`, `npm run build:html:financeiro`, `npm run build:html:tools` para 15 ferramentas, `npm run build:html:blog` para 15 páginas do blog ou `npm run build:html:site` para 36 páginas). O navegador recebe HTML estático 100% puro e completo, sem chamadas `fetch()` ou injeção dinâmica de templates em runtime.
 3. **Zero Frameworks e Dependências**: Implementado estritamente com módulos nativos `fs` e `path` do Node.js, plenamente compatível com o ecossistema CommonJS existente.
-4. **Resolução Dinâmica de Caminhos Relativos (`rootPrefix`)**: O motor calcula a profundidade do arquivo em relação à raiz (`../../` para ferramentas em `tools/<categoria>/`, `./` para Home e páginas de categoria na raiz), garantindo que CSS, scripts, imagens e links funcionem perfeitamente em qualquer nível de diretório.
-5. **Cópia Defensiva de Assets e Resolução da Árvore de Módulos ESM**: Todos os assets estáticos necessários (estilos, logos, scripts centrais, catálogo e módulos ESM das ferramentas compiladas) são copiados para `dist-pilot/` (28 assets no escopo do site). Para além dos pontos de entrada, o gerador e a suíte de testes asseguram a integridade da árvore transitiva completa de módulos ESM (copiando e validando dependências locais como `js/core/currency.js`, `js/auth.js` e `js/firebase-config.js`), prevenindo a falha em que a existência do script de entrada no HTTP direto mascara dependências internas ausentes no navegador. Se qualquer asset obrigatório não for encontrado no disco, o build falha imediatamente com erro explícito.
+4. **Resolução Dinâmica de Caminhos Relativos (`rootPrefix`)**: O motor calcula a profundidade do arquivo em relação à raiz (`../../` para ferramentas em `tools/<categoria>/` e artigos em `blog/artigos/`, `../` para categorias em `categorias/` e `blog/index.html`, `./` para Home e páginas de categoria na raiz), garantindo que CSS, scripts, imagens e links funcionem perfeitamente em qualquer nível de diretório.
+5. **Cópia Defensiva de Assets e Resolução da Árvore de Módulos ESM**: Todos os assets estáticos necessários (estilos, logos, scripts centrais, catálogo, módulos ESM das ferramentas compiladas e 30 imagens em `blog/img/`) são copiados para `dist-pilot/` (58 assets no escopo do site). Para além dos pontos de entrada, o gerador e a suíte de testes asseguram a integridade da árvore transitiva completa de módulos ESM (copiando e validando dependências locais como `js/core/currency.js`, `js/auth.js` e `js/firebase-config.js`), prevenindo a falha em que a existência do script de entrada no HTTP direto mascara dependências internas ausentes no navegador. Se qualquer asset obrigatório não for encontrado no disco, o build falha imediatamente com erro explícito.
 6. **Validação Defensiva de Placeholders**: O build falha expressamente se qualquer campo de metadado obrigatório estiver ausente ou se restar qualquer placeholder `{{...}}` não resolvido no artefato gerado.
-7. **Páginas Disponíveis no Gerador (21 Páginas — 15 Ferramentas + Home + 5 Categorias) e Isolamento de Produção**:
+7. **Páginas Disponíveis no Gerador (36 Páginas — 15 Ferramentas + Home + 5 Categorias + 15 Páginas do Blog) e Isolamento de Produção**:
    - **tools/financas/ (7 páginas)**:
      - `tools/financas/desconto.html`
      - `tools/financas/juros.html`
@@ -440,5 +458,21 @@ dist-pilot/               # Diretório isolado de saída de teste (ignorado no .
      - `saude.html`
      - `conversores.html`
      - `trabalhista.html`
-   Os HTMLs de produção atuais sob `tools/` e na raiz (`index.html`, `financeira.html`, etc.) permanecem 100% intactos e inalterados no repositório, garantindo preservação absoluta de SEO e estabilidade funcional.
-8. **Status e Limitações**: A migração de todas as 15 ferramentas do catálogo oficial, da Home e das 5 páginas de categorias para o SSG foi concluída com sucesso (21 páginas com fontes em `src/pages/`). O Blog (`blog/`) e as páginas institucionais (`sobre.html`, `contato.html`, `politica.html`, `termos.html`, `login.html`, `cadastro.html`, `404.html`) permanecem como HTMLs estáticos pendentes de integração na próxima etapa.
+   - **Blog (15 páginas)**:
+     - `blog/index.html` (índice do blog com listagem de artigos e imagens otimizadas)
+     - `blog/artigos/como-calcular-combustivel.html`
+     - `blog/artigos/como-calcular-contador.html`
+     - `blog/artigos/como-calcular-desconto.html`
+     - `blog/artigos/como-calcular-financiamento-carro.html`
+     - `blog/artigos/como-calcular-financiamento-imovel.html`
+     - `blog/artigos/como-calcular-idade.html`
+     - `blog/artigos/como-calcular-imc.html`
+     - `blog/artigos/como-calcular-juros.html`
+     - `blog/artigos/como-calcular-lucro.html`
+     - `blog/artigos/como-calcular-porcentagem.html`
+     - `blog/artigos/como-dividir-conta.html`
+     - `blog/artigos/como-gerar-link-whatsapp.html`
+     - `blog/artigos/como-gerar-qr.html`
+     - `blog/artigos/como-gerar-senha.html`
+   Os HTMLs de produção atuais sob `tools/`, na raiz (`index.html`, `financeira.html`, etc.) e sob `blog/` permanecem 100% intactos e inalterados no repositório, garantindo preservação absoluta de SEO e estabilidade funcional.
+8. **Status e Limitações**: A migração de todas as 15 ferramentas do catálogo oficial, da Home, das 5 páginas de categorias e de todas as 15 páginas do Blog para o SSG foi concluída com sucesso (36 páginas com fontes em `src/pages/`). As páginas institucionais (`sobre.html`, `contato.html`, `politica.html`, `termos.html`, `login.html`, `cadastro.html`, `404.html`) permanecem como HTMLs estáticos pendentes de integração na próxima etapa.

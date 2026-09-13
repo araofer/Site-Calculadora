@@ -12,6 +12,7 @@
     "build:html:financeiro": "node scripts/build-html.js --scope=financeiro",
     "build:html:tools": "node scripts/build-html.js",
     "build:html:site": "node scripts/build-html.js --scope=site",
+    "build:html:blog": "node scripts/build-html.js --scope=blog",
     "verify:ssg": "npm test && npm run build:data && npm run build:html:tools && git diff --check",
     "audit:ssg": "node scripts/audit-ssg.js",
     "test": "node --test tests/*.test.js"
