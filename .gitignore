@@ -13,6 +13,7 @@ arquivo.json
 # Dependências / builds, caso existam futuramente
 node_modules/
 dist/
+dist-pilot/
 build/
 
 # Logs

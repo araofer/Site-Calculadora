@@ -1,0 +1,206 @@
+/**
+ * Calculadora Master - Static Site Generation (SSG) Piloto
+ * Motor de geração estática de HTML em tempo de build (Node.js Vanilla).
+ * Zero dependências externas e 100% estático.
+ */
+
+const fs = require('fs');
+const path = require('path');
+
+const ROOT_DIR = path.resolve(__dirname, '..');
+const SRC_DIR = path.join(ROOT_DIR, 'src');
+const COMPONENTS_DIR = path.join(SRC_DIR, 'components');
+const LAYOUTS_DIR = path.join(SRC_DIR, 'layouts');
+const PAGES_DIR = path.join(SRC_DIR, 'pages');
+const DEFAULT_OUTPUT_DIR = path.join(ROOT_DIR, 'dist-pilot');
+
+/**
+ * Calcula o prefixo de caminho relativo até a raiz do projeto baseado na profundidade do arquivo.
+ * Ex: 'tools/financas/desconto.html' -> '../../'
+ *     'categorias/financas.html'   -> '../'
+ *     'index.html'                 -> './'
+ *
+ * @param {string} relativePath Caminho relativo do arquivo de saída
+ * @returns {string} Prefixo relativo
+ */
+function calculateRootPrefix(relativePath) {
+  const dir = path.dirname(relativePath);
+  if (dir === '.' || dir === '') {
+    return './';
+  }
+  const segments = dir.split(/[\\/]/).filter(Boolean);
+  return segments.map(() => '..').join('/') + '/';
+}
+
+/**
+ * Faz o parsing simples de metadados no topo do arquivo (formato frontmatter ---).
+ *
+ * @param {string} fileContent Conteúdo bruto do arquivo
+ * @returns {{meta: Object, content: string}}
+ */
+function parsePageSource(fileContent) {
+  const normalized = fileContent.replace(/\r\n/g, '\n');
+  const match = normalized.match(/^---\n([\s\S]*?)\n---\n([\s\S]*)$/);
+  if (!match) {
+    throw new Error('Metadados (frontmatter delimitado por ---) ausentes no arquivo de página.');
+  }
+
+  const metaBlock = match[1];
+  const content = match[2];
+
+  const meta = {};
+  metaBlock.split('\n').forEach(line => {
+    const trimmed = line.trim();
+    if (!trimmed || trimmed.startsWith('#')) return;
+    const colonIndex = line.indexOf(':');
+    if (colonIndex !== -1) {
+      const key = line.slice(0, colonIndex).trim();
+      const val = line.slice(colonIndex + 1).trim();
+      if (key) meta[key] = val;
+    }
+  });
+
+  return { meta, content };
+}
+
+/**
+ * Compõe o HTML completo a partir de componentes, layout e conteúdo da página.
+ *
+ * @param {Object} options
+ * @param {string} options.sourceFile Caminho absoluto do arquivo fonte .page.html
+ * @param {string} options.relativeOutputPath Caminho relativo do HTML de saída
+ * @param {string} [options.componentsDir] Diretório de componentes
+ * @param {string} [options.layoutsDir] Diretório de layouts
+ * @returns {string} HTML renderizado completo
+ */
+function renderPage({ sourceFile, relativeOutputPath, componentsDir = COMPONENTS_DIR, layoutsDir = LAYOUTS_DIR }) {
+  if (!fs.existsSync(sourceFile)) {
+    throw new Error(`Arquivo fonte de página não encontrado: ${sourceFile}`);
+  }
+
+  const rawSource = fs.readFileSync(sourceFile, 'utf-8');
+  const { meta, content } = parsePageSource(rawSource);
+
+  // Validação de campos obrigatórios
+  const requiredMeta = ['title', 'description', 'canonical', 'layout'];
+  for (const field of requiredMeta) {
+    if (!meta[field]) {
+      throw new Error(`Campo obrigatório ausente nos metadados: "${field}" em ${sourceFile}`);
+    }
+  }
+
+  const layoutPath = path.join(layoutsDir, `${meta.layout}.html`);
+  if (!fs.existsSync(layoutPath)) {
+    throw new Error(`Layout "${meta.layout}.html" não encontrado em: ${layoutsDir}`);
+  }
+  let template = fs.readFileSync(layoutPath, 'utf-8');
+
+  // Carregamento de componentes essenciais
+  const headerPath = path.join(componentsDir, 'header.html');
+  const footerPath = path.join(componentsDir, 'footer.html');
+
+  if (!fs.existsSync(headerPath)) {
+    throw new Error(`Componente de cabeçalho não encontrado: ${headerPath}`);
+  }
+  if (!fs.existsSync(footerPath)) {
+    throw new Error(`Componente de rodapé não encontrado: ${footerPath}`);
+  }
+
+  const headerHtml = fs.readFileSync(headerPath, 'utf-8');
+  const footerHtml = fs.readFileSync(footerPath, 'utf-8');
+
+  const rootPrefix = calculateRootPrefix(relativeOutputPath);
+
+  // Mapeamento e substituição de placeholders
+  template = template.replace(/\{\{HEADER\}\}/g, headerHtml);
+  template = template.replace(/\{\{FOOTER\}\}/g, footerHtml);
+  template = template.replace(/\{\{CONTENT\}\}/g, content);
+  template = template.replace(/\{\{PAGE_SCRIPTS\}\}/g, meta.pageScripts || '');
+
+  // Substituição de metadados SEO e caminhos
+  template = template.replace(/\{\{TITLE\}\}/g, meta.title);
+  template = template.replace(/\{\{META_DESCRIPTION\}\}/g, meta.description);
+  template = template.replace(/\{\{META_KEYWORDS\}\}/g, meta.keywords || '');
+  template = template.replace(/\{\{CANONICAL\}\}/g, meta.canonical);
+  template = template.replace(/\{\{ROOT_PREFIX\}\}/g, rootPrefix);
+
+  // Validação defensiva: falha se houver qualquer placeholder não resolvido
+  const leftover = template.match(/\{\{([A-Z0-9_]+)\}\}/);
+  if (leftover) {
+    throw new Error(`Placeholder obrigatório não resolvido: {{${leftover[1]}}} na página ${relativeOutputPath}`);
+  }
+
+  // Normalização de quebra de linha para CRLF padrão do projeto
+  const crlfOutput = template.replace(/\r?\n/g, '\r\n');
+  return crlfOutput;
+}
+
+/**
+ * Copia os assets mínimos necessários para que a página piloto seja testável via HTTP
+ * sem erros 404 e sem copiar o repositório inteiro.
+ *
+ * @param {string} outputDir Diretório raiz de saída do piloto
+ */
+function copyPilotAssets(outputDir = DEFAULT_OUTPUT_DIR) {
+  const minimalAssets = [
+    { src: 'css/style.css', dest: 'css/style.css' },
+    { src: 'css/cookie-consent.css', dest: 'css/cookie-consent.css' },
+    { src: 'js/tools/desconto.js', dest: 'js/tools/desconto.js' },
+    { src: 'js/header-auth.js', dest: 'js/header-auth.js' },
+    { src: 'js/cookie-consent.js', dest: 'js/cookie-consent.js' },
+    { src: 'logo/logo.png', dest: 'logo/logo.png' },
+    { src: 'logo/favicon.png', dest: 'logo/favicon.png' },
+    { src: 'logo/banner.png', dest: 'logo/banner.png' }
+  ];
+
+  for (const item of minimalAssets) {
+    const srcPath = path.join(ROOT_DIR, item.src);
+    const destPath = path.join(outputDir, item.dest);
+    if (fs.existsSync(srcPath)) {
+      fs.mkdirSync(path.dirname(destPath), { recursive: true });
+      fs.copyFileSync(srcPath, destPath);
+    }
+  }
+}
+
+/**
+ * Executa o build da página piloto de Desconto e copia os assets necessários.
+ *
+ * @param {Object} [options]
+ * @param {string} [options.outputDir] Diretório de saída
+ * @returns {{targetFile: string, relativeOutputPath: string, html: string}}
+ */
+function buildPilot({ outputDir = DEFAULT_OUTPUT_DIR } = {}) {
+  const relativeOutputPath = 'tools/financas/desconto.html';
+  const sourceFile = path.join(PAGES_DIR, 'tools', 'financas', 'desconto.page.html');
+  const targetFile = path.join(outputDir, relativeOutputPath);
+
+  const html = renderPage({ sourceFile, relativeOutputPath });
+
+  fs.mkdirSync(path.dirname(targetFile), { recursive: true });
+  fs.writeFileSync(targetFile, html, 'utf-8');
+
+  copyPilotAssets(outputDir);
+
+  console.log(`✓ Página piloto gerada com sucesso: ${targetFile}`);
+  console.log(`✓ Assets mínimos copiados para: ${outputDir}`);
+
+  return { targetFile, relativeOutputPath, html };
+}
+
+if (require.main === module) {
+  try {
+    buildPilot();
+  } catch (err) {
+    console.error('Falha na execução do build SSG piloto:', err.message);
+    process.exit(1);
+  }
+}
+
+module.exports = {
+  calculateRootPrefix,
+  parsePageSource,
+  renderPage,
+  copyPilotAssets,
+  buildPilot
+};

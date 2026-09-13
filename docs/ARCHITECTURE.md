@@ -350,5 +350,37 @@ Uma conversão cega em massa de todos os arquivos do repositório geraria:
 ## 8. Próximos Passos Recomendados
 
 1. **Fase 2 — Modularização de Scripts (Concluída)**: 15/15 ferramentas migradas para ES Modules nativos com testes automatizados e script legado removido.
-2. **Fase 3 — Motor de Build SSG**: Implementar geração de páginas via `src/components/` e `src/layouts/`, eliminando a duplicação de header e footer em 40 arquivos HTML.
+2. **Fase 3 — Motor de Build SSG (Piloto em Andamento)**: Piloto implementado com sucesso para Desconto em dist-pilot/; expansão para as demais páginas planejada após validação.
 3. **Fase 4 — Normalização de Git e Line Endings**: Aplicar `.gitattributes` e `.git-blame-ignore-revs` em commit exclusivo.
+
+---
+
+## 9. Fase 3 — SSG Piloto (Geração Estática em Tempo de Build)
+
+### Objetivo e Visão Geral
+Implementar um piloto mínimo, seguro e reversível de Static Site Generation (SSG) em Node.js vanilla para eliminar progressivamente a duplicação estrutural de cabeçalho, rodapé e casca HTML entre as ferramentas, sem uso de frameworks e sem substituição imediata dos arquivos de produção.
+
+### Estrutura Implementada no Piloto
+```text
+src/
+  components/
+    header.html           # Componente de cabeçalho e navegação padrão
+    footer.html           # Componente de rodapé e links institucionais
+  layouts/
+    tool.html             # Layout shell para páginas de ferramentas com placeholders simples
+  pages/
+    tools/
+      financas/
+        desconto.page.html # Conteúdo e metadados exclusivos da ferramenta piloto
+scripts/
+  build-html.js           # Motor de build SSG em Node.js Vanilla CommonJS
+dist-pilot/               # Diretório isolado de saída de teste do piloto
+```
+
+### Características Técnicas do Motor
+1. **Composição em Build-Time**: A injeção de layouts e componentes ocorre exclusivamente durante o build (`npm run build:html:pilot`). O navegador recebe HTML estático 100% puro e completo, sem chamadas `fetch()` ou injeção dinâmica de templates em runtime.
+2. **Zero Frameworks e Dependências**: Implementado estritamente com módulos nativos `fs` e `path` do Node.js, plenamente compatível com o ecossistema CommonJS existente.
+3. **Resolução Dinâmica de Caminhos Relativos (`rootPrefix`)**: O motor calcula a profundidade do arquivo em relação à raiz (`../../` para ferramentas em `tools/<categoria>/`, `../` para categorias e `./` para a raiz), garantindo que CSS, scripts, imagens e links funcionem perfeitamente em qualquer nível de diretório.
+4. **Validação Defensiva**: O build falha expressamente se qualquer campo de metadado obrigatório estiver ausente ou se restar qualquer placeholder `{{...}}` não resolvido no artefato gerado.
+5. **Página Piloto Controlada**: Apenas `tools/financas/desconto.html` foi utilizada como piloto, gerando o artefato de validação em `dist-pilot/tools/financas/desconto.html`. Os HTMLs atuais de produção não foram alterados nem deletados, mantendo URLs públicas e SEO 100% preservados.
+6. **Escopo e Limitações**: O SSG piloto ainda não foi adotado para as demais páginas do site, servindo como prova de conceito controlada e validada antes da expansão geral.

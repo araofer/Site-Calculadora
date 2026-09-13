@@ -8,6 +8,7 @@
     "generate:catalog": "node scripts/generate-catalog.js",
     "generate:sitemap": "node scripts/generate-sitemap.js",
     "build:data": "node scripts/validate-tools.js && node scripts/generate-catalog.js && node scripts/generate-sitemap.js && node scripts/validate-tools.js",
+    "build:html:pilot": "node scripts/build-html.js",
     "test": "node --test tests/*.test.js"
   },
   "keywords": [
