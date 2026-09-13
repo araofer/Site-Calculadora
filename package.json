@@ -1,0 +1,22 @@
+{
+  "name": "calculadora-master",
+  "version": "2.0.0",
+  "description": "Calculadora Master - Calculadoras e ferramentas online gratuitas",
+  "private": true,
+  "scripts": {
+    "validate:tools": "node scripts/validate-tools.js",
+    "generate:catalog": "node scripts/generate-catalog.js",
+    "generate:sitemap": "node scripts/generate-sitemap.js",
+    "build:data": "node scripts/validate-tools.js && node scripts/generate-catalog.js && node scripts/generate-sitemap.js && node scripts/validate-tools.js"
+  },
+  "keywords": [
+    "calculadoras",
+    "ferramentas",
+    "financas",
+    "saude",
+    "trabalhista",
+    "utilidades"
+  ],
+  "author": "Calculadora Master",
+  "license": "ISC"
+}

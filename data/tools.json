@@ -1,0 +1,401 @@
+[
+  {
+    "id": "horas-extras",
+    "slug": "horas-extras",
+    "name": "Calculadora de Horas Extras",
+    "category": "Trabalhista",
+    "categorySlug": "trabalhista",
+    "description": "Calcule o valor da hora normal, hora extra e o total com adicional informado.",
+    "url": "/tools/trabalhista/horas-extras.html",
+    "keywords": [
+      "horas extras",
+      "hora extra",
+      "trabalhista",
+      "adicional hora extra",
+      "salario",
+      "jornada",
+      "clt",
+      "trabalho",
+      "rescisao",
+      "banco de horas"
+    ],
+    "related": [
+      "porcentagem",
+      "desconto",
+      "juros"
+    ],
+    "featured": true,
+    "status": "published"
+  },
+  {
+    "id": "financiamento-carro",
+    "slug": "financiamento-carro",
+    "name": "Financiamento de Carros",
+    "category": "Financeiro",
+    "categorySlug": "financas",
+    "description": "Simule as parcelas e os juros do financiamento do seu carro pela Tabela Price.",
+    "url": "/tools/financas/financiamento-carro.html",
+    "keywords": [
+      "financiamento carro",
+      "carro",
+      "veiculo",
+      "auto",
+      "parcela carro",
+      "simulador auto",
+      "automovel",
+      "moto",
+      "tabela price",
+      "juros"
+    ],
+    "related": [
+      "juros",
+      "financiamento-imovel",
+      "porcentagem",
+      "combustivel"
+    ],
+    "featured": true,
+    "status": "published"
+  },
+  {
+    "id": "financiamento-imovel",
+    "slug": "financiamento-imovel",
+    "name": "Financiamento de Imóveis",
+    "category": "Financeiro",
+    "categorySlug": "financas",
+    "description": "Simule o financiamento imobiliário pelo Sistema SAC com parcelas decrescentes.",
+    "url": "/tools/financas/financiamento-imovel.html",
+    "keywords": [
+      "financiamento imovel",
+      "imovel",
+      "casa",
+      "apartamento",
+      "habitacional",
+      "sistema sac",
+      "parcela decrescente",
+      "caixa",
+      "financiamento"
+    ],
+    "related": [
+      "juros",
+      "financiamento-carro",
+      "porcentagem"
+    ],
+    "featured": false,
+    "status": "published"
+  },
+  {
+    "id": "desconto",
+    "slug": "desconto",
+    "name": "Calculadora de Desconto",
+    "category": "Financeiro",
+    "categorySlug": "financas",
+    "description": "Descubra o valor final com desconto e a economia real nas suas compras.",
+    "url": "/tools/financas/desconto.html",
+    "keywords": [
+      "desconto",
+      "porcentagem de desconto",
+      "promocao",
+      "liquidacao",
+      "preco final",
+      "compras",
+      "cupom",
+      "off"
+    ],
+    "related": [
+      "porcentagem",
+      "lucro",
+      "dividir-conta",
+      "juros"
+    ],
+    "featured": true,
+    "status": "published"
+  },
+  {
+    "id": "juros",
+    "slug": "juros",
+    "name": "Calculadora de Juros",
+    "category": "Financeiro",
+    "categorySlug": "financas",
+    "description": "Calcule juros simples e compostos para investimentos, empréstimos e rendimentos.",
+    "url": "/tools/financas/juros.html",
+    "keywords": [
+      "juros",
+      "juros compostos",
+      "juros simples",
+      "rendimento",
+      "investimento",
+      "emprestimo",
+      "taxa de juros",
+      "capital",
+      "rentabilidade"
+    ],
+    "related": [
+      "financiamento-carro",
+      "financiamento-imovel",
+      "porcentagem",
+      "lucro"
+    ],
+    "featured": false,
+    "status": "published"
+  },
+  {
+    "id": "lucro",
+    "slug": "lucro",
+    "name": "Calculadora de Lucros",
+    "category": "Financeiro",
+    "categorySlug": "financas",
+    "description": "Calcule lucro bruto, margem de lucro e a precificação ideal para seus produtos.",
+    "url": "/tools/financas/lucro.html",
+    "keywords": [
+      "lucro",
+      "margem de lucro",
+      "markup",
+      "precificacao",
+      "custo e venda",
+      "ganho",
+      "comercio",
+      "vendas",
+      "empresa"
+    ],
+    "related": [
+      "porcentagem",
+      "desconto",
+      "juros"
+    ],
+    "featured": false,
+    "status": "published"
+  },
+  {
+    "id": "porcentagem",
+    "slug": "porcentagem",
+    "name": "Calculadora de Porcentagem",
+    "category": "Matemática",
+    "categorySlug": "matematica",
+    "description": "Calcule percentuais, aumentos, reduções e proporções de forma simples e rápida.",
+    "url": "/tools/financas/porcentagem.html",
+    "keywords": [
+      "porcentagem",
+      "percentual",
+      "por cento",
+      "fracao",
+      "aumento percentual",
+      "regra de tres",
+      "desconto",
+      "porcentagens"
+    ],
+    "related": [
+      "desconto",
+      "lucro",
+      "juros"
+    ],
+    "featured": true,
+    "status": "published"
+  },
+  {
+    "id": "dividir-conta",
+    "slug": "dividir-conta",
+    "name": "Dividir Conta",
+    "category": "Financeiro",
+    "categorySlug": "financas",
+    "description": "Divida contas entre amigos de forma igual ou com consumos diferentes por pessoa.",
+    "url": "/tools/financas/dividir-conta.html",
+    "keywords": [
+      "dividir conta",
+      "divisao de conta",
+      "restaurante",
+      "bar",
+      "rachar conta",
+      "amigos",
+      "dividir despesas",
+      "churrasco",
+      "conta"
+    ],
+    "related": [
+      "desconto",
+      "porcentagem",
+      "combustivel"
+    ],
+    "featured": false,
+    "status": "published"
+  },
+  {
+    "id": "imc",
+    "slug": "imc",
+    "name": "Calculadora de IMC",
+    "category": "Saúde",
+    "categorySlug": "saude",
+    "description": "Calcule seu Índice de Massa Corporal e veja a classificação do seu peso ideal.",
+    "url": "/tools/saude/imc.html",
+    "keywords": [
+      "imc",
+      "indice de massa corporal",
+      "peso ideal",
+      "obesidade",
+      "saude",
+      "tabela imc",
+      "peso e altura",
+      "emagrecer",
+      "massa corporal"
+    ],
+    "related": [
+      "idade"
+    ],
+    "featured": true,
+    "status": "published"
+  },
+  {
+    "id": "idade",
+    "slug": "idade",
+    "name": "Calculadora de Idade",
+    "category": "Saúde",
+    "categorySlug": "saude",
+    "description": "Descubra sua idade exata em anos, meses e dias a partir da data de nascimento.",
+    "url": "/tools/saude/idade.html",
+    "keywords": [
+      "idade",
+      "quantos anos tenho",
+      "data de nascimento",
+      "dias de vida",
+      "tempo de vida",
+      "aniversario",
+      "calcular idade",
+      "nascimento"
+    ],
+    "related": [
+      "imc"
+    ],
+    "featured": false,
+    "status": "published"
+  },
+  {
+    "id": "combustivel",
+    "slug": "combustivel",
+    "name": "Calculadora de Combustível",
+    "category": "Utilidades",
+    "categorySlug": "utilidades",
+    "description": "Calcule o consumo em litros e o custo total estimado de combustível em viagens.",
+    "url": "/tools/utilidades/combustivel.html",
+    "keywords": [
+      "combustivel",
+      "gasolina",
+      "etanol",
+      "alcool",
+      "consumo km por litro",
+      "gasto de viagem",
+      "custo combustivel",
+      "carro",
+      "viagem"
+    ],
+    "related": [
+      "financiamento-carro",
+      "dividir-conta",
+      "desconto"
+    ],
+    "featured": false,
+    "status": "published"
+  },
+  {
+    "id": "contador",
+    "slug": "contador",
+    "name": "Contador de Caracteres",
+    "category": "Utilidades",
+    "categorySlug": "utilidades",
+    "description": "Conte caracteres, palavras, espaços e linhas em qualquer texto instantaneamente.",
+    "url": "/tools/utilidades/contador.html",
+    "keywords": [
+      "contador",
+      "contar caracteres",
+      "contar palavras",
+      "texto",
+      "tamanho do texto",
+      "redacao",
+      "caracteres",
+      "palavras"
+    ],
+    "related": [
+      "whatsapp",
+      "qr-code",
+      "senha"
+    ],
+    "featured": false,
+    "status": "published"
+  },
+  {
+    "id": "senha",
+    "slug": "senha",
+    "name": "Gerador de Senha",
+    "category": "Utilidades",
+    "categorySlug": "utilidades",
+    "description": "Gere senhas fortes, seguras e personalizadas com criptografia Web Crypto.",
+    "url": "/tools/utilidades/senha.html",
+    "keywords": [
+      "senha",
+      "gerador de senha",
+      "senha forte",
+      "password generator",
+      "seguranca",
+      "criar senha",
+      "senha segura",
+      "gerador senha"
+    ],
+    "related": [
+      "qr-code",
+      "whatsapp",
+      "contador"
+    ],
+    "featured": true,
+    "status": "published"
+  },
+  {
+    "id": "qr-code",
+    "slug": "qr-code",
+    "name": "Gerador de QR Code",
+    "category": "Utilidades",
+    "categorySlug": "utilidades",
+    "description": "Crie códigos QR personalizados para links, textos, WhatsApp e redes em segundos.",
+    "url": "/tools/utilidades/qr-code.html",
+    "keywords": [
+      "qr code",
+      "gerador qr code",
+      "codigo qr",
+      "qrcode",
+      "criar qr code",
+      "link qr",
+      "pix",
+      "wifi"
+    ],
+    "related": [
+      "whatsapp",
+      "senha",
+      "contador"
+    ],
+    "featured": false,
+    "status": "published"
+  },
+  {
+    "id": "whatsapp",
+    "slug": "whatsapp",
+    "name": "Gerador de Links WhatsApp",
+    "category": "Utilidades",
+    "categorySlug": "utilidades",
+    "description": "Gere links diretos de WhatsApp (wa.me) com mensagem personalizada sem cadastro.",
+    "url": "/tools/utilidades/whatsapp.html",
+    "keywords": [
+      "whatsapp",
+      "link whatsapp",
+      "gerador whatsapp",
+      "wa.me",
+      "link na bio",
+      "zap",
+      "mensagem direta",
+      "contato whatsapp"
+    ],
+    "related": [
+      "qr-code",
+      "contador",
+      "senha"
+    ],
+    "featured": false,
+    "status": "published"
+  }
+]
