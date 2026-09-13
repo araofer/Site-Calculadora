@@ -198,11 +198,43 @@ const BLOG_PAGES = [
   ...BLOG_ARTIGOS_PAGES
 ];
 
+const INSTITUCIONAL_PAGES = [
+  {
+    sourceFile: path.join(PAGES_DIR, 'institucional', 'sobre.page.html'),
+    relativeOutputPath: 'sobre.html'
+  },
+  {
+    sourceFile: path.join(PAGES_DIR, 'institucional', 'contato.page.html'),
+    relativeOutputPath: 'contato.html'
+  },
+  {
+    sourceFile: path.join(PAGES_DIR, 'institucional', 'politica.page.html'),
+    relativeOutputPath: 'politica.html'
+  },
+  {
+    sourceFile: path.join(PAGES_DIR, 'institucional', 'termos.page.html'),
+    relativeOutputPath: 'termos.html'
+  },
+  {
+    sourceFile: path.join(PAGES_DIR, 'institucional', 'login.page.html'),
+    relativeOutputPath: 'login.html'
+  },
+  {
+    sourceFile: path.join(PAGES_DIR, 'institucional', 'cadastro.page.html'),
+    relativeOutputPath: 'cadastro.html'
+  },
+  {
+    sourceFile: path.join(PAGES_DIR, 'institucional', '404.page.html'),
+    relativeOutputPath: '404.html'
+  }
+];
+
 const SITE_PAGES = [
   ...TOOL_PAGES,
   HOME_PAGE,
   ...CATEGORIA_PAGES,
-  ...BLOG_PAGES
+  ...BLOG_PAGES,
+  ...INSTITUCIONAL_PAGES
 ];
 
 const DEFAULT_PAGES = TOOL_PAGES;
@@ -414,6 +446,7 @@ function renderPage({ sourceFile, relativeOutputPath, componentsDir = COMPONENTS
   template = template.replace(/\{\{META_DESCRIPTION\}\}/g, meta.description);
   template = template.replace(/\{\{META_KEYWORDS\}\}/g, meta.keywords || '');
   template = template.replace(/\{\{CANONICAL\}\}/g, meta.canonical);
+  template = template.replace(/\{\{ROBOTS\}\}/g, meta.robots || 'index, follow');
   template = template.replace(/\{\{OG_TYPE\}\}/g, meta.ogType || 'website');
   template = template.replace(/\{\{OG_IMAGE\}\}/g, meta.ogImage || 'https://www.calculadoramaster.com/logo/banner.png');
   template = template.replace(/\{\{ROOT_PREFIX\}\}/g, rootPrefix);
@@ -522,6 +555,9 @@ if (require.main === module) {
     } else if (scope === 'blog') {
       pagesToBuild = BLOG_PAGES;
       assetsToCopy = [...COMMON_ASSETS, ...BLOG_ASSETS];
+    } else if (scope === 'institucional') {
+      pagesToBuild = INSTITUCIONAL_PAGES;
+      assetsToCopy = SITE_ASSETS;
     }
 
     const results = buildPages(pagesToBuild, { assets: assetsToCopy });
@@ -545,6 +581,7 @@ module.exports = {
   BLOG_INDEX_PAGE,
   BLOG_ARTIGOS_PAGES,
   BLOG_PAGES,
+  INSTITUCIONAL_PAGES,
   SITE_PAGES,
   DEFAULT_PAGES,
   COMMON_ASSETS,

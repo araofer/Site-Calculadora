@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>{{TITLE}}</title>
+  <meta name="description" content="{{META_DESCRIPTION}}">
+  <meta name="robots" content="noindex, follow">
+
+  <link rel="stylesheet" href="{{ROOT_PREFIX}}css/style.css">
+  <link rel="stylesheet" href="{{ROOT_PREFIX}}css/cookie-consent.css">
+  <link rel="icon" type="image/png" sizes="32x32" href="{{ROOT_PREFIX}}logo/favicon.png">
+</head>
+
+<body class="error-page-body">
+
+{{HEADER}}
+
+<main class="error-main">
+{{CONTENT}}
+</main>
+
+{{FOOTER}}
+
+<script>
+  const mobileMenu = document.querySelector('#mobile-menu');
+  const navMenu = document.querySelector('#nav-menu');
+
+  if (mobileMenu && navMenu) {
+    mobileMenu.addEventListener('click', function() {
+      const isExpanded = mobileMenu.classList.toggle('is-active');
+      navMenu.classList.toggle('active');
+      mobileMenu.setAttribute('aria-expanded', isExpanded ? 'true' : 'false');
+      mobileMenu.setAttribute('aria-label', isExpanded ? 'Fechar menu de navegação' : 'Abrir menu de navegação');
+    });
+  }
+</script>
+
+<script type="module" src="{{ROOT_PREFIX}}js/header-auth.js"></script>
+<script src="{{ROOT_PREFIX}}js/cookie-consent.js"></script>
+
+</body>
+</html>

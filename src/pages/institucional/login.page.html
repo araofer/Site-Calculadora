@@ -1,0 +1,33 @@
+---
+title: Entrar - Calculadora Master
+description: Entre na sua conta Calculadora Master para acessar suas ferramentas favoritas.
+canonical: https://www.calculadoramaster.com/login.html
+layout: site
+footer: auth-footer
+robots: noindex, follow
+pageScripts: <script type="module">\n  import { loginUsuario, traduzirErroFirebase } from "./js/auth.js";\n\n  const form = document.getElementById("form-login");\n  const messageBox = document.getElementById("auth-message");\n  const btnLogin = document.getElementById("btn-login");\n\n  form.addEventListener("submit", async (e) => {\n    e.preventDefault();\n\n    const email = document.getElementById("email").value.trim();\n    const senha = document.getElementById("senha").value;\n\n    messageBox.textContent = "";\n    messageBox.className = "auth-message";\n    btnLogin.disabled = true;\n    btnLogin.textContent = "Entrando...";\n\n    try {\n      await loginUsuario(email, senha);\n      messageBox.textContent = "Login realizado com sucesso! Redirecionando...";\n      messageBox.classList.add("success");\n      setTimeout(() => {\n        window.location.href = "index.html";\n      }, 1000);\n    } catch (err) {\n      messageBox.textContent = traduzirErroFirebase(err.code);\n      messageBox.classList.add("error");\n      btnLogin.disabled = false;\n      btnLogin.textContent = "Entrar";\n    }\n  });\n</script>
+---
+<section class="auth-section">
+    <div class="container auth-container">
+      <div class="auth-card">
+        <h1>Entrar na sua conta</h1>
+        <p class="auth-subtitle">Acesse para salvar e gerenciar seus cálculos favoritos.</p>
+
+        <div id="auth-message" class="auth-message"></div>
+
+        <form id="form-login">
+          <label for="email">E-mail</label>
+          <input type="email" id="email" name="email" placeholder="seuemail@exemplo.com" required>
+
+          <label for="senha">Senha</label>
+          <input type="password" id="senha" name="senha" placeholder="Sua senha" required>
+
+          <button type="submit" id="btn-login">Entrar</button>
+        </form>
+
+        <p class="auth-footer-text">
+          Não tem uma conta? <a href="cadastro.html">Cadastre-se</a>
+        </p>
+      </div>
+    </div>
+  </section>

@@ -24,6 +24,7 @@ const {
   BLOG_INDEX_PAGE,
   BLOG_ARTIGOS_PAGES,
   BLOG_PAGES,
+  INSTITUCIONAL_PAGES,
   SITE_PAGES,
   DEFAULT_PAGES,
   COMMON_ASSETS,
@@ -626,9 +627,9 @@ test('SSG Multipage - Contrato estrutural e ordem dos elementos em .nav-containe
   }
 });
 
-test('SSG Site - buildPages(SITE_PAGES) compila 36 páginas e copia 58 assets', () => {
+test('SSG Site - buildPages(SITE_PAGES) compila 43 páginas e copia 58 assets', () => {
   const results = buildPages(SITE_PAGES, { assets: SITE_ASSETS });
-  assert.equal(results.length, 36, 'SITE_PAGES deve gerar exatamente 36 páginas (15 ferramentas + Home + 5 categorias + 15 blog)');
+  assert.equal(results.length, 43, 'SITE_PAGES deve gerar exatamente 43 páginas (15 ferramentas + Home + 5 categorias + 15 blog + 7 institucionais)');
   assert.equal(SITE_ASSETS.length, 58, 'SITE_ASSETS deve conter exatamente 58 assets');
 
   for (const page of SITE_PAGES) {
@@ -970,6 +971,148 @@ test('SSG Blog - 14 artigos: metadados, canonical, H1, og:type=article, og:image
     // MathJax condicional
     if (spec.hasMathJax) {
       assert.match(html, /mathjax/, `${spec.file} deve conter script MathJax`);
+    }
+
+    // Ausência de placeholders e undefined
+    assert.equal(html.match(/\{\{([A-Z0-9_]+)\}\}/), null, `${spec.file} não deve conter placeholders não resolvidos`);
+    assert.ok(!html.includes('href="undefined"'), `${spec.file} não deve conter href undefined`);
+    assert.ok(!html.includes('src="undefined"'), `${spec.file} não deve conter src undefined`);
+  }
+});
+
+test('SSG Institucional - buildPages(INSTITUCIONAL_PAGES) compila 7 páginas institucionais', () => {
+  const results = buildPages(INSTITUCIONAL_PAGES, { assets: SITE_ASSETS });
+  assert.equal(results.length, 7, 'INSTITUCIONAL_PAGES deve gerar exatamente 7 páginas');
+
+  for (const page of INSTITUCIONAL_PAGES) {
+    const fullPath = path.join(ROOT_DIR, 'dist-pilot', page.relativeOutputPath);
+    assert.ok(fs.existsSync(fullPath), `Página institucional ${page.relativeOutputPath} deve existir no output`);
+    const content = fs.readFileSync(fullPath, 'utf-8');
+    assert.ok(content.length > 500, `Página ${page.relativeOutputPath} deve ter tamanho substancial`);
+    assert.equal(content.match(/\{\{([A-Z0-9_]+)\}\}/), null, `Página ${page.relativeOutputPath} não deve ter placeholders`);
+    assert.ok(!content.includes('href="undefined"'), `Página ${page.relativeOutputPath} não deve ter href undefined`);
+    assert.ok(!content.includes('src="undefined"'), `Página ${page.relativeOutputPath} não deve ter src undefined`);
+  }
+});
+
+test('SSG Institucional - Validação detalhada das 7 páginas: metadados, canonical, H1, auth e scripts', () => {
+  const institutionalSpecs = [
+    {
+      file: 'sobre.html',
+      title: 'Sobre | Calculadora Master',
+      canonical: 'https://www.calculadoramaster.com/sobre.html',
+      h1: 'Sobre o Calculadora Master',
+      robots: 'index, follow',
+      hasSiteFooter: true,
+      hasAuthFooter: false,
+      is404: false
+    },
+    {
+      file: 'contato.html',
+      title: 'Contato | Calculadora Master',
+      canonical: 'https://www.calculadoramaster.com/contato.html',
+      h1: 'Fale Conosco',
+      robots: 'index, follow',
+      hasSiteFooter: true,
+      hasAuthFooter: false,
+      is404: false
+    },
+    {
+      file: 'politica.html',
+      title: 'Política de Privacidade | Calculadora Master',
+      canonical: 'https://www.calculadoramaster.com/politica.html',
+      h1: 'Política de Privacidade',
+      robots: 'index, follow',
+      hasSiteFooter: true,
+      hasAuthFooter: false,
+      is404: false
+    },
+    {
+      file: 'termos.html',
+      title: 'Termos de Uso | Calculadora Master',
+      canonical: 'https://www.calculadoramaster.com/termos.html',
+      h1: 'Termos de Uso',
+      robots: 'index, follow',
+      hasSiteFooter: true,
+      hasAuthFooter: false,
+      is404: false
+    },
+    {
+      file: 'login.html',
+      title: 'Entrar - Calculadora Master',
+      canonical: 'https://www.calculadoramaster.com/login.html',
+      h1: 'Entrar na sua conta',
+      robots: 'noindex, follow',
+      hasSiteFooter: false,
+      hasAuthFooter: true,
+      is404: false
+    },
+    {
+      file: 'cadastro.html',
+      title: 'Cadastrar-se - Calculadora Master',
+      canonical: 'https://www.calculadoramaster.com/cadastro.html',
+      h1: 'Criar sua conta',
+      robots: 'noindex, follow',
+      hasSiteFooter: false,
+      hasAuthFooter: true,
+      is404: false
+    },
+    {
+      file: '404.html',
+      title: 'Página não encontrada | Calculadora Master',
+      canonical: null,
+      h1: 'Página não encontrada',
+      robots: 'noindex, follow',
+      hasSiteFooter: true,
+      hasAuthFooter: false,
+      is404: true
+    }
+  ];
+
+  for (const spec of institutionalSpecs) {
+    const filePath = path.join(ROOT_DIR, 'dist-pilot', spec.file);
+    assert.ok(fs.existsSync(filePath), `Página institucional ${spec.file} deve existir em dist-pilot`);
+
+    const html = fs.readFileSync(filePath, 'utf-8');
+    assert.ok(html.length > 500, `${spec.file} deve ter tamanho substancial`);
+
+    // Title
+    assert.match(html, new RegExp(`<title>${spec.title.replace(/\|/g, '\\|')}<\/title>`), `${spec.file} deve ter title correto`);
+
+    // Robots
+    assert.match(html, new RegExp(`<meta name="robots" content="${spec.robots}">`), `${spec.file} deve ter robots correto`);
+
+    // Canonical
+    if (spec.canonical) {
+      assert.match(html, new RegExp(`<link rel="canonical" href="${spec.canonical}">`), `${spec.file} deve ter canonical correta`);
+    } else {
+      assert.ok(!html.includes('rel="canonical"'), `${spec.file} não deve ter canonical`);
+    }
+
+    // H1
+    assert.match(html, new RegExp(`<h1>${spec.h1}<\/h1>|<h1 class="error-title">${spec.h1}<\/h1>`), `${spec.file} deve ter H1 correto`);
+
+    // Header institucional
+    assert.match(html, /<header class="header">/, `${spec.file} deve conter header`);
+    assert.match(html, /financeira\.html/, `${spec.file} deve conter link para financeira`);
+
+    // Footer
+    if (spec.hasSiteFooter) {
+      assert.match(html, /<div class="container footer-columns">/, `${spec.file} deve conter footer estruturado com 3 colunas`);
+    }
+    if (spec.hasAuthFooter) {
+      assert.ok(!html.includes('footer-columns'), `${spec.file} não deve conter footer de 3 colunas`);
+      assert.match(html, /<div class="footer-bottom">/, `${spec.file} deve conter footer-bottom`);
+    }
+
+    // Scripts essenciais
+    assert.match(html, /header-auth\.js/, `${spec.file} deve carregar header-auth.js`);
+    assert.match(html, /cookie-consent\.js/, `${spec.file} deve carregar cookie-consent.js`);
+
+    // 404 classes
+    if (spec.is404) {
+      assert.match(html, /<body class="error-page-body">/, '404.html deve ter classe error-page-body');
+      assert.match(html, /<main class="error-main">/, '404.html deve ter classe error-main');
     }
 
     // Ausência de placeholders e undefined

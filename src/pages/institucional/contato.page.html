@@ -1,0 +1,37 @@
+---
+title: Contato | Calculadora Master
+description: Entre em contato com o Calculadora Master. Envie dúvidas, sugestões ou reporte problemas em nossas calculadoras online gratuitas.
+canonical: https://www.calculadoramaster.com/contato.html
+layout: site
+pageScripts: <script>\n  const formContato = document.querySelector('.form-contato');\n  const statusContato = document.getElementById('contato-status');\n\n  if (formContato && statusContato) {\n    formContato.addEventListener('submit', function(e) {\n      e.preventDefault();\n      statusContato.textContent = 'O envio pelo formulário ainda não está disponível. Entre em contato pelo e-mail afdigital.contato@gmail.com.';\n      statusContato.hidden = false;\n    });\n  }\n</script>
+---
+<section class="contato">
+    <div class="container">
+      <h1>Fale Conosco</h1>
+      <p>
+        Se você tiver dúvidas, sugestões ou encontrar algum erro em nossas ferramentas,
+        entre em contato conosco. Estamos sempre buscando melhorar o
+        <strong>Calculadora Master</strong>.
+      </p>
+
+      <div class="info-contato">
+        <p><strong>Email:</strong> afdigital.contato@gmail.com</p>
+        <p><strong>Tempo de resposta:</strong> até 48 horas úteis</p>
+        <p><strong>Atendimento:</strong> Segunda a Sexta</p>
+      </div>
+
+      <form class="form-contato">
+        <label for="nome">Nome</label>
+        <input type="text" id="nome" placeholder="Seu nome" autocomplete="name" required>
+
+        <label for="email">Email</label>
+        <input type="email" id="email" placeholder="Seu email" autocomplete="email" required>
+
+        <label for="mensagem">Mensagem</label>
+        <textarea id="mensagem" rows="5" placeholder="Digite sua mensagem..." required></textarea>
+
+        <button type="submit">Enviar Mensagem</button>
+        <p id="contato-status" role="status" aria-live="polite" hidden></p>
+      </form>
+    </div>
+  </section>

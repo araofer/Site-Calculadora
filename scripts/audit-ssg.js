@@ -102,12 +102,12 @@ async function runAudit() {
     const ssgSiteMatch = ssgSiteOutput.match(/Build SSG concluído com sucesso: (\d+) página\(s\) gerada\(s\)/);
     summary.pagesCount = ssgSiteMatch ? parseInt(ssgSiteMatch[1], 10) : 0;
 
-    if (toolsCount === 15 && summary.pagesCount === 36) {
+    if (toolsCount === 15 && summary.pagesCount === 43) {
       summary.ssgPages = 'PASS';
     } else {
       summary.ssgPages = 'FAIL';
       allOk = false;
-      console.error(`Contagem incorreta de páginas: tools=${toolsCount} (esperado 15), site=${summary.pagesCount} (esperado 36)`);
+      console.error(`Contagem incorreta de páginas: tools=${toolsCount} (esperado 15), site=${summary.pagesCount} (esperado 43)`);
     }
   } catch (err) {
     summary.ssgPages = 'FAIL';
@@ -157,7 +157,7 @@ async function runAudit() {
     console.error('Erro na validação ESM:', err.message);
   }
 
-  // 5. Verificação de integridade das 36 páginas geradas e ausência de placeholders
+  // 5. Verificação de integridade das 43 páginas geradas e ausência de placeholders
   try {
     let pagesOk = true;
     for (const page of SITE_PAGES) {

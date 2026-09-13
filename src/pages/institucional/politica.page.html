@@ -1,0 +1,177 @@
+---
+title: Política de Privacidade | Calculadora Master
+description: Saiba como o Calculadora Master coleta, usa e protege suas informações. Transparência e segurança para nossos usuários.
+canonical: https://www.calculadoramaster.com/politica.html
+layout: site
+---
+<section class="privacidade">
+    <div class="container">
+
+      <h1>Política de Privacidade</h1>
+
+      <p>
+        Esta Política de Privacidade descreve como o Calculadora Master trata informações relacionadas ao uso do site e de suas ferramentas, observando a legislação aplicável, incluindo a Lei Geral de Proteção de Dados Pessoais (LGPD – Lei nº 13.709/2018).
+      </p>
+
+      <h2>1. Dados Tratados e Finalidades</h2>
+      <p>
+        O Calculadora Master busca tratar apenas as informações estritamente necessárias para o funcionamento das ferramentas, autenticação de contas de usuários, suporte a visitantes e medição analítica de uso. As seguintes categorias podem existir no site:
+      </p>
+
+      <h3>Dados de autenticação e conta</h3>
+      <p>
+        No cadastro, são fornecidos nome, endereço de e-mail e credencial de acesso. No login, são fornecidos endereço de e-mail e credencial de acesso. A credencial é processada pelo Firebase Authentication.
+      </p>
+      <p>
+        Para a gestão da conta, nome, endereço de e-mail e data de criação são armazenados no Cloud Firestore associados ao identificador do usuário gerado na autenticação.
+      </p>
+
+      <h3>Dados de contato e suporte</h3>
+      <p>
+        Na página de contato, o formulário atualmente não transmite nem armazena os valores digitados. Enquanto não houver integração de envio, o site informa o endereço afdigital.contato@gmail.com como canal de contato geral.
+      </p>
+
+      <h3>Dados de navegação e medição</h3>
+      <p>
+        Dados relacionados à navegação e ao uso das páginas podem ser tratados pelo Google Analytics 4 somente quando houver autorização para medição analítica.
+      </p>
+
+      <h3>Preferência de privacidade</h3>
+      <p>
+        A escolha entre aceitar ou recusar a medição analítica é armazenada localmente no navegador.
+      </p>
+
+      <h2>2. Firebase — Autenticação e Conta</h2>
+      <p>
+        O Calculadora Master utiliza o Firebase Authentication para autenticação de usuários. As credenciais são processadas pelo serviço de autenticação do Firebase, e o Calculadora Master não armazena senhas em texto simples no código da aplicação.
+      </p>
+      <p>
+        Na rotina de cadastro, um registro associado ao identificador do usuário, contendo nome, endereço de e-mail e data de criação, é armazenado no Cloud Firestore.
+      </p>
+      <p>
+        O Firebase pode utilizar tecnologias de armazenamento do navegador necessárias ao funcionamento da autenticação, conforme sua implementação e políticas.
+      </p>
+      <p>
+        O projeto não utiliza o Firebase Analytics para medição de audiência.
+      </p>
+
+      <h2>3. Google Analytics 4</h2>
+      <p>
+        O Calculadora Master utiliza o Google Analytics 4 (GA4) para compreender métricas de audiência e uso das páginas.
+      </p>
+      <p>
+        Quando o visitante escolhe Aceitar, analytics_storage é definido como granted e o GA4 pode ser carregado para realizar a medição.
+      </p>
+      <p>
+        Quando o visitante escolhe Recusar, o Calculadora Master não carrega o Google Analytics 4 em novas páginas e interrompe novos envios analíticos iniciados pelo GA4 na página atual por meio do mecanismo de revogação implementado.
+      </p>
+      <p>
+        Na implementação atual, ad_storage, ad_user_data e ad_personalization permanecem definidos como denied. O Calculadora Master não utiliza o consentimento analítico para remarketing ou publicidade personalizada.
+      </p>
+
+      <h2>4. Tecnologias de Armazenamento</h2>
+      <p>
+        O mecanismo próprio de preferência de privacidade utiliza localStorage.
+      </p>
+      <p>
+        A preferência é registrada na chave <code>cm_cookie_consent</code> com os valores <code>accepted</code> ou <code>rejected</code>.
+      </p>
+      <p>
+        O mecanismo próprio do Calculadora Master não utiliza cookie para armazenar essa escolha.
+      </p>
+      <p>
+        Serviços de terceiros integrados, como Firebase e Google Analytics quando autorizado, podem utilizar tecnologias próprias de armazenamento e identificadores conforme suas especificações e políticas.
+      </p>
+
+      <h2>5. Consentimento e Autonomia</h2>
+      <p>
+        A autorização para medição analítica é opcional.
+      </p>
+      <p>
+        A escolha Recusar não impede o uso normal das calculadoras e ferramentas disponíveis no site.
+      </p>
+
+      <h2>6. Alteração e Revogação da Escolha</h2>
+      <p>
+        O visitante pode rever ou alterar sua preferência de privacidade a qualquer momento utilizando o controle abaixo.
+      </p>
+      <p>
+        <button type="button" class="cm-cookie-manage">
+          Gerenciar preferências de privacidade
+        </button>
+      </p>
+      <p>
+        Ao escolher Recusar após uma autorização anterior, o site passa a impedir novos envios analíticos pelo GA4 a partir da nova escolha. A revogação não significa a exclusão automática de dados que já tenham sido processados anteriormente por provedores terceiros.
+      </p>
+
+      <h2>7. Compartilhamento e Provedores</h2>
+      <p>
+        O Calculadora Master não comercializa dados pessoais.
+      </p>
+      <p>
+        O tratamento de informações pode envolver provedores utilizados para operação do site e, quando autorizado, para medição analítica, conforme aplicável:
+      </p>
+      <ul>
+        <li><strong>Google Firebase / Google Cloud:</strong> autenticação e armazenamento de dados cadastrais;</li>
+        <li><strong>Google Analytics:</strong> medição de audiência quando autorizada;</li>
+        <li><strong>Autoridades competentes:</strong> quando houver obrigação legal ou determinação aplicável.</li>
+      </ul>
+
+      <h2>8. Transferência Internacional</h2>
+      <p>
+        Os provedores de tecnologia utilizados podem realizar tratamento de dados em infraestrutura localizada fora do Brasil. Quando aplicável, esse tratamento está sujeito às políticas dos respectivos provedores e aos mecanismos legais aplicáveis à transferência internacional de dados.
+      </p>
+
+      <h2>9. Retenção</h2>
+      <p>
+        Os dados são mantidos pelo período necessário às finalidades para as quais forem tratados, observadas as configurações dos serviços utilizados e as obrigações legais aplicáveis. Os períodos de retenção também podem depender das configurações definidas nos provedores de tecnologia.
+      </p>
+
+      <h2>10. Segurança</h2>
+      <p>
+        O Calculadora Master adota medidas técnicas e administrativas compatíveis com os serviços utilizados, visando reduzir riscos de acesso não autorizado, alteração, perda ou uso indevido de informações.
+      </p>
+      <p>
+        Como ocorre com qualquer serviço conectado à internet, não é possível garantir invulnerabilidade total contra todos os riscos de segurança.
+      </p>
+
+      <h2>11. Links Externos</h2>
+      <p>
+        Páginas e ferramentas podem conter links para terceiros. As respectivas práticas de privacidade são regidas pelas políticas desses serviços, não tendo o Calculadora Master controle ou responsabilidade sobre o conteúdo de sites externos.
+      </p>
+
+      <h2>12. Direitos do Titular — LGPD</h2>
+      <p>
+        Nos termos e hipóteses previstos na legislação aplicável, o titular pode solicitar:
+      </p>
+      <ul>
+        <li>Confirmação da existência de tratamento;</li>
+        <li>Acesso aos dados;</li>
+        <li>Correção de dados incompletos, inexatos ou desatualizados;</li>
+        <li>Anonimização, bloqueio ou eliminação de dados desnecessários, excessivos ou tratados em desconformidade, quando aplicável;</li>
+        <li>Eliminação de dados tratados com base no consentimento, ressalvadas hipóteses legais de conservação;</li>
+        <li>Portabilidade dos dados, quando aplicável;</li>
+        <li>Informações sobre as entidades públicas e privadas com as quais o controlador realizou uso compartilhado de dados;</li>
+        <li>Informações sobre a possibilidade de não fornecer consentimento e sobre as consequências da negativa;</li>
+        <li>Revogação do consentimento;</li>
+        <li>Oposição a tratamento realizado com base em hipóteses legais de dispensa de consentimento, quando aplicável;</li>
+        <li>Demais direitos previstos na legislação aplicável.</li>
+      </ul>
+
+      <h2>13. Canal de Privacidade</h2>
+      <p>
+        Para assuntos relacionados à LGPD, privacidade ou exercício de direitos:
+      </p>
+      <p>
+        <a href="mailto:afdigital.contato@gmail.com">
+          afdigital.contato@gmail.com
+        </a>
+      </p>
+
+      <h2>14. Atualizações da Política</h2>
+      <p>
+        Esta Política de Privacidade pode ser atualizada periodicamente para refletir alterações nos serviços, funcionalidades ou requisitos legais aplicáveis. Recomenda-se consultar esta página periodicamente.
+      </p>
+
+    </div>
+  </section>
