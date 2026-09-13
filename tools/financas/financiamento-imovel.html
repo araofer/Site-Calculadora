@@ -71,28 +71,28 @@
       <div class="form-inline">
         <div class="form-group-item">
           <label for="valorImovel">Valor do Imóvel (R$):</label>
-          <input type="text" id="valorImovel" placeholder="Ex: 300.000,00" oninput="mascaraMoeda(this); limparResultado()">
+          <input type="text" id="valorImovel" placeholder="Ex: 300.000,00">
         </div>
 
         <div class="form-group-item">
           <label for="valorEntrada">Entrada (R$ - Mínimo 20%):</label>
-          <input type="text" id="valorEntrada" placeholder="Ex: 60.000,00" oninput="mascaraMoeda(this); limparResultado()">
+          <input type="text" id="valorEntrada" placeholder="Ex: 60.000,00">
         </div>
 
         <div class="form-group-item">
           <label for="taxaAnual">Taxa de Juros Anual (%):</label>
-          <input type="text" id="taxaAnual" placeholder="Ex: 9,5" oninput="limparResultado()">
+          <input type="text" id="taxaAnual" placeholder="Ex: 9,5">
         </div>
 
         <div class="form-group-item">
           <label for="prazoAnos">Prazo (Em Anos):</label>
-          <input type="number" id="prazoAnos" placeholder="Ex: 30" oninput="limparResultado()">
+          <input type="number" id="prazoAnos" placeholder="Ex: 30">
         </div>
       </div>
 
       <div class="button-group">
-        <button type="button" onclick="calcularFinanciamentoImovel()">Calcular Financiamento</button>
-        <button type="button" onclick="limparCamposImovel()" style="background-color: #666;">Limpar Tudo</button>
+        <button type="button" data-action="calculate">Calcular Financiamento</button>
+        <button type="button" data-action="clear" style="background-color: #666;">Limpar Tudo</button>
       </div>
     </div>
 
@@ -151,8 +151,8 @@
         </div>
       </section>
 
-      <p style="margin-top: 30px;">
-        👉 <a href="../../index.html">Voltar para página inicial</a>
+      <p style="margin-top: 30px;">
+        👉 <a href="../../index.html">Voltar para página inicial</a>
       </p>
     </section>
   </main>
@@ -168,121 +168,9 @@
     </div>
   </footer>
 
+  <script type="module" src="../../js/tools/financiamento-imovel.js"></script>
+
   <script>
-    // 1. MÁSCARA DE MOEDA
-    function mascaraMoeda(campo) {
-        let valor = campo.value;
-        valor = valor.replace(/\D/g, "");
-        valor = (Number(valor) / 100).toFixed(2) + "";
-        valor = valor.replace(".", ",");
-        valor = valor.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
-        campo.value = valor;
-    }
-
-    // 2. LIMPA O TEXTO DO CARD DE RESULTADO
-    function limparResultado() {
-        let resultadoDiv = document.getElementById("resultadoImovel");
-        if (resultadoDiv) {
-            resultadoDiv.innerHTML = `<p style="color: #666; text-align: center;">Insira os dados do imóvel acima e clique em calcular para ver a evolução das parcelas.</p>`;
-        }
-    }
-
-    // 3. LIMPA TODOS OS INPUTS DA TELA
-    function limparCamposImovel() {
-        document.getElementById("valorImovel").value = "";
-        document.getElementById("valorEntrada").value = "";
-        document.getElementById("taxaAnual").value = "";
-        document.getElementById("prazoAnos").value = "";
-        limparResultado();
-    }
-
-    // 4. MOTOR DE CÁLCULO IMOBILIÁRIO (SISTEMA SAC)
-    function calcularFinanciamentoImovel() {
-        let campoImovel = document.getElementById("valorImovel").value;
-        let campoEntrada = document.getElementById("valorEntrada").value;
-        let campoTaxa = document.getElementById("taxaAnual").value;
-        let campoPrazo = document.getElementById("prazoAnos").value;
-
-        if (!campoImovel || !campoEntrada || !campoTaxa || !campoPrazo) {
-            alert("Por favor, preencha todos os campos obrigatórios.");
-            return;
-        }
-
-        let valorImovel = Number(campoImovel.replace(/\./g, "").replace(",", "."));
-        let valorEntrada = Number(campoEntrada.replace(/\./g, "").replace(",", "."));
-        let taxaAnual = parseFloat(campoTaxa.replace(/\./g, "").replace(",", "."));
-        let prazoAnos = parseInt(campoPrazo);
-
-        let valorFinanciado = valorImovel - valorEntrada;
-
-        if (valorFinanciado <= 0) {
-            alert("O valor da entrada não pode ser maior ou igual ao valor do imóvel.");
-            return;
-        }
-
-        let prazoMeses = prazoAnos * 12;
-        if (prazoMeses <= 0) {
-            alert("Por favor, insira um prazo válido em anos.");
-            return;
-        }
-
-        let taxaMensal = Math.pow(1 + (taxaAnual / 100), 1/12) - 1;
-        let amortizacaoMensal = valorFinanciado / prazoMeses;
-
-        let jurosPrimeiraParcela = valorFinanciado * taxaMensal;
-        let primeiraParcela = amortizacaoMensal + jurosPrimeiraParcela;
-
-        let jurosUltimaParcela = amortizacaoMensal * taxaMensal;
-        let ultimaParcela = amortizacaoMensal + jurosUltimaParcela;
-
-        let totalJuros = 0;
-        let saldoDevedorAtual = valorFinanciado;
-        for (let i = 0; i < prazoMeses; i++) {
-            totalJuros += saldoDevedorAtual * taxaMensal;
-            saldoDevedorAtual -= amortizacaoMensal;
-        }
-
-        let totalFinanciamento = valorFinanciado + totalJuros;
-        let custoTotalImovel = totalFinanciamento + valorEntrada;
-
-        let resultadoDiv = document.getElementById("resultadoImovel");
-        resultadoDiv.innerHTML = `
-            <div class="resultado-wrapper">
-                <div class="resultado-item principal">
-                    <span>Valor a Financiar:</span>
-                    <strong>R$ ${valorFinanciado.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong>
-                </div>
-                
-                <div class="resultado-duplo-destaque">
-                    <div class="resultado-destaque">
-                        <span>Primeira Parcela (Mais alta):</span>
-                        <h2 style="color: #2c3e50; font-size: 1.8rem; margin: 10px 0;">R$ ${primeiraParcela.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</h2>
-                    </div>
-                    <div class="resultado-destaque">
-                        <span>Última Parcela (Mais baixa):</span>
-                        <h2 style="color: #2e7d32; font-size: 1.8rem; margin: 10px 0;">R$ ${ultimaParcela.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</h2>
-                    </div>
-                </div>
-                
-                <div class="resultado-grid-detalhes">
-                    <div class="resultado-item">
-                        <span>Total estimado em Juros:</span>
-                        <span style="color: #c62828; font-weight: bold;">R$ ${totalJuros.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
-                    </div>
-                    <div class="resultado-item">
-                        <span>Total das Parcelas (${prazoMeses} meses):</span>
-                        <strong>R$ ${totalFinanciamento.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong>
-                    </div>
-                    <div class="resultado-item">
-                        <span>Custo Total do Imóvel (com a entrada):</span>
-                        <strong>R$ ${custoTotalImovel.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong>
-                    </div>
-                </div>
-            </div>
-        `;
-    }
-
-    // 5. LÓGICA DO MENU MOBILE
     const mobileMenu = document.querySelector('#mobile-menu');
     const navMenu = document.querySelector('#nav-menu');
 

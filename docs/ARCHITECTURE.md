@@ -94,12 +94,28 @@ Executa a validação, gera o catálogo JS, gera o sitemap e valida novamente a 
 
 ---
 
-## 4. Piloto de Modularização JavaScript (ES Modules Nativos)
+## 4. Modularização JavaScript (ES Modules Nativos)
 
-Após auditoria técnica de governança, o piloto de modularização foi atualizado para utilizar **ECMAScript Modules (ESM) nativos**. Migramos estritamente 3 ferramentas piloto:
+Adotamos o padrão de **ECMAScript Modules (ESM) nativos** para todas as ferramentas migradas. Até o momento, 7 ferramentas estão 100% modularizadas:
+
+**Piloto (3 ferramentas):**
 1. **Financiamento de Carro** (`tools/financas/financiamento-carro.html`) ➔ [`js/tools/financiamento-carro.js`](file:///home/araofer/Documentos/github/CalculadoraMaster/js/tools/financiamento-carro.js) (importa [`js/core/currency.js`](file:///home/araofer/Documentos/github/CalculadoraMaster/js/core/currency.js))
 2. **Calculadora de Idade** (`tools/saude/idade.html`) ➔ [`js/tools/idade.js`](file:///home/araofer/Documentos/github/CalculadoraMaster/js/tools/idade.js)
 3. **Gerador de Senha** (`tools/utilidades/senha.html`) ➔ [`js/tools/senha.js`](file:///home/araofer/Documentos/github/CalculadoraMaster/js/tools/senha.js)
+
+**Lote 1 Migrado (4 ferramentas financeiras):**
+4. **Financiamento de Imóveis (SAC)** (`tools/financas/financiamento-imovel.html`) ➔ [`js/tools/financiamento-imovel.js`](file:///home/araofer/Documentos/github/CalculadoraMaster/js/tools/financiamento-imovel.js) (importa [`js/core/currency.js`](file:///home/araofer/Documentos/github/CalculadoraMaster/js/core/currency.js))
+   - Função pura: `calcularFinanciamentoSAC(params)` (alias: `calcularFinanciamentoImovel`)
+   - Testes: `tests/financiamento-imovel.test.js`
+5. **Calculadora de Juros** (`tools/financas/juros.html`) ➔ [`js/tools/juros.js`](file:///home/araofer/Documentos/github/CalculadoraMaster/js/tools/juros.js)
+   - Funções puras: `calcularJurosSimples(params)`, `calcularJurosCompostos(params)`
+   - Testes: `tests/juros.test.js`
+6. **Calculadora de Desconto** (`tools/financas/desconto.html`) ➔ [`js/tools/desconto.js`](file:///home/araofer/Documentos/github/CalculadoraMaster/js/tools/desconto.js)
+   - Função pura: `calcularDesconto(params)`
+   - Testes: `tests/desconto.test.js`
+7. **Calculadora de Lucro e Margem** (`tools/financas/lucro.html`) ➔ [`js/tools/lucro.js`](file:///home/araofer/Documentos/github/CalculadoraMaster/js/tools/lucro.js)
+   - Função pura: `calcularLucro(params)`
+   - Testes: `tests/lucro.test.js`
 
 ### Estrutura Implementada
 
@@ -111,9 +127,13 @@ js/
 
   tools/
     package.json      # {"type": "module"} - escopo ESM isolado
-    financiamento-carro.js  # ESM: import currency.js + cálculo Price + bindings data-action
-    idade.js                # ESM: cálculo de idade local exato + bindings data-action
-    senha.js                # ESM: Web Crypto API + rejection sampling + bindings data-action
+    financiamento-carro.js   # ESM: Price + bindings data-action
+    financiamento-imovel.js  # ESM: SAC + bindings data-action
+    juros.js                 # ESM: Juros simples e compostos + bindings data-action
+    desconto.js              # ESM: Desconto percentual + bindings data-action
+    lucro.js                 # ESM: Lucro bruto e margem + bindings data-action
+    idade.js                 # ESM: Idade exata local + bindings data-action
+    senha.js                 # ESM: Web Crypto API + rejection sampling + bindings data-action
 
   home-search.js      # Controlador de busca universal da página inicial
   tools-catalog.js    # Catálogo central compilado
@@ -122,6 +142,10 @@ tests/
   package.json        # {"type": "module"} - escopo ESM de testes
   currency.test.js    # Testes unitários com node:test e node:assert
   financiamento-carro.test.js
+  financiamento-imovel.test.js
+  juros.test.js
+  desconto.test.js
+  lucro.test.js
   idade.test.js
   senha.test.js
 ```
@@ -251,10 +275,10 @@ Cada calculadora individual em `tools/` possui seu próprio script inline com su
 | `gerarCampos` / `calcularDivisao` | **Duplicada** | [`tools/financas/dividir-conta.html`](file:///home/araofer/Documentos/github/CalculadoraMaster/tools/financas/dividir-conta.html) possui versão idêntica inline. |
 | `contarCaracteres` | **Obsoleta / Reduzida** | Em `script.js`, apenas conta `texto.length`. Em [`tools/utilidades/contador.html`](file:///home/araofer/Documentos/github/CalculadoraMaster/tools/utilidades/contador.html), conta palavras, caracteres, espaços e quebras de linha. |
 | `calcularIMC` | **Duplicada** | [`tools/saude/imc.html`](file:///home/araofer/Documentos/github/CalculadoraMaster/tools/saude/imc.html) possui versão com classificação completa de obesidade. |
-| `calcularDesconto` | **Duplicada** | [`tools/financas/desconto.html`](file:///home/araofer/Documentos/github/CalculadoraMaster/tools/financas/desconto.html) possui versão própria com tratamento de vírgulas e botão de reset. |
-| `calcularJuros` | **Obsoleta** | Em `script.js`, calcula apenas juros simples. [`tools/financas/juros.html`](file:///home/araofer/Documentos/github/CalculadoraMaster/tools/financas/juros.html) possui abas para juros simples e compostos. |
+| `calcularDesconto` | **Obsoleta (Substituída)** | Substituída com testes por [`js/tools/desconto.js`](file:///home/araofer/Documentos/github/CalculadoraMaster/js/tools/desconto.js). A versão legada em `script.js` utilizava IDs desatualizados (`valor` em vez de `preco`). |
+| `calcularJuros` | **Obsoleta (Substituída)** | Substituída com testes por [`js/tools/juros.js`](file:///home/araofer/Documentos/github/CalculadoraMaster/js/tools/juros.js). A versão legada em `script.js` calculava apenas juros simples sob IDs obsoletos, enquanto o novo módulo suporta juros simples e compostos isoladamente. |
 | `gerarLinkWhats` | **Duplicada / Desconectada** | [`tools/utilidades/whatsapp.html`](file:///home/araofer/Documentos/github/CalculadoraMaster/tools/utilidades/whatsapp.html) possui a função `gerarLink()`. |
-| `calcularLucro` | **Duplicada** | [`tools/financas/lucro.html`](file:///home/araofer/Documentos/github/CalculadoraMaster/tools/financas/lucro.html) possui implementação própria. |
+| `calcularLucro` | **Obsoleta (Substituída)** | Substituída com testes por [`js/tools/lucro.js`](file:///home/araofer/Documentos/github/CalculadoraMaster/js/tools/lucro.js). A versão legada em `script.js` calculava margem incorretamente sobre o custo `(lucro/custo)*100`, enquanto o novo módulo calcula margem sobre o preço `(lucro/preco)*100` com destaque visual de prejuízo. |
 | `calcularCombustivel` | **Duplicada** | [`tools/utilidades/combustivel.html`](file:///home/araofer/Documentos/github/CalculadoraMaster/tools/utilidades/combustivel.html) possui implementação própria. |
 
 ### Plano de Ação Recomendado para `js/script.js`

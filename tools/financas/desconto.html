@@ -74,8 +74,8 @@
     
     <br>
 
-    <button type="button" onclick="calcularDesconto()">Calcular</button>
-    <button type="button" onclick="limparCampos()">Limpar</button>
+    <button type="button" data-action="calculate">Calcular</button>
+    <button type="button" data-action="clear">Limpar</button>
 
     <h3 id="resultado" style="margin-top: 20px; color: #008080;"></h3>
   </section>
@@ -156,36 +156,13 @@
       </div>
     </section>
 
-    <p style="margin-top: 30px;">
-      👉 <a href="../../index.html">Voltar para página inicial</a>
+    <p style="margin-top: 30px;">
+      👉 <a href="../../index.html">Voltar para página inicial</a>
     </p>
   </section>
 </main>
 
-<script>
-function calcularDesconto() {
-  let preco = parseFloat(document.getElementById("preco").value);
-  let desconto = parseFloat(document.getElementById("desconto").value);
-
-  if (isNaN(preco) || isNaN(desconto)) {
-    document.getElementById("resultado").innerText = "Por favor, preencha os valores corretamente!";
-    return;
-  }
-
-  let valorDesconto = (preco * desconto) / 100;
-  let precoFinal = preco - valorDesconto;
-
-  document.getElementById("resultado").innerText =
-    "Você economiza R$ " + valorDesconto.toFixed(2) +
-    " | Preço final: R$ " + precoFinal.toFixed(2);
-}
-
-function limparCampos() {
-  document.getElementById("preco").value = "";
-  document.getElementById("desconto").value = "";
-  document.getElementById("resultado").innerText = "";
-}
-</script>
+<script type="module" src="../../js/tools/desconto.js"></script>
 
 <footer class="footer">
     <div class="container">

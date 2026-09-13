@@ -70,14 +70,14 @@
   <div class="grid-juros"> <section class="card" style="margin-bottom: 20px;">
       <h2>Juros Simples</h2>
       <label>Capital Inicial (R$):</label>
-      <input type="number" id="capitalSimples" placeholder="Ex: 1000" oninput="limparResultado()">
+      <input type="number" id="capitalSimples" placeholder="Ex: 1000">
       <label>Taxa de Juros (%):</label>
-      <input type="number" id="taxaSimples" placeholder="Ex: 5" oninput="limparResultado()">
+      <input type="number" id="taxaSimples" placeholder="Ex: 5">
       <label>Período (Meses):</label>
-      <input type="number" id="tempoSimples" placeholder="Ex: 12" oninput="limparResultado()">
+      <input type="number" id="tempoSimples" placeholder="Ex: 12">
 
       <div style="margin-top: 15px;">
-        <button type="button" onclick="calcularSimples()">Calcular Simples</button>
+        <button type="button" data-action="calculate-simple">Calcular Simples</button>
       </div>
       <h3 id="resultadoSimples" style="margin-top: 15px; color: #008080;"></h3>
     </section>
@@ -85,14 +85,14 @@
     <section class="card">
       <h2>Juros Compostos</h2>
       <label>Capital Inicial (R$):</label>
-      <input type="number" id="capitalComposto" placeholder="Ex: 1000" oninput="limparResultado()">
+      <input type="number" id="capitalComposto" placeholder="Ex: 1000">
       <label>Taxa de Juros (%):</label>
-      <input type="number" id="taxaComposta" placeholder="Ex: 5" oninput="limparResultado()">
+      <input type="number" id="taxaComposta" placeholder="Ex: 5">
       <label>Período (Meses):</label>
-      <input type="number" id="tempoComposto" placeholder="Ex: 12" oninput="limparResultado()">
+      <input type="number" id="tempoComposto" placeholder="Ex: 12">
 
       <div style="margin-top: 15px;">
-        <button type="button" onclick="calcularComposto()" class="btn-destaque">Calcular Compostos</button>
+        <button type="button" class="btn-destaque" data-action="calculate-compound">Calcular Compostos</button>
       </div>
       <h3 id="resultadoComposto" style="margin-top: 15px; color: #008080;"></h3>
     </section>
@@ -100,7 +100,7 @@
   </div>
 
   <div style="text-align: center; margin-top: 20px;">
-    <button type="button" onclick="limparCampos()" style="background-color: #666;">Limpar Tudo</button>
+    <button type="button" data-action="clear" style="background-color: #666;">Limpar Tudo</button>
   </div>
 
   <section class="content">
@@ -162,58 +162,13 @@
       </div>
     </section>
 
-    <p style="margin-top: 30px;">
-      👉 <a href="../../index.html">Voltar para página inicial</a>
+    <p style="margin-top: 30px;">
+      👉 <a href="../../index.html">Voltar para página inicial</a>
     </p>
   </section>
 </main>
 
-<script>
-function calcularSimples() {
-  let capital = parseFloat(document.getElementById("capitalSimples").value);
-  let taxa = parseFloat(document.getElementById("taxaSimples").value);
-  let tempo = parseFloat(document.getElementById("tempoSimples").value);
-
-  if (isNaN(capital) || isNaN(taxa) || isNaN(tempo)) {
-    document.getElementById("resultadoSimples").innerText = "Preencha todos os campos corretamente.";
-    return;
-  }
-
-  let juros = capital * (taxa / 100) * tempo;
-  let total = capital + juros;
-
-  document.getElementById("resultadoSimples").innerHTML = 
-    `Juros: R$ ${juros.toFixed(2)} <br><strong>Total: R$ ${total.toFixed(2)}</strong>`;
-}
-
-function calcularComposto() {
-  let capital = parseFloat(document.getElementById("capitalComposto").value);
-  let taxa = parseFloat(document.getElementById("taxaComposta").value);
-  let tempo = parseFloat(document.getElementById("tempoComposto").value);
-
-  if (isNaN(capital) || isNaN(taxa) || isNaN(tempo)) {
-    document.getElementById("resultadoComposto").innerText = "Preencha todos os campos corretamente.";
-    return;
-  }
-
-  let total = capital * Math.pow((1 + taxa/100), tempo);
-  let juros = total - capital;
-
-  document.getElementById("resultadoComposto").innerHTML = 
-    `Juros: R$ ${juros.toFixed(2)} <br><strong>Total: R$ ${total.toFixed(2)}</strong>`;
-}
-
-function limparCampos() {
-  document.querySelectorAll('input').forEach(input => input.value = "");
-  document.getElementById("resultadoSimples").innerText = "";
-  document.getElementById("resultadoComposto").innerText = "";
-}
-
-function limparResultado() {
-  document.getElementById("resultadoSimples").innerText = "";
-  document.getElementById("resultadoComposto").innerText = "";
-}
-</script>
+<script type="module" src="../../js/tools/juros.js"></script>
 
 <footer class="footer">
     <div class="container">
