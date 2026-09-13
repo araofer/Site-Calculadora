@@ -71,16 +71,16 @@
     <h2>Conteúdo do QR Code</h2>
 
     <label for="textoQR">Insira a URL ou o texto abaixo:</label><br>
-    <input type="text" id="textoQR" placeholder="https://exemplo.com.br" style="width:100%; max-width: 500px; padding: 12px; margin-bottom: 15px;" oninput="limparResultado()">
+    <input type="text" id="textoQR" placeholder="https://exemplo.com.br" style="width:100%; max-width: 500px; padding: 12px; margin-bottom: 15px;">
     
     <br>
-    <button type="button" onclick="gerarQRCode()" class="btn-destaque">Gerar QR Code</button>
-    <button type="button" onclick="limparCampos()">Limpar</button>
+    <button type="button" data-action="generate" class="btn-destaque">Gerar QR Code</button>
+    <button type="button" data-action="clear">Limpar</button>
 
     <div id="resultado-area" style="margin-top: 30px; display: none; text-align: center;">
         <div id="qrcode" style="display: inline-block; padding: 15px; background: white; border: 1px solid #ddd;"></div>
         <br><br>
-        <button id="btnDownload" type="button" onclick="baixarQR()" style="background-color: #28a745;">Baixar QR Code (PNG)</button>
+        <button id="btnDownload" type="button" data-action="download" style="background-color: #28a745;">Baixar QR Code (PNG)</button>
     </div>
   </div>
 
@@ -145,57 +145,7 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
-<script>
-function gerarQRCode() {
-  let texto = document.getElementById("textoQR").value;
-  let container = document.getElementById("qrcode");
-  let areaResultado = document.getElementById("resultado-area");
-
-  if (texto.trim() === "") {
-    alert("Por favor, digite um link ou texto!");
-    return;
-  }
-
-  container.innerHTML = "";
-  areaResultado.style.display = "block";
-
-  new QRCode(container, {
-    text: texto,
-    width: 256,
-    height: 256,
-    colorDark : "#000000",
-    colorLight : "#ffffff",
-    correctLevel : QRCode.CorrectLevel.H
-  });
-}
-
-function baixarQR() {
-  const img = document.querySelector("#qrcode img");
-  if (img) {
-    const link = document.createElement("a");
-    link.href = img.src;
-    link.download = "qrcode-calculadora-master.png";
-    link.click();
-  } else {
-    // Caso a biblioteca ainda esteja renderizando no canvas
-    const canvas = document.querySelector("#qrcode canvas");
-    const link = document.createElement("a");
-    link.href = canvas.toDataURL("image/png");
-    link.download = "qrcode-calculadora-master.png";
-    link.click();
-  }
-}
-
-function limparCampos() {
-  document.getElementById("textoQR").value = "";
-  document.getElementById("qrcode").innerHTML = "";
-  document.getElementById("resultado-area").style.display = "none";
-}
-
-function limparResultado() {
-  // Opcional: manter o QR anterior até clicar em gerar novamente para evitar "piscada"
-}
-</script>
+<script type="module" src="../../js/tools/qr-code.js"></script>
 
 <footer class="footer">
     <div class="container">

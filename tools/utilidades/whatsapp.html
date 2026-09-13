@@ -71,21 +71,21 @@
     <h2>Configurar meu Link</h2>
 
     <label for="numero">Número do WhatsApp (com DDD):</label><br>
-    <input type="text" id="numero" placeholder="Ex: 11 99999-9999" style="width:100%; max-width: 400px; padding: 12px; margin-bottom: 15px;" oninput="limparResultado()">
+    <input type="text" id="numero" placeholder="Ex: 11 99999-9999" style="width:100%; max-width: 400px; padding: 12px; margin-bottom: 15px;">
     
     <br>
     <label for="mensagem">Mensagem automática (opcional):</label><br>
-    <textarea id="mensagem" rows="4" style="width:100%; max-width: 400px; padding: 10px;" placeholder="Ex: Olá, gostaria de saber mais sobre seus serviços!" oninput="limparResultado()"></textarea>
+    <textarea id="mensagem" rows="4" style="width:100%; max-width: 400px; padding: 10px;" placeholder="Ex: Olá, gostaria de saber mais sobre seus serviços!"></textarea>
 
     <br><br>
-    <button type="button" onclick="gerarLink()" class="btn-destaque">Gerar Link Personalizado</button>
-    <button type="button" onclick="limparCampos()">Limpar</button>
+    <button type="button" data-action="generate" class="btn-destaque">Gerar Link Personalizado</button>
+    <button type="button" data-action="clear">Limpar</button>
 
     <div id="resultado-area" style="margin-top: 25px; display: none;">
         <p><strong>Seu link pronto:</strong></p>
         <div id="link-box" style="background: #f4f4f4; padding: 15px; border-radius: 5px; border: 1px dashed #25D366; word-break: break-all; color: #075E54; font-family: monospace;"></div>
         <br>
-        <button type="button" onclick="copiarLink()" style="background-color: #25D366; border-color: #25D366;">Copiar Link</button>
+        <button type="button" data-action="copy" style="background-color: #25D366; border-color: #25D366;">Copiar Link</button>
         <span id="msg-copiado" style="color: #28a745; margin-left: 10px; display: none;">Copiado!</span>
     </div>
   </div>
@@ -149,54 +149,7 @@
   </section>
 </main>
 
-<script>
-function gerarLink() {
-  let numeroInput = document.getElementById("numero").value;
-  let mensagem = document.getElementById("mensagem").value;
-  let areaResultado = document.getElementById("resultado-area");
-  let linkBox = document.getElementById("link-box");
-
-  // Limpa o número: remove tudo que não for dígito
-  let numeroLimpo = numeroInput.replace(/\D/g, '');
-
-  if (numeroLimpo.length < 10) {
-    alert("Por favor, digite um número válido com DDD.");
-    return;
-  }
-
-  // Garante o código do país (55 para Brasil)
-  if (!numeroLimpo.startsWith('55') && numeroLimpo.length <= 11) {
-    numeroLimpo = '55' + numeroLimpo;
-  }
-
-  let textoCodificado = encodeURIComponent(mensagem);
-  let linkFinal = `https://wa.me/${numeroLimpo}?text=${textoCodificado}`;
-
-  linkBox.innerText = linkFinal;
-  areaResultado.style.display = "block";
-  document.getElementById("msg-copiado").style.display = "none";
-}
-
-function copiarLink() {
-  const link = document.getElementById("link-box").innerText;
-  navigator.clipboard.writeText(link).then(() => {
-    document.getElementById("msg-copiado").style.display = "inline";
-    setTimeout(() => {
-        document.getElementById("msg-copiado").style.display = "none";
-    }, 2000);
-  });
-}
-
-function limparCampos() {
-  document.getElementById("numero").value = "";
-  document.getElementById("mensagem").value = "";
-  document.getElementById("resultado-area").style.display = "none";
-}
-
-function limparResultado() {
-  // Opcional
-}
-</script>
+<script type="module" src="../../js/tools/whatsapp.js"></script>
 
 <footer class="footer">
     <div class="container">

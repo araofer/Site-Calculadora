@@ -69,9 +69,9 @@
 
   <div style="margin:20px 0;" class="card">
     <h2>Digite ou cole seu texto</h2>
-    <textarea id="texto" rows="6" style="width:100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc;" placeholder="Digite seu texto aqui..." oninput="contarTexto()"></textarea>
+    <textarea id="texto" rows="6" style="width:100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc;" placeholder="Digite seu texto aqui..."></textarea>
     <br><br>
-    <button type="button" onclick="limparCampos()">Limpar Texto</button>
+    <button type="button" data-action="clear">Limpar Texto</button>
 
     <h3 id="resultado" style="margin-top: 20px; color: #008080;">Aguardando texto...</h3>
   </div>
@@ -133,26 +133,7 @@
   </section>
 </main>
 
-<script>
-function contarTexto() {
-  let texto = document.getElementById("texto").value;
-
-  let caracteres = texto.length;
-  let caracteresSemEspaco = texto.replace(/\s/g, "").length;
-  // Regex melhorada para contar palavras corretamente
-  let palavras = texto.trim() === "" ? 0 : texto.trim().split(/\s+/).length;
-
-  document.getElementById("resultado").innerText =
-    "Caracteres: " + caracteres +
-    " | Sem espaços: " + caracteresSemEspaco +
-    " | Palavras: " + palavras;
-}
-
-function limparCampos() {
-  document.getElementById("texto").value = "";
-  document.getElementById("resultado").innerText = "Aguardando texto...";
-}
-</script>
+<script type="module" src="../../js/tools/contador.js"></script>
 
 <footer class="footer">
     <div class="container">

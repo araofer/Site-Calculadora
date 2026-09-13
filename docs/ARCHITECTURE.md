@@ -136,6 +136,10 @@ js/
     dividir-conta.js         # ESM: Fechamento de conta entre pessoas + bindings data-action
     imc.js                   # ESM: Índice de Massa Corporal + bindings data-action
     horas-extras.js          # ESM: Horas extras trabalhistas + bindings data-action
+    combustivel.js           # ESM: Consumo e custo de viagem + bindings data-action
+    contador.js              # ESM: Contagem de caracteres e palavras + bindings data-action
+    qr-code.js               # ESM: Validação e integração com QRCode.js + bindings data-action
+    whatsapp.js              # ESM: Sanitização e links wa.me + bindings data-action
     idade.js                 # ESM: Idade exata local + bindings data-action
     senha.js                 # ESM: Web Crypto API + rejection sampling + bindings data-action
 
@@ -154,6 +158,10 @@ tests/
   dividir-conta.test.js
   imc.test.js
   horas-extras.test.js
+  combustivel.test.js
+  contador.test.js
+  qr-code.test.js
+  whatsapp.test.js
   idade.test.js
   senha.test.js
 ```
@@ -178,16 +186,23 @@ tests/
 ### Eventos Semânticos (`data-action`) vs. Inspeção de Texto Visível
 
 Para eliminar a fragilidade de seletores baseados em texto visível dos botões (`textContent.includes("limpar")`), estabeleceu-se o padrão obrigatório de atributos semânticos:
-- `data-action="calculate"`: Ações de cálculo principal (ex: Calcular Idade, Calcular Financiamento, Calcular Horas Extras).
+- `data-action="calculate"`: Ações de cálculo principal (ex: Calcular Idade, Calcular Financiamento, Calcular Horas Extras, Calcular Consumo).
 - `data-action="clear"`: Ações de limpeza e redefinição de campos.
-- `data-action="generate"`: Ações de geração de dados (ex: Gerar Senha Forte).
+- `data-action="generate"`: Ações de geração de dados (ex: Gerar Senha Forte, Gerar QR Code, Gerar Link WhatsApp).
 - `data-action="generate-fields"`: Geração de campos dinâmicos (ex: Dividir Conta).
-- `data-action="copy"`: Ações de cópia para a área de transferência.
+- `data-action="copy"`: Ações de cópia para a área de transferência (ex: Copiar Senha, Copiar Link WhatsApp).
+- `data-action="download"`: Ações de download de arquivos gerados (ex: Baixar QR Code em PNG).
 
 Vantagens:
 - Desacopla completamente a lógica JavaScript da redação ou tradução dos textos dos botões.
 - Previne quebras se o texto for alterado por copywriting ou testes A/B.
 - Não requer atributos inline legados (`onclick="..."`, `oninput="..."`).
+
+### Integração com Bibliotecas Externas e Exceção do QR Code (QRCode.js)
+
+- A ferramenta de QR Code utiliza a biblioteca oficial `qrcodejs` carregada via CDN tradicional (`https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js`).
+- **Exceção Arquitetural Documentada**: Bibliotecas de terceiros que expõem seu construtor no escopo global (`window.QRCode`) são consumidas defensivamente pelo módulo ESM [`js/tools/qr-code.js`](../js/tools/qr-code.js), sem que o módulo registre qualquer variável ou função global própria.
+- Isso preserva a estabilidade e a qualidade visual da renderização sem introduzir pacotes npm, dependências pesadas ou bundlers no pipeline estático.
 
 ### Padronização Monetária Brasileira e Suporte a Negativos (`js/core/currency.js`)
 
@@ -209,9 +224,9 @@ Para manter a filosofia de **Zero Frameworks e Zero Dependências NPM**, todos o
 - Framework: `node:test`
 - Asserções: `node:assert/strict`
 - Execução: `npm test` (dispara `node --test tests/*.test.js`)
-- Execução instantânea (menos de 550ms para a suíte completa com 77 testes).
+- Execução instantânea (menos de 650ms para a suíte completa com 104 testes).
 
-### Como Migrar as Próximas 12 Ferramentas (Checklist Oficial)
+### Status da Migração ESM: 15/15 Ferramentas Migradas (100% Concluído)
 
 Para migrar cada uma das ferramentas restantes:
 1. Crie `js/tools/<id>.js` como ES Module nativo.
@@ -282,18 +297,18 @@ Cada calculadora individual em `tools/` possui seu próprio script inline com su
 | `gerarSenha` | **Obsoleta e Insegura** | Substituída com testes por [`js/tools/senha.js`](file:///home/araofer/Documentos/github/CalculadoraMaster/js/tools/senha.js). A versão em `script.js` utilizava `Math.random()` inseguro e comprimento fixo em 12 caracteres. |
 | `calcularPorcentagem` | **Obsoleta (Substituída)** | Substituída com testes por [`js/tools/porcentagem.js`](file:///home/araofer/Documentos/github/CalculadoraMaster/js/tools/porcentagem.js). A versão legada em `script.js` calculava apenas porcentagem simples, enquanto o novo módulo calcula projeção de acréscimo e desconto. |
 | `gerarCampos` / `calcularDivisao` | **Obsoleta (Substituída)** | Substituída com testes por [`js/tools/dividir-conta.js`](file:///home/araofer/Documentos/github/CalculadoraMaster/js/tools/dividir-conta.js). Suporta tolerância de ponto flutuante para centavos e validação de até 50 pessoas. |
-| `contarCaracteres` | **Obsoleta / Reduzida** | Em `script.js`, apenas conta `texto.length`. Em [`tools/utilidades/contador.html`](file:///home/araofer/Documentos/github/CalculadoraMaster/tools/utilidades/contador.html), conta palavras, caracteres, espaços e quebras de linha. |
+| `contarCaracteres` | **Obsoleta (Substituída)** | Substituída com testes por [js/tools/contador.js](../js/tools/contador.js). A versão legada em `script.js` contava apenas caracteres totais, enquanto o novo módulo calcula caracteres totais, caracteres sem espaços e palavras em tempo real. |
 | `calcularIMC` | **Obsoleta (Substituída)** | Substituída com testes por [`js/tools/imc.js`](file:///home/araofer/Documentos/github/CalculadoraMaster/js/tools/imc.js). Normaliza altura digitada em cm (> 3m) e classifica todas as 6 faixas da OMS. |
 | `calcularDesconto` | **Obsoleta (Substituída)** | Substituída com testes por [`js/tools/desconto.js`](file:///home/araofer/Documentos/github/CalculadoraMaster/js/tools/desconto.js). A versão legada em `script.js` utilizava IDs desatualizados (`valor` em vez de `preco`). |
 | `calcularJuros` | **Obsoleta (Substituída)** | Substituída com testes por [`js/tools/juros.js`](file:///home/araofer/Documentos/github/CalculadoraMaster/js/tools/juros.js). A versão legada em `script.js` calculava apenas juros simples sob IDs obsoletos, enquanto o novo módulo suporta juros simples e compostos isoladamente. |
-| `gerarLinkWhats` | **Duplicada / Desconectada** | [`tools/utilidades/whatsapp.html`](file:///home/araofer/Documentos/github/CalculadoraMaster/tools/utilidades/whatsapp.html) possui a função `gerarLink()`. |
+| `gerarLinkWhats` | **Obsoleta (Substituída)** | Substituída com testes por [js/tools/whatsapp.js](../js/tools/whatsapp.js). Sanitiza números, aplica DDI 55 defensivo e codifica mensagens via encodeURIComponent com atribuição segura no DOM. |
 | `calcularLucro` | **Obsoleta (Substituída)** | Substituída com testes por [`js/tools/lucro.js`](file:///home/araofer/Documentos/github/CalculadoraMaster/js/tools/lucro.js). A versão legada em `script.js` calculava margem incorretamente sobre o custo `(lucro/custo)*100`, enquanto o novo módulo calcula margem sobre o preço `(lucro/preco)*100` com destaque visual de prejuízo. |
-| `calcularCombustivel` | **Duplicada** | [`tools/utilidades/combustivel.html`](file:///home/araofer/Documentos/github/CalculadoraMaster/tools/utilidades/combustivel.html) possui implementação própria. |
+| `calcularCombustivel` | **Obsoleta (Substituída)** | Substituída com testes por [js/tools/combustivel.js](../js/tools/combustivel.js). Valida campos numéricos e calcula litros e custo da viagem com validação contra divisão por zero. |
 
 ### Plano de Ação Recomendado para `js/script.js`
 1. **Não remover agora**: Mantido temporariamente intacto para não impactar referências externas legadas ou pipelines de terceiros.
-2. **Conclusão das 12 Ferramentas Restantes**: Conforme as ferramentas restantes forem migradas para `js/tools/`, as funções remanescentes serão gradativamente substituídas por módulos testáveis.
-3. **Depreciação Definitiva**: Ao fim da migração total, o arquivo `js/script.js` poderá ser deletado com 100% de segurança e sem risco de regressão.
+2. **Migração 100% Concluída (15/15 Ferramentas)**: Todas as 15 ferramentas do projeto foram integralmente migradas para módulos ES independentes e testadas via `node:test` (104 testes passando). Nenhuma página depende de `js/script.js`.
+3. **Depreciação Definitiva Pronta para Execução**: O arquivo `js/script.js` está 100% obsoleto e pode ser deletado com segurança na próxima etapa de limpeza/estabilização.
 
 ---
 

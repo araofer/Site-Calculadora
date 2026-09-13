@@ -67,14 +67,14 @@
   <p>Descubra quantos litros seu carro consome e quanto vai gastar na viagem.</p>
 
   <div style="margin:20px 0;" class="card"> <h2>Calcular consumo e custo</h2>
-    <input type="number" id="distancia" placeholder="Distância (km) Ex: 300" oninput="limparResultado()">
+    <input type="number" id="distancia" placeholder="Distância (km) Ex: 300">
     <br><br>
-    <input type="number" id="consumo" placeholder="Consumo (km/l) Ex: 12" oninput="limparResultado()">
+    <input type="number" id="consumo" placeholder="Consumo (km/l) Ex: 12">
     <br><br>
-    <input type="number" id="preco" placeholder="Preço do combustível (Ex: 5.49)" oninput="limparResultado()">
+    <input type="number" id="preco" placeholder="Preço do combustível (Ex: 5.49)">
     <br><br>
-    <button type="button" onclick="calcularConsumo()">Calcular</button>
-    <button type="button" onclick="limparCampos()">Limpar</button>
+    <button type="button" data-action="calculate">Calcular</button>
+    <button type="button" data-action="clear">Limpar</button>
 
     <h3 id="resultado" style="margin-top: 20px; color: #008080;"></h3>
   </div>
@@ -135,35 +135,7 @@
   </section>
 </main>
 
-<script>
-function calcularConsumo() {
-  let distancia = document.getElementById("distancia").value;
-  let consumo = document.getElementById("consumo").value;
-  let preco = document.getElementById("preco").value;
-
-  if (distancia === "" || consumo === "" || preco === "") {
-    document.getElementById("resultado").innerText = "Preencha todos os campos!";
-    return;
-  }
-
-  let litros = distancia / consumo;
-  let custo = litros * preco;
-
-  document.getElementById("resultado").innerText =
-    "Você irá gastar " + litros.toFixed(2) + " litros | Custo total: R$ " + custo.toFixed(2);
-}
-
-function limparCampos() {
-  document.getElementById("distancia").value = "";
-  document.getElementById("consumo").value = "";
-  document.getElementById("preco").value = "";
-  document.getElementById("resultado").innerText = "";
-}
-
-function limparResultado() {
-  document.getElementById("resultado").innerText = "";
-}
-</script>
+<script type="module" src="../../js/tools/combustivel.js"></script>
 
 <footer class="footer">
     <div class="container">
