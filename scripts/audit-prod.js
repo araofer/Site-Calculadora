@@ -19,10 +19,25 @@ const { execSync, spawn } = require('node:child_process');
 const fs = require('node:fs');
 const path = require('node:path');
 const http = require('node:http');
+const net = require('node:net');
+const os = require('node:os');
 
 const ROOT_DIR = path.resolve(__dirname, '..');
 const DIST_PROD_DIR = path.join(ROOT_DIR, 'dist');
 const DIST_PILOT_DIR = path.join(ROOT_DIR, 'dist-pilot');
+
+async function getFreePort() {
+  return new Promise((resolve, reject) => {
+    const srv = net.createServer();
+    srv.listen(0, '127.0.0.1', () => {
+      const port = srv.address().port;
+      srv.close((err) => {
+        if (err) reject(err);
+        else resolve(port);
+      });
+    });
+  });
+}
 
 const {
   TOOL_PAGES,
@@ -399,18 +414,30 @@ async function runProdAudit() {
   }
 
   if (chromePath && httpPort > 0) {
+    let tempProfileDir = null;
+    let chrome = null;
     try {
-      const chromePort = 9250 + Math.floor(Math.random() * 100);
-      const chrome = spawn(chromePath, [
+      const chromePort = await getFreePort();
+      tempProfileDir = fs.mkdtempSync(path.join(os.tmpdir(), 'chrome-audit-prod-'));
+
+      chrome = spawn(chromePath, [
         '--headless=new',
         `--remote-debugging-port=${chromePort}`,
+        '--remote-debugging-address=127.0.0.1',
+        `--user-data-dir=${tempProfileDir}`,
         '--no-sandbox',
         '--disable-gpu',
+        '--disable-dev-shm-usage',
+        '--no-first-run',
+        '--disable-background-networking',
+        '--disable-default-apps',
+        '--disable-extensions',
+        '--disable-sync',
         '--window-size=320,800'
       ]);
 
       let chromeReady = false;
-      for (let i = 0; i < 30; i++) {
+      for (let i = 0; i < 40; i++) {
         try {
           const vRes = await fetch(`http://127.0.0.1:${chromePort}/json/version`);
           if (vRes.ok) {
@@ -426,109 +453,185 @@ async function runProdAudit() {
         throw new Error('Chrome DevTools não respondeu no tempo limite.');
       }
 
+      await new Promise(r => setTimeout(r, 300));
+
       let mobileAllOk = true;
 
-      try {
-        for (const page of SITE_PAGES) {
-          const pageUrl = `http://127.0.0.1:${httpPort}/${page.relativeOutputPath}`;
-          const newTabRes = await fetch(`http://127.0.0.1:${chromePort}/json/new?${pageUrl}`, { method: 'PUT' });
-          const tab = await newTabRes.json();
-          const ws = new WebSocket(tab.webSocketDebuggerUrl);
+      for (const page of SITE_PAGES) {
+        const pageUrl = `http://127.0.0.1:${httpPort}/${page.relativeOutputPath}`;
+        let tab = null;
 
-          await new Promise((resolve, reject) => {
-            let msgId = 1;
-            const pending = new Map();
-
-            ws.onerror = (err) => {
-              console.error(`WebSocket error em dist/${page.relativeOutputPath}:`, err.message || err);
-              resolve();
-            };
-
-            ws.onopen = () => {
-              send('Page.enable');
-              send('Runtime.enable');
-              send('Network.enable');
-              send('Emulation.setDeviceMetricsOverride', {
-                width: 320,
-                height: 800,
-                deviceScaleFactor: 1,
-                mobile: true
-              });
-
-              setTimeout(async () => {
-                try {
-                  const evalRes = await evalExpr(`({
-                    clientWidth: document.documentElement ? document.documentElement.clientWidth : 0,
-                    scrollWidth: document.documentElement ? document.documentElement.scrollWidth : 0,
-                    bodyScrollWidth: document.body ? document.body.scrollWidth : 0,
-                    menuToggleDisplay: document.querySelector("#mobile-menu") ? window.getComputedStyle(document.querySelector("#mobile-menu")).display : "none"
-                  })`);
-
-                  if (!evalRes) {
-                    console.error(`Métricas mobile não retornadas em dist/${page.relativeOutputPath}`);
-                    mobileAllOk = false;
-                    resolve();
-                    return;
-                  }
-
-                  if (evalRes.scrollWidth > evalRes.clientWidth) {
-                    console.error(`Overflow horizontal mobile detectado em dist/${page.relativeOutputPath}: scrollWidth=${evalRes.scrollWidth} clientWidth=${evalRes.clientWidth}`);
-                    mobileAllOk = false;
-                  }
-                  resolve();
-                } catch (err) {
-                  reject(err);
-                }
-              }, 1200);
-            };
-
-            ws.onmessage = (event) => {
-              const data = JSON.parse(event.data);
-              if (data.id && pending.has(data.id)) {
-                const cb = pending.get(data.id);
-                pending.delete(data.id);
-                cb(data);
-              }
-              if (data.method === 'Runtime.consoleAPICalled' && data.params.type === 'error') {
-                console.error(`Erro de console em dist/${page.relativeOutputPath}:`, ...data.params.args.map(a => a.value || a.description));
-                mobileAllOk = false;
-              }
-            };
-
-            function send(method, params = {}) {
-              const id = msgId++;
-              return new Promise(res => {
-                pending.set(id, res);
-                if (ws.readyState === 1) {
-                  ws.send(JSON.stringify({ id, method, params }));
-                } else {
-                  res({});
-                }
-              });
+        for (let attempt = 1; attempt <= 3; attempt++) {
+          try {
+            const newTabRes = await fetch(`http://127.0.0.1:${chromePort}/json/new?${pageUrl}`, { method: 'PUT' });
+            if (newTabRes.ok) {
+              tab = await newTabRes.json();
+              if (tab && tab.webSocketDebuggerUrl) break;
             }
-
-            async function evalExpr(expression) {
-              const res = await send('Runtime.evaluate', { expression, returnByValue: true, awaitPromise: true });
-              if (!res || !res.result || !res.result.result) {
-                return null;
-              }
-              return res.result.result.value;
-            }
-          });
-
-          ws.close();
-          await fetch(`http://127.0.0.1:${chromePort}/json/close/${tab.id}`);
+          } catch {}
+          await new Promise(r => setTimeout(r, 150));
         }
 
-        summary.mobile = mobileAllOk ? 'PASS' : 'FAIL';
-        if (!mobileAllOk) allOk = false;
-      } finally {
-        chrome.kill();
+        if (!tab || !tab.webSocketDebuggerUrl) {
+          console.error(`Falha ao criar aba DevTools para dist/${page.relativeOutputPath}`);
+          mobileAllOk = false;
+          allOk = false;
+          continue;
+        }
+
+        let pageValidated = false;
+
+        for (let wsAttempt = 1; wsAttempt <= 3; wsAttempt++) {
+          try {
+            await new Promise((resolve, reject) => {
+              let msgId = 1;
+              const pending = new Map();
+              let settled = false;
+
+              const ws = new WebSocket(tab.webSocketDebuggerUrl);
+
+              const timeoutId = setTimeout(() => {
+                if (!settled) {
+                  settled = true;
+                  try { ws.close(); } catch {}
+                  reject(new Error('Timeout aguardando validação mobile (6s)'));
+                }
+              }, 6000);
+
+              function finish(err) {
+                if (!settled) {
+                  settled = true;
+                  clearTimeout(timeoutId);
+                  try { ws.close(); } catch {}
+                  if (err) reject(err);
+                  else resolve();
+                }
+              }
+
+              ws.onerror = (err) => {
+                finish(new Error(`WebSocket error: ${err.message || 'ErrorEvent'}`));
+              };
+
+              ws.onclose = () => {
+                if (!pageValidated && !settled) {
+                  finish(new Error('WebSocket fechou prematuramente'));
+                }
+              };
+
+              ws.onopen = () => {
+                send('Page.enable');
+                send('Runtime.enable');
+                send('Network.enable');
+                send('Emulation.setDeviceMetricsOverride', {
+                  width: 320,
+                  height: 800,
+                  deviceScaleFactor: 1,
+                  mobile: true
+                });
+
+                setTimeout(async () => {
+                  try {
+                    const evalRes = await evalExpr(`({
+                      clientWidth: document.documentElement ? document.documentElement.clientWidth : 0,
+                      scrollWidth: document.documentElement ? document.documentElement.scrollWidth : 0,
+                      bodyScrollWidth: document.body ? document.body.scrollWidth : 0,
+                      menuToggleDisplay: document.querySelector("#mobile-menu") ? window.getComputedStyle(document.querySelector("#mobile-menu")).display : "none"
+                    })`);
+
+                    if (!evalRes) {
+                      console.error(`Métricas mobile não retornadas em dist/${page.relativeOutputPath}`);
+                      mobileAllOk = false;
+                      allOk = false;
+                      finish();
+                      return;
+                    }
+
+                    if (evalRes.scrollWidth > evalRes.clientWidth) {
+                      console.error(`Overflow horizontal mobile detectado em dist/${page.relativeOutputPath}: scrollWidth=${evalRes.scrollWidth} clientWidth=${evalRes.clientWidth}`);
+                      mobileAllOk = false;
+                      allOk = false;
+                    }
+
+                    pageValidated = true;
+                    finish();
+                  } catch (evalErr) {
+                    finish(evalErr);
+                  }
+                }, 1200);
+              };
+
+              ws.onmessage = (event) => {
+                try {
+                  const data = JSON.parse(event.data);
+                  if (data.id && pending.has(data.id)) {
+                    const cb = pending.get(data.id);
+                    pending.delete(data.id);
+                    cb(data);
+                  }
+                  if (data.method === 'Runtime.consoleAPICalled' && data.params.type === 'error') {
+                    console.error(`Erro de console em dist/${page.relativeOutputPath}:`, ...data.params.args.map(a => a.value || a.description));
+                    mobileAllOk = false;
+                    allOk = false;
+                  }
+                } catch {}
+              };
+
+              function send(method, params = {}) {
+                const id = msgId++;
+                return new Promise(res => {
+                  pending.set(id, res);
+                  if (ws.readyState === 1) {
+                    ws.send(JSON.stringify({ id, method, params }));
+                  } else {
+                    res({});
+                  }
+                });
+              }
+
+              async function evalExpr(expression) {
+                const res = await send('Runtime.evaluate', { expression, returnByValue: true, awaitPromise: true });
+                if (!res || !res.result || !res.result.result) {
+                  return null;
+                }
+                return res.result.result.value;
+              }
+            });
+
+            if (pageValidated) break;
+          } catch (wsErr) {
+            if (wsAttempt === 3) {
+              console.error(`WebSocket error em dist/${page.relativeOutputPath}:`, wsErr.message || wsErr);
+              mobileAllOk = false;
+              allOk = false;
+            } else {
+              await new Promise(r => setTimeout(r, 200));
+            }
+          }
+        }
+
+        if (!pageValidated) {
+          mobileAllOk = false;
+          allOk = false;
+        }
+
+        try {
+          await fetch(`http://127.0.0.1:${chromePort}/json/close/${tab.id}`);
+        } catch {}
       }
+
+      summary.mobile = mobileAllOk ? 'PASS' : 'FAIL';
+      if (!mobileAllOk) allOk = false;
     } catch (err) {
       summary.mobile = 'FAIL';
       allOk = false;
       console.error('Erro na validação mobile de produção via Chrome:', err.message);
+    } finally {
+      if (chrome) {
+        try { chrome.kill('SIGKILL'); } catch {}
+      }
+      if (tempProfileDir && fs.existsSync(tempProfileDir)) {
+        try { fs.rmSync(tempProfileDir, { recursive: true, force: true }); } catch {}
+      }
     }
   } else {
     summary.mobile = 'NÃO TESTADO';
