@@ -1,0 +1,130 @@
+---
+title: Calculadora de Horas Extras Online Grátis | Calculadora Master
+description: Faça uma estimativa das suas horas extras online. Calcule o valor da hora normal, da hora extra e o total com o adicional informado.
+keywords: calculadora horas extras, calcular hora extra, valor hora extra, adicional hora extra, cálculo hora extra online
+canonical: https://www.calculadoramaster.com/tools/trabalhista/horas-extras.html
+layout: tool
+pageScripts: <script type="module" src="{{ROOT_PREFIX}}js/tools/horas-extras.js"></script>
+---
+  <h1>Calculadora de Horas Extras</h1>
+  <p>Estime o valor das suas horas extras a partir do seu salário mensal, jornada e adicional informados.</p>
+
+  <div style="margin:20px 0;" class="card">
+    <h2>Simular Horas Extras</h2>
+
+    <label for="salario">Salário mensal (R$):</label><br>
+    <input type="text" id="salario" inputmode="decimal" placeholder="Ex: 2500,00"><br><br>
+
+    <label for="jornada">Jornada mensal em horas:</label><br>
+    <input type="text" id="jornada" inputmode="decimal" placeholder="Ex: 220"><br><br>
+
+    <label for="horas-extras">Quantidade de horas extras:</label><br>
+    <input type="text" id="horas-extras" inputmode="decimal" placeholder="Ex: 10"><br><br>
+
+    <label for="adicional">Adicional de hora extra (%):</label><br>
+    <input type="text" id="adicional" inputmode="decimal" placeholder="Ex: 50"><br><br>
+
+    <button type="button" data-action="calculate">Calcular</button>
+    <button type="button" data-action="clear">Limpar</button>
+
+    <p id="mensagem-erro" style="color: #c00; margin-top: 15px; display: none; font-weight: bold;"></p>
+
+    <div id="resultado-container" style="margin-top: 20px; display: none;">
+      <h3 id="resultado" style="color: #008080;"></h3>
+      <div id="detalhes" style="font-size: 0.95em; color: #444; margin-top: 10px; line-height: 1.6;"></div>
+    </div>
+  </div>
+
+  <section class="content">
+    <h2>Como calcular horas extras</h2>
+    <p>O cálculo de horas extras consiste em três etapas básicas:</p>
+
+    <h3>1. Como encontrar o valor da hora normal</h3>
+    <p>Divide-se o salário base mensal pelo total de horas que compõem a jornada normal do mês.</p>
+    <p><strong>Fórmula:</strong> Valor da Hora Normal = Salário Mensal ÷ Jornada Mensal</p>
+
+    <h3>2. Como aplicar o adicional informado</h3>
+    <p>Aplica-se o percentual de adicional à hora normal para descobrir o valor unitário de cada hora extra.</p>
+    <p><strong>Fórmula:</strong> Valor da Hora Extra = Valor da Hora Normal × (1 + Adicional ÷ 100)</p>
+
+    <h3>3. Como calcular o total das horas extras</h3>
+    <p>Multiplica-se o valor de cada hora extra pela quantidade de horas extras trabalhadas.</p>
+    <p><strong>Fórmula:</strong> Total das Horas Extras = Valor da Hora Extra × Quantidade de Horas Extras</p>
+
+    <h2>Exemplo didático</h2>
+    <p>Considere o seguinte cenário meramente ilustrativo:</p>
+    <ul>
+      <li>Salário mensal: <strong>R$ 2.200,00</strong></li>
+      <li>Jornada mensal: <strong>220 horas</strong></li>
+      <li>Horas extras realizadas: <strong>10 horas</strong></li>
+      <li>Adicional informado: <strong>50%</strong></li>
+    </ul>
+
+    <p><strong>Etapas do cálculo:</strong></p>
+    <ol style="padding-left: 24px; margin-bottom: 20px;">
+      <li>Valor da hora normal: R$ 2.200,00 ÷ 220 = R$ 10,00</li>
+      <li>Valor de cada hora extra: R$ 10,00 × (1 + 50 ÷ 100) = R$ 15,00</li>
+      <li>Total das horas extras: R$ 15,00 × 10 = <strong>R$ 150,00</strong></li>
+    </ol>
+    <p><em>Nota: Os valores acima são estritamente didáticos para exemplificar a metodologia das fórmulas.</em></p>
+
+    <h2>O que esta calculadora não considera</h2>
+    <p>Esta ferramenta é um simulador matemático direto e não inclui automaticamente em seu resultado:</p>
+    <ul>
+      <li>Descanso Semanal Remunerado (DSR) sobre horas extras;</li>
+      <li>Reflexos em férias proporcionais, 13º salário ou FGTS;</li>
+      <li>Descontos tributários e previdenciários (INSS e IRRF);</li>
+      <li>Adicionais noturnos ou de periculosidade/insalubridade;</li>
+      <li>Outras verbas contratuais ou rescisórias.</li>
+    </ul>
+
+    <h2>Aviso importante</h2>
+    <div class="card" style="background-color: #f9f9f9; border-left: 4px solid #008080; padding: 15px; margin: 15px 0;">
+      <p style="margin: 0;">
+        Os valores apresentados são estimativas matemáticas baseadas exclusivamente nos dados informados pelo usuário.
+        Regras de jornada, adicionais e outras verbas podem variar conforme contrato, acordo, convenção coletiva, categoria profissional e situação individual.
+        A ferramenta não substitui cálculo contábil, jurídico, departamento pessoal ou orientação profissional.
+      </p>
+    </div>
+
+    <!-- FERRAMENTAS RELACIONADAS -->
+    <section class="related-tools">
+      <h2>Você também pode precisar</h2>
+      <div class="related-tools-grid">
+        <article class="tool-card">
+          <div class="tool-card-header">
+            <span class="tool-card-category">Matemática</span>
+          </div>
+          <h3 class="tool-card-title">Calculadora de Porcentagem</h3>
+          <p class="tool-card-desc">Calcule percentuais, aumentos, reduções e proporções de forma simples e rápida.</p>
+          <div class="tool-card-footer">
+            <a href="../financas/porcentagem.html" class="tool-card-btn" aria-label="Acessar Calculadora de Porcentagem">Calcular agora &rarr;</a>
+          </div>
+        </article>
+        <article class="tool-card">
+          <div class="tool-card-header">
+            <span class="tool-card-category">Financeira</span>
+          </div>
+          <h3 class="tool-card-title">Calculadora de Desconto</h3>
+          <p class="tool-card-desc">Descubra o valor final com desconto e a economia real nas suas compras.</p>
+          <div class="tool-card-footer">
+            <a href="../financas/desconto.html" class="tool-card-btn" aria-label="Acessar Calculadora de Desconto">Calcular agora &rarr;</a>
+          </div>
+        </article>
+        <article class="tool-card">
+          <div class="tool-card-header">
+            <span class="tool-card-category">Financeira</span>
+          </div>
+          <h3 class="tool-card-title">Calculadora de Juros</h3>
+          <p class="tool-card-desc">Calcule juros simples e compostos para investimentos, empréstimos e rendimentos.</p>
+          <div class="tool-card-footer">
+            <a href="../financas/juros.html" class="tool-card-btn" aria-label="Acessar Calculadora de Juros">Calcular agora &rarr;</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <p style="margin-top: 30px;">
+      👉 <a href="{{ROOT_PREFIX}}index.html">Voltar para página inicial</a>
+    </p>
+  </section>

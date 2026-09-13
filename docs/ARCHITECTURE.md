@@ -350,17 +350,17 @@ Uma conversão cega em massa de todos os arquivos do repositório geraria:
 ## 8. Próximos Passos Recomendados
 
 1. **Fase 2 — Modularização de Scripts (Concluída)**: 15/15 ferramentas migradas para ES Modules nativos com testes automatizados e script legado removido.
-2. **Fase 3 — Motor de Build SSG (Lotes 1 e 2 de Finanças Concluídos / Em Andamento)**: Motor multipágina expandido com sucesso para as 7 páginas atualmente existentes no diretório histórico `tools/financas/` gerando artefatos em `dist-pilot/`; expansão para os próximos lotes de páginas planejada após validação contínua.
+2. **Fase 3 — Motor de Build SSG (Lote Financeiro, Saúde e Trabalhista Concluídos / Em Andamento)**: Motor multipágina expandido com sucesso para 10 das 15 ferramentas do projeto (7 páginas de `tools/financas/`, 2 de `tools/saude/` e 1 de `tools/trabalhista/`) gerando artefatos em `dist-pilot/`; expansão para as 5 ferramentas restantes de Utilidades e demais páginas planejada após validação contínua.
 3. **Fase 4 — Normalização de Git e Line Endings**: Aplicar `.gitattributes` e `.git-blame-ignore-revs` em commit exclusivo.
 
 ---
 
-## 9. Fase 3 — Motor SSG Multipágina (7 Páginas de tools/financas/)
+## 9. Fase 3 — Motor SSG Multipágina (10 Ferramentas: Finanças, Saúde e Trabalhista)
 
 ### Objetivo e Visão Geral
 Evoluir o piloto de Static Site Generation (SSG) em Node.js vanilla para um motor multipágina flexível, robusto e reversível, eliminando progressivamente a duplicação estrutural de cabeçalho, rodapé e casca HTML entre as ferramentas, sem uso de frameworks, sem bundlers e sem substituição imediata dos arquivos de produção.
 
-### Estrutura Implementada para as 7 Páginas de tools/financas/
+### Estrutura Implementada no SSG
 ```text
 src/
   components/
@@ -378,25 +378,36 @@ src/
         financiamento-carro.page.html  # Lote 2: Conteúdo e metadados de Financiamento de Carro
         financiamento-imovel.page.html # Lote 2: Conteúdo e metadados de Financiamento Imobiliário
         dividir-conta.page.html        # Lote 2: Conteúdo e metadados de Dividir Conta
+      saude/
+        imc.page.html                  # Lote Saúde: Conteúdo e metadados de IMC
+        idade.page.html                # Lote Saúde: Conteúdo e metadados de Idade
+      trabalhista/
+        horas-extras.page.html         # Lote Trabalhista: Conteúdo e metadados de Horas Extras
 scripts/
   build-html.js           # Motor de build SSG multipágina em Node.js Vanilla CommonJS
 dist-pilot/               # Diretório isolado de saída de teste (ignorado no .gitignore)
 ```
 
 ### Características Técnicas do Motor
-1. **Motor Multipágina Declarativo (`buildPages`)**: A função `buildPages(pages, options)` itera sobre coleções estruturadas (`FINANCEIRO_LOTE1_PAGES`, `FINANCEIRO_LOTE2_PAGES`, `FINANCEIRO_PAGES`), compilando cada template com base no seu arquivo fonte `.page.html` e gerando os artefatos correspondentes no diretório de destino (`dist-pilot/`). Mantém a função retrocompatível `buildPilot(options)`.
-2. **Composição em Build-Time**: A injeção de layouts e componentes ocorre exclusivamente durante o build (`npm run build:html:pilot` ou `npm run build:html:financeiro`). O navegador recebe HTML estático 100% puro e completo, sem chamadas `fetch()` ou injeção dinâmica de templates em runtime.
+1. **Motor Multipágina Declarativo (`buildPages`)**: A função `buildPages(pages, options)` itera sobre coleções estruturadas (`FINANCEIRO_LOTE1_PAGES`, `FINANCEIRO_LOTE2_PAGES`, `FINANCEIRO_PAGES`, `SAUDE_PAGES`, `TRABALHISTA_PAGES`, `TOOL_PAGES`), compilando cada template com base no seu arquivo fonte `.page.html` e gerando os artefatos correspondentes no diretório de destino (`dist-pilot/`). Mantém a função retrocompatível `buildPilot(options)`.
+2. **Composição em Build-Time**: A injeção de layouts e componentes ocorre exclusivamente durante o build (`npm run build:html:pilot`, `npm run build:html:financeiro` ou `npm run build:html:tools`). O navegador recebe HTML estático 100% puro e completo, sem chamadas `fetch()` ou injeção dinâmica de templates em runtime.
 3. **Zero Frameworks e Dependências**: Implementado estritamente com módulos nativos `fs` e `path` do Node.js, plenamente compatível com o ecossistema CommonJS existente.
 4. **Resolução Dinâmica de Caminhos Relativos (`rootPrefix`)**: O motor calcula a profundidade do arquivo em relação à raiz (`../../` para ferramentas em `tools/<categoria>/`, `../` para categorias e `./` para a raiz), garantindo que CSS, scripts, imagens e links funcionem perfeitamente em qualquer nível de diretório.
 5. **Cópia Defensiva de Assets e Resolução da Árvore de Módulos ESM**: Todos os assets estáticos necessários (estilos, logos, scripts centrais e módulos ESM das ferramentas compiladas) são copiados para `dist-pilot/`. Para além dos pontos de entrada, o gerador e a suíte de testes asseguram a integridade da árvore transitiva completa de módulos ESM (copiando e validando dependências locais como `js/core/currency.js`, `js/auth.js` e `js/firebase-config.js`), prevenindo a falha em que a existência do script de entrada no HTTP direto mascara dependências internas ausentes no navegador. Se qualquer asset obrigatório não for encontrado no disco, o build falha imediatamente com erro explícito.
 6. **Validação Defensiva de Placeholders**: O build falha expressamente se qualquer campo de metadado obrigatório estiver ausente ou se restar qualquer placeholder `{{...}}` não resolvido no artefato gerado.
-7. **Páginas de tools/financas/ (7/7 Disponíveis no Gerador) e Isolamento de Produção**:
-   - `tools/financas/desconto.html`
-   - `tools/financas/juros.html`
-   - `tools/financas/lucro.html`
-   - `tools/financas/porcentagem.html` (categoria lógica: Matemática)
-   - `tools/financas/financiamento-carro.html`
-   - `tools/financas/financiamento-imovel.html`
-   - `tools/financas/dividir-conta.html`
-   Os HTMLs de produção atuais sob `tools/financas/` permanecem 100% intactos e inalterados no repositório, garantindo preservação absoluta de SEO e estabilidade funcional.
-8. **Status e Limitações**: A Fase 3 NÃO está finalizada para todo o site. Apenas as 7 páginas do diretório histórico `tools/financas/` foram migradas para templates de build. As outras 8 ferramentas distribuídas nas categorias Saúde (`imc`, `idade`), Trabalhista (`horas-extras`) e Utilidades (`combustivel`, `contador`, `senha`, `qr-code`, `whatsapp`), bem como as páginas de categorias (`categorias/*.html`), o blog e páginas institucionais permanecem como HTMLs estáticos para serem integradas nos próximos lotes.
+7. **Ferramentas Disponíveis no Gerador (10/15 Disponíveis no Gerador) e Isolamento de Produção**:
+   - **tools/financas/ (7 páginas)**:
+     - `tools/financas/desconto.html`
+     - `tools/financas/juros.html`
+     - `tools/financas/lucro.html`
+     - `tools/financas/porcentagem.html` (categoria lógica: Matemática)
+     - `tools/financas/financiamento-carro.html`
+     - `tools/financas/financiamento-imovel.html`
+     - `tools/financas/dividir-conta.html`
+   - **tools/saude/ (2 páginas)**:
+     - `tools/saude/imc.html`
+     - `tools/saude/idade.html`
+   - **tools/trabalhista/ (1 página)**:
+     - `tools/trabalhista/horas-extras.html`
+   Os HTMLs de produção atuais sob `tools/` permanecem 100% intactos e inalterados no repositório, garantindo preservação absoluta de SEO e estabilidade funcional.
+8. **Status e Limitações**: A Fase 3 NÃO está finalizada para todo o site. 10 de 15 ferramentas do catálogo oficial foram migradas para templates de build. As 5 ferramentas restantes sob a categoria Utilidades (`combustivel`, `contador`, `senha`, `qr-code`, `whatsapp`), bem como as páginas de categorias (`categorias/*.html`), o blog e páginas institucionais permanecem como HTMLs estáticos para serem integradas nos próximos lotes.

@@ -1,0 +1,56 @@
+---
+title: Calculadora de Idade Online | Anos, Meses e Dias
+description: Calcule sua idade online de forma rápida e precisa. Descubra quantos anos, meses e dias você tem desde o seu nascimento.
+keywords: calculadora de idade, calcular idade online, idade em anos meses dias
+canonical: https://www.calculadoramaster.com/tools/saude/idade.html
+layout: tool
+pageScripts: <script type="module" src="{{ROOT_PREFIX}}js/tools/idade.js"></script>
+---
+  <h1>Calculadora de Idade</h1>
+  <p>Descubra sua idade exata em anos, meses e dias vividos até hoje.</p>
+
+  <div style="margin:20px 0;" class="card">
+    <h2>Selecione sua data de nascimento</h2>
+    <input type="date" id="dataNascimento" style="padding: 10px; border-radius: 5px; border: 1px solid #ccc; font-family: inherit;">
+    <br><br>
+
+    <button type="button" data-action="calculate">Calcular Idade</button>
+    <button type="button" data-action="clear">Limpar</button>
+
+    <h3 id="resultado" style="margin-top: 20px; color: #008080;"></h3>
+  </div>
+
+  <section class="content">
+    <h2>Como funciona o cálculo de idade?</h2>
+    <p>
+      A idade é calculada subtraindo a sua data de nascimento da data atual. Nossa ferramenta leva em conta os anos bissextos e a variação de dias nos meses para entregar um resultado preciso.
+    </p>
+
+    <h2>Por que saber a idade em detalhes?</h2>
+    <ul>
+      <li><strong>Documentos:</strong> Facilita o preenchimento de formulários que pedem idade exata.</li>
+      <li><strong>Desenvolvimento Infantil:</strong> Útil para pais acompanharem meses e dias de bebês.</li>
+      <li><strong>Curiosidade:</strong> Saiba exatamente há quanto tempo você está no mundo!</li>
+    </ul>
+
+    <!-- FERRAMENTAS RELACIONADAS -->
+    <section class="related-tools">
+      <h2>Você também pode precisar</h2>
+      <div class="related-tools-grid">
+        <article class="tool-card">
+          <div class="tool-card-header">
+            <span class="tool-card-category">Saúde</span>
+          </div>
+          <h3 class="tool-card-title">Calculadora de IMC</h3>
+          <p class="tool-card-desc">Calcule seu Índice de Massa Corporal e veja a classificação do seu peso ideal.</p>
+          <div class="tool-card-footer">
+            <a href="../saude/imc.html" class="tool-card-btn" aria-label="Acessar Calculadora de IMC">Calcular agora &rarr;</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <p style="margin-top: 30px;">
+      👉 <a href="{{ROOT_PREFIX}}index.html">Voltar para página inicial</a>
+    </p>
+  </section>

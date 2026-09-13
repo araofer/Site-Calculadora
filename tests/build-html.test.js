@@ -15,9 +15,15 @@ const {
   FINANCEIRO_LOTE1_PAGES,
   FINANCEIRO_LOTE2_PAGES,
   FINANCEIRO_PAGES,
+  SAUDE_PAGES,
+  TRABALHISTA_PAGES,
+  TOOL_PAGES,
   DEFAULT_PAGES,
   COMMON_ASSETS,
   FINANCEIRO_ASSETS,
+  SAUDE_ASSETS,
+  TRABALHISTA_ASSETS,
+  TOOL_ASSETS,
   DEFAULT_ASSETS,
   copyPilotAssets
 } = ssg;
@@ -161,9 +167,9 @@ test('SSG Piloto - Caminhos relativos de CSS, JS e imagens estão consistentes',
  * TESTES - SSG MULTIPÁGINA (7 FERRAMENTAS FINANCEIRAS)
  * ================================================== */
 
-test('SSG Multipage - buildPages compila com sucesso as 7 ferramentas financeiras (Lotes 1 e 2)', () => {
+test('SSG Multipage - buildPages compila com sucesso as 10 ferramentas (Lote Financeiro, Saúde e Trabalhista)', () => {
   const results = buildPages();
-  assert.equal(results.length, 7, 'Devem ser geradas exatamente 7 páginas financeiras no total');
+  assert.equal(results.length, 10, 'Devem ser geradas exatamente 10 páginas de ferramentas no total');
 
   const expectedPaths = [
     'tools/financas/desconto.html',
@@ -172,7 +178,10 @@ test('SSG Multipage - buildPages compila com sucesso as 7 ferramentas financeira
     'tools/financas/porcentagem.html',
     'tools/financas/financiamento-carro.html',
     'tools/financas/financiamento-imovel.html',
-    'tools/financas/dividir-conta.html'
+    'tools/financas/dividir-conta.html',
+    'tools/saude/imc.html',
+    'tools/saude/idade.html',
+    'tools/trabalhista/horas-extras.html'
   ];
 
   expectedPaths.forEach(expectedRel => {
@@ -181,6 +190,20 @@ test('SSG Multipage - buildPages compila com sucesso as 7 ferramentas financeira
     const content = fs.readFileSync(fullPath, 'utf-8');
     assert.ok(content.length > 500, `Arquivo ${expectedRel} deve ter conteúdo substancial`);
   });
+});
+
+test('SSG Multipage - buildPages com escopo específico compila subconjuntos de páginas corretamente', () => {
+  const finResults = buildPages(FINANCEIRO_PAGES);
+  assert.equal(finResults.length, 7, 'FINANCEIRO_PAGES deve gerar 7 páginas');
+
+  const saudeResults = buildPages(SAUDE_PAGES);
+  assert.equal(saudeResults.length, 2, 'SAUDE_PAGES deve gerar 2 páginas');
+
+  const trabResults = buildPages(TRABALHISTA_PAGES);
+  assert.equal(trabResults.length, 1, 'TRABALHISTA_PAGES deve gerar 1 página');
+
+  // Restaura compilação completa para testes subsequentes
+  buildPages();
 });
 
 test('SSG Multipage - Juros: title, canonical, H1, módulo ESM e elementos do formulário', () => {
@@ -292,7 +315,56 @@ test('SSG Multipage - Dividir Conta: title, canonical, H1, módulo ESM, formulá
   assert.match(html, /id="resultado"/);
 });
 
-test('SSG Multipage - Ausência de placeholders {{...}} em todas as 7 páginas geradas', () => {
+test('SSG Multipage - IMC: title, canonical, H1, módulo ESM e elementos do formulário', () => {
+  const filePath = path.join(ROOT_DIR, 'dist-pilot', 'tools', 'saude', 'imc.html');
+  const html = fs.readFileSync(filePath, 'utf-8');
+
+  assert.match(html, /<title>Calculadora de IMC Online \| Índice de Massa Corporal e Peso Ideal<\/title>/);
+  assert.match(html, /<link rel="canonical" href="https:\/\/www\.calculadoramaster\.com\/tools\/saude\/imc\.html">/);
+  assert.match(html, /<h1>Calculadora de IMC<\/h1>/);
+  assert.match(html, /<script type="module" src="\.\.\/\.\.\/js\/tools\/imc\.js"><\/script>/);
+
+  assert.match(html, /id="peso"/);
+  assert.match(html, /id="altura"/);
+  assert.match(html, /data-action="calculate"/);
+  assert.match(html, /data-action="clear"/);
+  assert.match(html, /id="resultado"/);
+});
+
+test('SSG Multipage - Idade: title, canonical, H1, módulo ESM e elementos do formulário', () => {
+  const filePath = path.join(ROOT_DIR, 'dist-pilot', 'tools', 'saude', 'idade.html');
+  const html = fs.readFileSync(filePath, 'utf-8');
+
+  assert.match(html, /<title>Calculadora de Idade Online \| Anos, Meses e Dias<\/title>/);
+  assert.match(html, /<link rel="canonical" href="https:\/\/www\.calculadoramaster\.com\/tools\/saude\/idade\.html">/);
+  assert.match(html, /<h1>Calculadora de Idade<\/h1>/);
+  assert.match(html, /<script type="module" src="\.\.\/\.\.\/js\/tools\/idade\.js"><\/script>/);
+
+  assert.match(html, /id="dataNascimento"/);
+  assert.match(html, /data-action="calculate"/);
+  assert.match(html, /data-action="clear"/);
+  assert.match(html, /id="resultado"/);
+});
+
+test('SSG Multipage - Horas Extras: title, canonical, H1, módulo ESM e elementos do formulário', () => {
+  const filePath = path.join(ROOT_DIR, 'dist-pilot', 'tools', 'trabalhista', 'horas-extras.html');
+  const html = fs.readFileSync(filePath, 'utf-8');
+
+  assert.match(html, /<title>Calculadora de Horas Extras Online Grátis \| Calculadora Master<\/title>/);
+  assert.match(html, /<link rel="canonical" href="https:\/\/www\.calculadoramaster\.com\/tools\/trabalhista\/horas-extras\.html">/);
+  assert.match(html, /<h1>Calculadora de Horas Extras<\/h1>/);
+  assert.match(html, /<script type="module" src="\.\.\/\.\.\/js\/tools\/horas-extras\.js"><\/script>/);
+
+  assert.match(html, /id="salario"/);
+  assert.match(html, /id="jornada"/);
+  assert.match(html, /id="horas-extras"/);
+  assert.match(html, /id="adicional"/);
+  assert.match(html, /data-action="calculate"/);
+  assert.match(html, /data-action="clear"/);
+  assert.match(html, /id="resultado"/);
+});
+
+test('SSG Multipage - Ausência de placeholders {{...}} em todas as 10 páginas geradas', () => {
   const pages = [
     'tools/financas/desconto.html',
     'tools/financas/juros.html',
@@ -300,7 +372,10 @@ test('SSG Multipage - Ausência de placeholders {{...}} em todas as 7 páginas g
     'tools/financas/porcentagem.html',
     'tools/financas/financiamento-carro.html',
     'tools/financas/financiamento-imovel.html',
-    'tools/financas/dividir-conta.html'
+    'tools/financas/dividir-conta.html',
+    'tools/saude/imc.html',
+    'tools/saude/idade.html',
+    'tools/trabalhista/horas-extras.html'
   ];
 
   for (const pageRel of pages) {
@@ -313,8 +388,13 @@ test('SSG Multipage - Ausência de placeholders {{...}} em todas as 7 páginas g
   }
 });
 
-test('SSG Multipage - Todos os 17 assets obrigatórios são copiados para dist-pilot', () => {
-  assert.equal(DEFAULT_ASSETS.length, 17, 'Devem existir exatamente 17 assets declarados no lote financeiro');
+test('SSG Multipage - Todos os 20 assets obrigatórios são copiados para dist-pilot', () => {
+  assert.equal(DEFAULT_ASSETS.length, 20, 'Devem existir exatamente 20 assets declarados no lote de ferramentas');
+  assert.equal(FINANCEIRO_ASSETS.length, 17, 'FINANCEIRO_ASSETS deve conter 17 assets');
+  assert.equal(SAUDE_ASSETS.length, 2, 'SAUDE_ASSETS deve conter 2 assets');
+  assert.equal(TRABALHISTA_ASSETS.length, 1, 'TRABALHISTA_ASSETS deve conter 1 asset');
+  assert.equal(TOOL_ASSETS.length, 20, 'TOOL_ASSETS deve conter 20 assets');
+
   for (const item of DEFAULT_ASSETS) {
     const destPath = path.join(ROOT_DIR, 'dist-pilot', item.dest);
     assert.ok(fs.existsSync(destPath), `Asset copiado deve existir em dist-pilot: ${item.dest}`);
@@ -407,7 +487,10 @@ test('SSG Multipage - Contrato estrutural e ordem dos elementos em .nav-containe
     'tools/financas/porcentagem.html',
     'tools/financas/financiamento-carro.html',
     'tools/financas/financiamento-imovel.html',
-    'tools/financas/dividir-conta.html'
+    'tools/financas/dividir-conta.html',
+    'tools/saude/imc.html',
+    'tools/saude/idade.html',
+    'tools/trabalhista/horas-extras.html'
   ];
 
   for (const pageRel of pages) {

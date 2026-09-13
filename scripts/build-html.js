@@ -53,7 +53,31 @@ const FINANCEIRO_PAGES = [
   ...FINANCEIRO_LOTE2_PAGES
 ];
 
-const DEFAULT_PAGES = FINANCEIRO_PAGES;
+const SAUDE_PAGES = [
+  {
+    sourceFile: path.join(PAGES_DIR, 'tools', 'saude', 'imc.page.html'),
+    relativeOutputPath: 'tools/saude/imc.html'
+  },
+  {
+    sourceFile: path.join(PAGES_DIR, 'tools', 'saude', 'idade.page.html'),
+    relativeOutputPath: 'tools/saude/idade.html'
+  }
+];
+
+const TRABALHISTA_PAGES = [
+  {
+    sourceFile: path.join(PAGES_DIR, 'tools', 'trabalhista', 'horas-extras.page.html'),
+    relativeOutputPath: 'tools/trabalhista/horas-extras.html'
+  }
+];
+
+const TOOL_PAGES = [
+  ...FINANCEIRO_PAGES,
+  ...SAUDE_PAGES,
+  ...TRABALHISTA_PAGES
+];
+
+const DEFAULT_PAGES = TOOL_PAGES;
 
 const COMMON_ASSETS = [
   { src: 'css/style.css', dest: 'css/style.css' },
@@ -79,7 +103,22 @@ const FINANCEIRO_ASSETS = [
   { src: 'js/core/currency.js', dest: 'js/core/currency.js' }
 ];
 
-const DEFAULT_ASSETS = FINANCEIRO_ASSETS;
+const SAUDE_ASSETS = [
+  { src: 'js/tools/imc.js', dest: 'js/tools/imc.js' },
+  { src: 'js/tools/idade.js', dest: 'js/tools/idade.js' }
+];
+
+const TRABALHISTA_ASSETS = [
+  { src: 'js/tools/horas-extras.js', dest: 'js/tools/horas-extras.js' }
+];
+
+const TOOL_ASSETS = [
+  ...FINANCEIRO_ASSETS,
+  ...SAUDE_ASSETS,
+  ...TRABALHISTA_ASSETS
+];
+
+const DEFAULT_ASSETS = TOOL_ASSETS;
 
 /**
  * Calcula o prefixo de caminho relativo até a raiz do projeto baseado na profundidade do arquivo.
@@ -270,7 +309,21 @@ function buildPilot({ outputDir = DEFAULT_OUTPUT_DIR } = {}) {
 
 if (require.main === module) {
   try {
-    const results = buildPages();
+    const scopeArg = process.argv.find(arg => arg.startsWith('--scope='));
+    const scope = scopeArg ? scopeArg.split('=')[1] : (process.env.SSG_SCOPE || 'all');
+
+    let pagesToBuild = DEFAULT_PAGES;
+    let assetsToCopy = DEFAULT_ASSETS;
+
+    if (scope === 'pilot') {
+      pagesToBuild = [FINANCEIRO_LOTE1_PAGES[0]];
+      assetsToCopy = DEFAULT_ASSETS;
+    } else if (scope === 'financeiro') {
+      pagesToBuild = FINANCEIRO_PAGES;
+      assetsToCopy = FINANCEIRO_ASSETS;
+    }
+
+    const results = buildPages(pagesToBuild, { assets: assetsToCopy });
     console.log(`\nBuild SSG concluído com sucesso: ${results.length} página(s) gerada(s).`);
   } catch (err) {
     console.error('Falha na execução do build SSG multipágina:', err.message);
@@ -282,9 +335,15 @@ module.exports = {
   FINANCEIRO_LOTE1_PAGES,
   FINANCEIRO_LOTE2_PAGES,
   FINANCEIRO_PAGES,
+  SAUDE_PAGES,
+  TRABALHISTA_PAGES,
+  TOOL_PAGES,
   DEFAULT_PAGES,
   COMMON_ASSETS,
   FINANCEIRO_ASSETS,
+  SAUDE_ASSETS,
+  TRABALHISTA_ASSETS,
+  TOOL_ASSETS,
   DEFAULT_ASSETS,
   calculateRootPrefix,
   parsePageSource,
