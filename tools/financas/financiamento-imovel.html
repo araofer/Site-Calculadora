@@ -92,7 +92,7 @@
 
       <div class="button-group">
         <button type="button" onclick="calcularFinanciamentoImovel()">Calcular Financiamento</button>
-        <button type="button" onclick="limparCampos()" style="background-color: #666#00c3ff;">Limpar Tudo</button>
+        <button type="button" onclick="limparCamposImovel()" style="background-color: #666;">Limpar Tudo</button>
       </div>
     </div>
 
@@ -158,6 +158,7 @@
         document.getElementById("prazoAnos").value = "";
         limparResultado();
     }
+    const limparCampos = limparCamposImovel;
 
     // 4. MOTOR DE CÁLCULO IMOBILIÁRIO (SISTEMA SAC)
     function calcularFinanciamentoImovel() {

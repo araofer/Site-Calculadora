@@ -107,7 +107,8 @@ function calcularIdade() {
   }
 
   const hoje = new Date();
-  const dataNasc = new Date(nascimentoInput);
+  const [ano, mes, dia] = nascimentoInput.split("-").map(Number);
+  const dataNasc = new Date(ano, mes - 1, dia);
 
   // Verifica se a data é no futuro
   if (dataNasc > hoje) {

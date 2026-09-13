@@ -138,9 +138,17 @@ function gerarSenha() {
   }
 
   let senha = "";
+  const len = caracteres.length;
+  const maxValid = 0xFFFFFFFF - (0xFFFFFFFF % len);
+  const randomBuffer = new Uint32Array(1);
+
   for (let i = 0; i < tamanho; i++) {
-    let random = Math.floor(Math.random() * caracteres.length);
-    senha += caracteres[random];
+    let randomVal;
+    do {
+      window.crypto.getRandomValues(randomBuffer);
+      randomVal = randomBuffer[0];
+    } while (randomVal >= maxValid);
+    senha += caracteres[randomVal % len];
   }
 
   document.getElementById("senha-gerada").innerText = senha;
