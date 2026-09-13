@@ -19,6 +19,9 @@ const {
   TRABALHISTA_PAGES,
   UTILIDADES_PAGES,
   TOOL_PAGES,
+  HOME_PAGE,
+  CATEGORIA_PAGES,
+  SITE_PAGES,
   DEFAULT_PAGES,
   COMMON_ASSETS,
   FINANCEIRO_ASSETS,
@@ -26,6 +29,8 @@ const {
   TRABALHISTA_ASSETS,
   UTILIDADES_ASSETS,
   TOOL_ASSETS,
+  SITE_SPECIFIC_ASSETS,
+  SITE_ASSETS,
   DEFAULT_ASSETS,
   copyPilotAssets
 } = ssg;
@@ -582,23 +587,7 @@ test('SSG Multipage - copyPilotAssets lança erro explícito se um asset obrigat
 });
 
 test('SSG Multipage - Contrato estrutural e ordem dos elementos em .nav-container do Header', () => {
-  const pages = [
-    'tools/financas/desconto.html',
-    'tools/financas/juros.html',
-    'tools/financas/lucro.html',
-    'tools/financas/porcentagem.html',
-    'tools/financas/financiamento-carro.html',
-    'tools/financas/financiamento-imovel.html',
-    'tools/financas/dividir-conta.html',
-    'tools/saude/imc.html',
-    'tools/saude/idade.html',
-    'tools/trabalhista/horas-extras.html',
-    'tools/utilidades/combustivel.html',
-    'tools/utilidades/contador.html',
-    'tools/utilidades/senha.html',
-    'tools/utilidades/whatsapp.html',
-    'tools/utilidades/qr-code.html'
-  ];
+  const pages = SITE_PAGES.map(p => p.relativeOutputPath);
 
   for (const pageRel of pages) {
     const filePath = path.join(ROOT_DIR, 'dist-pilot', pageRel);
@@ -630,5 +619,159 @@ test('SSG Multipage - Contrato estrutural e ordem dos elementos em .nav-containe
       logoIndex < navIndex && navIndex < toggleIndex && toggleIndex < actionsIndex,
       `${pageRel} deve respeitar a ordem contratual do header: logo (${logoIndex}) < nav (${navIndex}) < menu-toggle (${toggleIndex}) < nav-actions (${actionsIndex})`
     );
+  }
+});
+
+test('SSG Site - buildPages(SITE_PAGES) compila 21 páginas e copia 28 assets', () => {
+  const results = buildPages(SITE_PAGES, { assets: SITE_ASSETS });
+  assert.equal(results.length, 21, 'SITE_PAGES deve gerar exatamente 21 páginas (15 ferramentas + Home + 5 categorias)');
+
+  for (const page of SITE_PAGES) {
+    const fullPath = path.join(ROOT_DIR, 'dist-pilot', page.relativeOutputPath);
+    assert.ok(fs.existsSync(fullPath), `Página ${page.relativeOutputPath} deve existir no output`);
+    const content = fs.readFileSync(fullPath, 'utf-8');
+    assert.ok(content.length > 500, `Página ${page.relativeOutputPath} deve ter tamanho substancial`);
+    assert.equal(content.match(/\{\{([A-Z0-9_]+)\}\}/), null, `Página ${page.relativeOutputPath} não deve ter placeholders`);
+    assert.ok(!content.includes('href="undefined"'), `Página ${page.relativeOutputPath} não deve ter href undefined`);
+    assert.ok(!content.includes('src="undefined"'), `Página ${page.relativeOutputPath} não deve ter src undefined`);
+  }
+
+  for (const asset of SITE_ASSETS) {
+    const assetPath = path.join(ROOT_DIR, 'dist-pilot', asset.dest);
+    assert.ok(fs.existsSync(assetPath), `Asset ${asset.dest} deve existir em dist-pilot`);
+  }
+});
+
+test('SSG Site - Home (index.html): metadados, H1, busca, catálogo, destaques e scripts', () => {
+  const filePath = path.join(ROOT_DIR, 'dist-pilot', 'index.html');
+  const html = fs.readFileSync(filePath, 'utf-8');
+
+  // Metadados SEO
+  assert.match(html, /<title>Calculadora Master - Ferramentas Online Grátis<\/title>/);
+  assert.match(html, /<meta name="description" content="Calculadoras online grátis de IMC, combustível, lucro, juros e muito mais\. Rápido, fácil e preciso\.">/);
+  assert.match(html, /<link rel="canonical" href="https:\/\/www\.calculadoramaster\.com\/">/);
+
+  // H1 e estrutura principal
+  assert.match(html, /<h1>Calculadoras Online Grátis<\/h1>/);
+  assert.match(html, /id="busca"/);
+  assert.match(html, /id="search-input"/);
+  assert.match(html, /id="search-results"/);
+  assert.match(html, /id="search-count"/);
+  assert.match(html, /id="search-clear-btn"/);
+
+  // Seções principais
+  assert.match(html, /id="destaques"/);
+  assert.match(html, /id="categorias"/);
+  assert.match(html, /id="ferramentas"/);
+  assert.match(html, /class="blog-section"/);
+  assert.match(html, /class="newsletter"/);
+
+  // Scripts da Home
+  assert.match(html, /<script src="\.\/js\/tools-catalog\.js"><\/script>/);
+  assert.match(html, /<script src="\.\/js\/home-search\.js"><\/script>/);
+  assert.match(html, /<script type="module" src="\.\/js\/header-auth\.js"><\/script>/);
+  assert.match(html, /<script src="\.\/js\/cookie-consent\.js"><\/script>/);
+
+  // Links de navegação do site
+  assert.match(html, /href="\.\/financeira\.html"/);
+  assert.match(html, /href="\.\/matematica\.html"/);
+  assert.match(html, /href="\.\/saude\.html"/);
+  assert.match(html, /href="\.\/conversores\.html"/);
+  assert.match(html, /href="\.\/trabalhista\.html"/);
+  assert.match(html, /href="\.\/blog\/index\.html"/);
+});
+
+test('SSG Site - Páginas de categorias: testes parametrizados de integridade, metadados e cards', () => {
+  const categorySpecs = [
+    {
+      file: 'financeira.html',
+      title: 'Calculadoras Financeiras Online Grátis | Calculadora Master',
+      canonical: 'https://www.calculadoramaster.com/financeira.html',
+      h1: 'Calculadoras Financeiras',
+      expectedCards: [
+        'tools/financas/desconto.html',
+        'tools/financas/lucro.html',
+        'tools/financas/juros.html',
+        'tools/financas/financiamento-carro.html',
+        'tools/financas/financiamento-imovel.html'
+      ]
+    },
+    {
+      file: 'matematica.html',
+      title: 'Calculadoras e Ferramentas de Matemática Online | Calculadora Master',
+      canonical: 'https://www.calculadoramaster.com/matematica.html',
+      h1: 'Calculadoras de Matemática e Utilidades',
+      expectedCards: [
+        'tools/utilidades/contador.html',
+        'tools/financas/porcentagem.html',
+        'tools/utilidades/qr-code.html',
+        'tools/utilidades/senha.html'
+      ]
+    },
+    {
+      file: 'saude.html',
+      title: 'Calculadoras de Saúde Online Grátis | Calculadora Master',
+      canonical: 'https://www.calculadoramaster.com/saude.html',
+      h1: 'Calculadoras de Saúde',
+      expectedCards: [
+        'tools/saude/imc.html'
+      ]
+    },
+    {
+      file: 'conversores.html',
+      title: 'Conversores e Utilidades Online Grátis | Calculadora Master',
+      canonical: 'https://www.calculadoramaster.com/conversores.html',
+      h1: 'Conversores e Utilidades',
+      expectedCards: [
+        'tools/utilidades/combustivel.html',
+        'tools/financas/dividir-conta.html',
+        'tools/saude/idade.html',
+        'tools/utilidades/whatsapp.html'
+      ]
+    },
+    {
+      file: 'trabalhista.html',
+      title: 'Calculadoras Trabalhistas Online Grátis | Calculadora Master',
+      canonical: 'https://www.calculadoramaster.com/trabalhista.html',
+      h1: 'Calculadoras Trabalhistas',
+      expectedCards: [
+        'tools/trabalhista/horas-extras.html'
+      ]
+    }
+  ];
+
+  for (const spec of categorySpecs) {
+    const filePath = path.join(ROOT_DIR, 'dist-pilot', spec.file);
+    assert.ok(fs.existsSync(filePath), `Página de categoria ${spec.file} deve existir em dist-pilot`);
+
+    const html = fs.readFileSync(filePath, 'utf-8');
+    assert.ok(html.length > 500, `${spec.file} deve ter tamanho substancial`);
+
+    // Title
+    assert.match(html, new RegExp(`<title>${spec.title.replace(/\|/g, '\\|')}<\/title>`), `${spec.file} deve ter title correto`);
+
+    // Canonical
+    assert.match(html, new RegExp(`<link rel="canonical" href="${spec.canonical}">`), `${spec.file} deve ter canonical correta`);
+
+    // H1
+    assert.match(html, new RegExp(`<h1>${spec.h1}<\/h1>`), `${spec.file} deve ter H1 correto`);
+
+    // Scripts essenciais
+    assert.match(html, /<script type="module" src="\.\/js\/header-auth\.js"><\/script>/, `${spec.file} deve carregar header-auth.js`);
+    assert.match(html, /<script src="\.\/js\/cookie-consent\.js"><\/script>/, `${spec.file} deve carregar cookie-consent.js`);
+
+    // Cards esperados na categoria
+    for (const cardRel of spec.expectedCards) {
+      assert.match(html, new RegExp(`href="\\.\\/${cardRel.replace(/\//g, '\\/')}"`), `${spec.file} deve conter card apontando para ${cardRel}`);
+    }
+
+    // Ausência de placeholders e undefined
+    assert.equal(html.match(/\{\{([A-Z0-9_]+)\}\}/), null, `${spec.file} não deve conter placeholders não resolvidos`);
+    assert.ok(!html.includes('href="undefined"'), `${spec.file} não deve conter href undefined`);
+    assert.ok(!html.includes('src="undefined"'), `${spec.file} não deve conter src undefined`);
+
+    // Footer institucional de 3 colunas
+    assert.match(html, /<div class="container footer-columns">/, `${spec.file} deve conter footer estruturado`);
+    assert.match(html, /<div class="footer-bottom">/, `${spec.file} deve conter footer-bottom`);
   }
 });

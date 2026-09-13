@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>{{TITLE}}</title>
+  <meta name="description" content="{{META_DESCRIPTION}}">
+  <meta name="robots" content="index, follow">
+
+  <link rel="canonical" href="{{CANONICAL}}">
+  <link rel="icon" type="image/png" href="/logo/favicon.png">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Calculadora Master">
+  <meta property="og:locale" content="pt_BR">
+  <meta property="og:url" content="{{CANONICAL}}">
+  <meta property="og:title" content="{{TITLE}}">
+  <meta property="og:description" content="{{META_DESCRIPTION}}">
+  <meta property="og:image" content="https://www.calculadoramaster.com/logo/banner.png">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{{TITLE}}">
+  <meta name="twitter:description" content="{{META_DESCRIPTION}}">
+  <meta name="twitter:image" content="https://www.calculadoramaster.com/logo/banner.png">
+
+  <link rel="stylesheet" href="{{ROOT_PREFIX}}css/style.css">
+  <link rel="stylesheet" href="{{ROOT_PREFIX}}css/cookie-consent.css">
+</head>
+
+<body>
+
+{{HEADER}}
+
+<main>
+{{CONTENT}}
+</main>
+
+{{FOOTER}}
+
+<script>
+  const mobileMenu = document.querySelector('#mobile-menu');
+  const navMenu = document.querySelector('#nav-menu');
+
+  mobileMenu.addEventListener('click', function() {
+    mobileMenu.classList.toggle('is-active');
+    navMenu.classList.toggle('active');
+  });
+</script>
+
+{{PAGE_SCRIPTS}}
+<script type="module" src="{{ROOT_PREFIX}}js/header-auth.js"></script>
+<script src="{{ROOT_PREFIX}}js/cookie-consent.js"></script>
+
+</body>
+</html>

@@ -350,25 +350,35 @@ Uma conversão cega em massa de todos os arquivos do repositório geraria:
 ## 8. Próximos Passos Recomendados
 
 1. **Fase 2 — Modularização de Scripts (Concluída)**: 15/15 ferramentas migradas para ES Modules nativos com testes automatizados e script legado removido.
-2. **Fase 3 — Motor de Build SSG (15/15 Ferramentas Concluídas / Em Andamento)**: Motor multipágina expandido com sucesso para 100% das 15 ferramentas do projeto (7 páginas de `tools/financas/`, 2 de `tools/saude/`, 1 de `tools/trabalhista/` e 5 de `tools/utilidades/` incluindo o Gerador de QR Code) gerando artefatos em `dist-pilot/`. Migração das ferramentas concluída com sucesso; migração das páginas não-tool (categorias, home, blog e institucionais) planejada para a próxima fase.
+2. **Fase 3 — Motor de Build SSG (15/15 Ferramentas + Home + 5 Categorias Concluídas / Em Andamento)**: Motor multipágina expandido com sucesso para 100% das 15 ferramentas do projeto e páginas do site geral (Home `index.html` e as 5 páginas de categorias: `financeira.html`, `matematica.html`, `saude.html`, `conversores.html` e `trabalhista.html`), gerando 21 páginas compiladas e 28 assets em `dist-pilot/`. As páginas do blog (`blog/`) e páginas institucionais permanecem como HTMLs estáticos para serem integradas na próxima etapa.
 3. **Fase 4 — Normalização de Git e Line Endings**: Aplicar `.gitattributes` e `.git-blame-ignore-revs` em commit exclusivo.
 
 ---
 
-## 9. Fase 3 — Motor SSG Multipágina (15/15 Ferramentas: Todas as Categorias)
+## 9. Fase 3 — Motor SSG Multipágina (15 Ferramentas, Home e Categorias)
 
 ### Objetivo e Visão Geral
-Evoluir o piloto de Static Site Generation (SSG) em Node.js vanilla para um motor multipágina flexível, robusto e reversível, eliminando progressivamente a duplicação estrutural de cabeçalho, rodapé e casca HTML entre as ferramentas, sem uso de frameworks, sem bundlers e sem substituição imediata dos arquivos de produção.
+Evoluir o piloto de Static Site Generation (SSG) em Node.js vanilla para um motor multipágina flexível, robusto e reversível, eliminando progressivamente a duplicação estrutural de cabeçalho, rodapé e casca HTML entre as ferramentas e páginas de navegação, sem uso de frameworks, sem bundlers e sem substituição imediata dos arquivos de produção.
 
 ### Estrutura Implementada no SSG
 ```text
 src/
   components/
-    header.html           # Componente de cabeçalho e navegação padrão
-    footer.html           # Componente de rodapé e links institucionais
+    header.html           # Componente de cabeçalho padrão para ferramentas
+    footer.html           # Componente de rodapé simples para ferramentas
+    site-header.html      # Componente de cabeçalho com menu de categorias para Home e categorias
+    site-footer.html      # Componente de rodapé completo com 3 colunas para Home e categorias
   layouts/
     tool.html             # Layout shell para páginas de ferramentas com placeholders simples
+    site.html             # Layout shell para páginas institucionais/navegação (Home e Categorias)
   pages/
+    index.page.html       # Fonte da Home (Busca Universal, Destaques, Categorias e Catálogo)
+    categorias/
+      financeira.page.html   # Fonte da categoria Financeira
+      matematica.page.html   # Fonte da categoria Matemática
+      saude.page.html        # Fonte da categoria Saúde
+      conversores.page.html  # Fonte da categoria Conversores e Utilidades
+      trabalhista.page.html  # Fonte da categoria Trabalhista
     tools/
       financas/
         desconto.page.html             # Lote 1: Conteúdo e metadados de Desconto
@@ -391,17 +401,18 @@ src/
         qr-code.page.html              # Lote Utilidades: Conteúdo e metadados de Gerador de QR Code
 scripts/
   build-html.js           # Motor de build SSG multipágina em Node.js Vanilla CommonJS
+  audit-ssg.js            # Auditoria automatizada de ponta a ponta
 dist-pilot/               # Diretório isolado de saída de teste (ignorado no .gitignore)
 ```
 
 ### Características Técnicas do Motor
-1. **Motor Multipágina Declarativo (`buildPages`)**: A função `buildPages(pages, options)` itera sobre coleções estruturadas (`FINANCEIRO_LOTE1_PAGES`, `FINANCEIRO_LOTE2_PAGES`, `FINANCEIRO_PAGES`, `SAUDE_PAGES`, `TRABALHISTA_PAGES`, `UTILIDADES_PAGES`, `TOOL_PAGES`), compilando cada template com base no seu arquivo fonte `.page.html` e gerando os artefatos correspondentes no diretório de destino (`dist-pilot/`). Mantém a função retrocompatível `buildPilot(options)`.
-2. **Composição em Build-Time**: A injeção de layouts e componentes ocorre exclusivamente durante o build (`npm run build:html:pilot`, `npm run build:html:financeiro` ou `npm run build:html:tools`). O navegador recebe HTML estático 100% puro e completo, sem chamadas `fetch()` ou injeção dinâmica de templates em runtime.
+1. **Motor Multipágina Declarativo (`buildPages`)**: A função `buildPages(pages, options)` itera sobre coleções estruturadas (`FINANCEIRO_LOTE1_PAGES`, `FINANCEIRO_LOTE2_PAGES`, `FINANCEIRO_PAGES`, `SAUDE_PAGES`, `TRABALHISTA_PAGES`, `UTILIDADES_PAGES`, `TOOL_PAGES`, `CATEGORIA_PAGES`, `SITE_PAGES`), compilando cada template com base no seu arquivo fonte `.page.html` e gerando os artefatos correspondentes no diretório de destino (`dist-pilot/`). Mantém a função retrocompatível `buildPilot(options)`.
+2. **Composição em Build-Time**: A injeção de layouts e componentes ocorre exclusivamente durante o build (`npm run build:html:pilot`, `npm run build:html:financeiro`, `npm run build:html:tools` para 15 ferramentas ou `npm run build:html:site` para 21 páginas). O navegador recebe HTML estático 100% puro e completo, sem chamadas `fetch()` ou injeção dinâmica de templates em runtime.
 3. **Zero Frameworks e Dependências**: Implementado estritamente com módulos nativos `fs` e `path` do Node.js, plenamente compatível com o ecossistema CommonJS existente.
-4. **Resolução Dinâmica de Caminhos Relativos (`rootPrefix`)**: O motor calcula a profundidade do arquivo em relação à raiz (`../../` para ferramentas em `tools/<categoria>/`, `../` para categorias e `./` para a raiz), garantindo que CSS, scripts, imagens e links funcionem perfeitamente em qualquer nível de diretório.
-5. **Cópia Defensiva de Assets e Resolução da Árvore de Módulos ESM**: Todos os assets estáticos necessários (estilos, logos, scripts centrais e módulos ESM das ferramentas compiladas) são copiados para `dist-pilot/`. Para além dos pontos de entrada, o gerador e a suíte de testes asseguram a integridade da árvore transitiva completa de módulos ESM (copiando e validando dependências locais como `js/core/currency.js`, `js/auth.js` e `js/firebase-config.js`), prevenindo a falha em que a existência do script de entrada no HTTP direto mascara dependências internas ausentes no navegador. Se qualquer asset obrigatório não for encontrado no disco, o build falha imediatamente com erro explícito.
+4. **Resolução Dinâmica de Caminhos Relativos (`rootPrefix`)**: O motor calcula a profundidade do arquivo em relação à raiz (`../../` para ferramentas em `tools/<categoria>/`, `./` para Home e páginas de categoria na raiz), garantindo que CSS, scripts, imagens e links funcionem perfeitamente em qualquer nível de diretório.
+5. **Cópia Defensiva de Assets e Resolução da Árvore de Módulos ESM**: Todos os assets estáticos necessários (estilos, logos, scripts centrais, catálogo e módulos ESM das ferramentas compiladas) são copiados para `dist-pilot/` (28 assets no escopo do site). Para além dos pontos de entrada, o gerador e a suíte de testes asseguram a integridade da árvore transitiva completa de módulos ESM (copiando e validando dependências locais como `js/core/currency.js`, `js/auth.js` e `js/firebase-config.js`), prevenindo a falha em que a existência do script de entrada no HTTP direto mascara dependências internas ausentes no navegador. Se qualquer asset obrigatório não for encontrado no disco, o build falha imediatamente com erro explícito.
 6. **Validação Defensiva de Placeholders**: O build falha expressamente se qualquer campo de metadado obrigatório estiver ausente ou se restar qualquer placeholder `{{...}}` não resolvido no artefato gerado.
-7. **Ferramentas Disponíveis no Gerador (15/15 Ferramentas — 100% Concluído) e Isolamento de Produção**:
+7. **Páginas Disponíveis no Gerador (21 Páginas — 15 Ferramentas + Home + 5 Categorias) e Isolamento de Produção**:
    - **tools/financas/ (7 páginas)**:
      - `tools/financas/desconto.html`
      - `tools/financas/juros.html`
@@ -421,5 +432,13 @@ dist-pilot/               # Diretório isolado de saída de teste (ignorado no .
      - `tools/utilidades/senha.html`
      - `tools/utilidades/whatsapp.html`
      - `tools/utilidades/qr-code.html`
-   Os HTMLs de produção atuais sob `tools/` permanecem 100% intactos e inalterados no repositório, garantindo preservação absoluta de SEO e estabilidade funcional.
-8. **Status e Limitações**: A migração de todas as 15 ferramentas do catálogo oficial para o SSG foi concluída com sucesso (15/15 ferramentas possuem templates fonte em `src/pages/tools/`). A Fase 3 avança agora para as páginas não-tool, incluindo a Home (`index.html`), as páginas de categorias (`categorias/*.html`), o blog (`blog/`) e páginas institucionais (`sobre.html`, `contato.html`, `politica.html`, `termos.html`), que permanecem como HTMLs estáticos para serem integradas na próxima etapa.
+   - **Home (1 página)**:
+     - `index.html` (com Busca Universal, Destaques, Categorias e Catálogo Completo)
+   - **Categorias (5 páginas)**:
+     - `financeira.html`
+     - `matematica.html`
+     - `saude.html`
+     - `conversores.html`
+     - `trabalhista.html`
+   Os HTMLs de produção atuais sob `tools/` e na raiz (`index.html`, `financeira.html`, etc.) permanecem 100% intactos e inalterados no repositório, garantindo preservação absoluta de SEO e estabilidade funcional.
+8. **Status e Limitações**: A migração de todas as 15 ferramentas do catálogo oficial, da Home e das 5 páginas de categorias para o SSG foi concluída com sucesso (21 páginas com fontes em `src/pages/`). O Blog (`blog/`) e as páginas institucionais (`sobre.html`, `contato.html`, `politica.html`, `termos.html`, `login.html`, `cadastro.html`, `404.html`) permanecem como HTMLs estáticos pendentes de integração na próxima etapa.

@@ -24,6 +24,8 @@ const DIST_DIR = path.join(ROOT_DIR, 'dist-pilot');
 // Importa definições canônicas do motor SSG
 const {
   TOOL_PAGES,
+  SITE_PAGES,
+  SITE_ASSETS,
   DEFAULT_ASSETS
 } = require('./build-html.js');
 
@@ -82,25 +84,35 @@ async function runAudit() {
     console.error('Falha em build:data:', err.stdout || err.message);
   }
 
-  // 3. build:html:tools (geração estática do SSG)
+  // 3. build:html:tools e build:html:site (geração estática do SSG)
   try {
-    const ssgOutput = execSync('node scripts/build-html.js', {
+    const ssgToolsOutput = execSync('node scripts/build-html.js', {
       cwd: ROOT_DIR,
       encoding: 'utf-8',
       stdio: ['pipe', 'pipe', 'pipe']
     });
-    const ssgMatch = ssgOutput.match(/Build SSG concluído com sucesso: (\d+) página\(s\) gerada\(s\)/);
-    summary.pagesCount = ssgMatch ? parseInt(ssgMatch[1], 10) : 0;
-    if (summary.pagesCount === 15) {
+    const ssgToolsMatch = ssgToolsOutput.match(/Build SSG concluído com sucesso: (\d+) página\(s\) gerada\(s\)/);
+    const toolsCount = ssgToolsMatch ? parseInt(ssgToolsMatch[1], 10) : 0;
+
+    const ssgSiteOutput = execSync('node scripts/build-html.js --scope=site', {
+      cwd: ROOT_DIR,
+      encoding: 'utf-8',
+      stdio: ['pipe', 'pipe', 'pipe']
+    });
+    const ssgSiteMatch = ssgSiteOutput.match(/Build SSG concluído com sucesso: (\d+) página\(s\) gerada\(s\)/);
+    summary.pagesCount = ssgSiteMatch ? parseInt(ssgSiteMatch[1], 10) : 0;
+
+    if (toolsCount === 15 && summary.pagesCount === 21) {
       summary.ssgPages = 'PASS';
     } else {
       summary.ssgPages = 'FAIL';
       allOk = false;
+      console.error(`Contagem incorreta de páginas: tools=${toolsCount} (esperado 15), site=${summary.pagesCount} (esperado 21)`);
     }
   } catch (err) {
     summary.ssgPages = 'FAIL';
     allOk = false;
-    console.error('Falha em build:html:tools:', err.stdout || err.message);
+    console.error('Falha no build SSG:', err.stdout || err.message);
   }
 
   // 4. Verificação de imports ESM locais e transitivos em dist-pilot/js
@@ -145,10 +157,10 @@ async function runAudit() {
     console.error('Erro na validação ESM:', err.message);
   }
 
-  // 5. Verificação de integridade das 15 páginas geradas e ausência de placeholders
+  // 5. Verificação de integridade das 21 páginas geradas e ausência de placeholders
   try {
     let pagesOk = true;
-    for (const page of TOOL_PAGES) {
+    for (const page of SITE_PAGES) {
       const targetPath = path.join(DIST_DIR, page.relativeOutputPath);
       if (!fs.existsSync(targetPath)) {
         console.error(`Página gerada ausente: ${page.relativeOutputPath}`);
@@ -179,7 +191,7 @@ async function runAudit() {
   // 6. Verificação de assets mínimos copiados
   try {
     let assetsOk = true;
-    for (const asset of DEFAULT_ASSETS) {
+    for (const asset of SITE_ASSETS) {
       const destPath = path.join(DIST_DIR, asset.dest);
       if (!fs.existsSync(destPath)) {
         console.error(`Asset ausente em dist-pilot: ${asset.dest}`);
@@ -204,7 +216,8 @@ async function runAudit() {
         const contentType = ext === '.html' ? 'text/html' :
           ext === '.js' ? 'application/javascript' :
           ext === '.css' ? 'text/css' :
-          ext === '.png' ? 'image/png' : 'application/octet-stream';
+          ext === '.png' ? 'image/png' :
+          ext === '.webp' ? 'image/webp' : 'application/octet-stream';
         res.writeHead(200, { 'Content-Type': contentType });
         fs.createReadStream(filePath).pipe(res);
       } else {
@@ -221,8 +234,8 @@ async function runAudit() {
     });
 
     const resourcesToTest = [
-      ...TOOL_PAGES.map(p => '/' + p.relativeOutputPath.replace(/\\/g, '/')),
-      ...DEFAULT_ASSETS.map(a => '/' + a.dest.replace(/\\/g, '/'))
+      ...SITE_PAGES.map(p => '/' + p.relativeOutputPath.replace(/\\/g, '/')),
+      ...SITE_ASSETS.map(a => '/' + a.dest.replace(/\\/g, '/'))
     ];
 
     let allHttp200 = true;
@@ -267,12 +280,27 @@ async function runAudit() {
         '--window-size=320,800'
       ]);
 
-      await new Promise(r => setTimeout(r, 1200));
+      let chromeReady = false;
+      for (let i = 0; i < 30; i++) {
+        try {
+          const vRes = await fetch(`http://127.0.0.1:${chromePort}/json/version`);
+          if (vRes.ok) {
+            chromeReady = true;
+            break;
+          }
+        } catch {
+          await new Promise(r => setTimeout(r, 150));
+        }
+      }
+
+      if (!chromeReady) {
+        throw new Error('Chrome DevTools não respondeu no tempo limite.');
+      }
 
       let mobileAllOk = true;
 
       try {
-        for (const page of TOOL_PAGES) {
+        for (const page of SITE_PAGES) {
           const pageUrl = `http://127.0.0.1:${httpPort}/${page.relativeOutputPath}`;
           const newTabRes = await fetch(`http://127.0.0.1:${chromePort}/json/new?${pageUrl}`, { method: 'PUT' });
           const tab = await newTabRes.json();

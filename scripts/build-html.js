@@ -101,6 +101,40 @@ const TOOL_PAGES = [
   ...UTILIDADES_PAGES
 ];
 
+const HOME_PAGE = {
+  sourceFile: path.join(PAGES_DIR, 'index.page.html'),
+  relativeOutputPath: 'index.html'
+};
+
+const CATEGORIA_PAGES = [
+  {
+    sourceFile: path.join(PAGES_DIR, 'categorias', 'financeira.page.html'),
+    relativeOutputPath: 'financeira.html'
+  },
+  {
+    sourceFile: path.join(PAGES_DIR, 'categorias', 'matematica.page.html'),
+    relativeOutputPath: 'matematica.html'
+  },
+  {
+    sourceFile: path.join(PAGES_DIR, 'categorias', 'saude.page.html'),
+    relativeOutputPath: 'saude.html'
+  },
+  {
+    sourceFile: path.join(PAGES_DIR, 'categorias', 'conversores.page.html'),
+    relativeOutputPath: 'conversores.html'
+  },
+  {
+    sourceFile: path.join(PAGES_DIR, 'categorias', 'trabalhista.page.html'),
+    relativeOutputPath: 'trabalhista.html'
+  }
+];
+
+const SITE_PAGES = [
+  ...TOOL_PAGES,
+  HOME_PAGE,
+  ...CATEGORIA_PAGES
+];
+
 const DEFAULT_PAGES = TOOL_PAGES;
 
 const COMMON_ASSETS = [
@@ -149,6 +183,17 @@ const TOOL_ASSETS = [
   ...SAUDE_ASSETS,
   ...TRABALHISTA_ASSETS,
   ...UTILIDADES_ASSETS
+];
+
+const SITE_SPECIFIC_ASSETS = [
+  { src: 'logo/banner.webp', dest: 'logo/banner.webp' },
+  { src: 'js/tools-catalog.js', dest: 'js/tools-catalog.js' },
+  { src: 'js/home-search.js', dest: 'js/home-search.js' }
+];
+
+const SITE_ASSETS = [
+  ...TOOL_ASSETS,
+  ...SITE_SPECIFIC_ASSETS
 ];
 
 const DEFAULT_ASSETS = TOOL_ASSETS;
@@ -235,8 +280,12 @@ function renderPage({ sourceFile, relativeOutputPath, componentsDir = COMPONENTS
   let template = fs.readFileSync(layoutPath, 'utf-8');
 
   // Carregamento de componentes essenciais
-  const headerPath = path.join(componentsDir, 'header.html');
-  const footerPath = path.join(componentsDir, 'footer.html');
+  const defaultHeader = meta.layout === 'site' ? 'site-header' : 'header';
+  const defaultFooter = meta.layout === 'site' ? 'site-footer' : 'footer';
+  const headerFile = `${meta.header || defaultHeader}.html`;
+  const footerFile = `${meta.footer || defaultFooter}.html`;
+  const headerPath = path.join(componentsDir, headerFile);
+  const footerPath = path.join(componentsDir, footerFile);
 
   if (!fs.existsSync(headerPath)) {
     throw new Error(`Componente de cabeçalho não encontrado: ${headerPath}`);
@@ -354,6 +403,15 @@ if (require.main === module) {
     } else if (scope === 'financeiro') {
       pagesToBuild = FINANCEIRO_PAGES;
       assetsToCopy = FINANCEIRO_ASSETS;
+    } else if (scope === 'tools') {
+      pagesToBuild = TOOL_PAGES;
+      assetsToCopy = TOOL_ASSETS;
+    } else if (scope === 'site') {
+      pagesToBuild = SITE_PAGES;
+      assetsToCopy = SITE_ASSETS;
+    } else if (scope === 'categories') {
+      pagesToBuild = CATEGORIA_PAGES;
+      assetsToCopy = SITE_ASSETS;
     }
 
     const results = buildPages(pagesToBuild, { assets: assetsToCopy });
@@ -372,6 +430,9 @@ module.exports = {
   TRABALHISTA_PAGES,
   UTILIDADES_PAGES,
   TOOL_PAGES,
+  HOME_PAGE,
+  CATEGORIA_PAGES,
+  SITE_PAGES,
   DEFAULT_PAGES,
   COMMON_ASSETS,
   FINANCEIRO_ASSETS,
@@ -379,6 +440,8 @@ module.exports = {
   TRABALHISTA_ASSETS,
   UTILIDADES_ASSETS,
   TOOL_ASSETS,
+  SITE_SPECIFIC_ASSETS,
+  SITE_ASSETS,
   DEFAULT_ASSETS,
   calculateRootPrefix,
   parsePageSource,
