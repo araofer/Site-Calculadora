@@ -65,47 +65,358 @@
 </header>
 
 <main>
+  <!-- HERO -->
   <section class="hero">
     <div class="container hero-container">
       <div class="hero-content">
         <h1>Calculadoras Online Grátis</h1>
         <p>Ferramentas simples, rápidas e precisas para o seu dia a dia. Resolva cálculos complexos em segundos.</p>
-        <a href="#ferramentas" class="btn-primary">Ver todas as ferramentas</a>
+        <a href="#busca" class="btn-primary">Buscar calculadora</a>
       </div>
 
       <div class="hero-image">
         <div class="hero-banner">
           <picture>
             <source srcset="logo/banner.webp" type="image/webp">
-            <img src="logo/banner.png" alt="Calculadora online">
+            <img src="logo/banner.png" alt="Calculadora online" width="420" height="280">
           </picture>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="tools" id="ferramentas">
-    <div class="container">
-      <h2>Principais Calculadoras</h2>
-      <div class="grid">
-        <a href="tools/utilidades/combustivel.html" class="card">Calculadora de Combustível</a>
-        <a href="tools/utilidades/contador.html" class="card">Contador de Caracteres</a>
-        <a href="tools/financas/desconto.html" class="card">Calculadora de Desconto</a>
-        <a href="tools/financas/dividir-conta.html" class="card">Dividir Contas</a>
-        <a href="tools/saude/idade.html" class="card">Calculadora de Idade</a>
-        <a href="tools/saude/imc.html" class="card">Calculadora do IMC</a>
-        <a href="tools/financas/juros.html" class="card">Calculadora de Juros</a>
-        <a href="tools/financas/lucro.html" class="card">Calculadora de Lucros</a>
-        <a href="tools/financas/porcentagem.html" class="card">Calculadora de Porcentagem</a>
-        <a href="tools/utilidades/qr-code.html" class="card">Gerador de Código QR</a>
-        <a href="tools/utilidades/senha.html" class="card">Gerador de Senha</a>
-        <a href="tools/utilidades/whatsapp.html" class="card">Gerador de Links Whatsapp</a>
-        <a href="tools/financas/financiamento-carro.html" class="card">Financiamento de Carros</a>
-        <a href="tools/financas/financiamento-imovel.html" class="card">Financiamento de Imóveis</a>
+  <!-- BUSCA UNIVERSAL -->
+  <section class="search-section" id="busca">
+    <div class="container search-container">
+      <div class="search-header">
+        <h2>O que você quer calcular?</h2>
+        <p>Pesquise entre todas as nossas calculadoras financeiras, trabalhistas, de saúde e utilidades.</p>
+      </div>
+
+      <form class="search-form" id="search-form" onsubmit="return false;" role="search">
+        <label for="search-input" class="sr-only">O que você quer calcular?</label>
+        <div class="search-box-wrapper">
+          <span class="search-icon-left" aria-hidden="true">🔍</span>
+          <input
+            type="search"
+            id="search-input"
+            class="search-input"
+            placeholder="Busque por financiamento, porcentagem, idade..."
+            autocomplete="off"
+            aria-autocomplete="list"
+            aria-controls="search-results"
+            aria-describedby="search-count"
+          >
+          <button type="button" id="search-clear-btn" class="search-clear-btn" aria-label="Limpar busca" title="Limpar busca">&times;</button>
+        </div>
+      </form>
+
+      <div id="search-count" class="sr-only" aria-live="polite"></div>
+
+      <div class="search-results-area">
+        <div id="search-results" class="search-results-grid" style="display: none;"></div>
       </div>
     </div>
   </section>
 
+  <!-- FERRAMENTAS EM DESTAQUE -->
+  <section class="featured-section" id="destaques">
+    <div class="container">
+      <div class="section-header">
+        <h2>Ferramentas em destaque</h2>
+        <p>Calculadoras populares e práticas para facilitar as decisões do seu cotidiano.</p>
+      </div>
+
+      <div class="featured-grid">
+        <article class="tool-card">
+          <div class="tool-card-header">
+            <span class="tool-card-category">Trabalhista</span>
+          </div>
+          <h3 class="tool-card-title">Calculadora de Horas Extras</h3>
+          <p class="tool-card-desc">Calcule o valor da hora normal, hora extra e o total com adicional informado.</p>
+          <div class="tool-card-footer">
+            <a href="tools/trabalhista/horas-extras.html" class="tool-card-btn">Calcular agora &rarr;</a>
+          </div>
+        </article>
+
+        <article class="tool-card">
+          <div class="tool-card-header">
+            <span class="tool-card-category">Financeira</span>
+          </div>
+          <h3 class="tool-card-title">Financiamento de Carros</h3>
+          <p class="tool-card-desc">Simule as parcelas e os juros do financiamento do seu carro pela Tabela Price.</p>
+          <div class="tool-card-footer">
+            <a href="tools/financas/financiamento-carro.html" class="tool-card-btn">Calcular agora &rarr;</a>
+          </div>
+        </article>
+
+        <article class="tool-card">
+          <div class="tool-card-header">
+            <span class="tool-card-category">Matemática</span>
+          </div>
+          <h3 class="tool-card-title">Calculadora de Porcentagem</h3>
+          <p class="tool-card-desc">Calcule percentuais, aumentos, reduções e proporções de forma simples e rápida.</p>
+          <div class="tool-card-footer">
+            <a href="tools/financas/porcentagem.html" class="tool-card-btn">Calcular agora &rarr;</a>
+          </div>
+        </article>
+
+        <article class="tool-card">
+          <div class="tool-card-header">
+            <span class="tool-card-category">Financeira</span>
+          </div>
+          <h3 class="tool-card-title">Calculadora de Desconto</h3>
+          <p class="tool-card-desc">Descubra o valor final com desconto e a economia real nas suas compras.</p>
+          <div class="tool-card-footer">
+            <a href="tools/financas/desconto.html" class="tool-card-btn">Calcular agora &rarr;</a>
+          </div>
+        </article>
+
+        <article class="tool-card">
+          <div class="tool-card-header">
+            <span class="tool-card-category">Saúde</span>
+          </div>
+          <h3 class="tool-card-title">Calculadora de IMC</h3>
+          <p class="tool-card-desc">Calcule seu Índice de Massa Corporal e veja a classificação do seu peso ideal.</p>
+          <div class="tool-card-footer">
+            <a href="tools/saude/imc.html" class="tool-card-btn">Calcular agora &rarr;</a>
+          </div>
+        </article>
+
+        <article class="tool-card">
+          <div class="tool-card-header">
+            <span class="tool-card-category">Utilidades</span>
+          </div>
+          <h3 class="tool-card-title">Gerador de Senha</h3>
+          <p class="tool-card-desc">Gere senhas fortes, seguras e personalizadas com criptografia Web Crypto.</p>
+          <div class="tool-card-footer">
+            <a href="tools/utilidades/senha.html" class="tool-card-btn">Calcular agora &rarr;</a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- CATEGORIAS -->
+  <section class="categories-section" id="categorias">
+    <div class="container">
+      <div class="section-header">
+        <h2>Navegue por Categoria</h2>
+        <p>Explore nossas ferramentas organizadas por área temática.</p>
+      </div>
+
+      <div class="categories-grid">
+        <a href="financeira.html" class="category-card">
+          <span class="category-card-icon" aria-hidden="true">💰</span>
+          <span class="category-card-title">Financeira</span>
+          <span class="category-card-desc">Juros, financiamentos, descontos e lucros</span>
+        </a>
+
+        <a href="trabalhista.html" class="category-card">
+          <span class="category-card-icon" aria-hidden="true">💼</span>
+          <span class="category-card-title">Trabalhista</span>
+          <span class="category-card-desc">Horas extras, jornada e cálculos de trabalho</span>
+        </a>
+
+        <a href="matematica.html" class="category-card">
+          <span class="category-card-icon" aria-hidden="true">📐</span>
+          <span class="category-card-title">Matemática</span>
+          <span class="category-card-desc">Porcentagens, contagens e proporções</span>
+        </a>
+
+        <a href="saude.html" class="category-card">
+          <span class="category-card-icon" aria-hidden="true">🩺</span>
+          <span class="category-card-title">Saúde</span>
+          <span class="category-card-desc">IMC, idade e ferramentas de bem-estar</span>
+        </a>
+
+        <a href="conversores.html" class="category-card">
+          <span class="category-card-icon" aria-hidden="true">⚡</span>
+          <span class="category-card-title">Conversores &amp; Úteis</span>
+          <span class="category-card-desc">Combustível, QR Code, senhas e WhatsApp</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- TODAS AS FERRAMENTAS -->
+  <section class="all-tools-section" id="ferramentas">
+    <div class="container">
+      <div class="section-header">
+        <h2>Todas as Ferramentas</h2>
+        <p>Catálogo completo com todas as calculadoras e utilidades disponíveis no site.</p>
+      </div>
+
+      <div class="tools-cards-grid">
+        <article class="tool-card">
+          <div class="tool-card-header">
+            <span class="tool-card-category">Trabalhista</span>
+          </div>
+          <h3 class="tool-card-title">Calculadora de Horas Extras</h3>
+          <p class="tool-card-desc">Calcule o valor da hora normal, hora extra e o total com adicional informado.</p>
+          <div class="tool-card-footer">
+            <a href="tools/trabalhista/horas-extras.html" class="tool-card-btn">Calcular agora &rarr;</a>
+          </div>
+        </article>
+
+        <article class="tool-card">
+          <div class="tool-card-header">
+            <span class="tool-card-category">Financeira</span>
+          </div>
+          <h3 class="tool-card-title">Financiamento de Carros</h3>
+          <p class="tool-card-desc">Simule as parcelas e os juros do financiamento do seu carro pela Tabela Price.</p>
+          <div class="tool-card-footer">
+            <a href="tools/financas/financiamento-carro.html" class="tool-card-btn">Calcular agora &rarr;</a>
+          </div>
+        </article>
+
+        <article class="tool-card">
+          <div class="tool-card-header">
+            <span class="tool-card-category">Financeira</span>
+          </div>
+          <h3 class="tool-card-title">Financiamento de Imóveis</h3>
+          <p class="tool-card-desc">Simule o financiamento imobiliário pelo Sistema SAC com parcelas decrescentes.</p>
+          <div class="tool-card-footer">
+            <a href="tools/financas/financiamento-imovel.html" class="tool-card-btn">Calcular agora &rarr;</a>
+          </div>
+        </article>
+
+        <article class="tool-card">
+          <div class="tool-card-header">
+            <span class="tool-card-category">Financeira</span>
+          </div>
+          <h3 class="tool-card-title">Calculadora de Desconto</h3>
+          <p class="tool-card-desc">Descubra o valor final com desconto e a economia real nas suas compras.</p>
+          <div class="tool-card-footer">
+            <a href="tools/financas/desconto.html" class="tool-card-btn">Calcular agora &rarr;</a>
+          </div>
+        </article>
+
+        <article class="tool-card">
+          <div class="tool-card-header">
+            <span class="tool-card-category">Financeira</span>
+          </div>
+          <h3 class="tool-card-title">Calculadora de Juros</h3>
+          <p class="tool-card-desc">Calcule juros simples e compostos para investimentos, empréstimos e rendimentos.</p>
+          <div class="tool-card-footer">
+            <a href="tools/financas/juros.html" class="tool-card-btn">Calcular agora &rarr;</a>
+          </div>
+        </article>
+
+        <article class="tool-card">
+          <div class="tool-card-header">
+            <span class="tool-card-category">Financeira</span>
+          </div>
+          <h3 class="tool-card-title">Calculadora de Lucros</h3>
+          <p class="tool-card-desc">Calcule lucro bruto, margem de lucro e a precificação ideal para seus produtos.</p>
+          <div class="tool-card-footer">
+            <a href="tools/financas/lucro.html" class="tool-card-btn">Calcular agora &rarr;</a>
+          </div>
+        </article>
+
+        <article class="tool-card">
+          <div class="tool-card-header">
+            <span class="tool-card-category">Matemática</span>
+          </div>
+          <h3 class="tool-card-title">Calculadora de Porcentagem</h3>
+          <p class="tool-card-desc">Calcule percentuais, aumentos, reduções e proporções de forma simples e rápida.</p>
+          <div class="tool-card-footer">
+            <a href="tools/financas/porcentagem.html" class="tool-card-btn">Calcular agora &rarr;</a>
+          </div>
+        </article>
+
+        <article class="tool-card">
+          <div class="tool-card-header">
+            <span class="tool-card-category">Financeira</span>
+          </div>
+          <h3 class="tool-card-title">Dividir Conta</h3>
+          <p class="tool-card-desc">Divida contas entre amigos de forma igual ou com consumos diferentes por pessoa.</p>
+          <div class="tool-card-footer">
+            <a href="tools/financas/dividir-conta.html" class="tool-card-btn">Calcular agora &rarr;</a>
+          </div>
+        </article>
+
+        <article class="tool-card">
+          <div class="tool-card-header">
+            <span class="tool-card-category">Saúde</span>
+          </div>
+          <h3 class="tool-card-title">Calculadora de IMC</h3>
+          <p class="tool-card-desc">Calcule seu Índice de Massa Corporal e veja a classificação do seu peso ideal.</p>
+          <div class="tool-card-footer">
+            <a href="tools/saude/imc.html" class="tool-card-btn">Calcular agora &rarr;</a>
+          </div>
+        </article>
+
+        <article class="tool-card">
+          <div class="tool-card-header">
+            <span class="tool-card-category">Saúde</span>
+          </div>
+          <h3 class="tool-card-title">Calculadora de Idade</h3>
+          <p class="tool-card-desc">Descubra sua idade exata em anos, meses e dias a partir da data de nascimento.</p>
+          <div class="tool-card-footer">
+            <a href="tools/saude/idade.html" class="tool-card-btn">Calcular agora &rarr;</a>
+          </div>
+        </article>
+
+        <article class="tool-card">
+          <div class="tool-card-header">
+            <span class="tool-card-category">Utilidades</span>
+          </div>
+          <h3 class="tool-card-title">Calculadora de Combustível</h3>
+          <p class="tool-card-desc">Calcule o consumo em litros e o custo total estimado de combustível em viagens.</p>
+          <div class="tool-card-footer">
+            <a href="tools/utilidades/combustivel.html" class="tool-card-btn">Calcular agora &rarr;</a>
+          </div>
+        </article>
+
+        <article class="tool-card">
+          <div class="tool-card-header">
+            <span class="tool-card-category">Utilidades</span>
+          </div>
+          <h3 class="tool-card-title">Contador de Caracteres</h3>
+          <p class="tool-card-desc">Conte caracteres, palavras, espaços e linhas em qualquer texto instantaneamente.</p>
+          <div class="tool-card-footer">
+            <a href="tools/utilidades/contador.html" class="tool-card-btn">Calcular agora &rarr;</a>
+          </div>
+        </article>
+
+        <article class="tool-card">
+          <div class="tool-card-header">
+            <span class="tool-card-category">Utilidades</span>
+          </div>
+          <h3 class="tool-card-title">Gerador de Senha</h3>
+          <p class="tool-card-desc">Gere senhas fortes, seguras e personalizadas com criptografia Web Crypto.</p>
+          <div class="tool-card-footer">
+            <a href="tools/utilidades/senha.html" class="tool-card-btn">Calcular agora &rarr;</a>
+          </div>
+        </article>
+
+        <article class="tool-card">
+          <div class="tool-card-header">
+            <span class="tool-card-category">Utilidades</span>
+          </div>
+          <h3 class="tool-card-title">Gerador de QR Code</h3>
+          <p class="tool-card-desc">Crie códigos QR personalizados para links, textos, WhatsApp e redes em segundos.</p>
+          <div class="tool-card-footer">
+            <a href="tools/utilidades/qr-code.html" class="tool-card-btn">Calcular agora &rarr;</a>
+          </div>
+        </article>
+
+        <article class="tool-card">
+          <div class="tool-card-header">
+            <span class="tool-card-category">Utilidades</span>
+          </div>
+          <h3 class="tool-card-title">Gerador de Links WhatsApp</h3>
+          <p class="tool-card-desc">Gere links diretos de WhatsApp (wa.me) com mensagem personalizada sem cadastro.</p>
+          <div class="tool-card-footer">
+            <a href="tools/utilidades/whatsapp.html" class="tool-card-btn">Calcular agora &rarr;</a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- BLOG -->
   <section class="blog-section">
     <div class="container">
       <div class="blog-header">
@@ -132,6 +443,7 @@
     </div>
   </section>
 
+  <!-- NEWSLETTER -->
   <section class="newsletter">
     <div class="container newsletter-container">
       <div class="newsletter-content">
@@ -207,15 +519,17 @@
 </footer>
 
 <script>
-  const mobileMenu = document.querySelector('#mobile-menu');
-  const navMenu = document.querySelector('#nav-menu');
+  const mobileMenu = document.querySelector("#mobile-menu");
+  const navMenu = document.querySelector("#nav-menu");
 
-  mobileMenu.addEventListener('click', function() {
-    mobileMenu.classList.toggle('is-active');
-    navMenu.classList.toggle('active');
+  mobileMenu.addEventListener("click", function() {
+    mobileMenu.classList.toggle("is-active");
+    navMenu.classList.toggle("active");
   });
 </script>
 
+<script src="js/tools-catalog.js"></script>
+<script src="js/home-search.js"></script>
 <script type="module" src="js/header-auth.js"></script>
 <script src="js/cookie-consent.js"></script>
 
