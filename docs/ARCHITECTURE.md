@@ -96,24 +96,24 @@ Executa a validação, gera o catálogo JS, gera o sitemap e valida novamente a 
 
 ## 4. Modularização JavaScript (ES Modules Nativos)
 
-Adotamos o padrão de **ECMAScript Modules (ESM) nativos** para todas as ferramentas migradas. Até o momento, 7 ferramentas estão 100% modularizadas:
+Adotamos o padrão de **ECMAScript Modules (ESM) nativos** para todas as ferramentas do projeto. Todas as 15 ferramentas estão 100% modularizadas em ES Modules nativos (Piloto: 3, Lote 1: 4, Lote 2: 4, Lote 3: 4):
 
 **Piloto (3 ferramentas):**
-1. **Financiamento de Carro** (`tools/financas/financiamento-carro.html`) ➔ [`js/tools/financiamento-carro.js`](file:///home/araofer/Documentos/github/CalculadoraMaster/js/tools/financiamento-carro.js) (importa [`js/core/currency.js`](file:///home/araofer/Documentos/github/CalculadoraMaster/js/core/currency.js))
-2. **Calculadora de Idade** (`tools/saude/idade.html`) ➔ [`js/tools/idade.js`](file:///home/araofer/Documentos/github/CalculadoraMaster/js/tools/idade.js)
-3. **Gerador de Senha** (`tools/utilidades/senha.html`) ➔ [`js/tools/senha.js`](file:///home/araofer/Documentos/github/CalculadoraMaster/js/tools/senha.js)
+1. **Financiamento de Carro** (`tools/financas/financiamento-carro.html`) ➔ [`js/tools/financiamento-carro.js`](../js/tools/financiamento-carro.js) (importa [`js/core/currency.js`](../js/core/currency.js))
+2. **Calculadora de Idade** (`tools/saude/idade.html`) ➔ [`js/tools/idade.js`](../js/tools/idade.js)
+3. **Gerador de Senha** (`tools/utilidades/senha.html`) ➔ [`js/tools/senha.js`](../js/tools/senha.js)
 
 **Lote 1 Migrado (4 ferramentas financeiras):**
-4. **Financiamento de Imóveis (SAC)** (`tools/financas/financiamento-imovel.html`) ➔ [`js/tools/financiamento-imovel.js`](file:///home/araofer/Documentos/github/CalculadoraMaster/js/tools/financiamento-imovel.js) (importa [`js/core/currency.js`](file:///home/araofer/Documentos/github/CalculadoraMaster/js/core/currency.js))
+4. **Financiamento de Imóveis (SAC)** (`tools/financas/financiamento-imovel.html`) ➔ [`js/tools/financiamento-imovel.js`](../js/tools/financiamento-imovel.js) (importa [`js/core/currency.js`](../js/core/currency.js))
    - Função pura: `calcularFinanciamentoSAC(params)` (alias: `calcularFinanciamentoImovel`)
    - Testes: `tests/financiamento-imovel.test.js`
-5. **Calculadora de Juros** (`tools/financas/juros.html`) ➔ [`js/tools/juros.js`](file:///home/araofer/Documentos/github/CalculadoraMaster/js/tools/juros.js)
+5. **Calculadora de Juros** (`tools/financas/juros.html`) ➔ [`js/tools/juros.js`](../js/tools/juros.js)
    - Funções puras: `calcularJurosSimples(params)`, `calcularJurosCompostos(params)`
    - Testes: `tests/juros.test.js`
-6. **Calculadora de Desconto** (`tools/financas/desconto.html`) ➔ [`js/tools/desconto.js`](file:///home/araofer/Documentos/github/CalculadoraMaster/js/tools/desconto.js)
+6. **Calculadora de Desconto** (`tools/financas/desconto.html`) ➔ [`js/tools/desconto.js`](../js/tools/desconto.js)
    - Função pura: `calcularDesconto(params)`
    - Testes: `tests/desconto.test.js`
-7. **Calculadora de Lucro e Margem** (`tools/financas/lucro.html`) ➔ [`js/tools/lucro.js`](file:///home/araofer/Documentos/github/CalculadoraMaster/js/tools/lucro.js)
+7. **Calculadora de Lucro e Margem** (`tools/financas/lucro.html`) ➔ [`js/tools/lucro.js`](../js/tools/lucro.js)
    - Função pura: `calcularLucro(params)`
    - Testes: `tests/lucro.test.js`
 
@@ -175,7 +175,7 @@ tests/
    - A raiz do repositório (`package.json`) e a pasta `scripts/` permanecem em CommonJS tradicional, garantindo que o pipeline existente (`npm run build:data`, `validate-tools.js`, etc.) continue funcionando sem necessidade de transpiladores.
    - Os subdiretórios `js/core/`, `js/tools/` e `tests/` possuem arquivos `package.json` individuais com `{"type": "module"}`, permitindo que o Node.js e os navegadores tratem esses arquivos diretamente como ES Modules (`import`/`export`).
 3. **Servidor HTTP Local para Desenvolvimento**:
-   - Por especificação dos padrões web, módulos ES (`<script type="module">`) estão sujeitos a políticas de CORS e segurança do navegador e não carregam sobre o protocolo direto `file:///`.
+   - Por especificação dos padrões web, módulos ES (`<script type="module">`) estão sujeitos a políticas de CORS e segurança do navegador e não carregam sobre o protocolo direto de arquivo (`file://`).
    - Para rodar o ambiente de desenvolvimento local, basta subir qualquer servidor estático HTTP simples:
      ```bash
      npx serve .
@@ -228,7 +228,7 @@ Para manter a filosofia de **Zero Frameworks e Zero Dependências NPM**, todos o
 
 ### Status da Migração ESM: 15/15 Ferramentas Migradas (100% Concluído)
 
-Para migrar cada uma das ferramentas restantes:
+Padrão arquitetural estabelecido para novas ferramentas adicionadas ao projeto:
 1. Crie `js/tools/<id>.js` como ES Module nativo.
 2. Isole a regra de cálculo em uma função pura exportável (ex: `export function calcularX(params) { ... }`).
 3. Crie a função de setup da interface (ex: `export function setupX() { ... }`) utilizando seletores semânticos:
@@ -279,37 +279,34 @@ Um script Node.js nativo lerá os arquivos de `src/`, injetará componentes e la
 
 ---
 
-## 6. Débito Técnico — `js/script.js`
+## 6. Eliminação do JavaScript Legado — `js/script.js` (Concluída)
 
-### Diagnóstico
-O arquivo [`js/script.js`](file:///home/araofer/Documentos/github/CalculadoraMaster/js/script.js) possui 324 linhas contendo 16 funções de cálculo. Uma auditoria detalhada no repositório revelou um fato crucial:
+### Diagnóstico e Resolução
+O arquivo histórico `js/script.js` continha 324 linhas e 16 funções de cálculo legadas. Uma auditoria rigorosa de referências e dependências em todo o repositório comprovou que:
+1. **Zero Referências Ativas**: Nenhuma página HTML, script ou componente do repositório importava ou referenciava `js/script.js`.
+2. **100% das Funcionalidades Substituídas**: Todas as 16 funções legadas foram migradas para módulos ES nativos isolados sob `js/core/` e `js/tools/`, acompanhados por 104 testes automatizados em `node:test`.
+3. **Zero Impacto**: A remoção física do arquivo `js/script.js` foi executada e validada, mantendo 104 testes passando e a integridade de 15 ferramentas e 40 URLs no sitemap.
 
-> **Nenhuma página HTML do projeto (nem a Home, nem páginas de categoria, nem calculadoras em `tools/`) referencia ou importa `js/script.js`.**
+### Inventário das 16 Funções Legadas e Seus Módulos Substitutos:
 
-Cada calculadora individual em `tools/` possui seu próprio script inline com sua própria implementação.
-
-### Análise Detalhada das Funções em `js/script.js`:
-
-| Função em `script.js` | Status Pós-Piloto | Situação em Relação aos Módulos e Páginas |
-| :--- | :--- | :--- |
-| `mascaraMoeda` / `limparCampos` / `calcularFinanciamento` | **Obsoleta (Substituída)** | Substituída com testes por [`js/core/currency.js`](file:///home/araofer/Documentos/github/CalculadoraMaster/js/core/currency.js) e [`js/tools/financiamento-carro.js`](file:///home/araofer/Documentos/github/CalculadoraMaster/js/tools/financiamento-carro.js). A versão legada em `script.js` não tratava campos vazios e carecia de proteção contra divisão por zero em taxa 0%. |
-| `calcularIdade` | **Obsoleta (Substituída)** | Substituída com testes por [`js/tools/idade.js`](file:///home/araofer/Documentos/github/CalculadoraMaster/js/tools/idade.js). A versão em `script.js` apenas subtraía anos, ignorando dias e meses e sujeita a bugs de fuso UTC. |
-| `gerarSenha` | **Obsoleta e Insegura** | Substituída com testes por [`js/tools/senha.js`](file:///home/araofer/Documentos/github/CalculadoraMaster/js/tools/senha.js). A versão em `script.js` utilizava `Math.random()` inseguro e comprimento fixo em 12 caracteres. |
-| `calcularPorcentagem` | **Obsoleta (Substituída)** | Substituída com testes por [`js/tools/porcentagem.js`](file:///home/araofer/Documentos/github/CalculadoraMaster/js/tools/porcentagem.js). A versão legada em `script.js` calculava apenas porcentagem simples, enquanto o novo módulo calcula projeção de acréscimo e desconto. |
-| `gerarCampos` / `calcularDivisao` | **Obsoleta (Substituída)** | Substituída com testes por [`js/tools/dividir-conta.js`](file:///home/araofer/Documentos/github/CalculadoraMaster/js/tools/dividir-conta.js). Suporta tolerância de ponto flutuante para centavos e validação de até 50 pessoas. |
-| `contarCaracteres` | **Obsoleta (Substituída)** | Substituída com testes por [js/tools/contador.js](../js/tools/contador.js). A versão legada em `script.js` contava apenas caracteres totais, enquanto o novo módulo calcula caracteres totais, caracteres sem espaços e palavras em tempo real. |
-| `calcularIMC` | **Obsoleta (Substituída)** | Substituída com testes por [`js/tools/imc.js`](file:///home/araofer/Documentos/github/CalculadoraMaster/js/tools/imc.js). Normaliza altura digitada em cm (> 3m) e classifica todas as 6 faixas da OMS. |
-| `calcularDesconto` | **Obsoleta (Substituída)** | Substituída com testes por [`js/tools/desconto.js`](file:///home/araofer/Documentos/github/CalculadoraMaster/js/tools/desconto.js). A versão legada em `script.js` utilizava IDs desatualizados (`valor` em vez de `preco`). |
-| `calcularJuros` | **Obsoleta (Substituída)** | Substituída com testes por [`js/tools/juros.js`](file:///home/araofer/Documentos/github/CalculadoraMaster/js/tools/juros.js). A versão legada em `script.js` calculava apenas juros simples sob IDs obsoletos, enquanto o novo módulo suporta juros simples e compostos isoladamente. |
-| `gerarLinkWhats` | **Obsoleta (Substituída)** | Substituída com testes por [js/tools/whatsapp.js](../js/tools/whatsapp.js). Sanitiza números, aplica DDI 55 defensivo e codifica mensagens via encodeURIComponent com atribuição segura no DOM. |
-| `calcularLucro` | **Obsoleta (Substituída)** | Substituída com testes por [`js/tools/lucro.js`](file:///home/araofer/Documentos/github/CalculadoraMaster/js/tools/lucro.js). A versão legada em `script.js` calculava margem incorretamente sobre o custo `(lucro/custo)*100`, enquanto o novo módulo calcula margem sobre o preço `(lucro/preco)*100` com destaque visual de prejuízo. |
-| `calcularCombustivel` | **Obsoleta (Substituída)** | Substituída com testes por [js/tools/combustivel.js](../js/tools/combustivel.js). Valida campos numéricos e calcula litros e custo da viagem com validação contra divisão por zero. |
-
-### Plano de Ação Recomendado para `js/script.js`
-1. **Não remover agora**: Mantido temporariamente intacto para não impactar referências externas legadas ou pipelines de terceiros.
-2. **Migração 100% Concluída (15/15 Ferramentas)**: Todas as 15 ferramentas do projeto foram integralmente migradas para módulos ES independentes e testadas via `node:test` (104 testes passando). Nenhuma página depende de `js/script.js`.
-3. **Depreciação Definitiva Pronta para Execução**: O arquivo `js/script.js` está 100% obsoleto e pode ser deletado com segurança na próxima etapa de limpeza/estabilização.
-
+| # | Função Legada em `script.js` | Finalidade Real | Módulo ESM Substituto | Função Exportada Substituta | Status |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| 1 | `calcularPorcentagem` | Lê `#valor` e `#porcentagem`, calcula `(valor * porcentagem) / 100` e exibe o resultado em `#resultado`. | [`js/tools/porcentagem.js`](../js/tools/porcentagem.js) | `calcularPorcentagem` | Removida |
+| 2 | `gerarCampos` | Lê `#pessoas` e gera dinamicamente `<input type="number" class="valores">` no container `#camposPessoas`. | [`js/tools/dividir-conta.js`](../js/tools/dividir-conta.js) | `validarQuantidadePessoas` (renderização dinâmica em `setupDividirConta`) | Removida |
+| 3 | `calcularDivisao` | Soma inputs `.valores`, compara com `#total` e exibe mensagem de status ("Tudo certo", "Faltam R$ ...", "Passou R$ ..."). | [`js/tools/dividir-conta.js`](../js/tools/dividir-conta.js) | `calcularDivisaoConta` | Removida |
+| 4 | `calcularIdade` | Lê `#nascimento`, subtrai ano de nascimento do ano atual (`hoje.getFullYear() - nasc.getFullYear()`) e exibe em `#resultado`. | [`js/tools/idade.js`](../js/tools/idade.js) | `calcularIdadePrecisa` (calcula idade com exatidão em anos, meses e dias no fuso local) | Removida |
+| 5 | `gerarSenha` | Gera senha alfanumérica de 12 caracteres usando `Math.random()` e exibe em `#resultado`. | [`js/tools/senha.js`](../js/tools/senha.js) | `gerarSenhaSegura` (Web Crypto API com amostragem por rejeição) | Removida |
+| 6 | `contarCaracteres` | Lê `#texto`, calcula o tamanho total da cadeia (`texto.length`) e exibe contagem em `#resultado`. | [`js/tools/contador.js`](../js/tools/contador.js) | `contarTexto` (contagem de caracteres, caracteres sem espaços e palavras) | Removida |
+| 7 | `calcularIMC` | Lê `#peso` e `#altura`, calcula `peso / (altura * altura)` e exibe em `#resultado`. | [`js/tools/imc.js`](../js/tools/imc.js) | `calcularIMC` (normalização m/cm, ponto/vírgula e faixas da OMS) | Removida |
+| 8 | `calcularDesconto` | Lê `#valor` e `#desconto`, calcula `valorDesconto = (valor * desconto) / 100` e `valorFinal = valor - valorDesconto`. | [`js/tools/desconto.js`](../js/tools/desconto.js) | `calcularDesconto` | Removida |
+| 9 | `calcularJuros` | Lê `#capital`, `#taxa` e `#tempo`, calcula juros simples `(capital * taxa * tempo) / 100` e total `capital + juros`. | [`js/tools/juros.js`](../js/tools/juros.js) | `calcularJurosSimples` (e `calcularJurosCompostos`) | Removida |
+| 10 | `gerarLinkWhats` | Lê `#numero` e `#mensagem`, remove não dígitos e monta link `https://wa.me/<numero>?text=<mensagem>`. | [`js/tools/whatsapp.js`](../js/tools/whatsapp.js) | `gerarLinkWhatsApp` (URL `https://wa.me/${numero}?text=${mensagem}`) | Removida |
+| 11 | `calcularLucro` | Lê `#custo` e `#venda`, calcula `lucro = venda - custo` e margem percentual `(lucro / custo) * 100`. | [`js/tools/lucro.js`](../js/tools/lucro.js) | `calcularLucro` | Removida |
+| 12 | `calcularCombustivel` | Lê `#distancia`, `#consumo` e `#preco`, calcula `litros = distancia / consumo` e custo total `litros * preco`. | [`js/tools/combustivel.js`](../js/tools/combustivel.js) | `calcularConsumoCombustivel` | Removida |
+| 13 | `mascaraMoeda` | Formata valor do input em moeda BRL em tempo real durante a digitação dividindo centavos por 100. | [`js/core/currency.js`](../js/core/currency.js) | `formatBRLCurrencyInput` (além de `parseBRLCurrency` e `formatBRL`) | Removida |
+| 14 | `limparResultado` | Restaura mensagem informativa de orientação no elemento `#resultadoFinanciamento`. | [`js/tools/financiamento-carro.js`](../js/tools/financiamento-carro.js) | Manipulada internamente no controlador `setupFinanciamentoCarro` | Removida |
+| 15 | `limparCampos` | Limpa campos de financiamento (`#valorVeiculo`, `#valorEntrada`, `#taxaMensal`, `#prazoMeses`) e chama `limparResultado()`. | [`js/tools/financiamento-carro.js`](../js/tools/financiamento-carro.js) | Delegada semanticamente via `data-action="clear"` em `setupFinanciamentoCarro` | Removida |
+| 16 | `calcularFinanciamento` | Lê dados do veículo e calcula prestação mensal pela Tabela Price, total dos juros e custo total. | [`js/tools/financiamento-carro.js`](../js/tools/financiamento-carro.js) | `calcularFinanciamentoPrice` | Removida |
 ---
 
 ## 7. Estratégia de Normalização de Line Endings (.gitattributes)
@@ -352,6 +349,6 @@ Uma conversão cega em massa de todos os arquivos do repositório geraria:
 
 ## 8. Próximos Passos Recomendados
 
-1. **Fase 2 — Modularização de Scripts**: Extrair funções de cálculo inline de `tools/` para `js/tools/<id>.js` com testes automatizados via Node Test Runner.
+1. **Fase 2 — Modularização de Scripts (Concluída)**: 15/15 ferramentas migradas para ES Modules nativos com testes automatizados e script legado removido.
 2. **Fase 3 — Motor de Build SSG**: Implementar geração de páginas via `src/components/` e `src/layouts/`, eliminando a duplicação de header e footer em 40 arquivos HTML.
 3. **Fase 4 — Normalização de Git e Line Endings**: Aplicar `.gitattributes` e `.git-blame-ignore-revs` em commit exclusivo.
