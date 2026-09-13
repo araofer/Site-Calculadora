@@ -72,7 +72,7 @@
 
     <div style="margin-bottom: 15px;">
         <label for="tamanho">Comprimento da senha: <span id="val_tamanho">12</span> caracteres</label><br>
-        <input type="range" id="tamanho" min="6" max="32" value="12" oninput="atualizarLabel(); limparResultado()" style="width: 100%; max-width: 300px;">
+        <input type="range" id="tamanho" min="6" max="32" value="12" style="width: 100%; max-width: 300px;">
     </div>
 
     <div style="text-align: left; display: inline-block;">
@@ -84,13 +84,13 @@
 
     <br><br>
 
-    <button type="button" onclick="gerarSenha()" class="btn-destaque">Gerar Senha Forte</button>
-    <button type="button" onclick="limparCampos()">Resetar</button>
+    <button type="button" class="btn-destaque">Gerar Senha Forte</button>
+    <button type="button">Resetar</button>
 
     <div id="resultado-area" style="margin-top: 25px; display: none;">
         <div style="background: #f4f4f4; padding: 15px; border-radius: 5px; border: 1px dashed #008080; font-family: monospace; font-size: 1.2em; word-break: break-all;" id="senha-gerada"></div>
         <br>
-        <button type="button" onclick="copiarSenha()" style="background-color: #007bff;">Copiar Senha</button>
+        <button type="button" style="background-color: #007bff;">Copiar Senha</button>
         <span id="msg-copiado" style="color: #28a745; margin-left: 10px; display: none;">Copiado!</span>
     </div>
   </div>
@@ -151,73 +151,7 @@
   </section>
 </main>
 
-<script>
-function atualizarLabel() {
-    document.getElementById("val_tamanho").innerText = document.getElementById("tamanho").value;
-}
-
-function gerarSenha() {
-  let tamanho = document.getElementById("tamanho").value;
-  let maiusculas = document.getElementById("maiusculas").checked;
-  let minusculas = document.getElementById("minusculas").checked;
-  let numeros = document.getElementById("numeros").checked;
-  let especiais = document.getElementById("especiais").checked;
-
-  let caracteres = "";
-  if (maiusculas) caracteres += "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-  if (minusculas) caracteres += "abcdefghijklmnopqrstuvwxyz";
-  if (numeros) caracteres += "0123456789";
-  if (especiais) caracteres += "!@#$%&*()_+{}[]<>?-=";
-
-  if (caracteres === "") {
-    alert("Selecione pelo menos um tipo de caractere!");
-    return;
-  }
-
-  let senha = "";
-  const len = caracteres.length;
-  const range = 4294967296;
-  const maxValid = range - (range % len);
-  const randomBuffer = new Uint32Array(1);
-
-  for (let i = 0; i < tamanho; i++) {
-    let randomVal;
-    do {
-      window.crypto.getRandomValues(randomBuffer);
-      randomVal = randomBuffer[0];
-    } while (randomVal >= maxValid);
-    senha += caracteres[randomVal % len];
-  }
-
-  document.getElementById("senha-gerada").innerText = senha;
-  document.getElementById("resultado-area").style.display = "block";
-  document.getElementById("msg-copiado").style.display = "none";
-}
-
-function copiarSenha() {
-  const senha = document.getElementById("senha-gerada").innerText;
-  navigator.clipboard.writeText(senha).then(() => {
-    document.getElementById("msg-copiado").style.display = "inline";
-    setTimeout(() => {
-        document.getElementById("msg-copiado").style.display = "none";
-    }, 2000);
-  });
-}
-
-function limparCampos() {
-  document.getElementById("tamanho").value = 12;
-  atualizarLabel();
-  document.getElementById("maiusculas").checked = true;
-  document.getElementById("minusculas").checked = true;
-  document.getElementById("numeros").checked = true;
-  document.getElementById("especiais").checked = true;
-  document.getElementById("resultado-area").style.display = "none";
-}
-
-function limparResultado() {
-  document.getElementById("resultado-area").style.display = "none";
-}
-</script>
+<script src="../../js/tools/senha.js"></script>
 
 <footer class="footer">
     <div class="container">

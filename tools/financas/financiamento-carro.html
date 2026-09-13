@@ -72,20 +72,20 @@
       <h2>Dados do Financiamento</h2>
       
       <label for="valorVeiculo">Valor do Veículo (R$):</label>
-      <input type="text" id="valorVeiculo" placeholder="Ex: 50.000,00" oninput="mascaraMoeda(this); limparResultado()">
+      <input type="text" id="valorVeiculo" placeholder="Ex: 50.000,00">
       
       <label for="valorEntrada">Valor da Entrada (R$ - opcional):</label>
-      <input type="text" id="valorEntrada" placeholder="Ex: 15.000,00" oninput="mascaraMoeda(this); limparResultado()"><br>
+      <input type="text" id="valorEntrada" placeholder="Ex: 15.000,00"><br>
       
       <label for="taxaMensal">Taxa de Juros Mensal (%):</label>
-      <input type="number" id="taxaMensal" placeholder="Ex: 1.5" step="0.01" oninput="limparResultado()">
+      <input type="number" id="taxaMensal" placeholder="Ex: 1.5" step="0.01">
       
       <label for="prazoMeses">Prazo (Meses):</label>
-      <input type="number" id="prazoMeses" placeholder="Ex: 48" oninput="limparResultado()">
+      <input type="number" id="prazoMeses" placeholder="Ex: 48">
 
       <div style="margin-top: 15px;">
-        <button type="button" onclick="calcularFinanciamento()" class="btn-destaque">Calcular Financiamento</button>
-        <button type="button" onclick="limparCampos()" style="background-color: #666;">Limpar Tudo</button>
+        <button type="button" class="btn-destaque">Calcular Financiamento</button>
+        <button type="button" style="background-color: #666;">Limpar Tudo</button>
       </div>
     </section>
 
@@ -161,90 +161,8 @@
   </section>
 </main>
 
-<script>
-function mascaraMoeda(campo) {
-  const digitos = campo.value.replace(/\D/g, "");
-
-  if (!digitos) {
-    campo.value = "";
-    return;
-  }
-
-  let valor = (Number(digitos) / 100).toFixed(2) + "";
-  valor = valor.replace(".", ",");
-  valor = valor.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
-  campo.value = valor;
-}
-
-function parseMoeda(valor) {
-  if (!valor) return 0;
-  if (typeof valor === "number") return valor;
-  const limpo = valor.toString().trim();
-  if (!limpo) return 0;
-  const normalizado = limpo.replace(/\./g, "").replace(",", ".");
-  const num = Number(normalizado);
-  return isNaN(num) ? 0 : num;
-}
-
-function calcularFinanciamento() {
-  let valorVeiculo = parseMoeda(document.getElementById("valorVeiculo").value);
-  let valorEntrada = parseMoeda(document.getElementById("valorEntrada").value);
-  let taxaInput = document.getElementById("taxaMensal").value.trim();
-  let taxaMensal = parseFloat(taxaInput.replace(",", "."));
-  let prazoMeses = parseInt(document.getElementById("prazoMeses").value);
-
-  let containerResultado = document.getElementById("resultadoFinanciamento");
-
-  if (isNaN(valorVeiculo) || isNaN(taxaMensal) || isNaN(prazoMeses) || valorVeiculo <= 0 || taxaMensal < 0 || prazoMeses <= 0) {
-    containerResultado.innerHTML = `<span style="color: red;">Preencha todos os campos corretamente.</span>`;
-    return;
-  }
-
-  let valorFinanciado = valorVeiculo - valorEntrada;
-
-  if (valorFinanciado <= 0) {
-    containerResultado.innerHTML = `<span style="color: red;">O valor da entrada não pode ser maior ou igual ao valor do veículo.</span>`;
-    return;
-  }
-
-  let taxaDecimal = taxaMensal / 100;
-  let valorParcela = 0;
-
-  // Se a taxa for 0, evita divisão por zero na fórmula Price
-  if (taxaDecimal === 0) {
-    valorParcela = valorFinanciado / prazoMeses;
-  } else {
-    valorParcela = valorFinanciado * (taxaDecimal * Math.pow(1 + taxaDecimal, prazoMeses)) / (Math.pow(1 + taxaDecimal, prazoMeses) - 1);
-  }
-
-  let totalPago = valorParcela * prazoMeses;
-  let jurosPagos = totalPago - valorFinanciado;
-  let custoTotalComEntrada = totalPago + valorEntrada;
-
-  containerResultado.innerHTML = `
-    <div style="font-size: 1.1em; margin-bottom: 10px;">Valor a Financiar: <strong>R$ ${valorFinanciado.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong></div>
-    <div style="font-size: 1.3em; color: #008080; margin-bottom: 15px;">Parcela Mensal (${prazoMeses}x): <strong>R$ ${valorParcela.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong></div>
-    <hr style="border: 0; border-top: 1px solid #ddd; margin: 10px 0;">
-    <p>Total dos Juros: <span style="color: #d9534f; font-weight: bold;">R$ ${jurosPagos.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span></p>
-    <p>Total do Financiamento: <strong>R$ ${totalPago.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong></p>
-    <p>Custo Total do Veículo (com entrada): <strong>R$ ${custoTotalComEntrada.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong></p>
-  `;
-}
-
-function limparCampos() {
-  document.getElementById("valorVeiculo").value = "";
-  document.getElementById("valorEntrada").value = "";
-  document.getElementById("taxaMensal").value = "";
-  document.getElementById("prazoMeses").value = "";
-  limparResultado();
-}
-
-function limparResultado() {
-  document.getElementById("resultadoFinanciamento").innerHTML = `
-    <p style="color: #666;">Insira os dados ao lado e clique em calcular para ver o resultado.</p>
-  `;
-}
-</script>
+<script src="../../js/core/currency.js"></script>
+<script src="../../js/tools/financiamento-carro.js"></script>
 
 <footer class="footer">
     <div class="container">

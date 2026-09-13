@@ -69,11 +69,11 @@
 
   <div style="margin:20px 0;" class="card">
     <h2>Selecione sua data de nascimento</h2>
-    <input type="date" id="dataNascimento" oninput="limparResultado()" style="padding: 10px; border-radius: 5px; border: 1px solid #ccc; font-family: inherit;">
+    <input type="date" id="dataNascimento" style="padding: 10px; border-radius: 5px; border: 1px solid #ccc; font-family: inherit;">
     <br><br>
 
-    <button type="button" onclick="calcularIdade()">Calcular Idade</button>
-    <button type="button" onclick="limparCampos()">Limpar</button>
+    <button type="button">Calcular Idade</button>
+    <button type="button">Limpar</button>
 
     <h3 id="resultado" style="margin-top: 20px; color: #008080;"></h3>
   </div>
@@ -114,61 +114,7 @@
   </section>
 </main>
 
-<script>
-function calcularIdade() {
-  const nascimentoInput = document.getElementById("dataNascimento").value;
-
-  if (!nascimentoInput) {
-    document.getElementById("resultado").innerText = "Por favor, selecione uma data!";
-    return;
-  }
-
-  const hoje = new Date();
-  const [ano, mes, dia] = nascimentoInput.split("-").map(Number);
-  const dataNasc = new Date(ano, mes - 1, dia);
-
-  // Verifica se a data é no futuro
-  if (dataNasc > hoje) {
-    document.getElementById("resultado").innerText = "A data de nascimento não pode ser no futuro!";
-    return;
-  }
-
-  let anos = hoje.getFullYear() - dataNasc.getFullYear();
-  let meses = hoje.getMonth() - dataNasc.getMonth();
-  let dias = hoje.getDate() - dataNasc.getDate();
-
-  // Ajuste para dias negativos
-  if (dias < 0) {
-    meses--;
-    // Pega o último dia do mês anterior
-    const ultimoDiaMesPassado = new Date(hoje.getFullYear(), hoje.getMonth(), 0).getDate();
-    dias += ultimoDiaMesPassado;
-  }
-
-  // Ajuste para meses negativos
-  if (meses < 0) {
-    anos--;
-    meses += 12;
-  }
-
-  // Formatação do texto
-  let textoAnos = anos === 1 ? "1 ano" : anos + " anos";
-  let textoMeses = meses === 1 ? "1 mês" : meses + " meses";
-  let textoDias = dias === 1 ? "1 dia" : dias + " dias";
-
-  document.getElementById("resultado").innerText = 
-    `Você tem ${textoAnos}, ${textoMeses} e ${textoDias}.`;
-}
-
-function limparCampos() {
-  document.getElementById("dataNascimento").value = "";
-  document.getElementById("resultado").innerText = "";
-}
-
-function limparResultado() {
-  document.getElementById("resultado").innerText = "";
-}
-</script>
+<script src="../../js/tools/idade.js"></script>
 
 <footer class="footer">
     <div class="container">

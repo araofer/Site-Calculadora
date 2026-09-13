@@ -94,37 +94,68 @@ Executa a validação, gera o catálogo JS, gera o sitemap e valida novamente a 
 
 ---
 
-## 4. Estrutura Futura de JavaScript Modular
+## 4. Piloto de Modularização JavaScript
 
-Atualmente, cada página em `tools/` possui uma tag `<script>` inline com a sua lógica de cálculo. Embora isso garanta que cada ferramenta seja auto-suficiente sem requisições adicionais, dificulta testes unitários automatizados e reutilização de utilitários comuns.
+Na Fase 2 da arquitetura, implementamos a modularização piloto para 3 ferramentas representativas:
+1. **Financiamento de Carro** (`tools/financas/financiamento-carro.html`) ➔ [`js/tools/financiamento-carro.js`](file:///home/araofer/Documentos/github/CalculadoraMaster/js/tools/financiamento-carro.js) + [`js/core/currency.js`](file:///home/araofer/Documentos/github/CalculadoraMaster/js/core/currency.js)
+2. **Calculadora de Idade** (`tools/saude/idade.html`) ➔ [`js/tools/idade.js`](file:///home/araofer/Documentos/github/CalculadoraMaster/js/tools/idade.js)
+3. **Gerador de Senha** (`tools/utilidades/senha.html`) ➔ [`js/tools/senha.js`](file:///home/araofer/Documentos/github/CalculadoraMaster/js/tools/senha.js)
 
-### Proposta de Modularização (Fase Arquitetura 2)
+### Estrutura Implementada
 
 ```text
 js/
   core/
-    currency.js       # Máscara monetária pt-BR, parse de moeda, arredondamento financeiro
-    storage.js        # Abstração de localStorage com fallback seguro e tipagem
-    analytics.js      # Disparador central de eventos para GA4 (sem poluir scripts de ferramentas)
-    utils.js          # Debounce, escape HTML, validação de datas e números
+    currency.js       # Utilitários de moeda pt-BR (parseBRLCurrency, formatBRLCurrencyInput, formatBRL)
 
   tools/
-    financiamento-carro.js
-    financiamento-imovel.js
-    juros.js
-    porcentagem.js
-    idade.js
-    imc.js
-    ... (um módulo puro e testável por ferramenta)
+    financiamento-carro.js  # Cálculo Price puro + bindings de DOM
+    idade.js                # Cálculo de idade preciso (sem UTC) + bindings de DOM
+    senha.js                # Geração criptograficamente segura Web Crypto + bindings de DOM
 
   home-search.js      # Controlador de busca universal da página inicial
-  tools-catalog.js    # Catálogo compilado
+  tools-catalog.js    # Catálogo central compilado
 ```
 
-### Responsabilidade de cada diretório:
-- **`js/core/`**: Funções utilitárias puras, altamente reutilizáveis e com 100% de cobertura de testes. Nenhuma lógica específica de uma calculadora deve entrar aqui.
-- **`js/tools/`**: Lógica de cada calculadora. Cada módulo exportará funções puras de cálculo (ex: `calcularPrice(valor, entrada, taxa, meses)`) desacopladas do DOM, facilitando testes automatizados com Jest ou Node Test Runner.
-- **Transição Segura**: A migração deve ser gradual (ferramenta por ferramenta), mantendo compatibilidade com as páginas existentes até a conclusão dos testes.
+### Responsabilidades de Cada Diretório
+- **`js/core/`**: Funções utilitárias universais e puras, compartilháveis entre múltiplas calculadoras.
+  - Não deve conter regras de negócio de nenhuma ferramenta específica.
+  - Deve possuir 100% de cobertura de testes unitários.
+  - Atualmente abriga `currency.js`, que padroniza o tratamento de moeda em todo o site.
+- **`js/tools/`**: Módulos específicos de cada calculadora.
+  - Cada arquivo contém a função de cálculo pura desacoplada (ex: `calcularFinanciamentoPrice`, `calcularIdadePrecisa`, `gerarSenhaSegura`) e a camada de controle de eventos de interface (`inicializarEventos`).
+  - Suporta execução no navegador e importação direta via `require()` no Node.js para testes automatizados.
+
+### Padrão Adotado para Eventos: Separação entre Estrutura e Comportamento
+Nas páginas migradas, todos os atributos inline de evento foram eliminados do HTML:
+- Removidos: `onclick="..."`, `oninput="..."`.
+- Implementados via JavaScript: `addEventListener("input", ...)`, `addEventListener("click", ...)`, `addEventListener("change", ...)`.
+- Inicialização segura: os listeners são registrados em `DOMContentLoaded` (ou imediatamente se o documento já estiver pronto).
+- Suporte a acessibilidade e usabilidade: inputs numéricos disparam cálculo também com a tecla `Enter`.
+
+### Padrão de Moeda Brasileira (`js/core/currency.js`)
+Padronizamos o ecossistema financeiro do site com três operações essenciais:
+1. `parseBRLCurrency(valor)`: Converte `"50.000,00"` para `50000`, `"15.000,00"` para `15000` e campo vazio para `0`.
+2. `formatBRLCurrencyInput(input)`: Máscara monetária dinâmica em tempo real para campos `<input>`. Se o usuário apagar completamente os dígitos, o campo permanece vazio (`""`), sem travar com `"0,00"`.
+3. `formatBRL(valor, incluirSimbolo)`: Formata números para o padrão visual `1.250,00` ou `R$ 1.250,00`.
+
+### Decisão Arquitetural: Scripts Tradicionais vs. ES Modules
+**Decisão**: Adotamos scripts tradicionais com padrão UMD/IIFE em vez de `<script type="module">`.
+**Motivação**:
+1. **Compatibilidade Universal**: Scripts tradicionais funcionam sem erros de CORS tanto em servidores HTTP (`http://localhost`, produção) quanto na abertura direta de arquivos via protocolo local (`file:///`), comum para desenvolvedores que inspecionam páginas sem subir servidores Node/Python.
+2. **Zero Overhead e Sem Bundler**: Não requer Webpack, Vite, Rollup ou transpiladores.
+3. **Isolamento de Escopo e Testabilidade**: O padrão UMD/IIFE encapsula variáveis privadas protegendo o `window`, expõe métodos necessários e permite `module.exports` direto para suítes de teste em Node.js.
+
+### Como Migrar uma Ferramenta Futura (Passo a Passo)
+Para migrar uma das próximas 12 ferramentas:
+1. Crie `js/tools/<id>.js`.
+2. Isole a regra matemática ou de negócio em uma função pura exportável (ex: `calcularDescontoMatematico(preco, taxa)`).
+3. Crie a função `inicializarEventos()` registrando listeners via `addEventListener` nos IDs do HTML.
+4. Na página `tools/<categoria>/<slug>.html`:
+   - Remova os atributos inline `onclick` e `oninput`.
+   - Remova o bloco `<script>` inline de cálculo.
+   - Adicione `<script src="../../js/core/currency.js"></script>` (se usar moeda) e `<script src="../../js/tools/<id>.js"></script>`.
+5. Crie testes unitários chamando a função pura do módulo via Node.js.
 
 ---
 
@@ -175,12 +206,13 @@ Cada calculadora individual em `tools/` possui seu próprio script inline com su
 
 ### Análise Detalhada das Funções em `js/script.js`:
 
-| Função em `script.js` | Status | Situação em Relação às Páginas em `tools/` |
+| Função em `script.js` | Status Pós-Piloto | Situação em Relação aos Módulos e Páginas |
 | :--- | :--- | :--- |
+| `mascaraMoeda` / `limparCampos` / `calcularFinanciamento` | **Obsoleta (Substituída)** | Substituída com testes por [`js/core/currency.js`](file:///home/araofer/Documentos/github/CalculadoraMaster/js/core/currency.js) e [`js/tools/financiamento-carro.js`](file:///home/araofer/Documentos/github/CalculadoraMaster/js/tools/financiamento-carro.js). A versão legada em `script.js` não tratava campos vazios e carecia de proteção contra divisão por zero em taxa 0%. |
+| `calcularIdade` | **Obsoleta (Substituída)** | Substituída com testes por [`js/tools/idade.js`](file:///home/araofer/Documentos/github/CalculadoraMaster/js/tools/idade.js). A versão em `script.js` apenas subtraía anos, ignorando dias e meses e sujeita a bugs de fuso UTC. |
+| `gerarSenha` | **Obsoleta e Insegura** | Substituída com testes por [`js/tools/senha.js`](file:///home/araofer/Documentos/github/CalculadoraMaster/js/tools/senha.js). A versão em `script.js` utilizava `Math.random()` inseguro e comprimento fixo em 12 caracteres. |
 | `calcularPorcentagem` | **Obsoleta** | [`tools/financas/porcentagem.html`](file:///home/araofer/Documentos/github/CalculadoraMaster/tools/financas/porcentagem.html) possui implementação própria com suporte a 3 tipos de cálculos percentuais. |
 | `gerarCampos` / `calcularDivisao` | **Duplicada** | [`tools/financas/dividir-conta.html`](file:///home/araofer/Documentos/github/CalculadoraMaster/tools/financas/dividir-conta.html) possui versão idêntica inline. |
-| `calcularIdade` | **Obsoleta / Incompleta** | Em `script.js`, apenas subtrai anos (`hoje.getFullYear() - nasc.getFullYear()`). Em [`tools/saude/idade.html`](file:///home/araofer/Documentos/github/CalculadoraMaster/tools/saude/idade.html), calcula com precisão anos, meses e dias exatos. |
-| `gerarSenha` | **Insegura / Obsoleta** | Em `script.js`, utiliza `Math.random()`. Em [`tools/utilidades/senha.html`](file:///home/araofer/Documentos/github/CalculadoraMaster/tools/utilidades/senha.html), utiliza criptografia com a API nativa `window.crypto.getRandomValues()`. |
 | `contarCaracteres` | **Obsoleta / Reduzida** | Em `script.js`, apenas conta `texto.length`. Em [`tools/utilidades/contador.html`](file:///home/araofer/Documentos/github/CalculadoraMaster/tools/utilidades/contador.html), conta palavras, caracteres, espaços e quebras de linha. |
 | `calcularIMC` | **Duplicada** | [`tools/saude/imc.html`](file:///home/araofer/Documentos/github/CalculadoraMaster/tools/saude/imc.html) possui versão com classificação completa de obesidade. |
 | `calcularDesconto` | **Duplicada** | [`tools/financas/desconto.html`](file:///home/araofer/Documentos/github/CalculadoraMaster/tools/financas/desconto.html) possui versão própria com tratamento de vírgulas e botão de reset. |
@@ -188,12 +220,11 @@ Cada calculadora individual em `tools/` possui seu próprio script inline com su
 | `gerarLinkWhats` | **Duplicada / Desconectada** | [`tools/utilidades/whatsapp.html`](file:///home/araofer/Documentos/github/CalculadoraMaster/tools/utilidades/whatsapp.html) possui a função `gerarLink()`. |
 | `calcularLucro` | **Duplicada** | [`tools/financas/lucro.html`](file:///home/araofer/Documentos/github/CalculadoraMaster/tools/financas/lucro.html) possui implementação própria. |
 | `calcularCombustivel` | **Duplicada** | [`tools/utilidades/combustivel.html`](file:///home/araofer/Documentos/github/CalculadoraMaster/tools/utilidades/combustivel.html) possui implementação própria. |
-| `mascaraMoeda` / `limparCampos` / `calcularFinanciamento` | **Duplicada** | [`tools/financas/financiamento-carro.html`](file:///home/araofer/Documentos/github/CalculadoraMaster/tools/financas/financiamento-carro.html) possui essas funções inline com suporte SAC/Price. |
 
 ### Plano de Ação Recomendado para `js/script.js`
-1. **Não remover agora**: Mantido temporariamente intacto para garantir que nenhuma automação ou documentação externa dependa dele.
-2. **Fase 2 de Arquitetura**: Extrair as funções úteis para `js/core/` (como `mascaraMoeda`) e `js/tools/`.
-3. **Depreciação Definitiva**: Após a extração dos módulos e verificação dos testes, o arquivo será arquivado ou deletado com segurança.
+1. **Não remover agora**: Mantido temporariamente intacto para não impactar referências externas legadas ou pipelines de terceiros.
+2. **Conclusão das 12 Ferramentas Restantes**: Conforme as ferramentas restantes forem migradas para `js/tools/`, as funções remanescentes serão gradativamente substituídas por módulos testáveis.
+3. **Depreciação Definitiva**: Ao fim da migração total, o arquivo `js/script.js` poderá ser deletado com 100% de segurança e sem risco de regressão.
 
 ---
 
