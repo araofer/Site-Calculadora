@@ -1,0 +1,79 @@
+---
+title: Calculadora de Consumo de Combustível | Km por Litro e Custo
+description: Calcule o consumo de combustível do seu veículo. Descubra quantos litros serão usados e o custo total da viagem.
+keywords: consumo combustível, km por litro, calcular gasto gasolina, custo viagem carro
+canonical: https://www.calculadoramaster.com/tools/utilidades/combustivel.html
+layout: tool
+pageScripts: <script type="module" src="{{ROOT_PREFIX}}js/tools/combustivel.js"></script>
+---
+  <h1>Calculadora de Consumo de Combustível</h1>
+  <p>Descubra quantos litros seu carro consome e quanto vai gastar na viagem.</p>
+
+  <div style="margin:20px 0;" class="card">
+    <h2>Calcular consumo e custo</h2>
+    <input type="number" id="distancia" placeholder="Distância (km) Ex: 300">
+    <br><br>
+    <input type="number" id="consumo" placeholder="Consumo (km/l) Ex: 12">
+    <br><br>
+    <input type="number" id="preco" placeholder="Preço do combustível (Ex: 5.49)">
+    <br><br>
+    <button type="button" data-action="calculate">Calcular</button>
+    <button type="button" data-action="clear">Limpar</button>
+
+    <h3 id="resultado" style="margin-top: 20px; color: #008080;"></h3>
+  </div>
+
+  <section class="content">
+    <h2>Como calcular consumo de combustível?</h2>
+    <p>O consumo de combustível é calculado dividindo a distância percorrida pelo rendimento do veículo (km por litro).</p>
+    <p><strong>Fórmula:</strong> Litros = distância ÷ consumo</p>
+
+    <h2>Como calcular o custo da viagem?</h2>
+    <p>Após descobrir os litros necessários, basta multiplicar pelo preço do combustível.</p>
+    <p><strong>Fórmula:</strong> Custo = litros × preço</p>
+
+    <h2>Exemplo prático</h2>
+    <p>Distância: 300 km | Consumo: 12 km/l | Preço: R$ 5,50</p>
+    <p>Litros: 300 ÷ 12 = 25 litros | Custo: 25 × 5,50 = <strong>R$ 137,50</strong></p>
+
+    <!-- FERRAMENTAS RELACIONADAS -->
+    <section class="related-tools">
+      <h2>Você também pode precisar</h2>
+      <div class="related-tools-grid">
+        <article class="tool-card">
+          <div class="tool-card-header">
+            <span class="tool-card-category">Financeira</span>
+          </div>
+          <h3 class="tool-card-title">Financiamento de Carros</h3>
+          <p class="tool-card-desc">Simule as parcelas e os juros do financiamento do seu carro pela Tabela Price.</p>
+          <div class="tool-card-footer">
+            <a href="../financas/financiamento-carro.html" class="tool-card-btn" aria-label="Acessar Financiamento de Carros">Calcular agora &rarr;</a>
+          </div>
+        </article>
+        <article class="tool-card">
+          <div class="tool-card-header">
+            <span class="tool-card-category">Financeira</span>
+          </div>
+          <h3 class="tool-card-title">Dividir Conta</h3>
+          <p class="tool-card-desc">Divida contas entre amigos de forma igual ou com consumos diferentes por pessoa.</p>
+          <div class="tool-card-footer">
+            <a href="../financas/dividir-conta.html" class="tool-card-btn" aria-label="Acessar Dividir Conta">Calcular agora &rarr;</a>
+          </div>
+        </article>
+        <article class="tool-card">
+          <div class="tool-card-header">
+            <span class="tool-card-category">Financeira</span>
+          </div>
+          <h3 class="tool-card-title">Calculadora de Desconto</h3>
+          <p class="tool-card-desc">Descubra o valor final com desconto e a economia real nas suas compras.</p>
+          <div class="tool-card-footer">
+            <a href="../financas/desconto.html" class="tool-card-btn" aria-label="Acessar Calculadora de Desconto">Calcular agora &rarr;</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <p style="margin-top: 30px;">
+      👉 <a href="../../index.html">Voltar para página inicial</a>
+    </p>
+  </section>

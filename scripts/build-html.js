@@ -71,10 +71,30 @@ const TRABALHISTA_PAGES = [
   }
 ];
 
+const UTILIDADES_PAGES = [
+  {
+    sourceFile: path.join(PAGES_DIR, 'tools', 'utilidades', 'combustivel.page.html'),
+    relativeOutputPath: 'tools/utilidades/combustivel.html'
+  },
+  {
+    sourceFile: path.join(PAGES_DIR, 'tools', 'utilidades', 'contador.page.html'),
+    relativeOutputPath: 'tools/utilidades/contador.html'
+  },
+  {
+    sourceFile: path.join(PAGES_DIR, 'tools', 'utilidades', 'senha.page.html'),
+    relativeOutputPath: 'tools/utilidades/senha.html'
+  },
+  {
+    sourceFile: path.join(PAGES_DIR, 'tools', 'utilidades', 'whatsapp.page.html'),
+    relativeOutputPath: 'tools/utilidades/whatsapp.html'
+  }
+];
+
 const TOOL_PAGES = [
   ...FINANCEIRO_PAGES,
   ...SAUDE_PAGES,
-  ...TRABALHISTA_PAGES
+  ...TRABALHISTA_PAGES,
+  ...UTILIDADES_PAGES
 ];
 
 const DEFAULT_PAGES = TOOL_PAGES;
@@ -112,10 +132,18 @@ const TRABALHISTA_ASSETS = [
   { src: 'js/tools/horas-extras.js', dest: 'js/tools/horas-extras.js' }
 ];
 
+const UTILIDADES_ASSETS = [
+  { src: 'js/tools/combustivel.js', dest: 'js/tools/combustivel.js' },
+  { src: 'js/tools/contador.js', dest: 'js/tools/contador.js' },
+  { src: 'js/tools/senha.js', dest: 'js/tools/senha.js' },
+  { src: 'js/tools/whatsapp.js', dest: 'js/tools/whatsapp.js' }
+];
+
 const TOOL_ASSETS = [
   ...FINANCEIRO_ASSETS,
   ...SAUDE_ASSETS,
-  ...TRABALHISTA_ASSETS
+  ...TRABALHISTA_ASSETS,
+  ...UTILIDADES_ASSETS
 ];
 
 const DEFAULT_ASSETS = TOOL_ASSETS;
@@ -337,12 +365,14 @@ module.exports = {
   FINANCEIRO_PAGES,
   SAUDE_PAGES,
   TRABALHISTA_PAGES,
+  UTILIDADES_PAGES,
   TOOL_PAGES,
   DEFAULT_PAGES,
   COMMON_ASSETS,
   FINANCEIRO_ASSETS,
   SAUDE_ASSETS,
   TRABALHISTA_ASSETS,
+  UTILIDADES_ASSETS,
   TOOL_ASSETS,
   DEFAULT_ASSETS,
   calculateRootPrefix,

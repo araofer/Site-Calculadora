@@ -17,12 +17,14 @@ const {
   FINANCEIRO_PAGES,
   SAUDE_PAGES,
   TRABALHISTA_PAGES,
+  UTILIDADES_PAGES,
   TOOL_PAGES,
   DEFAULT_PAGES,
   COMMON_ASSETS,
   FINANCEIRO_ASSETS,
   SAUDE_ASSETS,
   TRABALHISTA_ASSETS,
+  UTILIDADES_ASSETS,
   TOOL_ASSETS,
   DEFAULT_ASSETS,
   copyPilotAssets
@@ -167,9 +169,9 @@ test('SSG Piloto - Caminhos relativos de CSS, JS e imagens estão consistentes',
  * TESTES - SSG MULTIPÁGINA (7 FERRAMENTAS FINANCEIRAS)
  * ================================================== */
 
-test('SSG Multipage - buildPages compila com sucesso as 10 ferramentas (Lote Financeiro, Saúde e Trabalhista)', () => {
+test('SSG Multipage - buildPages compila com sucesso as 14 ferramentas (Lote Financeiro, Saúde, Trabalhista e Utilidades)', () => {
   const results = buildPages();
-  assert.equal(results.length, 10, 'Devem ser geradas exatamente 10 páginas de ferramentas no total');
+  assert.equal(results.length, 14, 'Devem ser geradas exatamente 14 páginas de ferramentas no total');
 
   const expectedPaths = [
     'tools/financas/desconto.html',
@@ -181,7 +183,11 @@ test('SSG Multipage - buildPages compila com sucesso as 10 ferramentas (Lote Fin
     'tools/financas/dividir-conta.html',
     'tools/saude/imc.html',
     'tools/saude/idade.html',
-    'tools/trabalhista/horas-extras.html'
+    'tools/trabalhista/horas-extras.html',
+    'tools/utilidades/combustivel.html',
+    'tools/utilidades/contador.html',
+    'tools/utilidades/senha.html',
+    'tools/utilidades/whatsapp.html'
   ];
 
   expectedPaths.forEach(expectedRel => {
@@ -201,6 +207,9 @@ test('SSG Multipage - buildPages com escopo específico compila subconjuntos de 
 
   const trabResults = buildPages(TRABALHISTA_PAGES);
   assert.equal(trabResults.length, 1, 'TRABALHISTA_PAGES deve gerar 1 página');
+
+  const utilResults = buildPages(UTILIDADES_PAGES);
+  assert.equal(utilResults.length, 4, 'UTILIDADES_PAGES deve gerar 4 páginas');
 
   // Restaura compilação completa para testes subsequentes
   buildPages();
@@ -364,7 +373,75 @@ test('SSG Multipage - Horas Extras: title, canonical, H1, módulo ESM e elemento
   assert.match(html, /id="resultado"/);
 });
 
-test('SSG Multipage - Ausência de placeholders {{...}} em todas as 10 páginas geradas', () => {
+test('SSG Multipage - Combustível: title, canonical, H1, módulo ESM e elementos do formulário', () => {
+  const filePath = path.join(ROOT_DIR, 'dist-pilot', 'tools', 'utilidades', 'combustivel.html');
+  const html = fs.readFileSync(filePath, 'utf-8');
+
+  assert.match(html, /<title>Calculadora de Consumo de Combustível \| Km por Litro e Custo<\/title>/);
+  assert.match(html, /<link rel="canonical" href="https:\/\/www\.calculadoramaster\.com\/tools\/utilidades\/combustivel\.html">/);
+  assert.match(html, /<h1>Calculadora de Consumo de Combustível<\/h1>/);
+  assert.match(html, /<script type="module" src="\.\.\/\.\.\/js\/tools\/combustivel\.js"><\/script>/);
+
+  assert.match(html, /id="distancia"/);
+  assert.match(html, /id="consumo"/);
+  assert.match(html, /id="preco"/);
+  assert.match(html, /data-action="calculate"/);
+  assert.match(html, /data-action="clear"/);
+  assert.match(html, /id="resultado"/);
+});
+
+test('SSG Multipage - Contador: title, canonical, H1, módulo ESM e elementos do formulário', () => {
+  const filePath = path.join(ROOT_DIR, 'dist-pilot', 'tools', 'utilidades', 'contador.html');
+  const html = fs.readFileSync(filePath, 'utf-8');
+
+  assert.match(html, /<title>Contador de Caracteres Online \| Texto e Palavras<\/title>/);
+  assert.match(html, /<link rel="canonical" href="https:\/\/www\.calculadoramaster\.com\/tools\/utilidades\/contador\.html">/);
+  assert.match(html, /<h1>Contador de Caracteres<\/h1>/);
+  assert.match(html, /<script type="module" src="\.\.\/\.\.\/js\/tools\/contador\.js"><\/script>/);
+
+  assert.match(html, /id="texto"/);
+  assert.match(html, /data-action="clear"/);
+  assert.match(html, /id="resultado"/);
+});
+
+test('SSG Multipage - Senha: title, canonical, H1, módulo ESM e elementos do formulário', () => {
+  const filePath = path.join(ROOT_DIR, 'dist-pilot', 'tools', 'utilidades', 'senha.html');
+  const html = fs.readFileSync(filePath, 'utf-8');
+
+  assert.match(html, /<title>Gerador de Senha Segura Online \| Criar Senhas Fortes e Aleatórias<\/title>/);
+  assert.match(html, /<link rel="canonical" href="https:\/\/www\.calculadoramaster\.com\/tools\/utilidades\/senha\.html">/);
+  assert.match(html, /<h1>Gerador de Senha Segura<\/h1>/);
+  assert.match(html, /<script type="module" src="\.\.\/\.\.\/js\/tools\/senha\.js"><\/script>/);
+
+  assert.match(html, /id="tamanho"/);
+  assert.match(html, /id="maiusculas"/);
+  assert.match(html, /id="minusculas"/);
+  assert.match(html, /id="numeros"/);
+  assert.match(html, /id="especiais"/);
+  assert.match(html, /data-action="generate"/);
+  assert.match(html, /data-action="clear"/);
+  assert.match(html, /id="senha-gerada"/);
+  assert.match(html, /data-action="copy"/);
+});
+
+test('SSG Multipage - WhatsApp: title, canonical, H1, módulo ESM e elementos do formulário', () => {
+  const filePath = path.join(ROOT_DIR, 'dist-pilot', 'tools', 'utilidades', 'whatsapp.html');
+  const html = fs.readFileSync(filePath, 'utf-8');
+
+  assert.match(html, /<title>Gerador de Link para WhatsApp Online \| Criar Link wa\.me Grátis<\/title>/);
+  assert.match(html, /<link rel="canonical" href="https:\/\/www\.calculadoramaster\.com\/tools\/utilidades\/whatsapp\.html">/);
+  assert.match(html, /<h1>Gerador de Link para WhatsApp<\/h1>/);
+  assert.match(html, /<script type="module" src="\.\.\/\.\.\/js\/tools\/whatsapp\.js"><\/script>/);
+
+  assert.match(html, /id="numero"/);
+  assert.match(html, /id="mensagem"/);
+  assert.match(html, /data-action="generate"/);
+  assert.match(html, /data-action="clear"/);
+  assert.match(html, /id="link-box"/);
+  assert.match(html, /data-action="copy"/);
+});
+
+test('SSG Multipage - Ausência de placeholders {{...}} em todas as 14 páginas geradas', () => {
   const pages = [
     'tools/financas/desconto.html',
     'tools/financas/juros.html',
@@ -375,7 +452,11 @@ test('SSG Multipage - Ausência de placeholders {{...}} em todas as 10 páginas 
     'tools/financas/dividir-conta.html',
     'tools/saude/imc.html',
     'tools/saude/idade.html',
-    'tools/trabalhista/horas-extras.html'
+    'tools/trabalhista/horas-extras.html',
+    'tools/utilidades/combustivel.html',
+    'tools/utilidades/contador.html',
+    'tools/utilidades/senha.html',
+    'tools/utilidades/whatsapp.html'
   ];
 
   for (const pageRel of pages) {
@@ -388,12 +469,13 @@ test('SSG Multipage - Ausência de placeholders {{...}} em todas as 10 páginas 
   }
 });
 
-test('SSG Multipage - Todos os 20 assets obrigatórios são copiados para dist-pilot', () => {
-  assert.equal(DEFAULT_ASSETS.length, 20, 'Devem existir exatamente 20 assets declarados no lote de ferramentas');
+test('SSG Multipage - Todos os 24 assets obrigatórios são copiados para dist-pilot', () => {
+  assert.equal(DEFAULT_ASSETS.length, 24, 'Devem existir exatamente 24 assets declarados no lote de ferramentas');
   assert.equal(FINANCEIRO_ASSETS.length, 17, 'FINANCEIRO_ASSETS deve conter 17 assets');
   assert.equal(SAUDE_ASSETS.length, 2, 'SAUDE_ASSETS deve conter 2 assets');
   assert.equal(TRABALHISTA_ASSETS.length, 1, 'TRABALHISTA_ASSETS deve conter 1 asset');
-  assert.equal(TOOL_ASSETS.length, 20, 'TOOL_ASSETS deve conter 20 assets');
+  assert.equal(UTILIDADES_ASSETS.length, 4, 'UTILIDADES_ASSETS deve conter 4 assets');
+  assert.equal(TOOL_ASSETS.length, 24, 'TOOL_ASSETS deve conter 24 assets');
 
   for (const item of DEFAULT_ASSETS) {
     const destPath = path.join(ROOT_DIR, 'dist-pilot', item.dest);
@@ -490,7 +572,11 @@ test('SSG Multipage - Contrato estrutural e ordem dos elementos em .nav-containe
     'tools/financas/dividir-conta.html',
     'tools/saude/imc.html',
     'tools/saude/idade.html',
-    'tools/trabalhista/horas-extras.html'
+    'tools/trabalhista/horas-extras.html',
+    'tools/utilidades/combustivel.html',
+    'tools/utilidades/contador.html',
+    'tools/utilidades/senha.html',
+    'tools/utilidades/whatsapp.html'
   ];
 
   for (const pageRel of pages) {
