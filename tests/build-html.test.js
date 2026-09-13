@@ -169,9 +169,9 @@ test('SSG Piloto - Caminhos relativos de CSS, JS e imagens estão consistentes',
  * TESTES - SSG MULTIPÁGINA (7 FERRAMENTAS FINANCEIRAS)
  * ================================================== */
 
-test('SSG Multipage - buildPages compila com sucesso as 14 ferramentas (Lote Financeiro, Saúde, Trabalhista e Utilidades)', () => {
+test('SSG Multipage - buildPages compila com sucesso as 15 ferramentas do catálogo oficial', () => {
   const results = buildPages();
-  assert.equal(results.length, 14, 'Devem ser geradas exatamente 14 páginas de ferramentas no total');
+  assert.equal(results.length, 15, 'Devem ser geradas exatamente 15 páginas de ferramentas no total');
 
   const expectedPaths = [
     'tools/financas/desconto.html',
@@ -187,7 +187,8 @@ test('SSG Multipage - buildPages compila com sucesso as 14 ferramentas (Lote Fin
     'tools/utilidades/combustivel.html',
     'tools/utilidades/contador.html',
     'tools/utilidades/senha.html',
-    'tools/utilidades/whatsapp.html'
+    'tools/utilidades/whatsapp.html',
+    'tools/utilidades/qr-code.html'
   ];
 
   expectedPaths.forEach(expectedRel => {
@@ -209,7 +210,7 @@ test('SSG Multipage - buildPages com escopo específico compila subconjuntos de 
   assert.equal(trabResults.length, 1, 'TRABALHISTA_PAGES deve gerar 1 página');
 
   const utilResults = buildPages(UTILIDADES_PAGES);
-  assert.equal(utilResults.length, 4, 'UTILIDADES_PAGES deve gerar 4 páginas');
+  assert.equal(utilResults.length, 5, 'UTILIDADES_PAGES deve gerar 5 páginas');
 
   // Restaura compilação completa para testes subsequentes
   buildPages();
@@ -441,7 +442,25 @@ test('SSG Multipage - WhatsApp: title, canonical, H1, módulo ESM e elementos do
   assert.match(html, /data-action="copy"/);
 });
 
-test('SSG Multipage - Ausência de placeholders {{...}} em todas as 14 páginas geradas', () => {
+test('SSG Multipage - QR Code: title, canonical, H1, módulo ESM, CDN qrcodejs e elementos do formulário', () => {
+  const filePath = path.join(ROOT_DIR, 'dist-pilot', 'tools', 'utilidades', 'qr-code.html');
+  const html = fs.readFileSync(filePath, 'utf-8');
+
+  assert.match(html, /<title>Gerador de QR Code Online Grátis \| Criar QR Code para Links<\/title>/);
+  assert.match(html, /<link rel="canonical" href="https:\/\/www\.calculadoramaster\.com\/tools\/utilidades\/qr-code\.html">/);
+  assert.match(html, /<h1>Gerador de QR Code<\/h1>/);
+  assert.match(html, /<script src="https:\/\/cdnjs\.cloudflare\.com\/ajax\/libs\/qrcodejs\/1\.0\.0\/qrcode\.min\.js"><\/script>/);
+  assert.match(html, /<script type="module" src="\.\.\/\.\.\/js\/tools\/qr-code\.js"><\/script>/);
+
+  assert.match(html, /id="textoQR"/);
+  assert.match(html, /data-action="generate"/);
+  assert.match(html, /data-action="clear"/);
+  assert.match(html, /id="qrcode"/);
+  assert.match(html, /id="btnDownload"/);
+  assert.match(html, /data-action="download"/);
+});
+
+test('SSG Multipage - Ausência de placeholders {{...}} em todas as 15 páginas geradas', () => {
   const pages = [
     'tools/financas/desconto.html',
     'tools/financas/juros.html',
@@ -456,7 +475,8 @@ test('SSG Multipage - Ausência de placeholders {{...}} em todas as 14 páginas 
     'tools/utilidades/combustivel.html',
     'tools/utilidades/contador.html',
     'tools/utilidades/senha.html',
-    'tools/utilidades/whatsapp.html'
+    'tools/utilidades/whatsapp.html',
+    'tools/utilidades/qr-code.html'
   ];
 
   for (const pageRel of pages) {
@@ -469,13 +489,13 @@ test('SSG Multipage - Ausência de placeholders {{...}} em todas as 14 páginas 
   }
 });
 
-test('SSG Multipage - Todos os 24 assets obrigatórios são copiados para dist-pilot', () => {
-  assert.equal(DEFAULT_ASSETS.length, 24, 'Devem existir exatamente 24 assets declarados no lote de ferramentas');
+test('SSG Multipage - Todos os 25 assets obrigatórios são copiados para dist-pilot', () => {
+  assert.equal(DEFAULT_ASSETS.length, 25, 'Devem existir exatamente 25 assets declarados no lote de ferramentas');
   assert.equal(FINANCEIRO_ASSETS.length, 17, 'FINANCEIRO_ASSETS deve conter 17 assets');
   assert.equal(SAUDE_ASSETS.length, 2, 'SAUDE_ASSETS deve conter 2 assets');
   assert.equal(TRABALHISTA_ASSETS.length, 1, 'TRABALHISTA_ASSETS deve conter 1 asset');
-  assert.equal(UTILIDADES_ASSETS.length, 4, 'UTILIDADES_ASSETS deve conter 4 assets');
-  assert.equal(TOOL_ASSETS.length, 24, 'TOOL_ASSETS deve conter 24 assets');
+  assert.equal(UTILIDADES_ASSETS.length, 5, 'UTILIDADES_ASSETS deve conter 5 assets');
+  assert.equal(TOOL_ASSETS.length, 25, 'TOOL_ASSETS deve conter 25 assets');
 
   for (const item of DEFAULT_ASSETS) {
     const destPath = path.join(ROOT_DIR, 'dist-pilot', item.dest);
@@ -576,7 +596,8 @@ test('SSG Multipage - Contrato estrutural e ordem dos elementos em .nav-containe
     'tools/utilidades/combustivel.html',
     'tools/utilidades/contador.html',
     'tools/utilidades/senha.html',
-    'tools/utilidades/whatsapp.html'
+    'tools/utilidades/whatsapp.html',
+    'tools/utilidades/qr-code.html'
   ];
 
   for (const pageRel of pages) {

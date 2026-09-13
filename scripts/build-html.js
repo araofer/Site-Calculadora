@@ -87,6 +87,10 @@ const UTILIDADES_PAGES = [
   {
     sourceFile: path.join(PAGES_DIR, 'tools', 'utilidades', 'whatsapp.page.html'),
     relativeOutputPath: 'tools/utilidades/whatsapp.html'
+  },
+  {
+    sourceFile: path.join(PAGES_DIR, 'tools', 'utilidades', 'qr-code.page.html'),
+    relativeOutputPath: 'tools/utilidades/qr-code.html'
   }
 ];
 
@@ -136,7 +140,8 @@ const UTILIDADES_ASSETS = [
   { src: 'js/tools/combustivel.js', dest: 'js/tools/combustivel.js' },
   { src: 'js/tools/contador.js', dest: 'js/tools/contador.js' },
   { src: 'js/tools/senha.js', dest: 'js/tools/senha.js' },
-  { src: 'js/tools/whatsapp.js', dest: 'js/tools/whatsapp.js' }
+  { src: 'js/tools/whatsapp.js', dest: 'js/tools/whatsapp.js' },
+  { src: 'js/tools/qr-code.js', dest: 'js/tools/qr-code.js' }
 ];
 
 const TOOL_ASSETS = [
@@ -190,7 +195,7 @@ function parsePageSource(fileContent) {
     if (colonIndex !== -1) {
       const key = line.slice(0, colonIndex).trim();
       const val = line.slice(colonIndex + 1).trim();
-      if (key) meta[key] = val;
+      if (key) meta[key] = val.replace(/\\n/g, '\n');
     }
   });
 

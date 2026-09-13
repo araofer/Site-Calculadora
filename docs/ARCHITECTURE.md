@@ -350,12 +350,12 @@ Uma conversão cega em massa de todos os arquivos do repositório geraria:
 ## 8. Próximos Passos Recomendados
 
 1. **Fase 2 — Modularização de Scripts (Concluída)**: 15/15 ferramentas migradas para ES Modules nativos com testes automatizados e script legado removido.
-2. **Fase 3 — Motor de Build SSG (Finanças, Saúde, Trabalhista e Utilidades Lote 1 Concluídos / Em Andamento)**: Motor multipágina expandido com sucesso para 14 das 15 ferramentas do projeto (7 páginas de `tools/financas/`, 2 de `tools/saude/`, 1 de `tools/trabalhista/` e 4 de `tools/utilidades/`) gerando artefatos em `dist-pilot/`; migração da ferramenta restante (`qr-code`) e demais páginas institucionais/blog planejada após validação contínua.
+2. **Fase 3 — Motor de Build SSG (15/15 Ferramentas Concluídas / Em Andamento)**: Motor multipágina expandido com sucesso para 100% das 15 ferramentas do projeto (7 páginas de `tools/financas/`, 2 de `tools/saude/`, 1 de `tools/trabalhista/` e 5 de `tools/utilidades/` incluindo o Gerador de QR Code) gerando artefatos em `dist-pilot/`. Migração das ferramentas concluída com sucesso; migração das páginas não-tool (categorias, home, blog e institucionais) planejada para a próxima fase.
 3. **Fase 4 — Normalização de Git e Line Endings**: Aplicar `.gitattributes` e `.git-blame-ignore-revs` em commit exclusivo.
 
 ---
 
-## 9. Fase 3 — Motor SSG Multipágina (14 Ferramentas: Finanças, Saúde, Trabalhista e Utilidades)
+## 9. Fase 3 — Motor SSG Multipágina (15/15 Ferramentas: Todas as Categorias)
 
 ### Objetivo e Visão Geral
 Evoluir o piloto de Static Site Generation (SSG) em Node.js vanilla para um motor multipágina flexível, robusto e reversível, eliminando progressivamente a duplicação estrutural de cabeçalho, rodapé e casca HTML entre as ferramentas, sem uso de frameworks, sem bundlers e sem substituição imediata dos arquivos de produção.
@@ -388,6 +388,7 @@ src/
         contador.page.html             # Lote Utilidades: Conteúdo e metadados de Contador de Caracteres
         senha.page.html                # Lote Utilidades: Conteúdo e metadados de Gerador de Senha
         whatsapp.page.html             # Lote Utilidades: Conteúdo e metadados de Gerador de Link WhatsApp
+        qr-code.page.html              # Lote Utilidades: Conteúdo e metadados de Gerador de QR Code
 scripts/
   build-html.js           # Motor de build SSG multipágina em Node.js Vanilla CommonJS
 dist-pilot/               # Diretório isolado de saída de teste (ignorado no .gitignore)
@@ -400,7 +401,7 @@ dist-pilot/               # Diretório isolado de saída de teste (ignorado no .
 4. **Resolução Dinâmica de Caminhos Relativos (`rootPrefix`)**: O motor calcula a profundidade do arquivo em relação à raiz (`../../` para ferramentas em `tools/<categoria>/`, `../` para categorias e `./` para a raiz), garantindo que CSS, scripts, imagens e links funcionem perfeitamente em qualquer nível de diretório.
 5. **Cópia Defensiva de Assets e Resolução da Árvore de Módulos ESM**: Todos os assets estáticos necessários (estilos, logos, scripts centrais e módulos ESM das ferramentas compiladas) são copiados para `dist-pilot/`. Para além dos pontos de entrada, o gerador e a suíte de testes asseguram a integridade da árvore transitiva completa de módulos ESM (copiando e validando dependências locais como `js/core/currency.js`, `js/auth.js` e `js/firebase-config.js`), prevenindo a falha em que a existência do script de entrada no HTTP direto mascara dependências internas ausentes no navegador. Se qualquer asset obrigatório não for encontrado no disco, o build falha imediatamente com erro explícito.
 6. **Validação Defensiva de Placeholders**: O build falha expressamente se qualquer campo de metadado obrigatório estiver ausente ou se restar qualquer placeholder `{{...}}` não resolvido no artefato gerado.
-7. **Ferramentas Disponíveis no Gerador (14/15 Disponíveis no Gerador) e Isolamento de Produção**:
+7. **Ferramentas Disponíveis no Gerador (15/15 Ferramentas — 100% Concluído) e Isolamento de Produção**:
    - **tools/financas/ (7 páginas)**:
      - `tools/financas/desconto.html`
      - `tools/financas/juros.html`
@@ -414,10 +415,11 @@ dist-pilot/               # Diretório isolado de saída de teste (ignorado no .
      - `tools/saude/idade.html`
    - **tools/trabalhista/ (1 página)**:
      - `tools/trabalhista/horas-extras.html`
-   - **tools/utilidades/ (4 páginas)**:
+   - **tools/utilidades/ (5 páginas)**:
      - `tools/utilidades/combustivel.html`
      - `tools/utilidades/contador.html`
      - `tools/utilidades/senha.html`
      - `tools/utilidades/whatsapp.html`
+     - `tools/utilidades/qr-code.html`
    Os HTMLs de produção atuais sob `tools/` permanecem 100% intactos e inalterados no repositório, garantindo preservação absoluta de SEO e estabilidade funcional.
-8. **Status e Limitações**: A Fase 3 NÃO está finalizada para todo o site. 14 de 15 ferramentas do catálogo oficial foram migradas para templates de build. Apenas a ferramenta `qr-code` da categoria Utilidades permanece pendente no SSG, além das páginas de categorias (`categorias/*.html`), o blog e páginas institucionais que permanecem como HTMLs estáticos para serem integradas nos próximos lotes.
+8. **Status e Limitações**: A migração de todas as 15 ferramentas do catálogo oficial para o SSG foi concluída com sucesso (15/15 ferramentas possuem templates fonte em `src/pages/tools/`). A Fase 3 avança agora para as páginas não-tool, incluindo a Home (`index.html`), as páginas de categorias (`categorias/*.html`), o blog (`blog/`) e páginas institucionais (`sobre.html`, `contato.html`, `politica.html`, `termos.html`), que permanecem como HTMLs estáticos para serem integradas na próxima etapa.

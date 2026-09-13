@@ -1,0 +1,84 @@
+---
+title: Gerador de QR Code Online Grátis | Criar QR Code para Links
+description: Gere QR Codes gratuitamente em segundos. Crie códigos para links, textos, WhatsApp e redes sociais de forma rápida e fácil.
+keywords: gerador de qr code, criar qr code, qr code online grátis, gerador de qr code para link
+canonical: https://www.calculadoramaster.com/tools/utilidades/qr-code.html
+layout: tool
+pageScripts: <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>\n<script type="module" src="{{ROOT_PREFIX}}js/tools/qr-code.js"></script>
+---
+  <h1>Gerador de QR Code</h1>
+  <p>Transforme links, textos ou contatos em um QR Code pronto para uso.</p>
+
+  <div style="margin:20px 0;" class="card">
+    <h2>Conteúdo do QR Code</h2>
+
+    <label for="textoQR">Insira a URL ou o texto abaixo:</label><br>
+    <input type="text" id="textoQR" placeholder="https://exemplo.com.br" style="width:100%; max-width: 500px; padding: 12px; margin-bottom: 15px;">
+    <br>
+    <button type="button" data-action="generate" class="btn-destaque">Gerar QR Code</button>
+    <button type="button" data-action="clear">Limpar</button>
+
+    <div id="resultado-area" style="margin-top: 30px; display: none; text-align: center;">
+        <div id="qrcode" style="display: inline-block; padding: 15px; background: white; border: 1px solid #ddd;"></div>
+        <br><br>
+        <button id="btnDownload" type="button" data-action="download" style="background-color: #28a745;">Baixar QR Code (PNG)</button>
+    </div>
+  </div>
+
+  <section class="content">
+    <h2>O que é um QR Code?</h2>
+    <p>
+      O QR Code (Quick Response Code) é um código de barras bidimensional que pode ser facilmente escaneado pela maioria dos celulares modernos. Ele é amplamente utilizado para direcionar usuários para sites sem a necessidade de digitar endereços longos.
+    </p>
+
+    <h2>Onde utilizar o QR Code?</h2>
+    <ul>
+      <li><strong>Marketing:</strong> Em cartões de visita, panfletos e cartazes.</li>
+      <li><strong>Restaurantes:</strong> Para cardápios digitais e pagamentos via PIX.</li>
+      <li><strong>Eventos:</strong> Para facilitar o check-in ou compartilhar a senha do Wi-Fi.</li>
+    </ul>
+
+    <h2>Dica de Ouro</h2>
+    <p>Sempre teste o QR Code gerado com a câmera do seu próprio celular antes de imprimir em grande escala, para garantir que o link está correto.</p>
+
+    <!-- FERRAMENTAS RELACIONADAS -->
+    <section class="related-tools">
+      <h2>Você também pode precisar</h2>
+      <div class="related-tools-grid">
+        <article class="tool-card">
+          <div class="tool-card-header">
+            <span class="tool-card-category">Utilidades</span>
+          </div>
+          <h3 class="tool-card-title">Gerador de Links WhatsApp</h3>
+          <p class="tool-card-desc">Gere links diretos de WhatsApp (wa.me) com mensagem personalizada sem cadastro.</p>
+          <div class="tool-card-footer">
+            <a href="../utilidades/whatsapp.html" class="tool-card-btn" aria-label="Acessar Gerador de Links WhatsApp">Calcular agora &rarr;</a>
+          </div>
+        </article>
+        <article class="tool-card">
+          <div class="tool-card-header">
+            <span class="tool-card-category">Utilidades</span>
+          </div>
+          <h3 class="tool-card-title">Gerador de Senha</h3>
+          <p class="tool-card-desc">Gere senhas fortes, seguras e personalizadas com criptografia Web Crypto.</p>
+          <div class="tool-card-footer">
+            <a href="../utilidades/senha.html" class="tool-card-btn" aria-label="Acessar Gerador de Senha">Calcular agora &rarr;</a>
+          </div>
+        </article>
+        <article class="tool-card">
+          <div class="tool-card-header">
+            <span class="tool-card-category">Utilidades</span>
+          </div>
+          <h3 class="tool-card-title">Contador de Caracteres</h3>
+          <p class="tool-card-desc">Conte caracteres, palavras, espaços e linhas em qualquer texto instantaneamente.</p>
+          <div class="tool-card-footer">
+            <a href="../utilidades/contador.html" class="tool-card-btn" aria-label="Acessar Contador de Caracteres">Calcular agora &rarr;</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <p style="margin-top: 30px;">
+      👉 <a href="../../index.html">Voltar para página inicial</a>
+    </p>
+  </section>
