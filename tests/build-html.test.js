@@ -398,3 +398,47 @@ test('SSG Multipage - copyPilotAssets lança erro explícito se um asset obrigat
     copyPilotAssets(path.join(ROOT_DIR, 'dist-pilot'), mockAssets);
   }, /Asset obrigatório não encontrado no disco/);
 });
+
+test('SSG Multipage - Contrato estrutural e ordem dos elementos em .nav-container do Header', () => {
+  const pages = [
+    'tools/financas/desconto.html',
+    'tools/financas/juros.html',
+    'tools/financas/lucro.html',
+    'tools/financas/porcentagem.html',
+    'tools/financas/financiamento-carro.html',
+    'tools/financas/financiamento-imovel.html',
+    'tools/financas/dividir-conta.html'
+  ];
+
+  for (const pageRel of pages) {
+    const filePath = path.join(ROOT_DIR, 'dist-pilot', pageRel);
+    const html = fs.readFileSync(filePath, 'utf-8');
+
+    // 1. Presença obrigatória dos 4 elementos da barra de navegação
+    assert.match(html, /<div class="logo">[\s\S]*?<\/div>/, `${pageRel} deve conter .logo`);
+    assert.match(html, /<nav class="nav" id="nav-menu">[\s\S]*?<\/nav>/, `${pageRel} deve conter .nav#nav-menu`);
+    assert.match(html, /<div class="menu-toggle" id="mobile-menu">[\s\S]*?<\/div>/, `${pageRel} deve conter .menu-toggle#mobile-menu`);
+    assert.match(html, /<div class="nav-actions">[\s\S]*?<\/div>/, `${pageRel} deve conter .nav-actions`);
+
+    // 2. Extração de índices para validação da ordem sequencial no DOM
+    const navContainerMatch = html.match(/<div class="container nav-container">([\s\S]*?)<\/header>/);
+    assert.ok(navContainerMatch, `${pageRel} deve conter .container.nav-container dentro de <header>`);
+
+    const headerContent = navContainerMatch[1];
+    const logoIndex = headerContent.indexOf('class="logo"');
+    const navIndex = headerContent.indexOf('class="nav"');
+    const toggleIndex = headerContent.indexOf('class="menu-toggle"');
+    const actionsIndex = headerContent.indexOf('class="nav-actions"');
+
+    assert.ok(logoIndex !== -1, `${pageRel} deve conter class="logo"`);
+    assert.ok(navIndex !== -1, `${pageRel} deve conter class="nav"`);
+    assert.ok(toggleIndex !== -1, `${pageRel} deve conter class="menu-toggle"`);
+    assert.ok(actionsIndex !== -1, `${pageRel} deve conter class="nav-actions"`);
+
+    // Ordem contratual garantida: logo -> nav -> menu-toggle -> nav-actions
+    assert.ok(
+      logoIndex < navIndex && navIndex < toggleIndex && toggleIndex < actionsIndex,
+      `${pageRel} deve respeitar a ordem contratual do header: logo (${logoIndex}) < nav (${navIndex}) < menu-toggle (${toggleIndex}) < nav-actions (${actionsIndex})`
+    );
+  }
+});
