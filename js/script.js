@@ -127,18 +127,31 @@ function calcularJuros(){
 
 function gerarLinkWhats(){
 
-        let numero = document.getElementById("numero").value;
-        
-        let mensagem = document.getElementById("mensagem").value;
-        
-        let mensagemCodificada = encodeURIComponent(mensagem);
-        
-        let link = "https://wa.me/" + numero + "?text=" + mensagemCodificada;
-        
-        document.getElementById("resultado").innerHTML =
-        '<a href="' + link + '" target="_blank">' + link + '</a>';
-        
-        }
+    let numeroInput = document.getElementById("numero").value;
+    let mensagem = document.getElementById("mensagem").value;
+
+    let numero = numeroInput.replace(/\D/g, "");
+
+    let resultado = document.getElementById("resultado");
+
+    if (!numero) {
+        resultado.textContent = "Informe um número de WhatsApp válido.";
+        return;
+    }
+
+    let link = "https://wa.me/" + numero + "?text=" + encodeURIComponent(mensagem);
+
+    resultado.textContent = "";
+
+    let a = document.createElement("a");
+    a.href = link;
+    a.target = "_blank";
+    a.rel = "noopener noreferrer";
+    a.textContent = link;
+
+    resultado.appendChild(a);
+
+}
 
 
 
