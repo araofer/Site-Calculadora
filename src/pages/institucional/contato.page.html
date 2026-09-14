@@ -3,7 +3,7 @@ title: Contato | Calculadora Master
 description: Entre em contato com o Calculadora Master. Envie dúvidas, sugestões ou reporte problemas em nossas calculadoras online gratuitas.
 canonical: https://www.calculadoramaster.com/contato.html
 layout: site
-pageScripts: <script>\n  const formContato = document.querySelector('.form-contato');\n  const statusContato = document.getElementById('contato-status');\n\n  if (formContato && statusContato) {\n    formContato.addEventListener('submit', function(e) {\n      e.preventDefault();\n      statusContato.textContent = 'O envio pelo formulário ainda não está disponível. Entre em contato pelo e-mail afdigital.contato@gmail.com.';\n      statusContato.hidden = false;\n    });\n  }\n</script>
+pageScripts: <script src="https://web3forms.com/client/script.js" async defer></script>\n<script>\n  const formContato = document.getElementById('form-contato');\n  const statusContato = document.getElementById('contato-status');\n  const btnSubmit = document.getElementById('btn-contato-submit');\n\n  if (formContato && statusContato && btnSubmit) {\n    formContato.addEventListener('submit', async function(e) {\n      e.preventDefault();\n\n      if (window.hcaptcha && window.hcaptcha.getResponse) {\n        const captchaResponse = window.hcaptcha.getResponse();\n        if (!captchaResponse) {\n          statusContato.textContent = 'Por favor, marque a caixa de verificação (não sou um robô) antes de enviar.';\n          statusContato.className = 'contato-status contato-error';\n          statusContato.hidden = false;\n          return;\n        }\n      }\n\n      const originalBtnText = btnSubmit.textContent;\n      btnSubmit.disabled = true;\n      btnSubmit.textContent = 'Enviando...';\n      formContato.setAttribute('aria-busy', 'true');\n\n      statusContato.hidden = true;\n      statusContato.textContent = '';\n      statusContato.className = 'contato-status';\n\n      try {\n        const formData = new FormData(formContato);\n\n        const response = await fetch('https://api.web3forms.com/submit', {\n          method: 'POST',\n          headers: {\n            'Accept': 'application/json'\n          },\n          body: formData\n        });\n\n        const result = await response.json();\n\n        if (response.ok && result.success) {\n          statusContato.textContent = 'Mensagem enviada com sucesso! Entraremos em contato em breve.';\n          statusContato.className = 'contato-status contato-success';\n          statusContato.hidden = false;\n          formContato.reset();\n          if (window.hcaptcha && window.hcaptcha.reset) {\n            try { window.hcaptcha.reset(); } catch (_) {}\n          }\n        } else if (response.status === 429) {\n          statusContato.textContent = 'Muitas tentativas em pouco tempo. Aguarde alguns minutos e tente novamente, ou envie diretamente para afdigital.contato@gmail.com.';\n          statusContato.className = 'contato-status contato-error';\n          statusContato.hidden = false;\n          if (window.hcaptcha && window.hcaptcha.reset) {\n            try { window.hcaptcha.reset(); } catch (_) {}\n          }\n        } else {\n          statusContato.textContent = 'Não foi possível enviar sua mensagem. Tente novamente ou envie diretamente para afdigital.contato@gmail.com.';\n          statusContato.className = 'contato-status contato-error';\n          statusContato.hidden = false;\n          if (window.hcaptcha && window.hcaptcha.reset) {\n            try { window.hcaptcha.reset(); } catch (_) {}\n          }\n        }\n      } catch (err) {\n        statusContato.textContent = 'Não foi possível enviar sua mensagem devido a uma falha de conexão. Tente novamente ou envie para afdigital.contato@gmail.com.';\n        statusContato.className = 'contato-status contato-error';\n        statusContato.hidden = false;\n      } finally {\n        btnSubmit.disabled = false;\n        btnSubmit.textContent = originalBtnText;\n        formContato.removeAttribute('aria-busy');\n      }\n    });\n  }\n</script>
 ---
 <section class="contato">
     <div class="container">
@@ -20,18 +20,25 @@ pageScripts: <script>\n  const formContato = document.querySelector('.form-conta
         <p><strong>Atendimento:</strong> Segunda a Sexta</p>
       </div>
 
-      <form class="form-contato">
+      <form class="form-contato" id="form-contato" action="https://api.web3forms.com/submit" method="POST">
+        <input type="hidden" name="access_key" value="2c869b08-0577-4cd8-9ee8-337cb9e8271a">
+        <input type="hidden" name="subject" value="Nova mensagem - Calculadora Master">
+        <input type="hidden" name="from_name" value="Calculadora Master">
+        <input type="checkbox" name="botcheck" class="hidden" style="display: none;">
+
         <label for="nome">Nome</label>
-        <input type="text" id="nome" placeholder="Seu nome" autocomplete="name" required>
+        <input type="text" id="nome" name="name" placeholder="Seu nome" autocomplete="name" required>
 
         <label for="email">Email</label>
-        <input type="email" id="email" placeholder="Seu email" autocomplete="email" required>
+        <input type="email" id="email" name="email" placeholder="Seu email" autocomplete="email" required>
 
         <label for="mensagem">Mensagem</label>
-        <textarea id="mensagem" rows="5" placeholder="Digite sua mensagem..." required></textarea>
+        <textarea id="mensagem" name="message" rows="5" placeholder="Digite sua mensagem..." required></textarea>
 
-        <button type="submit">Enviar Mensagem</button>
-        <p id="contato-status" role="status" aria-live="polite" hidden></p>
+        <div class="h-captcha" data-captcha="true"></div>
+
+        <button type="submit" id="btn-contato-submit">Enviar Mensagem</button>
+        <p id="contato-status" class="contato-status" role="status" aria-live="polite" hidden></p>
       </form>
     </div>
   </section>

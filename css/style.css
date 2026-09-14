@@ -1084,6 +1084,48 @@ textarea:focus-visible {
   align-self: flex-start;
 }
 
+.form-contato button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.form-contato .h-captcha {
+  margin-top: 15px;
+  max-width: 100%;
+}
+
+.contato-status {
+  margin-top: 15px;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.5;
+  box-sizing: border-box;
+}
+
+.contato-status.contato-success {
+  background-color: #e6f4ea;
+  color: #137333;
+  border: 1px solid #ceead6;
+}
+
+.contato-status.contato-error {
+  background-color: #fce8e6;
+  color: #c5221f;
+  border: 1px solid #fad2cf;
+}
+
+@media (max-width: 360px) {
+  .form-contato .h-captcha {
+    width: 268px;
+    height: 72px;
+    overflow: hidden;
+    transform: scale(0.88);
+    transform-origin: 0 0;
+  }
+}
+
 /* ===================================================== */
 /* AUTENTICAÇÃO (login / cadastro)                        */
 /* ===================================================== */
