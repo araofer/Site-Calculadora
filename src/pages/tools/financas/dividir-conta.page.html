@@ -18,15 +18,17 @@ pageScripts: <script type="module" src="{{ROOT_PREFIX}}js/tools/dividir-conta.js
 
     <label for="pessoas">Quantas pessoas vão dividir?</label><br>
     <input type="number" id="pessoas" placeholder="Ex: 4">
-    <br><br>
 
-    <button type="button" data-action="generate-fields">Inserir valores individuais</button>
+    <div class="tool-actions">
+      <button type="button" class="tool-btn tool-btn-primary" data-action="generate-fields">Inserir valores individuais</button>
+    </div>
 
     <div id="camposPessoas" style="margin-top:20px;"></div>
 
-    <br>
-    <button type="button" data-action="calculate" class="btn-destaque">Calcular Fechamento</button>
-    <button type="button" data-action="clear">Limpar Tudo</button>
+    <div class="tool-actions">
+      <button type="button" class="tool-btn tool-btn-primary" data-action="calculate">Calcular Fechamento</button>
+      <button type="button" class="tool-btn tool-btn-secondary" data-action="clear">Limpar Tudo</button>
+    </div>
 
     <h3 id="resultado" style="margin-top: 20px; color: #008080;"></h3>
   </div>

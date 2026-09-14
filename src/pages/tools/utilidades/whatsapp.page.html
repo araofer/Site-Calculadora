@@ -18,9 +18,10 @@ pageScripts: <script type="module" src="{{ROOT_PREFIX}}js/tools/whatsapp.js"></s
     <label for="mensagem">Mensagem automática (opcional):</label><br>
     <textarea id="mensagem" rows="4" style="width:100%; max-width: 400px; padding: 10px;" placeholder="Ex: Olá, gostaria de saber mais sobre seus serviços!"></textarea>
 
-    <br><br>
-    <button type="button" data-action="generate" class="btn-destaque">Gerar Link Personalizado</button>
-    <button type="button" data-action="clear">Limpar</button>
+    <div class="tool-actions">
+      <button type="button" class="tool-btn tool-btn-primary" data-action="generate">Gerar Link Personalizado</button>
+      <button type="button" class="tool-btn tool-btn-secondary" data-action="clear">Limpar</button>
+    </div>
 
     <div id="resultado-area" style="margin-top: 25px; display: none;">
         <p><strong>Seu link pronto:</strong></p>

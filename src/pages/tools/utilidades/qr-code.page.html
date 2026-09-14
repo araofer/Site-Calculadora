@@ -14,9 +14,11 @@ pageScripts: <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/
 
     <label for="textoQR">Insira a URL ou o texto abaixo:</label><br>
     <input type="text" id="textoQR" placeholder="https://exemplo.com.br" style="width:100%; max-width: 500px; padding: 12px; margin-bottom: 15px;">
-    <br>
-    <button type="button" data-action="generate" class="btn-destaque">Gerar QR Code</button>
-    <button type="button" data-action="clear">Limpar</button>
+
+    <div class="tool-actions">
+      <button type="button" class="tool-btn tool-btn-primary" data-action="generate">Gerar QR Code</button>
+      <button type="button" class="tool-btn tool-btn-secondary" data-action="clear">Limpar</button>
+    </div>
 
     <div id="resultado-area" style="margin-top: 30px; display: none; text-align: center;">
         <div id="qrcode" style="display: inline-block; padding: 15px; background: white; border: 1px solid #ddd;"></div>

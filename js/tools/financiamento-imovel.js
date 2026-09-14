@@ -116,11 +116,27 @@ export function setupFinanciamentoImovel() {
   const elTaxa = document.getElementById("taxaAnual");
   const elPrazo = document.getElementById("prazoAnos");
   const elResultado = document.getElementById("resultadoImovel");
+  const elErro = document.getElementById("mensagem-erro-imovel");
 
   const btnCalcular = document.querySelector('[data-action="calculate"]');
   const btnLimpar = document.querySelector('[data-action="clear"]');
 
+  function exibirErro(msg) {
+    if (elErro) {
+      elErro.textContent = msg;
+      elErro.style.display = "block";
+    }
+  }
+
+  function ocultarErro() {
+    if (elErro) {
+      elErro.textContent = "";
+      elErro.style.display = "none";
+    }
+  }
+
   function limparResultado() {
+    ocultarErro();
     if (elResultado) {
       elResultado.innerHTML = `
         <p style="color: #666; text-align: center;">Insira os dados do imóvel acima e clique em calcular para ver a evolução das parcelas.</p>
@@ -138,6 +154,7 @@ export function setupFinanciamentoImovel() {
 
   function executarCalculo() {
     if (!elResultado) return;
+    ocultarErro();
 
     const campoImovel = elImovel ? elImovel.value : "";
     const campoEntrada = elEntrada ? elEntrada.value : "";
@@ -145,7 +162,7 @@ export function setupFinanciamentoImovel() {
     const campoPrazo = elPrazo ? elPrazo.value : "";
 
     if (!campoImovel || !campoEntrada || !campoTaxa || !campoPrazo) {
-      alert("Por favor, preencha todos os campos obrigatórios.");
+      exibirErro("Por favor, preencha todos os campos obrigatórios.");
       return;
     }
 
@@ -157,7 +174,7 @@ export function setupFinanciamentoImovel() {
     });
 
     if (!res.valido) {
-      alert(res.erro);
+      exibirErro(res.erro);
       return;
     }
 

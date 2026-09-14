@@ -18,8 +18,8 @@ pageScripts: <script type="module" src="{{ROOT_PREFIX}}js/tools/juros.js"></scri
       <label>Período (Meses):</label>
       <input type="number" id="tempoSimples" placeholder="Ex: 12">
 
-      <div style="margin-top: 15px;">
-        <button type="button" data-action="calculate-simple">Calcular Simples</button>
+      <div class="tool-actions">
+        <button type="button" class="tool-btn tool-btn-primary" data-action="calculate-simple">Calcular Simples</button>
       </div>
       <h3 id="resultadoSimples" style="margin-top: 15px; color: #008080;"></h3>
     </section>
@@ -33,16 +33,16 @@ pageScripts: <script type="module" src="{{ROOT_PREFIX}}js/tools/juros.js"></scri
       <label>Período (Meses):</label>
       <input type="number" id="tempoComposto" placeholder="Ex: 12">
 
-      <div style="margin-top: 15px;">
-        <button type="button" class="btn-destaque" data-action="calculate-compound">Calcular Compostos</button>
+      <div class="tool-actions">
+        <button type="button" class="tool-btn tool-btn-primary" data-action="calculate-compound">Calcular Compostos</button>
       </div>
       <h3 id="resultadoComposto" style="margin-top: 15px; color: #008080;"></h3>
     </section>
 
   </div>
 
-  <div style="text-align: center; margin-top: 20px;">
-    <button type="button" data-action="clear" style="background-color: #666;">Limpar Tudo</button>
+  <div class="tool-actions" style="justify-content: center;">
+    <button type="button" class="tool-btn tool-btn-secondary" data-action="clear">Limpar Tudo</button>
   </div>
 
   <section class="content">
