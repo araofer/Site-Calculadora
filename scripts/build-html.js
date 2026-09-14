@@ -261,7 +261,8 @@ const FINANCEIRO_ASSETS = [
   { src: 'js/tools/financiamento-carro.js', dest: 'js/tools/financiamento-carro.js' },
   { src: 'js/tools/financiamento-imovel.js', dest: 'js/tools/financiamento-imovel.js' },
   { src: 'js/tools/dividir-conta.js', dest: 'js/tools/dividir-conta.js' },
-  { src: 'js/core/currency.js', dest: 'js/core/currency.js' }
+  { src: 'js/core/currency.js', dest: 'js/core/currency.js' },
+  { src: 'js/core/pdf-export.js', dest: 'js/core/pdf-export.js' }
 ];
 
 const SAUDE_ASSETS = [

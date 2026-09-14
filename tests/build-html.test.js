@@ -500,13 +500,13 @@ test('SSG Multipage - Ausência de placeholders {{...}} em todas as 15 páginas 
   }
 });
 
-test('SSG Multipage - Todos os 25 assets obrigatórios são copiados para dist-pilot', () => {
-  assert.equal(DEFAULT_ASSETS.length, 25, 'Devem existir exatamente 25 assets declarados no lote de ferramentas');
-  assert.equal(FINANCEIRO_ASSETS.length, 17, 'FINANCEIRO_ASSETS deve conter 17 assets');
+test('SSG Multipage - Todos os 26 assets obrigatórios são copiados para dist-pilot', () => {
+  assert.equal(DEFAULT_ASSETS.length, 26, 'Devem existir exatamente 26 assets declarados no lote de ferramentas');
+  assert.equal(FINANCEIRO_ASSETS.length, 18, 'FINANCEIRO_ASSETS deve conter 18 assets');
   assert.equal(SAUDE_ASSETS.length, 2, 'SAUDE_ASSETS deve conter 2 assets');
   assert.equal(TRABALHISTA_ASSETS.length, 1, 'TRABALHISTA_ASSETS deve conter 1 asset');
   assert.equal(UTILIDADES_ASSETS.length, 5, 'UTILIDADES_ASSETS deve conter 5 assets');
-  assert.equal(TOOL_ASSETS.length, 25, 'TOOL_ASSETS deve conter 25 assets');
+  assert.equal(TOOL_ASSETS.length, 26, 'TOOL_ASSETS deve conter 26 assets');
 
   for (const item of DEFAULT_ASSETS) {
     const destPath = path.join(ROOT_DIR, 'dist-pilot', item.dest);
@@ -519,6 +519,13 @@ test('SSG Multipage - Dependência compartilhada js/core/currency.js está prese
   assert.ok(fs.existsSync(currencyDest), 'js/core/currency.js deve existir em dist-pilot');
   const content = fs.readFileSync(currencyDest, 'utf-8');
   assert.ok(content.includes('export function parseBRLCurrency'), 'currency.js deve conter exports essenciais');
+});
+
+test('SSG Multipage - Dependência compartilhada js/core/pdf-export.js está presente e válida em dist-pilot', () => {
+  const pdfExportDest = path.join(ROOT_DIR, 'dist-pilot', 'js', 'core', 'pdf-export.js');
+  assert.ok(fs.existsSync(pdfExportDest), 'js/core/pdf-export.js deve existir em dist-pilot');
+  const content = fs.readFileSync(pdfExportDest, 'utf-8');
+  assert.ok(content.includes('exportResultPdf'), 'pdf-export.js deve conter exportResultPdf');
 });
 
 test('SSG Multipage - Dependências transitivas de autenticação (auth.js e firebase-config.js) existem em dist-pilot', () => {
@@ -628,10 +635,10 @@ test('SSG Multipage - Contrato estrutural e ordem dos elementos em .nav-containe
   }
 });
 
-test('SSG Site - buildPages(SITE_PAGES) compila 43 páginas e copia 58 assets', () => {
+test('SSG Site - buildPages(SITE_PAGES) compila 43 páginas e copia 59 assets', () => {
   const results = buildPages(SITE_PAGES, { assets: SITE_ASSETS });
   assert.equal(results.length, 43, 'SITE_PAGES deve gerar exatamente 43 páginas (15 ferramentas + Home + 5 categorias + 15 blog + 7 institucionais)');
-  assert.equal(SITE_ASSETS.length, 58, 'SITE_ASSETS deve conter exatamente 58 assets');
+  assert.equal(SITE_ASSETS.length, 59, 'SITE_ASSETS deve conter exatamente 59 assets');
 
   for (const page of SITE_PAGES) {
     const fullPath = path.join(ROOT_DIR, 'dist-pilot', page.relativeOutputPath);
@@ -1134,7 +1141,7 @@ test('SSG Institucional - Validação detalhada das 7 páginas: metadados, canon
   }
 });
 
-test('PROD - buildPages com PROD_OUTPUT_DIR gera todas as 43 páginas e 58 assets em dist/', () => {
+test('PROD - buildPages com PROD_OUTPUT_DIR gera todas as 43 páginas e 59 assets em dist/', () => {
   const result = buildPages(SITE_PAGES, { outputDir: PROD_OUTPUT_DIR, assets: SITE_ASSETS });
   assert.equal(result.length, 43, 'build:prod deve compilar exatamente 43 páginas');
 
@@ -1152,7 +1159,7 @@ test('PROD - buildPages com PROD_OUTPUT_DIR gera todas as 43 páginas e 58 asset
   }
 });
 
-test('PROD - Todas as 43 páginas e 58 assets em dist/ são idênticos a dist-pilot/', () => {
+test('PROD - Todas as 43 páginas e 59 assets em dist/ são idênticos a dist-pilot/', () => {
   const pilotDir = path.join(ROOT_DIR, 'dist-pilot');
   // Assegura que dist-pilot está compilado
   buildPages(SITE_PAGES, { outputDir: pilotDir, assets: SITE_ASSETS });
@@ -1176,6 +1183,18 @@ test('PROD - Todas as 43 páginas e 58 assets em dist/ são idênticos a dist-pi
     const pilotBuffer = fs.readFileSync(pilotAsset);
     assert.ok(prodBuffer.equals(pilotBuffer), `Asset divergente entre dist/ e dist-pilot/: ${asset.dest}`);
   }
+});
+
+test('PROD - dist/js/core/pdf-export.js existe após o build e corresponde ao arquivo-fonte', () => {
+  const prodFile = path.join(PROD_OUTPUT_DIR, 'js', 'core', 'pdf-export.js');
+  const sourceFile = path.join(ROOT_DIR, 'js', 'core', 'pdf-export.js');
+
+  assert.ok(fs.existsSync(prodFile), 'dist/js/core/pdf-export.js deve existir após o build');
+  assert.ok(fs.existsSync(sourceFile), 'js/core/pdf-export.js deve existir na raiz');
+
+  const prodContent = fs.readFileSync(prodFile, 'utf-8');
+  const sourceContent = fs.readFileSync(sourceFile, 'utf-8');
+  assert.equal(prodContent, sourceContent, 'dist/js/core/pdf-export.js deve corresponder exatamente ao arquivo-fonte');
 });
 
 test('Regressão Footer: site-footer não contém href="#", possui Imprensa e Parcerias para contato e removeu links provisórios', () => {
