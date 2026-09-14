@@ -1282,14 +1282,69 @@ textarea:focus-visible {
 /* GRID DE DUAS CALCULADORAS (Juros, Financiamento de Carro) */
 .grid-juros {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 20px;
   margin: 20px 0;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.grid-juros > .card {
+  width: 100% !important;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.grid-juros label {
+  display: block;
+  font-weight: 600;
+  font-size: 14px;
+  color: #333;
+  margin-top: 12px;
+  margin-bottom: 4px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.grid-juros input {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  margin: 0 0 12px 0;
+  box-sizing: border-box;
+}
+
+.grid-juros .grafico-container {
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  height: 260px;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.grid-juros canvas {
+  display: block;
+  width: 100% !important;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 @media (max-width: 768px) {
   .grid-juros {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
+    width: 100%;
+    max-width: 100%;
+    gap: 20px;
+  }
+
+  .grid-juros > .card {
+    padding: 20px 15px;
+    margin-bottom: 0 !important;
   }
 }
 

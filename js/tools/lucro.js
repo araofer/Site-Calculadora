@@ -63,8 +63,80 @@ export function setupCalculadoraLucro() {
   const btnCalcular = document.querySelector('[data-action="calculate"]');
   const btnLimpar = document.querySelector('[data-action="clear"]');
 
+  let chartLucroInstance = null;
+
+  function renderizarGraficoLucro(res) {
+    if (typeof window === "undefined" || typeof window.Chart === "undefined") return;
+    const canvas = document.getElementById("graficoLucro");
+    const container = document.getElementById("containerGraficoLucro");
+    if (!canvas || !container) return;
+
+    if (chartLucroInstance) {
+      chartLucroInstance.destroy();
+      chartLucroInstance = null;
+    }
+
+    const labels = ['Custo', 'Lucro', 'Preço de Venda'];
+    const dados = [res.custo, res.lucro, res.preco];
+    const cores = [
+      '#e74c3c',
+      res.lucro >= 0 ? '#2e7d32' : '#c62828',
+      '#1e2a38'
+    ];
+
+    const prefersReducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    container.style.display = "block";
+    chartLucroInstance = new window.Chart(canvas, {
+      type: 'bar',
+      data: {
+        labels,
+        datasets: [{
+          label: 'Valor (R$)',
+          data: dados,
+          backgroundColor: cores,
+          borderRadius: 6,
+          maxBarThickness: 50
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        animation: prefersReducedMotion ? false : { duration: 400 },
+        plugins: {
+          legend: { display: false },
+          title: {
+            display: true,
+            text: 'Custo, lucro e preço de venda',
+            color: '#1a1a1a',
+            font: { size: 14, weight: 'bold' }
+          },
+          tooltip: {
+            callbacks: {
+              label: (context) => `${context.label}: R$ ${context.parsed.y.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+            }
+          }
+        },
+        scales: {
+          y: {
+            title: { display: true, text: 'Valor (R$)' },
+            ticks: {
+              callback: (val) => `R$ ${Number(val).toLocaleString('pt-BR')}`
+            }
+          }
+        }
+      }
+    });
+  }
+
   function limparResultado() {
     if (elResultado) elResultado.innerText = "";
+    if (chartLucroInstance) {
+      chartLucroInstance.destroy();
+      chartLucroInstance = null;
+    }
+    const container = document.getElementById("containerGraficoLucro");
+    if (container) container.style.display = "none";
   }
 
   function limparCampos() {
@@ -93,6 +165,10 @@ export function setupCalculadoraLucro() {
 
     elResultado.style.color = res.corResultado;
     elResultado.innerHTML = res.textoHtml;
+
+    try {
+      renderizarGraficoLucro(res);
+    } catch (_) {}
   }
 
   if (elCusto) {

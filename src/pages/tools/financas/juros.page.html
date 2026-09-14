@@ -4,39 +4,46 @@ description: Calcule juros simples e compostos online grátis. Descubra o valor 
 keywords: calculadora de juros, juros simples, juros compostos, calcular juros online, simulador de investimentos
 canonical: https://www.calculadoramaster.com/tools/financas/juros.html
 layout: tool
-pageScripts: <script type="module" src="{{ROOT_PREFIX}}js/tools/juros.js"></script>
+pageScripts: <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>\n<script type="module" src="{{ROOT_PREFIX}}js/tools/juros.js"></script>
 ---
   <h1>Calculadora de Juros</h1>
   <p>Compare juros simples e compostos para planejar seus investimentos ou entender o custo de um empréstimo.</p>
 
-  <div class="grid-juros"> <section class="card" style="margin-bottom: 20px;">
+  <div class="grid-juros">
+    <section class="card">
       <h2>Juros Simples</h2>
-      <label>Capital Inicial (R$):</label>
+      <label for="capitalSimples">Capital Inicial (R$):</label>
       <input type="number" id="capitalSimples" placeholder="Ex: 1000">
-      <label>Taxa de Juros (%):</label>
+      <label for="taxaSimples">Taxa de Juros (%):</label>
       <input type="number" id="taxaSimples" placeholder="Ex: 5">
-      <label>Período (Meses):</label>
+      <label for="tempoSimples">Período (Meses):</label>
       <input type="number" id="tempoSimples" placeholder="Ex: 12">
 
       <div class="tool-actions">
         <button type="button" class="tool-btn tool-btn-primary" data-action="calculate-simple">Calcular Simples</button>
       </div>
       <h3 id="resultadoSimples" style="margin-top: 15px; color: #008080;"></h3>
+      <div id="containerGraficoSimples" class="grafico-container" style="position: relative; height: 260px; width: 100%; max-width: 100%; min-width: 0; box-sizing: border-box; margin-top: 20px; display: none; overflow: hidden;">
+        <canvas id="graficoJurosSimples" aria-label="Gráfico de linha mostrando a evolução do montante em juros simples" role="img"></canvas>
+      </div>
     </section>
 
     <section class="card">
       <h2>Juros Compostos</h2>
-      <label>Capital Inicial (R$):</label>
+      <label for="capitalComposto">Capital Inicial (R$):</label>
       <input type="number" id="capitalComposto" placeholder="Ex: 1000">
-      <label>Taxa de Juros (%):</label>
+      <label for="taxaComposta">Taxa de Juros (%):</label>
       <input type="number" id="taxaComposta" placeholder="Ex: 5">
-      <label>Período (Meses):</label>
+      <label for="tempoComposto">Período (Meses):</label>
       <input type="number" id="tempoComposto" placeholder="Ex: 12">
 
       <div class="tool-actions">
         <button type="button" class="tool-btn tool-btn-primary" data-action="calculate-compound">Calcular Compostos</button>
       </div>
       <h3 id="resultadoComposto" style="margin-top: 15px; color: #008080;"></h3>
+      <div id="containerGraficoComposto" class="grafico-container" style="position: relative; height: 260px; width: 100%; max-width: 100%; min-width: 0; box-sizing: border-box; margin-top: 20px; display: none; overflow: hidden;">
+        <canvas id="graficoJurosComposto" aria-label="Gráfico de linha mostrando a evolução do montante em juros compostos" role="img"></canvas>
+      </div>
     </section>
 
   </div>
