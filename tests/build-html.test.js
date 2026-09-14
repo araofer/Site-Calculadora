@@ -1177,3 +1177,31 @@ test('PROD - Todas as 43 páginas e 58 assets em dist/ são idênticos a dist-pi
     assert.ok(prodBuffer.equals(pilotBuffer), `Asset divergente entre dist/ e dist-pilot/: ${asset.dest}`);
   }
 });
+
+test('Regressão Footer: site-footer não contém href="#", possui Imprensa e Parcerias para contato e removeu links provisórios', () => {
+  const footerPath = path.join(ROOT_DIR, 'src', 'components', 'site-footer.html');
+  assert.ok(fs.existsSync(footerPath), 'src/components/site-footer.html deve existir');
+  const footerHtml = fs.readFileSync(footerPath, 'utf-8');
+
+  // site-footer não contém href="#"
+  assert.ok(!footerHtml.includes('href="#"'), 'site-footer.html não deve conter href="#"');
+
+  // "Imprensa e Parcerias" existe e aponta para contato.html
+  assert.match(footerHtml, /href="\{\{ROOT_PREFIX\}\}contato\.html">Imprensa e Parcerias<\/a>/, 'Imprensa e Parcerias deve apontar para contato.html');
+
+  // Os textos removidos não aparecem mais no site-footer
+  assert.ok(!footerHtml.includes('Status do sistema'), 'Status do sistema não deve existir no site-footer');
+  assert.ok(!footerHtml.includes('Carreiras'), 'Carreiras não deve existir no site-footer');
+  assert.ok(!footerHtml.includes('Programa de afiliados'), 'Programa de afiliados não deve existir no site-footer');
+
+  // Validação no HTML gerado pelo SSG (Home)
+  const homePath = path.join(ROOT_DIR, 'dist-pilot', 'index.html');
+  if (fs.existsSync(homePath)) {
+    const homeHtml = fs.readFileSync(homePath, 'utf-8');
+    assert.ok(!homeHtml.includes('href="#"'), 'index.html gerado não deve conter href="#"');
+    assert.match(homeHtml, /href="\.\/contato\.html">Imprensa e Parcerias<\/a>/);
+    assert.ok(!homeHtml.includes('Status do sistema'));
+    assert.ok(!homeHtml.includes('Carreiras'));
+    assert.ok(!homeHtml.includes('Programa de afiliados'));
+  }
+});
