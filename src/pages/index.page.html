@@ -392,13 +392,16 @@ pageScripts: <script src="{{ROOT_PREFIX}}js/tools-catalog.js"></script>\n<script
       </div>
 
       <div class="newsletter-form">
-        <form action="#" method="post">
+        <form id="newsletter-form" action="https://9de5fa26.sibforms.com/serve/MUIFAMtFTyTucrBN7VCAp7FcU1nYflU18STOhyDarfanZm4CQfP-zvHzuVZIGgSocj580mVZek8t7sm32tr7E74FeTkwNCMfVOT_SreMqsLKxyMz9M6PbYNbN4nK5QFCncEXWz93sx9iV0cM9zdmn95epe1S9UChO0CDNsKbz_c5bZBBc-w_OJSf_LsWS5WeeFxscBD3ijVkeBm3" method="POST">
+          <input type="text" name="email_address_check" value="" class="newsletter-honeypot" tabindex="-1" autocomplete="off" aria-hidden="true">
+          <input type="hidden" name="locale" value="pt">
+          <input type="hidden" name="html_type" value="simple">
           <div class="form-row">
             <label for="newsletter-email" class="sr-only">Seu e-mail</label>
-            <input type="email" id="newsletter-email" name="email" placeholder="Insira seu e-mail" required>
-            <button type="submit">Subscrever</button>
+            <input type="email" id="newsletter-email" name="EMAIL" placeholder="Insira seu e-mail" autocomplete="email" required>
+            <button type="submit">Inscrever-se</button>
           </div>
-          <small class="newsletter-note">Ao se inscrever você concorda com nossa <a href="{{ROOT_PREFIX}}politica.html">Política de Privacidade</a>.</small>
+          <small class="newsletter-note">Ao se inscrever, você concorda em receber novidades, artigos e novas ferramentas do Calculadora Master por e-mail. Você pode cancelar a inscrição a qualquer momento. Consulte nossa <a href="{{ROOT_PREFIX}}politica.html">Política de Privacidade</a>.</small>
         </form>
       </div>
     </div>
