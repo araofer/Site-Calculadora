@@ -4,7 +4,7 @@ description: Simule o financiamento da sua casa ou apartamento online grátis. D
 keywords: financiamento imobiliário, simulador de financiamento, calcular parcela de imóvel, simulador habitacional, tabela sac, juros caixa
 canonical: https://www.calculadoramaster.com/tools/financas/financiamento-imovel.html
 layout: tool
-pageScripts: <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>\n<script type="module" src="{{ROOT_PREFIX}}js/tools/financiamento-imovel.js"></script>
+pageScripts: <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>\n<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js"></script>\n<script type="module" src="{{ROOT_PREFIX}}js/tools/financiamento-imovel.js"></script>
 ---
     <h1>Simulador de Financiamento Imobiliário (SAC)</h1>
     <p>Planeje a compra da sua casa ou apartamento. Calcule o valor da primeira e da última parcela usando o sistema de amortização constante.</p>
@@ -46,6 +46,9 @@ pageScripts: <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart
       <h2>Resultado da Simulação</h2>
       <div id="resultadoImovel">
         <p style="color: #666; text-align: center;">Insira os dados do imóvel acima e clique em calcular para ver a evolução das parcelas.</p>
+      </div>
+      <div id="containerPdfImovel" class="tool-actions" style="margin-top: 20px; margin-bottom: 0; display: none;">
+        <button type="button" class="tool-btn tool-btn-secondary" data-action="export-pdf">Baixar PDF</button>
       </div>
       <div id="containerGraficoImovel" style="position: relative; height: 280px; max-width: 100%; margin-top: 25px; display: none;">
         <canvas id="graficoImovel" aria-label="Gráfico de linha da evolução do saldo devedor ao longo das parcelas" role="img"></canvas>

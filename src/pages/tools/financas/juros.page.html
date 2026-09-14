@@ -4,7 +4,7 @@ description: Calcule juros simples e compostos online grátis. Descubra o valor 
 keywords: calculadora de juros, juros simples, juros compostos, calcular juros online, simulador de investimentos
 canonical: https://www.calculadoramaster.com/tools/financas/juros.html
 layout: tool
-pageScripts: <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>\n<script type="module" src="{{ROOT_PREFIX}}js/tools/juros.js"></script>
+pageScripts: <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>\n<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js"></script>\n<script type="module" src="{{ROOT_PREFIX}}js/tools/juros.js"></script>
 ---
   <h1>Calculadora de Juros</h1>
   <p>Compare juros simples e compostos para planejar seus investimentos ou entender o custo de um empréstimo.</p>
@@ -23,6 +23,9 @@ pageScripts: <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart
         <button type="button" class="tool-btn tool-btn-primary" data-action="calculate-simple">Calcular Simples</button>
       </div>
       <h3 id="resultadoSimples" style="margin-top: 15px; color: #008080;"></h3>
+      <div id="containerPdfSimples" class="tool-actions" style="margin-top: 12px; margin-bottom: 0; display: none;">
+        <button type="button" class="tool-btn tool-btn-secondary" data-action="export-pdf-simple">Baixar PDF</button>
+      </div>
       <div id="containerGraficoSimples" class="grafico-container" style="position: relative; height: 260px; width: 100%; max-width: 100%; min-width: 0; box-sizing: border-box; margin-top: 20px; display: none; overflow: hidden;">
         <canvas id="graficoJurosSimples" aria-label="Gráfico de linha mostrando a evolução do montante em juros simples" role="img"></canvas>
       </div>
@@ -41,6 +44,9 @@ pageScripts: <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart
         <button type="button" class="tool-btn tool-btn-primary" data-action="calculate-compound">Calcular Compostos</button>
       </div>
       <h3 id="resultadoComposto" style="margin-top: 15px; color: #008080;"></h3>
+      <div id="containerPdfComposto" class="tool-actions" style="margin-top: 12px; margin-bottom: 0; display: none;">
+        <button type="button" class="tool-btn tool-btn-secondary" data-action="export-pdf-compound">Baixar PDF</button>
+      </div>
       <div id="containerGraficoComposto" class="grafico-container" style="position: relative; height: 260px; width: 100%; max-width: 100%; min-width: 0; box-sizing: border-box; margin-top: 20px; display: none; overflow: hidden;">
         <canvas id="graficoJurosComposto" aria-label="Gráfico de linha mostrando a evolução do montante em juros compostos" role="img"></canvas>
       </div>

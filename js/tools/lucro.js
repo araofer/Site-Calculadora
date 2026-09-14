@@ -62,8 +62,27 @@ export function setupCalculadoraLucro() {
 
   const btnCalcular = document.querySelector('[data-action="calculate"]');
   const btnLimpar = document.querySelector('[data-action="clear"]');
+  const btnPdf = document.querySelector('[data-action="export-pdf"]');
+  const contPdf = document.getElementById("containerPdfLucro");
 
   let chartLucroInstance = null;
+  let ultimoResultadoLucro = null;
+
+  async function getPdfExporter() {
+    if (typeof window !== 'undefined' && typeof window.exportResultPdf === 'function') {
+      return window.exportResultPdf;
+    }
+    try {
+      const helper = await import('../core/' + 'pdf-export.js');
+      if (helper && typeof helper.exportResultPdf === 'function') {
+        return helper.exportResultPdf;
+      }
+    } catch (_) {}
+    if (typeof window !== 'undefined' && typeof window.alert === 'function') {
+      window.alert('Não foi possível gerar o PDF agora. Tente novamente.');
+    }
+    return null;
+  }
 
   function renderizarGraficoLucro(res) {
     if (typeof window === "undefined" || typeof window.Chart === "undefined") return;
@@ -131,6 +150,8 @@ export function setupCalculadoraLucro() {
 
   function limparResultado() {
     if (elResultado) elResultado.innerText = "";
+    ultimoResultadoLucro = null;
+    if (contPdf) contPdf.style.display = "none";
     if (chartLucroInstance) {
       chartLucroInstance.destroy();
       chartLucroInstance = null;
@@ -163,12 +184,43 @@ export function setupCalculadoraLucro() {
       return;
     }
 
+    ultimoResultadoLucro = res;
+    if (contPdf) contPdf.style.display = "flex";
+
     elResultado.style.color = res.corResultado;
     elResultado.innerHTML = res.textoHtml;
 
     try {
       renderizarGraficoLucro(res);
     } catch (_) {}
+  }
+
+  async function exportarPdfLucro() {
+    if (!ultimoResultadoLucro) return;
+    const res = ultimoResultadoLucro;
+    const canvas = document.getElementById("graficoLucro");
+    const helper = await getPdfExporter();
+    if (!helper) return;
+
+    const statusTexto = res.status === 'lucro'
+      ? 'Lucro Positivo'
+      : (res.status === 'prejuizo' ? 'Prejuízo' : 'Ponto de Equilíbrio');
+
+    helper({
+      filename: "calculadora-master-lucro.pdf",
+      title: "Calculadora de Lucro e Margem",
+      inputs: [
+        { label: "Custo Total do Produto", value: `R$ ${res.custo.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` },
+        { label: "Preço de Venda Final", value: `R$ ${res.preco.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` }
+      ],
+      results: [
+        { label: "Situação", value: statusTexto },
+        { label: res.lucro >= 0 ? "Lucro Bruto" : "Prejuízo", value: `R$ ${res.lucro.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`, highlight: true },
+        { label: "Margem de Lucro", value: `${res.margem.toFixed(2)}%`, highlight: true }
+      ],
+      canvas: canvas && canvas.offsetParent !== null ? canvas : null,
+      notes: ["Fórmulas aplicadas: Lucro = Preço de Venda - Custo | Margem % = (Lucro ÷ Preço de Venda) × 100."]
+    });
   }
 
   if (elCusto) {
@@ -197,6 +249,10 @@ export function setupCalculadoraLucro() {
 
   if (btnLimpar) {
     btnLimpar.addEventListener("click", limparCampos);
+  }
+
+  if (btnPdf) {
+    btnPdf.addEventListener("click", exportarPdfLucro);
   }
 }
 
