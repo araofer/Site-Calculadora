@@ -672,6 +672,17 @@ test('SSG Site - Home (index.html): metadados, H1, busca, catálogo, destaques e
   assert.match(html, /id="ferramentas"/);
   assert.match(html, /class="blog-section"/);
   assert.match(html, /class="newsletter"/);
+  assert.match(html, /id="newsletter-form"/);
+  assert.match(html, /action="https:\/\/9de5fa26\.sibforms\.com\/serve\/[a-zA-Z0-9_-]+"/);
+  assert.match(html, /method="POST"/i);
+  assert.match(html, /name="EMAIL"/);
+  assert.match(html, /autocomplete="email"/);
+  assert.match(html, /name="email_address_check"/);
+  assert.match(html, /class="newsletter-honeypot"/);
+  assert.match(html, /name="locale" value="pt"/);
+  assert.match(html, /name="html_type" value="simple"/);
+  assert.match(html, /<button type="submit">Inscrever-se<\/button>/);
+  assert.match(html, /href="\.\/politica\.html"/);
 
   // Scripts da Home
   assert.match(html, /<script src="\.\/js\/tools-catalog\.js"><\/script>/);
