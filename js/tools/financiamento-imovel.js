@@ -128,6 +128,90 @@ export function setupFinanciamentoImovel() {
     }
   }
 
+  let chartImovelInstance = null;
+
+  function renderizarGraficoImovel(res) {
+    if (typeof window === "undefined" || typeof window.Chart === "undefined") return;
+    const canvas = document.getElementById("graficoImovel");
+    const container = document.getElementById("containerGraficoImovel");
+    if (!canvas || !container) return;
+
+    if (chartImovelInstance) {
+      chartImovelInstance.destroy();
+      chartImovelInstance = null;
+    }
+
+    const prazoMeses = res.prazoMeses;
+    const amortizacaoMensal = res.amortizacaoMensal;
+    const valorFinanciado = res.valorFinanciado;
+
+    // Amostragem controlada para eixos limpos em prazos longos
+    // Sempre preserva início (Parcela 0), intermediárias e última parcela
+    const labels = ['Início'];
+    const dados = [Number(valorFinanciado.toFixed(2))];
+
+    const step = prazoMeses > 120 ? 12 : (prazoMeses > 36 ? 6 : 1);
+
+    for (let m = step; m < prazoMeses; m += step) {
+      labels.push(`Mês ${m}`);
+      const saldo = Math.max(0, valorFinanciado - (m * amortizacaoMensal));
+      dados.push(Number(saldo.toFixed(2)));
+    }
+
+    // Última parcela (saldo quitado / zero)
+    labels.push(`Mês ${prazoMeses}`);
+    dados.push(0);
+
+    const prefersReducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    container.style.display = "block";
+    chartImovelInstance = new window.Chart(canvas, {
+      type: 'line',
+      data: {
+        labels,
+        datasets: [{
+          label: 'Saldo Devedor (R$)',
+          data: dados,
+          borderColor: '#1e2a38',
+          backgroundColor: 'rgba(30, 42, 56, 0.08)',
+          fill: true,
+          tension: 0.1,
+          pointRadius: prazoMeses > 36 ? 1 : 3
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        animation: prefersReducedMotion ? false : { duration: 400 },
+        plugins: {
+          legend: { display: false },
+          title: {
+            display: true,
+            text: 'Saldo devedor ao longo do financiamento',
+            color: '#1a1a1a',
+            font: { size: 14, weight: 'bold' }
+          },
+          tooltip: {
+            callbacks: {
+              label: (context) => `Saldo devedor: R$ ${context.parsed.y.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+            }
+          }
+        },
+        scales: {
+          x: {
+            title: { display: true, text: 'Parcelas' }
+          },
+          y: {
+            title: { display: true, text: 'Saldo Devedor (R$)' },
+            ticks: {
+              callback: (val) => `R$ ${Number(val).toLocaleString('pt-BR')}`
+            }
+          }
+        }
+      }
+    });
+  }
+
   function ocultarErro() {
     if (elErro) {
       elErro.textContent = "";
@@ -137,6 +221,12 @@ export function setupFinanciamentoImovel() {
 
   function limparResultado() {
     ocultarErro();
+    if (chartImovelInstance) {
+      chartImovelInstance.destroy();
+      chartImovelInstance = null;
+    }
+    const container = document.getElementById("containerGraficoImovel");
+    if (container) container.style.display = "none";
     if (elResultado) {
       elResultado.innerHTML = `
         <p style="color: #666; text-align: center;">Insira os dados do imóvel acima e clique em calcular para ver a evolução das parcelas.</p>
@@ -212,6 +302,10 @@ export function setupFinanciamentoImovel() {
         </div>
       </div>
     `;
+
+    try {
+      renderizarGraficoImovel(res);
+    } catch (_) {}
   }
 
   // Máscaras de entrada em tempo real
