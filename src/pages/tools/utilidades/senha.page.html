@@ -24,10 +24,10 @@ pageScripts: <script type="module" src="{{ROOT_PREFIX}}js/tools/senha.js"></scri
         <label><input type="checkbox" id="especiais" checked> Incluir Símbolos (!@#$%&*)</label>
     </div>
 
-    <br><br>
-
-    <button type="button" class="btn-destaque" data-action="generate">Gerar Senha Forte</button>
-    <button type="button" data-action="clear">Resetar</button>
+    <div class="tool-actions">
+      <button type="button" class="tool-btn tool-btn-primary" data-action="generate">Gerar Senha Forte</button>
+      <button type="button" class="tool-btn tool-btn-secondary" data-action="clear">Resetar</button>
+    </div>
 
     <div id="resultado-area" style="margin-top: 25px; display: none;">
         <div style="background: #f4f4f4; padding: 15px; border-radius: 5px; border: 1px dashed #008080; font-family: monospace; font-size: 1.2em; word-break: break-all;" id="senha-gerada"></div>

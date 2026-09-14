@@ -12,8 +12,10 @@ pageScripts: <script type="module" src="{{ROOT_PREFIX}}js/tools/contador.js"></s
   <div style="margin:20px 0;" class="card">
     <h2>Digite ou cole seu texto</h2>
     <textarea id="texto" rows="6" style="width:100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc;" placeholder="Digite seu texto aqui..."></textarea>
-    <br><br>
-    <button type="button" data-action="clear">Limpar Texto</button>
+
+    <div class="tool-actions">
+      <button type="button" class="tool-btn tool-btn-secondary" data-action="clear">Limpar Texto</button>
+    </div>
 
     <h3 id="resultado" style="margin-top: 20px; color: #008080;">Aguardando texto...</h3>
   </div>

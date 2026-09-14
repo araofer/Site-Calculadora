@@ -16,9 +16,11 @@ pageScripts: <script type="module" src="{{ROOT_PREFIX}}js/tools/combustivel.js">
     <input type="number" id="consumo" placeholder="Consumo (km/l) Ex: 12">
     <br><br>
     <input type="number" id="preco" placeholder="Preço do combustível (Ex: 5.49)">
-    <br><br>
-    <button type="button" data-action="calculate">Calcular</button>
-    <button type="button" data-action="clear">Limpar</button>
+
+    <div class="tool-actions">
+      <button type="button" class="tool-btn tool-btn-primary" data-action="calculate">Calcular</button>
+      <button type="button" class="tool-btn tool-btn-secondary" data-action="clear">Limpar</button>
+    </div>
 
     <h3 id="resultado" style="margin-top: 20px; color: #008080;"></h3>
   </div>

@@ -17,10 +17,10 @@ pageScripts: <script type="module" src="{{ROOT_PREFIX}}js/tools/porcentagem.js">
     <span> de </span>
     <input type="number" id="valor" placeholder="Ex: 200">
 
-    <br><br>
-
-    <button type="button" data-action="calculate">Calcular</button>
-    <button type="button" data-action="clear">Limpar</button>
+    <div class="tool-actions">
+      <button type="button" class="tool-btn tool-btn-primary" data-action="calculate">Calcular</button>
+      <button type="button" class="tool-btn tool-btn-secondary" data-action="clear">Limpar</button>
+    </div>
 
     <div id="resultado-container" style="margin-top: 20px; display: none;">
         <h3 id="resultado" style="color: #008080;"></h3>

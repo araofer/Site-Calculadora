@@ -12,10 +12,11 @@ pageScripts: <script type="module" src="{{ROOT_PREFIX}}js/tools/idade.js"></scri
   <div style="margin:20px 0;" class="card">
     <h2>Selecione sua data de nascimento</h2>
     <input type="date" id="dataNascimento" style="padding: 10px; border-radius: 5px; border: 1px solid #ccc; font-family: inherit;">
-    <br><br>
 
-    <button type="button" data-action="calculate">Calcular Idade</button>
-    <button type="button" data-action="clear">Limpar</button>
+    <div class="tool-actions">
+      <button type="button" class="tool-btn tool-btn-primary" data-action="calculate">Calcular Idade</button>
+      <button type="button" class="tool-btn tool-btn-secondary" data-action="clear">Limpar</button>
+    </div>
 
     <h3 id="resultado" style="margin-top: 20px; color: #008080;"></h3>
   </div>

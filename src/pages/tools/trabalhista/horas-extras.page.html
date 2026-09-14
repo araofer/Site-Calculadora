@@ -22,10 +22,12 @@ pageScripts: <script type="module" src="{{ROOT_PREFIX}}js/tools/horas-extras.js"
     <input type="text" id="horas-extras" inputmode="decimal" placeholder="Ex: 10"><br><br>
 
     <label for="adicional">Adicional de hora extra (%):</label><br>
-    <input type="text" id="adicional" inputmode="decimal" placeholder="Ex: 50"><br><br>
+    <input type="text" id="adicional" inputmode="decimal" placeholder="Ex: 50">
 
-    <button type="button" data-action="calculate">Calcular</button>
-    <button type="button" data-action="clear">Limpar</button>
+    <div class="tool-actions">
+      <button type="button" class="tool-btn tool-btn-primary" data-action="calculate">Calcular</button>
+      <button type="button" class="tool-btn tool-btn-secondary" data-action="clear">Limpar</button>
+    </div>
 
     <p id="mensagem-erro" style="color: #c00; margin-top: 15px; display: none; font-weight: bold;"></p>
 
