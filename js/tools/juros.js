@@ -108,9 +108,31 @@ export function setupCalculadoraJuros() {
   const btnSimples = document.querySelector('[data-action="calculate-simple"]');
   const btnComposto = document.querySelector('[data-action="calculate-compound"]');
   const btnLimpar = document.querySelector('[data-action="clear"]');
+  const btnPdfSimples = document.querySelector('[data-action="export-pdf-simple"]');
+  const btnPdfComposto = document.querySelector('[data-action="export-pdf-compound"]');
+  const contPdfSimples = document.getElementById("containerPdfSimples");
+  const contPdfComposto = document.getElementById("containerPdfComposto");
 
   let chartSimplesInstance = null;
   let chartCompostoInstance = null;
+  let ultimoResultadoSimples = null;
+  let ultimoResultadoComposto = null;
+
+  async function getPdfExporter() {
+    if (typeof window !== 'undefined' && typeof window.exportResultPdf === 'function') {
+      return window.exportResultPdf;
+    }
+    try {
+      const helper = await import('../core/' + 'pdf-export.js');
+      if (helper && typeof helper.exportResultPdf === 'function') {
+        return helper.exportResultPdf;
+      }
+    } catch (_) {}
+    if (typeof window !== 'undefined' && typeof window.alert === 'function') {
+      window.alert('Não foi possível gerar o PDF agora. Tente novamente.');
+    }
+    return null;
+  }
 
   function renderizarGraficoSimples(capital, taxa, tempo) {
     if (typeof window === "undefined" || typeof window.Chart === "undefined") return;
@@ -265,6 +287,8 @@ export function setupCalculadoraJuros() {
   function limparResultado() {
     if (resSimples) resSimples.innerText = "";
     if (resComposto) resComposto.innerText = "";
+    ultimoResultadoSimples = null;
+    ultimoResultadoComposto = null;
     if (chartSimplesInstance) {
       chartSimplesInstance.destroy();
       chartSimplesInstance = null;
@@ -277,6 +301,8 @@ export function setupCalculadoraJuros() {
     if (contSimples) contSimples.style.display = "none";
     const contComposto = document.getElementById("containerGraficoComposto");
     if (contComposto) contComposto.style.display = "none";
+    if (contPdfSimples) contPdfSimples.style.display = "none";
+    if (contPdfComposto) contPdfComposto.style.display = "none";
   }
 
   function limparCampos() {
@@ -305,7 +331,17 @@ export function setupCalculadoraJuros() {
       return;
     }
 
+    ultimoResultadoSimples = {
+      capital: res.capital,
+      taxa: res.taxa,
+      tempo: res.tempo,
+      juros: res.juros,
+      total: res.total
+    };
+
     resSimples.innerHTML = `Juros: R$ ${res.juros.toFixed(2)} <br><strong>Total: R$ ${res.total.toFixed(2)}</strong>`;
+    if (contPdfSimples) contPdfSimples.style.display = "flex";
+
     try {
       renderizarGraficoSimples(res.capital, res.taxa, res.tempo);
     } catch (_) {}
@@ -330,10 +366,68 @@ export function setupCalculadoraJuros() {
       return;
     }
 
+    ultimoResultadoComposto = {
+      capital: res.capital,
+      taxa: res.taxa,
+      tempo: res.tempo,
+      juros: res.juros,
+      total: res.total
+    };
+
     resComposto.innerHTML = `Juros: R$ ${res.juros.toFixed(2)} <br><strong>Total: R$ ${res.total.toFixed(2)}</strong>`;
+    if (contPdfComposto) contPdfComposto.style.display = "flex";
+
     try {
       renderizarGraficoComposto(res.capital, res.taxa, res.tempo);
     } catch (_) {}
+  }
+
+  async function exportarPdfSimples() {
+    if (!ultimoResultadoSimples) return;
+    const canvas = document.getElementById("graficoJurosSimples");
+    const helper = await getPdfExporter();
+    if (!helper) return;
+
+    helper({
+      filename: "calculadora-master-juros-simples.pdf",
+      title: "Calculadora de Juros Simples",
+      inputs: [
+        { label: "Tipo de Operação", value: "Juros Simples" },
+        { label: "Capital Inicial", value: `R$ ${ultimoResultadoSimples.capital.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` },
+        { label: "Taxa de Juros", value: `${ultimoResultadoSimples.taxa}% ao mês` },
+        { label: "Período", value: `${ultimoResultadoSimples.tempo} ${ultimoResultadoSimples.tempo === 1 ? 'mês' : 'meses'}` }
+      ],
+      results: [
+        { label: "Total de Juros", value: `R$ ${ultimoResultadoSimples.juros.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` },
+        { label: "Montante Total", value: `R$ ${ultimoResultadoSimples.total.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`, highlight: true }
+      ],
+      canvas: canvas && canvas.offsetParent !== null ? canvas : null,
+      notes: ["Cálculo baseado na fórmula J = C × i × t."]
+    });
+  }
+
+  async function exportarPdfComposto() {
+    if (!ultimoResultadoComposto) return;
+    const canvas = document.getElementById("graficoJurosComposto");
+    const helper = await getPdfExporter();
+    if (!helper) return;
+
+    helper({
+      filename: "calculadora-master-juros-compostos.pdf",
+      title: "Calculadora de Juros Compostos",
+      inputs: [
+        { label: "Tipo de Operação", value: "Juros Compostos" },
+        { label: "Capital Inicial", value: `R$ ${ultimoResultadoComposto.capital.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` },
+        { label: "Taxa de Juros", value: `${ultimoResultadoComposto.taxa}% ao mês` },
+        { label: "Período", value: `${ultimoResultadoComposto.tempo} ${ultimoResultadoComposto.tempo === 1 ? 'mês' : 'meses'}` }
+      ],
+      results: [
+        { label: "Total de Juros", value: `R$ ${ultimoResultadoComposto.juros.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` },
+        { label: "Montante Total", value: `R$ ${ultimoResultadoComposto.total.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`, highlight: true }
+      ],
+      canvas: canvas && canvas.offsetParent !== null ? canvas : null,
+      notes: ["Cálculo baseado na fórmula M = C × (1 + i)^t."]
+    });
   }
 
   // Eventos de limpeza ao digitar
@@ -377,6 +471,14 @@ export function setupCalculadoraJuros() {
 
   if (btnLimpar) {
     btnLimpar.addEventListener("click", limparCampos);
+  }
+
+  if (btnPdfSimples) {
+    btnPdfSimples.addEventListener("click", exportarPdfSimples);
+  }
+
+  if (btnPdfComposto) {
+    btnPdfComposto.addEventListener("click", exportarPdfComposto);
   }
 }
 

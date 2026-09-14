@@ -120,6 +120,8 @@ export function setupFinanciamentoImovel() {
 
   const btnCalcular = document.querySelector('[data-action="calculate"]');
   const btnLimpar = document.querySelector('[data-action="clear"]');
+  const btnPdf = document.querySelector('[data-action="export-pdf"]');
+  const contPdf = document.getElementById("containerPdfImovel");
 
   function exibirErro(msg) {
     if (elErro) {
@@ -129,6 +131,23 @@ export function setupFinanciamentoImovel() {
   }
 
   let chartImovelInstance = null;
+  let ultimoResultadoImovel = null;
+
+  async function getPdfExporter() {
+    if (typeof window !== 'undefined' && typeof window.exportResultPdf === 'function') {
+      return window.exportResultPdf;
+    }
+    try {
+      const helper = await import('../core/' + 'pdf-export.js');
+      if (helper && typeof helper.exportResultPdf === 'function') {
+        return helper.exportResultPdf;
+      }
+    } catch (_) {}
+    if (typeof window !== 'undefined' && typeof window.alert === 'function') {
+      window.alert('Não foi possível gerar o PDF agora. Tente novamente.');
+    }
+    return null;
+  }
 
   function renderizarGraficoImovel(res) {
     if (typeof window === "undefined" || typeof window.Chart === "undefined") return;
@@ -221,6 +240,8 @@ export function setupFinanciamentoImovel() {
 
   function limparResultado() {
     ocultarErro();
+    ultimoResultadoImovel = null;
+    if (contPdf) contPdf.style.display = "none";
     if (chartImovelInstance) {
       chartImovelInstance.destroy();
       chartImovelInstance = null;
@@ -268,6 +289,9 @@ export function setupFinanciamentoImovel() {
       return;
     }
 
+    ultimoResultadoImovel = res;
+    if (contPdf) contPdf.style.display = "flex";
+
     elResultado.innerHTML = `
       <div class="resultado-wrapper">
         <div class="resultado-item principal">
@@ -308,6 +332,36 @@ export function setupFinanciamentoImovel() {
     } catch (_) {}
   }
 
+  async function exportarPdfImovel() {
+    if (!ultimoResultadoImovel) return;
+    const res = ultimoResultadoImovel;
+    const canvas = document.getElementById("graficoImovel");
+    const helper = await getPdfExporter();
+    if (!helper) return;
+
+    helper({
+      filename: "calculadora-master-financiamento-imovel.pdf",
+      title: "Simulador de Financiamento Imobiliário (SAC)",
+      inputs: [
+        { label: "Valor do Imóvel", value: `R$ ${formatBRL(res.valorImovel)}` },
+        { label: "Valor da Entrada", value: `R$ ${formatBRL(res.valorEntrada)}` },
+        { label: "Valor a Financiar", value: `R$ ${formatBRL(res.valorFinanciado)}` },
+        { label: "Taxa de Juros Anual", value: `${res.taxaAnual.toLocaleString('pt-BR')}% ao ano` },
+        { label: "Prazo de Amortização", value: `${res.prazoAnos} anos (${res.prazoMeses} meses)` }
+      ],
+      results: [
+        { label: "Primeira Parcela (Mais alta)", value: `R$ ${formatBRL(res.primeiraParcela)}`, highlight: true },
+        { label: "Última Parcela (Mais baixa)", value: `R$ ${formatBRL(res.ultimaParcela)}` },
+        { label: "Amortização Mensal Fixa", value: `R$ ${formatBRL(res.amortizacaoMensal)}` },
+        { label: "Total Estimado em Juros", value: `R$ ${formatBRL(res.totalJuros)}` },
+        { label: "Total das Parcelas", value: `R$ ${formatBRL(res.totalFinanciamento)}` },
+        { label: "Custo Total do Imóvel (com entrada)", value: `R$ ${formatBRL(res.custoTotalImovel)}`, highlight: true }
+      ],
+      canvas: canvas && canvas.offsetParent !== null ? canvas : null,
+      notes: ["Simulação elaborada de acordo com as regras do Sistema de Amortização Constante (SAC)."]
+    });
+  }
+
   // Máscaras de entrada em tempo real
   if (elImovel) {
     elImovel.addEventListener("input", () => {
@@ -338,6 +392,10 @@ export function setupFinanciamentoImovel() {
 
   if (btnLimpar) {
     btnLimpar.addEventListener("click", limparCampos);
+  }
+
+  if (btnPdf) {
+    btnPdf.addEventListener("click", exportarPdfImovel);
   }
 
   // Suporte a teclado (Enter) nos campos de entrada

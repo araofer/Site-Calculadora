@@ -4,7 +4,7 @@ description: Calcule lucro bruto, custo, preço de venda e margem de lucro facil
 keywords: calculadora de lucro, margem de lucro, preço de venda, lucro por produto, markup
 canonical: https://www.calculadoramaster.com/tools/financas/lucro.html
 layout: tool
-pageScripts: <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>\n<script type="module" src="{{ROOT_PREFIX}}js/tools/lucro.js"></script>
+pageScripts: <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>\n<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js"></script>\n<script type="module" src="{{ROOT_PREFIX}}js/tools/lucro.js"></script>
 ---
   <h1>Calculadora de Lucro e Margem</h1>
   <p>Analise a viabilidade do seu preço de venda e descubra sua margem de lucro real.</p>
@@ -25,6 +25,9 @@ pageScripts: <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart
     </div>
 
     <h3 id="resultado" style="margin-top: 20px; color: #008080;"></h3>
+    <div id="containerPdfLucro" class="tool-actions" style="margin-top: 15px; margin-bottom: 0; display: none;">
+      <button type="button" class="tool-btn tool-btn-secondary" data-action="export-pdf">Baixar PDF</button>
+    </div>
     <div id="containerGraficoLucro" style="position: relative; height: 260px; max-width: 100%; margin-top: 20px; display: none;">
       <canvas id="graficoLucro" aria-label="Gráfico de barras comparando custo, lucro e preço de venda" role="img"></canvas>
     </div>
