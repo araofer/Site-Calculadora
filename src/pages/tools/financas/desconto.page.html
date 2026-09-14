@@ -11,8 +11,11 @@ pageScripts: <script type="module" src="{{ROOT_PREFIX}}js/tools/desconto.js"></s
 
   <section style="margin:20px 0;" class="card">
     <h2>Calcular desconto</h2>
-    <input type="number" id="preco" placeholder="Preço original (Ex: 200)" style="margin-bottom: 10px; padding: 8px;">
-    <input type="number" id="desconto" placeholder="Desconto % (Ex: 10)" style="margin-bottom: 10px; padding: 8px;">
+    <label for="preco">Preço original (R$):</label><br>
+    <input type="number" id="preco" inputmode="decimal" placeholder="Preço original (Ex: 200)" style="margin-bottom: 10px; padding: 8px;">
+    <br>
+    <label for="desconto">Desconto (%):</label><br>
+    <input type="number" id="desconto" inputmode="decimal" placeholder="Desconto % (Ex: 10)" style="margin-bottom: 10px; padding: 8px;">
 
     <br>
 

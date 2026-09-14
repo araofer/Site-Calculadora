@@ -15,22 +15,22 @@ pageScripts: <script type="module" src="{{ROOT_PREFIX}}js/tools/financiamento-im
       <div class="form-inline">
         <div class="form-group-item">
           <label for="valorImovel">Valor do Imóvel (R$):</label>
-          <input type="text" id="valorImovel" placeholder="Ex: 300.000,00">
+          <input type="text" id="valorImovel" inputmode="decimal" placeholder="Ex: 300.000,00">
         </div>
 
         <div class="form-group-item">
           <label for="valorEntrada">Entrada (R$ - Mínimo 20%):</label>
-          <input type="text" id="valorEntrada" placeholder="Ex: 60.000,00">
+          <input type="text" id="valorEntrada" inputmode="decimal" placeholder="Ex: 60.000,00">
         </div>
 
         <div class="form-group-item">
           <label for="taxaAnual">Taxa de Juros Anual (%):</label>
-          <input type="text" id="taxaAnual" placeholder="Ex: 9,5">
+          <input type="text" id="taxaAnual" inputmode="decimal" placeholder="Ex: 9,5">
         </div>
 
         <div class="form-group-item">
           <label for="prazoAnos">Prazo (Em Anos):</label>
-          <input type="number" id="prazoAnos" placeholder="Ex: 30">
+          <input type="number" id="prazoAnos" inputmode="numeric" placeholder="Ex: 30">
         </div>
       </div>
 
@@ -38,6 +38,8 @@ pageScripts: <script type="module" src="{{ROOT_PREFIX}}js/tools/financiamento-im
         <button type="button" data-action="calculate">Calcular Financiamento</button>
         <button type="button" data-action="clear" style="background-color: #666;">Limpar Tudo</button>
       </div>
+
+      <p id="mensagem-erro-imovel" class="mensagem-erro" role="alert" aria-live="polite" style="color: #c00; margin-top: 15px; display: none; font-weight: bold;"></p>
     </div>
 
     <div class="card" style="margin-top: 20px;">

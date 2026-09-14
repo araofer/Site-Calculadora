@@ -410,12 +410,18 @@ input, textarea {
 /* BOTÕES */
 button {
   padding: 10px 20px;
+  min-height: 44px;
   background-color: #1e2a38;
   color: white;
   border: none;
   border-radius: 8px;
   cursor: pointer;
   transition: 0.3s;
+  font-size: 15px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 button:hover {
@@ -716,8 +722,30 @@ button:hover {
   }
 
 
+  input,
+  select,
+  textarea {
+    font-size: 16px;
+  }
+
   input, button {
     width: 90%;
+  }
+
+  button {
+    min-height: 44px;
+    margin-bottom: 10px;
+  }
+
+  .button-group button {
+    margin-bottom: 0;
+  }
+
+  .search-clear-btn {
+    width: 32px;
+    height: 32px;
+    min-height: 32px;
+    margin-bottom: 0;
   }
 
   h1 {
@@ -1868,11 +1896,17 @@ main.container {
   font-size: 14px;
   font-weight: 700;
   text-decoration: none;
-  transition: color 0.2s, transform 0.2s;
+  padding: 8px 14px;
+  min-height: 44px;
+  border-radius: 8px;
+  background-color: #f1f5f9;
+  box-sizing: border-box;
+  transition: color 0.2s, background-color 0.2s, transform 0.2s;
 }
 
 .tool-card-btn:hover {
   color: #008080;
+  background-color: #e2e8f0;
   transform: translateX(4px);
 }
 
