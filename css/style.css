@@ -2504,24 +2504,29 @@ main.container {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  width: auto;
+  max-width: fit-content;
   gap: 6px;
-  background: #ffffff;
-  color: #4a5568;
-  border: 1px solid #cbd5e0;
-  border-radius: 20px;
-  padding: 6px 14px;
-  font-size: 14px;
+  background-color: #ffffff;
+  color: #374151;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-size: 0.92rem;
   font-weight: 500;
+  line-height: 1.2;
   cursor: pointer;
-  min-height: 40px;
-  transition: all 0.2s ease-in-out;
+  min-height: 38px;
+  margin-bottom: 0;
+  box-sizing: border-box;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
   user-select: none;
 }
 
 .favorite-button:hover {
-  background: #f7fafc;
-  border-color: #a0aec0;
-  color: #2d3748;
+  background-color: #f9fafb;
+  border-color: #9ca3af;
+  color: #111827;
 }
 
 .favorite-button:focus-visible {
@@ -2530,50 +2535,55 @@ main.container {
 }
 
 .favorite-button .favorite-icon {
-  font-size: 16px;
+  font-size: 0.95rem;
   line-height: 1;
-  color: #718096;
+  color: #6b7280;
 }
 
 /* Estado Ativo / Favoritado */
 .favorite-button[aria-pressed="true"] {
-  background: #e6fffa;
-  border-color: #008080;
-  color: #008080;
-  font-weight: 600;
+  background-color: #fdfbf7;
+  border-color: #e0b85a;
+  color: #1f2937;
+  font-weight: 500;
 }
 
 .favorite-button[aria-pressed="true"] .favorite-icon {
-  color: #d69e2e;
+  color: #d97706;
 }
 
 .favorite-button[aria-pressed="true"]:hover {
-  background: #b2f5ea;
-  border-color: #006666;
+  background-color: #f7f3e8;
+  border-color: #c99a38;
+  color: #111827;
 }
 
 .favorite-status {
-  font-size: 13px;
-  color: #008080;
-  font-weight: 500;
-  min-height: 1.2em;
-}
-
-.favorite-status:empty {
-  display: none;
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 @media (max-width: 480px) {
   .tool-header-actions {
     justify-content: flex-end;
     margin-top: 8px;
-    margin-bottom: 10px;
+    margin-bottom: 12px;
   }
 
   .favorite-button {
-    padding: 6px 12px;
-    font-size: 13px;
-    min-height: 38px;
+    width: auto;
+    max-width: fit-content;
+    margin-bottom: 0;
+    padding: 7px 12px;
+    font-size: 0.88rem;
+    min-height: 36px;
   }
 }
 
