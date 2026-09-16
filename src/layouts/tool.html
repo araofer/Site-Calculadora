@@ -37,6 +37,13 @@
 {{HEADER}}
 
 <main class="container">
+  <div class="tool-header-actions">
+    <button type="button" class="favorite-button" data-favorite-button data-tool-id="{{TOOL_ID}}" data-tool-category="{{TOOL_CATEGORY}}" data-tool-name="{{TOOL_NAME}}" aria-pressed="false" aria-label="Adicionar {{TOOL_NAME}} aos favoritos">
+      <span class="favorite-icon" aria-hidden="true">☆</span>
+      <span class="favorite-text">Favoritar</span>
+    </button>
+    <div class="favorite-status" role="status" aria-live="polite"></div>
+  </div>
 {{CONTENT}}
 </main>
 
@@ -56,6 +63,7 @@
 
 <script type="module" src="{{ROOT_PREFIX}}js/header-auth.js"></script>
 <script src="{{ROOT_PREFIX}}js/cookie-consent.js"></script>
+<script type="module" src="{{ROOT_PREFIX}}js/core/favorites.js"></script>
 
 </body>
 </html>
