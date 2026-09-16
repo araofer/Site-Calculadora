@@ -6,6 +6,7 @@
 
 import { parseBRLCurrency, formatBRLCurrencyInput, formatBRL } from "../core/currency.js";
 import { createResultActions } from "../core/result-actions.js";
+import { trackCalculatorAction } from "../core/analytics.js";
 
 /**
  * Realiza o cálculo do financiamento imobiliário através do Sistema de Amortização Constante (SAC).
@@ -286,6 +287,11 @@ export function setupFinanciamentoImovel() {
     if (elTaxa) elTaxa.value = "";
     if (elPrazo) elPrazo.value = "";
     limparResultado();
+    trackCalculatorAction({
+      calculatorId: 'financiamento_imovel',
+      calculatorCategory: 'financas',
+      action: 'clear'
+    });
   }
 
   function executarCalculo() {
@@ -316,6 +322,12 @@ export function setupFinanciamentoImovel() {
 
     ultimoResultadoImovel = res;
     if (contPdf) contPdf.style.display = "flex";
+
+    trackCalculatorAction({
+      calculatorId: 'financiamento_imovel',
+      calculatorCategory: 'financas',
+      action: 'calculate'
+    });
 
     elResultado.innerHTML = `
       <div class="resultado-wrapper">
@@ -385,6 +397,12 @@ export function setupFinanciamentoImovel() {
       canvas: canvas && canvas.offsetParent !== null ? canvas : null,
       notes: ["Simulação elaborada de acordo com as regras do Sistema de Amortização Constante (SAC)."]
     });
+
+    trackCalculatorAction({
+      calculatorId: 'financiamento_imovel',
+      calculatorCategory: 'financas',
+      action: 'pdf'
+    });
   }
 
   // Máscaras de entrada em tempo real
@@ -424,15 +442,40 @@ export function setupFinanciamentoImovel() {
   }
 
   if (btnCopy) {
-    btnCopy.addEventListener("click", () => actionsImovel.copy());
+    btnCopy.addEventListener("click", async () => {
+      const ok = await actionsImovel.copy();
+      if (ok) {
+        trackCalculatorAction({
+          calculatorId: 'financiamento_imovel',
+          calculatorCategory: 'financas',
+          action: 'copy'
+        });
+      }
+    });
   }
 
   if (btnShare) {
-    btnShare.addEventListener("click", () => actionsImovel.share());
+    btnShare.addEventListener("click", async () => {
+      const ok = await actionsImovel.share();
+      if (ok) {
+        trackCalculatorAction({
+          calculatorId: 'financiamento_imovel',
+          calculatorCategory: 'financas',
+          action: 'share'
+        });
+      }
+    });
   }
 
   if (btnPrint) {
-    btnPrint.addEventListener("click", () => actionsImovel.print());
+    btnPrint.addEventListener("click", () => {
+      actionsImovel.print();
+      trackCalculatorAction({
+        calculatorId: 'financiamento_imovel',
+        calculatorCategory: 'financas',
+        action: 'print'
+      });
+    });
   }
 
   // Suporte a teclado (Enter) nos campos de entrada

@@ -5,6 +5,7 @@
  */
 
 import { createResultActions } from "../core/result-actions.js";
+import { trackCalculatorAction } from "../core/analytics.js";
 
 /**
  * Calcula juros simples: J = C * i * t e Montante = C + J.
@@ -125,6 +126,7 @@ export function setupCalculadoraJuros() {
   let chartCompostoInstance = null;
   let ultimoResultadoSimples = null;
   let ultimoResultadoComposto = null;
+  let modoAtivo = 'simple';
 
   const actionsSimples = createResultActions({
     title: "Calculadora de Juros Simples",
@@ -347,14 +349,49 @@ export function setupCalculadoraJuros() {
     if (statusComposto) statusComposto.textContent = "";
   }
 
+  function obterModoAtivo() {
+    if (ultimoResultadoComposto && !ultimoResultadoSimples) {
+      return 'compound';
+    }
+    if (ultimoResultadoSimples && !ultimoResultadoComposto) {
+      return 'simple';
+    }
+    const temValorComposto = Boolean(
+      (capComposto && capComposto.value) ||
+      (taxComposto && taxComposto.value) ||
+      (temComposto && temComposto.value)
+    );
+    const temValorSimples = Boolean(
+      (capSimples && capSimples.value) ||
+      (taxSimples && taxSimples.value) ||
+      (temSimples && temSimples.value)
+    );
+    if (temValorComposto && !temValorSimples) {
+      return 'compound';
+    }
+    if (temValorSimples && !temValorComposto) {
+      return 'simple';
+    }
+    return modoAtivo === 'compound' ? 'compound' : 'simple';
+  }
+
   function limparCampos() {
+    const calculationType = obterModoAtivo();
     [capSimples, taxSimples, temSimples, capComposto, taxComposto, temComposto].forEach(input => {
       if (input) input.value = "";
     });
     limparResultado();
+    modoAtivo = 'simple';
+    trackCalculatorAction({
+      calculatorId: 'juros',
+      calculatorCategory: 'financas',
+      calculationType,
+      action: 'clear'
+    });
   }
 
   function executarSimples() {
+    modoAtivo = 'simple';
     if (!resSimples) return;
 
     const capital = capSimples ? capSimples.value : "";
@@ -384,12 +421,20 @@ export function setupCalculadoraJuros() {
     resSimples.innerHTML = `Juros: R$ ${res.juros.toFixed(2)} <br><strong>Total: R$ ${res.total.toFixed(2)}</strong>`;
     if (contPdfSimples) contPdfSimples.style.display = "flex";
 
+    trackCalculatorAction({
+      calculatorId: 'juros',
+      calculatorCategory: 'financas',
+      calculationType: 'simple',
+      action: 'calculate'
+    });
+
     try {
       renderizarGraficoSimples(res.capital, res.taxa, res.tempo);
     } catch (_) {}
   }
 
   function executarComposto() {
+    modoAtivo = 'compound';
     if (!resComposto) return;
 
     const capital = capComposto ? capComposto.value : "";
@@ -419,12 +464,20 @@ export function setupCalculadoraJuros() {
     resComposto.innerHTML = `Juros: R$ ${res.juros.toFixed(2)} <br><strong>Total: R$ ${res.total.toFixed(2)}</strong>`;
     if (contPdfComposto) contPdfComposto.style.display = "flex";
 
+    trackCalculatorAction({
+      calculatorId: 'juros',
+      calculatorCategory: 'financas',
+      calculationType: 'compound',
+      action: 'calculate'
+    });
+
     try {
       renderizarGraficoComposto(res.capital, res.taxa, res.tempo);
     } catch (_) {}
   }
 
   async function exportarPdfSimples() {
+    modoAtivo = 'simple';
     if (!ultimoResultadoSimples) return;
     const canvas = document.getElementById("graficoJurosSimples");
     const helper = await getPdfExporter();
@@ -446,9 +499,17 @@ export function setupCalculadoraJuros() {
       canvas: canvas && canvas.offsetParent !== null ? canvas : null,
       notes: ["Cálculo baseado na fórmula J = C × i × t."]
     });
+
+    trackCalculatorAction({
+      calculatorId: 'juros',
+      calculatorCategory: 'financas',
+      calculationType: 'simple',
+      action: 'pdf'
+    });
   }
 
   async function exportarPdfComposto() {
+    modoAtivo = 'compound';
     if (!ultimoResultadoComposto) return;
     const canvas = document.getElementById("graficoJurosComposto");
     const helper = await getPdfExporter();
@@ -470,12 +531,36 @@ export function setupCalculadoraJuros() {
       canvas: canvas && canvas.offsetParent !== null ? canvas : null,
       notes: ["Cálculo baseado na fórmula M = C × (1 + i)^t."]
     });
+
+    trackCalculatorAction({
+      calculatorId: 'juros',
+      calculatorCategory: 'financas',
+      calculationType: 'compound',
+      action: 'pdf'
+    });
   }
 
   // Eventos de limpeza ao digitar
   [capSimples, taxSimples, temSimples, capComposto, taxComposto, temComposto].forEach(input => {
     if (input) {
       input.addEventListener("input", limparResultado);
+    }
+  });
+
+  // Rastreamento de modo ativo por foco nos campos
+  [capSimples, taxSimples, temSimples].forEach(input => {
+    if (input) {
+      input.addEventListener("focus", () => {
+        modoAtivo = 'simple';
+      });
+    }
+  });
+
+  [capComposto, taxComposto, temComposto].forEach(input => {
+    if (input) {
+      input.addEventListener("focus", () => {
+        modoAtivo = 'compound';
+      });
     }
   });
 
@@ -524,27 +609,89 @@ export function setupCalculadoraJuros() {
   }
 
   if (btnCopySimples) {
-    btnCopySimples.addEventListener("click", () => actionsSimples.copy());
+    btnCopySimples.addEventListener("click", async () => {
+      modoAtivo = 'simple';
+      const ok = await actionsSimples.copy();
+      if (ok) {
+        trackCalculatorAction({
+          calculatorId: 'juros',
+          calculatorCategory: 'financas',
+          calculationType: 'simple',
+          action: 'copy'
+        });
+      }
+    });
   }
 
   if (btnShareSimples) {
-    btnShareSimples.addEventListener("click", () => actionsSimples.share());
+    btnShareSimples.addEventListener("click", async () => {
+      modoAtivo = 'simple';
+      const ok = await actionsSimples.share();
+      if (ok) {
+        trackCalculatorAction({
+          calculatorId: 'juros',
+          calculatorCategory: 'financas',
+          calculationType: 'simple',
+          action: 'share'
+        });
+      }
+    });
   }
 
   if (btnPrintSimples) {
-    btnPrintSimples.addEventListener("click", () => actionsSimples.print());
+    btnPrintSimples.addEventListener("click", () => {
+      modoAtivo = 'simple';
+      actionsSimples.print();
+      trackCalculatorAction({
+        calculatorId: 'juros',
+        calculatorCategory: 'financas',
+        calculationType: 'simple',
+        action: 'print'
+      });
+    });
   }
 
   if (btnCopyComposto) {
-    btnCopyComposto.addEventListener("click", () => actionsComposto.copy());
+    btnCopyComposto.addEventListener("click", async () => {
+      modoAtivo = 'compound';
+      const ok = await actionsComposto.copy();
+      if (ok) {
+        trackCalculatorAction({
+          calculatorId: 'juros',
+          calculatorCategory: 'financas',
+          calculationType: 'compound',
+          action: 'copy'
+        });
+      }
+    });
   }
 
   if (btnShareComposto) {
-    btnShareComposto.addEventListener("click", () => actionsComposto.share());
+    btnShareComposto.addEventListener("click", async () => {
+      modoAtivo = 'compound';
+      const ok = await actionsComposto.share();
+      if (ok) {
+        trackCalculatorAction({
+          calculatorId: 'juros',
+          calculatorCategory: 'financas',
+          calculationType: 'compound',
+          action: 'share'
+        });
+      }
+    });
   }
 
   if (btnPrintComposto) {
-    btnPrintComposto.addEventListener("click", () => actionsComposto.print());
+    btnPrintComposto.addEventListener("click", () => {
+      modoAtivo = 'compound';
+      actionsComposto.print();
+      trackCalculatorAction({
+        calculatorId: 'juros',
+        calculatorCategory: 'financas',
+        calculationType: 'compound',
+        action: 'print'
+      });
+    });
   }
 }
 

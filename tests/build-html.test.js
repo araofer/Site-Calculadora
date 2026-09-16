@@ -500,13 +500,13 @@ test('SSG Multipage - Ausência de placeholders {{...}} em todas as 15 páginas 
   }
 });
 
-test('SSG Multipage - Todos os 27 assets obrigatórios são copiados para dist-pilot', () => {
-  assert.equal(DEFAULT_ASSETS.length, 27, 'Devem existir exatamente 27 assets declarados no lote de ferramentas');
-  assert.equal(FINANCEIRO_ASSETS.length, 19, 'FINANCEIRO_ASSETS deve conter 19 assets');
+test('SSG Multipage - Todos os 28 assets obrigatórios são copiados para dist-pilot', () => {
+  assert.equal(DEFAULT_ASSETS.length, 28, 'Devem existir exatamente 28 assets declarados no lote de ferramentas');
+  assert.equal(FINANCEIRO_ASSETS.length, 20, 'FINANCEIRO_ASSETS deve conter 20 assets');
   assert.equal(SAUDE_ASSETS.length, 2, 'SAUDE_ASSETS deve conter 2 assets');
   assert.equal(TRABALHISTA_ASSETS.length, 1, 'TRABALHISTA_ASSETS deve conter 1 asset');
   assert.equal(UTILIDADES_ASSETS.length, 5, 'UTILIDADES_ASSETS deve conter 5 assets');
-  assert.equal(TOOL_ASSETS.length, 27, 'TOOL_ASSETS deve conter 27 assets');
+  assert.equal(TOOL_ASSETS.length, 28, 'TOOL_ASSETS deve conter 28 assets');
 
   for (const item of DEFAULT_ASSETS) {
     const destPath = path.join(ROOT_DIR, 'dist-pilot', item.dest);
@@ -534,6 +534,14 @@ test('SSG Multipage - Dependência compartilhada js/core/result-actions.js está
   assert.ok(fs.existsSync(resultActionsDest), 'js/core/result-actions.js deve existir em dist-pilot');
   const content = fs.readFileSync(resultActionsDest, 'utf-8');
   assert.ok(content.includes('createResultActions'), 'result-actions.js deve conter createResultActions');
+});
+
+test('SSG Multipage - Dependência compartilhada js/core/analytics.js está presente e válida em dist-pilot', () => {
+  assert.ok(FINANCEIRO_ASSETS.some(a => a.src === 'js/core/analytics.js' && a.dest === 'js/core/analytics.js'), 'js/core/analytics.js faz parte dos assets financeiros');
+  const analyticsDest = path.join(ROOT_DIR, 'dist-pilot', 'js', 'core', 'analytics.js');
+  assert.ok(fs.existsSync(analyticsDest), 'js/core/analytics.js deve existir em dist-pilot');
+  const content = fs.readFileSync(analyticsDest, 'utf-8');
+  assert.ok(content.includes('trackCalculatorAction'), 'analytics.js deve conter trackCalculatorAction');
 });
 
 test('SSG Multipage - Dependências transitivas de autenticação (auth.js e firebase-config.js) existem em dist-pilot', () => {
@@ -643,10 +651,10 @@ test('SSG Multipage - Contrato estrutural e ordem dos elementos em .nav-containe
   }
 });
 
-test('SSG Site - buildPages(SITE_PAGES) compila 43 páginas e copia 60 assets', () => {
+test('SSG Site - buildPages(SITE_PAGES) compila 43 páginas e copia 61 assets', () => {
   const results = buildPages(SITE_PAGES, { assets: SITE_ASSETS });
   assert.equal(results.length, 43, 'SITE_PAGES deve gerar exatamente 43 páginas (15 ferramentas + Home + 5 categorias + 15 blog + 7 institucionais)');
-  assert.equal(SITE_ASSETS.length, 60, 'SITE_ASSETS deve conter exatamente 60 assets');
+  assert.equal(SITE_ASSETS.length, 61, 'SITE_ASSETS deve conter exatamente 61 assets');
 
   for (const page of SITE_PAGES) {
     const fullPath = path.join(ROOT_DIR, 'dist-pilot', page.relativeOutputPath);
@@ -1149,7 +1157,7 @@ test('SSG Institucional - Validação detalhada das 7 páginas: metadados, canon
   }
 });
 
-test('PROD - buildPages com PROD_OUTPUT_DIR gera todas as 43 páginas e 60 assets em dist/', () => {
+test('PROD - buildPages com PROD_OUTPUT_DIR gera todas as 43 páginas e 61 assets em dist/', () => {
   const result = buildPages(SITE_PAGES, { outputDir: PROD_OUTPUT_DIR, assets: SITE_ASSETS });
   assert.equal(result.length, 43, 'build:prod deve compilar exatamente 43 páginas');
 
@@ -1167,7 +1175,7 @@ test('PROD - buildPages com PROD_OUTPUT_DIR gera todas as 43 páginas e 60 asset
   }
 });
 
-test('PROD - Todas as 43 páginas e 60 assets em dist/ são idênticos a dist-pilot/', () => {
+test('PROD - Todas as 43 páginas e 61 assets em dist/ são idênticos a dist-pilot/', () => {
   const pilotDir = path.join(ROOT_DIR, 'dist-pilot');
   // Assegura que dist-pilot está compilado
   buildPages(SITE_PAGES, { outputDir: pilotDir, assets: SITE_ASSETS });
@@ -1215,6 +1223,18 @@ test('PROD - dist/js/core/result-actions.js existe após o build e corresponde a
   const prodContent = fs.readFileSync(prodFile, 'utf-8');
   const sourceContent = fs.readFileSync(sourceFile, 'utf-8');
   assert.equal(prodContent, sourceContent, 'dist/js/core/result-actions.js deve corresponder exatamente ao arquivo-fonte');
+});
+
+test('PROD - dist/js/core/analytics.js existe após o build e corresponde ao arquivo-fonte', () => {
+  const prodFile = path.join(PROD_OUTPUT_DIR, 'js', 'core', 'analytics.js');
+  const sourceFile = path.join(ROOT_DIR, 'js', 'core', 'analytics.js');
+
+  assert.ok(fs.existsSync(prodFile), 'dist/js/core/analytics.js deve existir após o build');
+  assert.ok(fs.existsSync(sourceFile), 'js/core/analytics.js deve existir na raiz');
+
+  const prodContent = fs.readFileSync(prodFile, 'utf-8');
+  const sourceContent = fs.readFileSync(sourceFile, 'utf-8');
+  assert.equal(prodContent, sourceContent, 'dist/js/core/analytics.js deve corresponder exatamente ao arquivo-fonte');
 });
 
 test('Regressão Footer: site-footer não contém href="#", possui Imprensa e Parcerias para contato e removeu links provisórios', () => {

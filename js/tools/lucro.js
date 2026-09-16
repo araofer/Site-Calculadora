@@ -5,6 +5,7 @@
  */
 
 import { createResultActions } from "../core/result-actions.js";
+import { trackCalculatorAction } from "../core/analytics.js";
 
 /**
  * Realiza o cálculo de lucro bruto e margem de lucro sobre o preço de venda final.
@@ -192,6 +193,11 @@ export function setupCalculadoraLucro() {
     if (elCusto) elCusto.value = "";
     if (elPreco) elPreco.value = "";
     limparResultado();
+    trackCalculatorAction({
+      calculatorId: 'lucro',
+      calculatorCategory: 'financas',
+      action: 'clear'
+    });
   }
 
   function executarCalculo() {
@@ -214,6 +220,12 @@ export function setupCalculadoraLucro() {
 
     ultimoResultadoLucro = res;
     if (contPdf) contPdf.style.display = "flex";
+
+    trackCalculatorAction({
+      calculatorId: 'lucro',
+      calculatorCategory: 'financas',
+      action: 'calculate'
+    });
 
     elResultado.style.color = res.corResultado;
     elResultado.innerHTML = res.textoHtml;
@@ -248,6 +260,12 @@ export function setupCalculadoraLucro() {
       ],
       canvas: canvas && canvas.offsetParent !== null ? canvas : null,
       notes: ["Fórmulas aplicadas: Lucro = Preço de Venda - Custo | Margem % = (Lucro ÷ Preço de Venda) × 100."]
+    });
+
+    trackCalculatorAction({
+      calculatorId: 'lucro',
+      calculatorCategory: 'financas',
+      action: 'pdf'
     });
   }
 
@@ -284,15 +302,40 @@ export function setupCalculadoraLucro() {
   }
 
   if (btnCopy) {
-    btnCopy.addEventListener("click", () => actionsLucro.copy());
+    btnCopy.addEventListener("click", async () => {
+      const ok = await actionsLucro.copy();
+      if (ok) {
+        trackCalculatorAction({
+          calculatorId: 'lucro',
+          calculatorCategory: 'financas',
+          action: 'copy'
+        });
+      }
+    });
   }
 
   if (btnShare) {
-    btnShare.addEventListener("click", () => actionsLucro.share());
+    btnShare.addEventListener("click", async () => {
+      const ok = await actionsLucro.share();
+      if (ok) {
+        trackCalculatorAction({
+          calculatorId: 'lucro',
+          calculatorCategory: 'financas',
+          action: 'share'
+        });
+      }
+    });
   }
 
   if (btnPrint) {
-    btnPrint.addEventListener("click", () => actionsLucro.print());
+    btnPrint.addEventListener("click", () => {
+      actionsLucro.print();
+      trackCalculatorAction({
+        calculatorId: 'lucro',
+        calculatorCategory: 'financas',
+        action: 'print'
+      });
+    });
   }
 }
 
