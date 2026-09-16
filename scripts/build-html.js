@@ -14,6 +14,21 @@ const LAYOUTS_DIR = path.join(SRC_DIR, 'layouts');
 const PAGES_DIR = path.join(SRC_DIR, 'pages');
 const DEFAULT_OUTPUT_DIR = path.join(ROOT_DIR, 'dist-pilot');
 const PROD_OUTPUT_DIR = path.join(ROOT_DIR, 'dist');
+const TOOLS_JSON_PATH = path.join(ROOT_DIR, 'data', 'tools.json');
+
+const { getPageJsonLd, renderJsonLdScript } = require('../src/utils/seo.js');
+
+let cachedToolsData = null;
+function getToolsData() {
+  if (!cachedToolsData && fs.existsSync(TOOLS_JSON_PATH)) {
+    try {
+      cachedToolsData = JSON.parse(fs.readFileSync(TOOLS_JSON_PATH, 'utf-8'));
+    } catch (_) {
+      cachedToolsData = [];
+    }
+  }
+  return cachedToolsData || [];
+}
 
 const FINANCEIRO_LOTE1_PAGES = [
   {
@@ -455,6 +470,15 @@ function renderPage({ sourceFile, relativeOutputPath, componentsDir = COMPONENTS
   template = template.replace(/\{\{OG_IMAGE\}\}/g, meta.ogImage || 'https://www.calculadoramaster.com/logo/banner.png');
   template = template.replace(/\{\{ROOT_PREFIX\}\}/g, rootPrefix);
   template = template.replace(/\{\{EXTRA_HEAD\}\}\n?/g, meta.extraHead ? `  ${meta.extraHead}\n` : '');
+
+  // Dados estruturados JSON-LD
+  const jsonLdData = getPageJsonLd({
+    relativeOutputPath,
+    meta,
+    tools: getToolsData()
+  });
+  const jsonLdHtml = renderJsonLdScript(jsonLdData);
+  template = template.replace(/\{\{JSON_LD\}\}\n?/g, jsonLdHtml ? `  ${jsonLdHtml}\n` : '');
 
   // Validação defensiva: falha se houver qualquer placeholder não resolvido
   const leftover = template.match(/\{\{([A-Z0-9_]+)\}\}/);
