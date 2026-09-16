@@ -4,6 +4,8 @@
  * Zero APIs globais.
  */
 
+import { createResultActions } from "../core/result-actions.js";
+
 /**
  * Calcula juros simples: J = C * i * t e Montante = C + J.
  * Função pura e desacoplada do DOM.
@@ -112,11 +114,47 @@ export function setupCalculadoraJuros() {
   const btnPdfComposto = document.querySelector('[data-action="export-pdf-compound"]');
   const contPdfSimples = document.getElementById("containerPdfSimples");
   const contPdfComposto = document.getElementById("containerPdfComposto");
+  const btnCopySimples = document.querySelector('[data-action="copy-simple"]');
+  const btnShareSimples = document.querySelector('[data-action="share-simple"]');
+  const btnPrintSimples = document.querySelector('[data-action="print-simple"]');
+  const btnCopyComposto = document.querySelector('[data-action="copy-compound"]');
+  const btnShareComposto = document.querySelector('[data-action="share-compound"]');
+  const btnPrintComposto = document.querySelector('[data-action="print-compound"]');
 
   let chartSimplesInstance = null;
   let chartCompostoInstance = null;
   let ultimoResultadoSimples = null;
   let ultimoResultadoComposto = null;
+
+  const actionsSimples = createResultActions({
+    title: "Calculadora de Juros Simples",
+    getSections: () => {
+      if (!ultimoResultadoSimples) return null;
+      return [
+        { label: "Capital inicial", value: `R$ ${ultimoResultadoSimples.capital.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` },
+        { label: "Taxa", value: `${ultimoResultadoSimples.taxa}% ao mês` },
+        { label: "Período", value: `${ultimoResultadoSimples.tempo} ${ultimoResultadoSimples.tempo === 1 ? 'mês' : 'meses'}` },
+        { label: "Juros", value: `R$ ${ultimoResultadoSimples.juros.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` },
+        { label: "Total", value: `R$ ${ultimoResultadoSimples.total.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` }
+      ];
+    },
+    statusElement: () => document.getElementById("statusSimples")
+  });
+
+  const actionsComposto = createResultActions({
+    title: "Calculadora de Juros Compostos",
+    getSections: () => {
+      if (!ultimoResultadoComposto) return null;
+      return [
+        { label: "Capital inicial", value: `R$ ${ultimoResultadoComposto.capital.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` },
+        { label: "Taxa", value: `${ultimoResultadoComposto.taxa}% ao mês` },
+        { label: "Período", value: `${ultimoResultadoComposto.tempo} ${ultimoResultadoComposto.tempo === 1 ? 'mês' : 'meses'}` },
+        { label: "Juros", value: `R$ ${ultimoResultadoComposto.juros.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` },
+        { label: "Total", value: `R$ ${ultimoResultadoComposto.total.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` }
+      ];
+    },
+    statusElement: () => document.getElementById("statusComposto")
+  });
 
   async function getPdfExporter() {
     if (typeof window !== 'undefined' && typeof window.exportResultPdf === 'function') {
@@ -303,6 +341,10 @@ export function setupCalculadoraJuros() {
     if (contComposto) contComposto.style.display = "none";
     if (contPdfSimples) contPdfSimples.style.display = "none";
     if (contPdfComposto) contPdfComposto.style.display = "none";
+    const statusSimples = document.getElementById("statusSimples");
+    if (statusSimples) statusSimples.textContent = "";
+    const statusComposto = document.getElementById("statusComposto");
+    if (statusComposto) statusComposto.textContent = "";
   }
 
   function limparCampos() {
@@ -479,6 +521,30 @@ export function setupCalculadoraJuros() {
 
   if (btnPdfComposto) {
     btnPdfComposto.addEventListener("click", exportarPdfComposto);
+  }
+
+  if (btnCopySimples) {
+    btnCopySimples.addEventListener("click", () => actionsSimples.copy());
+  }
+
+  if (btnShareSimples) {
+    btnShareSimples.addEventListener("click", () => actionsSimples.share());
+  }
+
+  if (btnPrintSimples) {
+    btnPrintSimples.addEventListener("click", () => actionsSimples.print());
+  }
+
+  if (btnCopyComposto) {
+    btnCopyComposto.addEventListener("click", () => actionsComposto.copy());
+  }
+
+  if (btnShareComposto) {
+    btnShareComposto.addEventListener("click", () => actionsComposto.share());
+  }
+
+  if (btnPrintComposto) {
+    btnPrintComposto.addEventListener("click", () => actionsComposto.print());
   }
 }
 

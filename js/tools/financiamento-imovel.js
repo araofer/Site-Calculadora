@@ -5,6 +5,7 @@
  */
 
 import { parseBRLCurrency, formatBRLCurrencyInput, formatBRL } from "../core/currency.js";
+import { createResultActions } from "../core/result-actions.js";
 
 /**
  * Realiza o cálculo do financiamento imobiliário através do Sistema de Amortização Constante (SAC).
@@ -133,6 +134,28 @@ export function setupFinanciamentoImovel() {
   let chartImovelInstance = null;
   let ultimoResultadoImovel = null;
 
+  const btnCopy = contPdf ? contPdf.querySelector('[data-action="copy"]') : document.querySelector('[data-action="copy"]');
+  const btnShare = contPdf ? contPdf.querySelector('[data-action="share"]') : document.querySelector('[data-action="share"]');
+  const btnPrint = contPdf ? contPdf.querySelector('[data-action="print"]') : document.querySelector('[data-action="print"]');
+
+  const actionsImovel = createResultActions({
+    title: "Simulador de Financiamento Imobiliário (SAC)",
+    getSections: () => {
+      if (!ultimoResultadoImovel) return null;
+      const res = ultimoResultadoImovel;
+      return [
+        { label: "Valor do imóvel", value: `R$ ${formatBRL(res.valorImovel)}` },
+        { label: "Entrada", value: `R$ ${formatBRL(res.valorEntrada)}` },
+        { label: "Valor financiado", value: `R$ ${formatBRL(res.valorFinanciado)}` },
+        { label: "Quantidade de parcelas", value: `${res.prazoMeses} parcelas (${res.prazoAnos} anos)` },
+        { label: "Juros", value: `R$ ${formatBRL(res.totalJuros)}` },
+        { label: "Total", value: `R$ ${formatBRL(res.totalFinanciamento)}` },
+        { label: "Custo final", value: `R$ ${formatBRL(res.custoTotalImovel)}` }
+      ];
+    },
+    statusElement: () => document.getElementById("statusImovel")
+  });
+
   async function getPdfExporter() {
     if (typeof window !== 'undefined' && typeof window.exportResultPdf === 'function') {
       return window.exportResultPdf;
@@ -242,6 +265,8 @@ export function setupFinanciamentoImovel() {
     ocultarErro();
     ultimoResultadoImovel = null;
     if (contPdf) contPdf.style.display = "none";
+    const statusImovel = document.getElementById("statusImovel");
+    if (statusImovel) statusImovel.textContent = "";
     if (chartImovelInstance) {
       chartImovelInstance.destroy();
       chartImovelInstance = null;
@@ -396,6 +421,18 @@ export function setupFinanciamentoImovel() {
 
   if (btnPdf) {
     btnPdf.addEventListener("click", exportarPdfImovel);
+  }
+
+  if (btnCopy) {
+    btnCopy.addEventListener("click", () => actionsImovel.copy());
+  }
+
+  if (btnShare) {
+    btnShare.addEventListener("click", () => actionsImovel.share());
+  }
+
+  if (btnPrint) {
+    btnPrint.addEventListener("click", () => actionsImovel.print());
   }
 
   // Suporte a teclado (Enter) nos campos de entrada

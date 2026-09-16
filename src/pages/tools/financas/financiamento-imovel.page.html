@@ -47,9 +47,13 @@ pageScripts: <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart
       <div id="resultadoImovel">
         <p style="color: #666; text-align: center;">Insira os dados do imóvel acima e clique em calcular para ver a evolução das parcelas.</p>
       </div>
-      <div id="containerPdfImovel" class="tool-actions" style="margin-top: 20px; margin-bottom: 0; display: none;">
+      <div id="containerPdfImovel" class="tool-actions result-actions" style="margin-top: 20px; margin-bottom: 0; display: none;">
         <button type="button" class="tool-btn tool-btn-secondary" data-action="export-pdf">Baixar PDF</button>
+        <button type="button" class="tool-btn tool-btn-secondary" data-action="copy">Copiar resultado</button>
+        <button type="button" class="tool-btn tool-btn-secondary" data-action="share">Compartilhar</button>
+        <button type="button" class="tool-btn tool-btn-secondary" data-action="print">Imprimir</button>
       </div>
+      <div id="statusImovel" class="result-action-status" role="status" aria-live="polite"></div>
       <div id="containerGraficoImovel" style="position: relative; height: 280px; max-width: 100%; margin-top: 25px; display: none;">
         <canvas id="graficoImovel" aria-label="Gráfico de linha da evolução do saldo devedor ao longo das parcelas" role="img"></canvas>
       </div>

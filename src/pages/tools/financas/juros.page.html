@@ -23,9 +23,13 @@ pageScripts: <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart
         <button type="button" class="tool-btn tool-btn-primary" data-action="calculate-simple">Calcular Simples</button>
       </div>
       <h3 id="resultadoSimples" style="margin-top: 15px; color: #008080;"></h3>
-      <div id="containerPdfSimples" class="tool-actions" style="margin-top: 12px; margin-bottom: 0; display: none;">
+      <div id="containerPdfSimples" class="tool-actions result-actions" style="margin-top: 12px; margin-bottom: 0; display: none;">
         <button type="button" class="tool-btn tool-btn-secondary" data-action="export-pdf-simple">Baixar PDF</button>
+        <button type="button" class="tool-btn tool-btn-secondary" data-action="copy-simple">Copiar resultado</button>
+        <button type="button" class="tool-btn tool-btn-secondary" data-action="share-simple">Compartilhar</button>
+        <button type="button" class="tool-btn tool-btn-secondary" data-action="print-simple">Imprimir</button>
       </div>
+      <div id="statusSimples" class="result-action-status" role="status" aria-live="polite"></div>
       <div id="containerGraficoSimples" class="grafico-container" style="position: relative; height: 260px; width: 100%; max-width: 100%; min-width: 0; box-sizing: border-box; margin-top: 20px; display: none; overflow: hidden;">
         <canvas id="graficoJurosSimples" aria-label="Gráfico de linha mostrando a evolução do montante em juros simples" role="img"></canvas>
       </div>
@@ -44,9 +48,13 @@ pageScripts: <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart
         <button type="button" class="tool-btn tool-btn-primary" data-action="calculate-compound">Calcular Compostos</button>
       </div>
       <h3 id="resultadoComposto" style="margin-top: 15px; color: #008080;"></h3>
-      <div id="containerPdfComposto" class="tool-actions" style="margin-top: 12px; margin-bottom: 0; display: none;">
+      <div id="containerPdfComposto" class="tool-actions result-actions" style="margin-top: 12px; margin-bottom: 0; display: none;">
         <button type="button" class="tool-btn tool-btn-secondary" data-action="export-pdf-compound">Baixar PDF</button>
+        <button type="button" class="tool-btn tool-btn-secondary" data-action="copy-compound">Copiar resultado</button>
+        <button type="button" class="tool-btn tool-btn-secondary" data-action="share-compound">Compartilhar</button>
+        <button type="button" class="tool-btn tool-btn-secondary" data-action="print-compound">Imprimir</button>
       </div>
+      <div id="statusComposto" class="result-action-status" role="status" aria-live="polite"></div>
       <div id="containerGraficoComposto" class="grafico-container" style="position: relative; height: 260px; width: 100%; max-width: 100%; min-width: 0; box-sizing: border-box; margin-top: 20px; display: none; overflow: hidden;">
         <canvas id="graficoJurosComposto" aria-label="Gráfico de linha mostrando a evolução do montante em juros compostos" role="img"></canvas>
       </div>

@@ -4,6 +4,8 @@
  * Zero APIs globais.
  */
 
+import { createResultActions } from "../core/result-actions.js";
+
 /**
  * Realiza o cálculo de lucro bruto e margem de lucro sobre o preço de venda final.
  * Função pura e desacoplada do DOM.
@@ -67,6 +69,30 @@ export function setupCalculadoraLucro() {
 
   let chartLucroInstance = null;
   let ultimoResultadoLucro = null;
+
+  const btnCopy = contPdf ? contPdf.querySelector('[data-action="copy"]') : document.querySelector('[data-action="copy"]');
+  const btnShare = contPdf ? contPdf.querySelector('[data-action="share"]') : document.querySelector('[data-action="share"]');
+  const btnPrint = contPdf ? contPdf.querySelector('[data-action="print"]') : document.querySelector('[data-action="print"]');
+
+  const actionsLucro = createResultActions({
+    title: "Calculadora de Lucro e Margem",
+    getSections: () => {
+      if (!ultimoResultadoLucro) return null;
+      const res = ultimoResultadoLucro;
+      let situacao = "Ponto de equilíbrio";
+      if (res.lucro > 0) situacao = "Lucro";
+      else if (res.lucro < 0) situacao = "Prejuízo";
+
+      return [
+        { label: "Custo", value: `R$ ${res.custo.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` },
+        { label: "Preço de venda", value: `R$ ${res.preco.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` },
+        { label: "Situação", value: situacao },
+        { label: "Lucro ou prejuízo", value: `R$ ${res.lucro.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` },
+        { label: "Margem", value: `${res.margem.toFixed(2)}%` }
+      ];
+    },
+    statusElement: () => document.getElementById("statusLucro")
+  });
 
   async function getPdfExporter() {
     if (typeof window !== 'undefined' && typeof window.exportResultPdf === 'function') {
@@ -152,6 +178,8 @@ export function setupCalculadoraLucro() {
     if (elResultado) elResultado.innerText = "";
     ultimoResultadoLucro = null;
     if (contPdf) contPdf.style.display = "none";
+    const statusLucro = document.getElementById("statusLucro");
+    if (statusLucro) statusLucro.textContent = "";
     if (chartLucroInstance) {
       chartLucroInstance.destroy();
       chartLucroInstance = null;
@@ -253,6 +281,18 @@ export function setupCalculadoraLucro() {
 
   if (btnPdf) {
     btnPdf.addEventListener("click", exportarPdfLucro);
+  }
+
+  if (btnCopy) {
+    btnCopy.addEventListener("click", () => actionsLucro.copy());
+  }
+
+  if (btnShare) {
+    btnShare.addEventListener("click", () => actionsLucro.share());
+  }
+
+  if (btnPrint) {
+    btnPrint.addEventListener("click", () => actionsLucro.print());
   }
 }
 

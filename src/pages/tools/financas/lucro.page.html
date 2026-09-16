@@ -25,9 +25,13 @@ pageScripts: <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart
     </div>
 
     <h3 id="resultado" style="margin-top: 20px; color: #008080;"></h3>
-    <div id="containerPdfLucro" class="tool-actions" style="margin-top: 15px; margin-bottom: 0; display: none;">
+    <div id="containerPdfLucro" class="tool-actions result-actions" style="margin-top: 15px; margin-bottom: 0; display: none;">
       <button type="button" class="tool-btn tool-btn-secondary" data-action="export-pdf">Baixar PDF</button>
+      <button type="button" class="tool-btn tool-btn-secondary" data-action="copy">Copiar resultado</button>
+      <button type="button" class="tool-btn tool-btn-secondary" data-action="share">Compartilhar</button>
+      <button type="button" class="tool-btn tool-btn-secondary" data-action="print">Imprimir</button>
     </div>
+    <div id="statusLucro" class="result-action-status" role="status" aria-live="polite"></div>
     <div id="containerGraficoLucro" style="position: relative; height: 260px; max-width: 100%; margin-top: 20px; display: none;">
       <canvas id="graficoLucro" aria-label="Gráfico de barras comparando custo, lucro e preço de venda" role="img"></canvas>
     </div>
