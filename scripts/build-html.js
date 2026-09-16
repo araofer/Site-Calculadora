@@ -263,7 +263,8 @@ const FINANCEIRO_ASSETS = [
   { src: 'js/tools/dividir-conta.js', dest: 'js/tools/dividir-conta.js' },
   { src: 'js/core/currency.js', dest: 'js/core/currency.js' },
   { src: 'js/core/pdf-export.js', dest: 'js/core/pdf-export.js' },
-  { src: 'js/core/result-actions.js', dest: 'js/core/result-actions.js' }
+  { src: 'js/core/result-actions.js', dest: 'js/core/result-actions.js' },
+  { src: 'js/core/analytics.js', dest: 'js/core/analytics.js' }
 ];
 
 const SAUDE_ASSETS = [
