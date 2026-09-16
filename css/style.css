@@ -2339,3 +2339,151 @@ main.container {
     gap: 12px;
   }
 }
+
+/* ===================================================== */
+/* AÇÕES DE RESULTADO (.result-actions)                   */
+/* ===================================================== */
+.result-actions {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: wrap !important;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px !important;
+  width: 100% !important;
+  box-sizing: border-box;
+}
+
+.result-actions .tool-btn,
+.result-actions button {
+  min-height: 44px !important;
+  min-width: 44px;
+  width: auto !important;
+  flex: 0 1 auto;
+  box-sizing: border-box;
+  padding: 10px 16px;
+  font-size: 14px;
+}
+
+.result-action-status {
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  color: #008080;
+  min-height: 1.4em;
+  margin-top: 6px;
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+@media (max-width: 768px) {
+  .result-actions {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+    gap: 10px !important;
+    width: 100% !important;
+    margin-top: 15px;
+    margin-bottom: 15px;
+  }
+
+  .result-actions .tool-btn,
+  .result-actions button {
+    flex: 1 1 calc(50% - 10px);
+    width: auto !important;
+    min-height: 44px !important;
+    box-sizing: border-box;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .result-actions .tool-btn,
+  .result-actions button {
+    flex: 1 1 100%;
+    width: 100% !important;
+  }
+}
+
+/* ===================================================== */
+/* IMPRESSÃO CIRÚRGICA (PÁGINAS DAS CALCULADORAS)        */
+/* ===================================================== */
+@media print {
+  /* Elementos estruturais e globais a esconder na impressão */
+  header,
+  .header,
+  nav,
+  .nav,
+  .menu-toggle,
+  footer,
+  .footer,
+  .newsletter,
+  .newsletter-section,
+  .cookie-banner,
+  .cookie-consent,
+  #cookie-consent-banner {
+    display: none !important;
+  }
+
+  /* Conteúdo secundário, anúncios e ações na impressão */
+  .related-tools,
+  .ad,
+  .ads,
+  .adsbygoogle,
+  [class*="ad-"],
+  [id*="ad-"],
+  .result-actions,
+  .result-action-status {
+    display: none !important;
+  }
+
+  /* Controles de ação que não fazem parte do resultado impresso */
+  .tool-actions:not(.result-actions),
+  button {
+    display: none !important;
+  }
+
+  /* Formatação base da página impressa */
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+    font-size: 12pt;
+    line-height: 1.4;
+    margin: 0;
+    padding: 0;
+  }
+
+  main.container,
+  .calculator-container {
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    gap: 15px !important;
+  }
+
+  .card {
+    box-shadow: none !important;
+    border: 1px solid #ddd !important;
+    padding: 15px !important;
+    margin-bottom: 15px !important;
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  /* Preservar gráficos e canvas sem corte de página */
+  .grafico-container,
+  #containerGraficoSimples,
+  #containerGraficoComposto,
+  #containerGraficoImovel,
+  #containerGraficoLucro {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  canvas {
+    max-width: 100% !important;
+    height: auto !important;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+}
