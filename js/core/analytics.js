@@ -4,7 +4,7 @@
  * Nunca lança exceções para os chamadores e nunca envia PII ou dados financeiros.
  */
 
-const ALLOWED_ACTIONS = new Set(['calculate', 'pdf', 'copy', 'share', 'print', 'clear']);
+const ALLOWED_ACTIONS = new Set(['calculate', 'pdf', 'copy', 'share', 'print', 'clear', 'favorite_add', 'favorite_remove']);
 
 /**
  * Dispara o evento 'calculator_action' no GA4 com metadados seguros.

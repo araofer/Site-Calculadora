@@ -500,13 +500,13 @@ test('SSG Multipage - Ausência de placeholders {{...}} em todas as 15 páginas 
   }
 });
 
-test('SSG Multipage - Todos os 28 assets obrigatórios são copiados para dist-pilot', () => {
-  assert.equal(DEFAULT_ASSETS.length, 28, 'Devem existir exatamente 28 assets declarados no lote de ferramentas');
-  assert.equal(FINANCEIRO_ASSETS.length, 20, 'FINANCEIRO_ASSETS deve conter 20 assets');
+test('SSG Multipage - Todos os 29 assets obrigatórios são copiados para dist-pilot', () => {
+  assert.equal(DEFAULT_ASSETS.length, 29, 'Devem existir exatamente 29 assets declarados no lote de ferramentas');
+  assert.equal(FINANCEIRO_ASSETS.length, 21, 'FINANCEIRO_ASSETS deve conter 21 assets');
   assert.equal(SAUDE_ASSETS.length, 2, 'SAUDE_ASSETS deve conter 2 assets');
   assert.equal(TRABALHISTA_ASSETS.length, 1, 'TRABALHISTA_ASSETS deve conter 1 asset');
   assert.equal(UTILIDADES_ASSETS.length, 5, 'UTILIDADES_ASSETS deve conter 5 assets');
-  assert.equal(TOOL_ASSETS.length, 28, 'TOOL_ASSETS deve conter 28 assets');
+  assert.equal(TOOL_ASSETS.length, 29, 'TOOL_ASSETS deve conter 29 assets');
 
   for (const item of DEFAULT_ASSETS) {
     const destPath = path.join(ROOT_DIR, 'dist-pilot', item.dest);
@@ -542,6 +542,14 @@ test('SSG Multipage - Dependência compartilhada js/core/analytics.js está pres
   assert.ok(fs.existsSync(analyticsDest), 'js/core/analytics.js deve existir em dist-pilot');
   const content = fs.readFileSync(analyticsDest, 'utf-8');
   assert.ok(content.includes('trackCalculatorAction'), 'analytics.js deve conter trackCalculatorAction');
+});
+
+test('SSG Multipage - Dependência compartilhada js/core/favorites.js está presente e válida em dist-pilot', () => {
+  assert.ok(FINANCEIRO_ASSETS.some(a => a.src === 'js/core/favorites.js' && a.dest === 'js/core/favorites.js'), 'js/core/favorites.js faz parte dos assets financeiros');
+  const favoritesDest = path.join(ROOT_DIR, 'dist-pilot', 'js', 'core', 'favorites.js');
+  assert.ok(fs.existsSync(favoritesDest), 'js/core/favorites.js deve existir em dist-pilot');
+  const content = fs.readFileSync(favoritesDest, 'utf-8');
+  assert.ok(content.includes('initFavoriteButtons'), 'favorites.js deve conter initFavoriteButtons');
 });
 
 test('SSG Multipage - Dependências transitivas de autenticação (auth.js e firebase-config.js) existem em dist-pilot', () => {
@@ -651,10 +659,10 @@ test('SSG Multipage - Contrato estrutural e ordem dos elementos em .nav-containe
   }
 });
 
-test('SSG Site - buildPages(SITE_PAGES) compila 43 páginas e copia 61 assets', () => {
+test('SSG Site - buildPages(SITE_PAGES) compila 43 páginas e copia 62 assets', () => {
   const results = buildPages(SITE_PAGES, { assets: SITE_ASSETS });
   assert.equal(results.length, 43, 'SITE_PAGES deve gerar exatamente 43 páginas (15 ferramentas + Home + 5 categorias + 15 blog + 7 institucionais)');
-  assert.equal(SITE_ASSETS.length, 61, 'SITE_ASSETS deve conter exatamente 61 assets');
+  assert.equal(SITE_ASSETS.length, 62, 'SITE_ASSETS deve conter exatamente 62 assets');
 
   for (const page of SITE_PAGES) {
     const fullPath = path.join(ROOT_DIR, 'dist-pilot', page.relativeOutputPath);
@@ -1157,7 +1165,7 @@ test('SSG Institucional - Validação detalhada das 7 páginas: metadados, canon
   }
 });
 
-test('PROD - buildPages com PROD_OUTPUT_DIR gera todas as 43 páginas e 61 assets em dist/', () => {
+test('PROD - buildPages com PROD_OUTPUT_DIR gera todas as 43 páginas e 62 assets em dist/', () => {
   const result = buildPages(SITE_PAGES, { outputDir: PROD_OUTPUT_DIR, assets: SITE_ASSETS });
   assert.equal(result.length, 43, 'build:prod deve compilar exatamente 43 páginas');
 
@@ -1175,7 +1183,7 @@ test('PROD - buildPages com PROD_OUTPUT_DIR gera todas as 43 páginas e 61 asset
   }
 });
 
-test('PROD - Todas as 43 páginas e 61 assets em dist/ são idênticos a dist-pilot/', () => {
+test('PROD - Todas as 43 páginas e 62 assets em dist/ são idênticos a dist-pilot/', () => {
   const pilotDir = path.join(ROOT_DIR, 'dist-pilot');
   // Assegura que dist-pilot está compilado
   buildPages(SITE_PAGES, { outputDir: pilotDir, assets: SITE_ASSETS });
@@ -1235,6 +1243,59 @@ test('PROD - dist/js/core/analytics.js existe após o build e corresponde ao arq
   const prodContent = fs.readFileSync(prodFile, 'utf-8');
   const sourceContent = fs.readFileSync(sourceFile, 'utf-8');
   assert.equal(prodContent, sourceContent, 'dist/js/core/analytics.js deve corresponder exatamente ao arquivo-fonte');
+});
+
+test('PROD - dist/js/core/favorites.js existe após o build e corresponde ao arquivo-fonte', () => {
+  const prodFile = path.join(PROD_OUTPUT_DIR, 'js', 'core', 'favorites.js');
+  const sourceFile = path.join(ROOT_DIR, 'js', 'core', 'favorites.js');
+
+  assert.ok(fs.existsSync(prodFile), 'dist/js/core/favorites.js deve existir após o build');
+  assert.ok(fs.existsSync(sourceFile), 'js/core/favorites.js deve existir na raiz');
+
+  const prodContent = fs.readFileSync(prodFile, 'utf-8');
+  const sourceContent = fs.readFileSync(sourceFile, 'utf-8');
+  assert.equal(prodContent, sourceContent, 'dist/js/core/favorites.js deve corresponder exatamente ao arquivo-fonte');
+});
+
+test('SSG Multipage - Todas as 15 calculadoras contêm exatamente um botão de favorito com atributos corretos e carregam favorites.js', () => {
+  const toolsData = JSON.parse(fs.readFileSync(path.join(ROOT_DIR, 'data', 'tools.json'), 'utf-8'));
+  assert.equal(TOOL_PAGES.length, 15, 'Devem existir 15 TOOL_PAGES');
+
+  for (const page of TOOL_PAGES) {
+    const filePath = path.join(ROOT_DIR, 'dist-pilot', page.relativeOutputPath);
+    assert.ok(fs.existsSync(filePath), `Página deve existir compilada: ${page.relativeOutputPath}`);
+
+    const html = fs.readFileSync(filePath, 'utf-8');
+
+    // Exatamente um botão de favorito
+    const buttonMatches = html.match(/<button[^>]*data-favorite-button[^>]*>/g);
+    assert.ok(buttonMatches, `Deve conter botão de favorito em ${page.relativeOutputPath}`);
+    assert.equal(buttonMatches.length, 1, `Deve conter exatamente 1 botão de favorito em ${page.relativeOutputPath}`);
+
+    // Tool correspondente em data/tools.json
+    const normRel = '/' + page.relativeOutputPath.replace(/\\/g, '/');
+    const slug = path.basename(page.relativeOutputPath, '.html');
+    const tool = toolsData.find(t => t.url === normRel || t.slug === slug || t.id === slug);
+    assert.ok(tool, `Ferramenta correspondente encontrada para ${page.relativeOutputPath}`);
+
+    // Atributos obrigatórios corretos
+    const btnHtml = buttonMatches[0];
+    assert.ok(btnHtml.includes('type="button"'), `Botão deve ter type="button" em ${page.relativeOutputPath}`);
+    assert.ok(btnHtml.includes(`data-tool-id="${tool.id}"`), `Botão deve ter data-tool-id="${tool.id}" em ${page.relativeOutputPath}`);
+    assert.ok(btnHtml.includes(`data-tool-category="${tool.categorySlug}"`), `Botão deve ter data-tool-category="${tool.categorySlug}" em ${page.relativeOutputPath}`);
+    assert.ok(btnHtml.includes(`data-tool-name="${tool.name}"`), `Botão deve ter data-tool-name="${tool.name}" em ${page.relativeOutputPath}`);
+    assert.ok(btnHtml.includes('aria-pressed="false"'), `Botão deve ter estado inicial aria-pressed="false" em ${page.relativeOutputPath}`);
+    assert.ok(btnHtml.includes(`aria-label="Adicionar ${tool.name} aos favoritos"`), `Botão deve ter aria-label dinâmico em ${page.relativeOutputPath}`);
+
+    // Região de status acessível presente
+    assert.ok(html.includes('role="status"') && html.includes('aria-live="polite"'), `Região de status acessível deve existir em ${page.relativeOutputPath}`);
+
+    // Script favorites.js presente
+    assert.ok(html.includes('js/core/favorites.js'), `Deve carregar favorites.js em ${page.relativeOutputPath}`);
+
+    // Nenhum placeholder {{...}} restante
+    assert.equal(html.match(/\{\{([A-Z0-9_]+)\}\}/), null, `Não deve conter placeholders restantes em ${page.relativeOutputPath}`);
+  }
 });
 
 test('Regressão Footer: site-footer não contém href="#", possui Imprensa e Parcerias para contato e removeu links provisórios', () => {

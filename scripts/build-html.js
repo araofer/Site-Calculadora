@@ -279,7 +279,8 @@ const FINANCEIRO_ASSETS = [
   { src: 'js/core/currency.js', dest: 'js/core/currency.js' },
   { src: 'js/core/pdf-export.js', dest: 'js/core/pdf-export.js' },
   { src: 'js/core/result-actions.js', dest: 'js/core/result-actions.js' },
-  { src: 'js/core/analytics.js', dest: 'js/core/analytics.js' }
+  { src: 'js/core/analytics.js', dest: 'js/core/analytics.js' },
+  { src: 'js/core/favorites.js', dest: 'js/core/favorites.js' }
 ];
 
 const SAUDE_ASSETS = [
@@ -479,6 +480,31 @@ function renderPage({ sourceFile, relativeOutputPath, componentsDir = COMPONENTS
   });
   const jsonLdHtml = renderJsonLdScript(jsonLdData);
   template = template.replace(/\{\{JSON_LD\}\}\n?/g, jsonLdHtml ? `  ${jsonLdHtml}\n` : '');
+
+  // Metadados da ferramenta para o botão de favoritos (layout: tool)
+  let toolId = '';
+  let toolCategory = '';
+  let toolName = '';
+
+  if (meta.layout === 'tool' || relativeOutputPath.startsWith('tools/')) {
+    const normRel = '/' + relativeOutputPath.replace(/\\/g, '/');
+    const slug = path.basename(relativeOutputPath, '.html');
+    const tools = getToolsData();
+    const tool = tools.find(t => t.url === normRel || t.slug === slug || t.id === slug);
+    if (tool) {
+      toolId = tool.id;
+      toolCategory = tool.categorySlug || 'utilidades';
+      toolName = tool.name;
+    } else {
+      toolId = slug;
+      toolCategory = 'utilidades';
+      toolName = meta.title ? meta.title.split('|')[0].trim() : slug;
+    }
+  }
+
+  template = template.replace(/\{\{TOOL_ID\}\}/g, toolId);
+  template = template.replace(/\{\{TOOL_CATEGORY\}\}/g, toolCategory);
+  template = template.replace(/\{\{TOOL_NAME\}\}/g, toolName);
 
   // Validação defensiva: falha se houver qualquer placeholder não resolvido
   const leftover = template.match(/\{\{([A-Z0-9_]+)\}\}/);

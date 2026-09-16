@@ -2487,3 +2487,100 @@ main.container {
     page-break-inside: avoid;
   }
 }
+
+/* ===================================================== */
+/* BOTÃO DE FAVORITOS (.favorite-button)                 */
+/* ===================================================== */
+.tool-header-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 10px;
+  margin-bottom: 15px;
+}
+
+.favorite-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: #ffffff;
+  color: #4a5568;
+  border: 1px solid #cbd5e0;
+  border-radius: 20px;
+  padding: 6px 14px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  min-height: 40px;
+  transition: all 0.2s ease-in-out;
+  user-select: none;
+}
+
+.favorite-button:hover {
+  background: #f7fafc;
+  border-color: #a0aec0;
+  color: #2d3748;
+}
+
+.favorite-button:focus-visible {
+  outline: 2px solid #008080;
+  outline-offset: 2px;
+}
+
+.favorite-button .favorite-icon {
+  font-size: 16px;
+  line-height: 1;
+  color: #718096;
+}
+
+/* Estado Ativo / Favoritado */
+.favorite-button[aria-pressed="true"] {
+  background: #e6fffa;
+  border-color: #008080;
+  color: #008080;
+  font-weight: 600;
+}
+
+.favorite-button[aria-pressed="true"] .favorite-icon {
+  color: #d69e2e;
+}
+
+.favorite-button[aria-pressed="true"]:hover {
+  background: #b2f5ea;
+  border-color: #006666;
+}
+
+.favorite-status {
+  font-size: 13px;
+  color: #008080;
+  font-weight: 500;
+  min-height: 1.2em;
+}
+
+.favorite-status:empty {
+  display: none;
+}
+
+@media (max-width: 480px) {
+  .tool-header-actions {
+    justify-content: flex-end;
+    margin-top: 8px;
+    margin-bottom: 10px;
+  }
+
+  .favorite-button {
+    padding: 6px 12px;
+    font-size: 13px;
+    min-height: 38px;
+  }
+}
+
+@media print {
+  .tool-header-actions,
+  .favorite-button,
+  .favorite-status {
+    display: none !important;
+  }
+}
