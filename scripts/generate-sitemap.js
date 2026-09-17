@@ -24,6 +24,8 @@ const STATIC_PAGES = [
   '/termos.html'
 ];
 
+const { isPublicTool } = require('./lib/tool-registry.js');
+
 function generateSitemap() {
   if (!fs.existsSync(TOOLS_JSON_PATH)) {
     console.error(`ERRO: ${TOOLS_JSON_PATH} não encontrado.`);
@@ -34,7 +36,7 @@ function generateSitemap() {
   const tools = JSON.parse(rawTools);
 
   const toolUrls = tools
-    .filter(tool => tool.status === 'published')
+    .filter(isPublicTool)
     .map(tool => (tool.url.startsWith('/') ? tool.url : `/${tool.url}`));
 
   const blogPages = ['/blog/index.html'];

@@ -10,6 +10,8 @@ const ROOT_DIR = path.resolve(__dirname, '..');
 const TOOLS_JSON_PATH = path.join(ROOT_DIR, 'data', 'tools.json');
 const OUTPUT_JS_PATH = path.join(ROOT_DIR, 'js', 'tools-catalog.js');
 
+const { isPublicTool } = require('./lib/tool-registry.js');
+
 function generateCatalog() {
   if (!fs.existsSync(TOOLS_JSON_PATH)) {
     console.error(`ERRO: Arquivo ${TOOLS_JSON_PATH} não encontrado.`);
@@ -21,7 +23,7 @@ function generateCatalog() {
 
   // Mapeia para o formato compatível com o catálogo JS e a Home
   const catalogItems = tools
-    .filter(tool => tool.status === 'published')
+    .filter(isPublicTool)
     .map(tool => ({
       id: tool.id,
       slug: tool.slug || tool.id,
