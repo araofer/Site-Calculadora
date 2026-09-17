@@ -437,7 +437,7 @@ test('SEO SSG - Páginas noindex (login, cadastro, 404) NÃO recebem JSON-LD e p
   }
 });
 
-test('SEO SSG - Build produz exatamente 43 páginas e 61 assets', () => {
+test('SEO SSG - Build produz exatamente 43 páginas e 62 assets', () => {
   assert.equal(SITE_PAGES.length, 43, 'SITE_PAGES deve continuar tendo 43 páginas');
-  assert.equal(SITE_ASSETS.length, 61, 'SITE_ASSETS deve continuar tendo 61 assets');
+  assert.equal(SITE_ASSETS.length, 62, 'SITE_ASSETS deve continuar tendo 62 assets');
 });

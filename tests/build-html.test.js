@@ -2,11 +2,14 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
+import crypto from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 
 // Importa funções do motor SSG CommonJS
 import ssg from '../scripts/build-html.js';
 const {
+  STYLE_VERSION,
+  getStyleVersion,
   calculateRootPrefix,
   parsePageSource,
   renderPage,
@@ -169,7 +172,7 @@ test('SSG Piloto - Ausência absoluta de placeholders {{...}} não resolvidos no
 test('SSG Piloto - Caminhos relativos de CSS, JS e imagens estão consistentes', () => {
   const filePath = path.join(ROOT_DIR, 'dist-pilot', 'tools', 'financas', 'desconto.html');
   const html = fs.readFileSync(filePath, 'utf-8');
-  assert.match(html, /href="\.\.\/\.\.\/css\/style\.css"/);
+  assert.match(html, new RegExp(`href="\\.\\./\\.\\./css/style\\.css\\?v=${STYLE_VERSION}"`));
   assert.match(html, /href="\.\.\/\.\.\/css\/cookie-consent\.css"/);
   assert.doesNotMatch(html, /href="undefined"/);
   assert.doesNotMatch(html, /src="undefined"/);
@@ -1324,4 +1327,107 @@ test('Regressão Footer: site-footer não contém href="#", possui Imprensa e Pa
     assert.ok(!homeHtml.includes('Carreiras'));
     assert.ok(!homeHtml.includes('Programa de afiliados'));
   }
+});
+
+test('SSG Cache Busting - STYLE_VERSION é hash hexadecimal curto determinístico de css/style.css e não é 2.0.0', () => {
+  // 1. versão possui exatamente hash hexadecimal curto (8 caracteres hex)
+  assert.match(STYLE_VERSION, /^[a-f0-9]{8}$/, 'STYLE_VERSION deve ser um hash hexadecimal de 8 caracteres');
+  assert.equal(STYLE_VERSION.length, 8, 'STYLE_VERSION deve ter tamanho exatamente 8');
+
+  // 2. não é "2.0.0"
+  assert.notEqual(STYLE_VERSION, '2.0.0', 'STYLE_VERSION não deve ser a versão fixa 2.0.0 do package.json');
+
+  // 3. hash corresponde ao conteúdo atual de css/style.css
+  const rawCss = fs.readFileSync(path.join(ROOT_DIR, 'css', 'style.css'), 'utf-8');
+  const expectedHash = crypto.createHash('sha256').update(rawCss).digest('hex').slice(0, 8);
+  assert.equal(STYLE_VERSION, expectedHash, 'STYLE_VERSION deve corresponder ao sha256().slice(0, 8) de css/style.css');
+  assert.equal(getStyleVersion(), expectedHash, 'getStyleVersion() deve retornar o mesmo hash determinístico');
+});
+
+test('SSG Cache Busting - Todas as 43 páginas usam a mesma versão de style.css, 62 assets e caminhos CSS válidos', () => {
+  const results = buildPages(SITE_PAGES, { assets: SITE_ASSETS });
+
+  // 10. 43 páginas continuam
+  assert.equal(results.length, 43, 'SITE_PAGES deve compilar exatamente 43 páginas');
+
+  // 11. 62 assets continuam
+  assert.equal(SITE_ASSETS.length, 62, 'SITE_ASSETS deve permanecer exatamente com 62 assets');
+
+  // 4. todas as 43 páginas usam a mesma versão
+  for (const page of SITE_PAGES) {
+    const fullPath = path.join(ROOT_DIR, 'dist-pilot', page.relativeOutputPath);
+    assert.ok(fs.existsSync(fullPath), `Arquivo deve existir: ${page.relativeOutputPath}`);
+    const html = fs.readFileSync(fullPath, 'utf-8');
+    const prefix = calculateRootPrefix(page.relativeOutputPath);
+
+    // style.css possui ?v=<hash>
+    const expectedLink = `<link rel="stylesheet" href="${prefix}css/style.css?v=${STYLE_VERSION}">`;
+    assert.ok(
+      html.includes(expectedLink),
+      `${page.relativeOutputPath} deve conter link exato para style.css com versão: ${expectedLink}`
+    );
+
+    // 9. nenhum {{STYLE_VERSION}} permanece
+    assert.ok(!html.includes('{{STYLE_VERSION}}'), `${page.relativeOutputPath} não deve conter {{STYLE_VERSION}}`);
+    const leftover = html.match(/\{\{([A-Z0-9_]+)\}\}/);
+    assert.equal(leftover, null, `${page.relativeOutputPath} não deve conter nenhum placeholder pendente: ${leftover?.[0]}`);
+
+    // Caminhos CSS continuam válidos no disco
+    const resolvedCssPath = path.resolve(path.dirname(fullPath), `${prefix}css/style.css`);
+    assert.ok(
+      fs.existsSync(resolvedCssPath),
+      `Arquivo CSS referenciado em ${page.relativeOutputPath} deve existir no disco em: ${resolvedCssPath}`
+    );
+  }
+});
+
+test('SSG Cache Busting - Exemplos específicos: Home, Ferramenta (Juros), Artigo (Juros e Combustível) e 404 possuem style.css?v=<hash>', () => {
+  // 5. Home possui style.css?v=<hash>
+  const homeHtml = fs.readFileSync(path.join(ROOT_DIR, 'dist-pilot', 'index.html'), 'utf-8');
+  assert.match(
+    homeHtml,
+    new RegExp(`<link rel="stylesheet" href="\\./css/style\\.css\\?v=${STYLE_VERSION}">`),
+    'Home deve usar ./css/style.css?v=<hash>'
+  );
+
+  // 6. Ferramenta (Juros) possui style.css?v=<hash>
+  const jurosHtml = fs.readFileSync(path.join(ROOT_DIR, 'dist-pilot', 'tools', 'financas', 'juros.html'), 'utf-8');
+  assert.match(
+    jurosHtml,
+    new RegExp(`<link rel="stylesheet" href="\\.\\./\\.\\./css/style\\.css\\?v=${STYLE_VERSION}">`),
+    'Juros deve usar ../../css/style.css?v=<hash>'
+  );
+
+  // 7. Artigo (como-calcular-juros.html e como-calcular-combustivel.html) possui style.css?v=<hash>
+  const artigoJurosHtml = fs.readFileSync(path.join(ROOT_DIR, 'dist-pilot', 'blog', 'artigos', 'como-calcular-juros.html'), 'utf-8');
+  assert.match(
+    artigoJurosHtml,
+    new RegExp(`<link rel="stylesheet" href="\\.\\./\\.\\./css/style\\.css\\?v=${STYLE_VERSION}">`),
+    'Artigo como-calcular-juros deve usar ../../css/style.css?v=<hash>'
+  );
+
+  const artigoCombustivelHtml = fs.readFileSync(path.join(ROOT_DIR, 'dist-pilot', 'blog', 'artigos', 'como-calcular-combustivel.html'), 'utf-8');
+  assert.match(
+    artigoCombustivelHtml,
+    new RegExp(`<link rel="stylesheet" href="\\.\\./\\.\\./css/style\\.css\\?v=${STYLE_VERSION}">`),
+    'Artigo como-calcular-combustivel deve usar ../../css/style.css?v=<hash>'
+  );
+
+  // 8. 404 também possui style.css?v=<hash>
+  const errorHtml = fs.readFileSync(path.join(ROOT_DIR, 'dist-pilot', '404.html'), 'utf-8');
+  assert.match(
+    errorHtml,
+    new RegExp(`<link rel="stylesheet" href="\\./css/style\\.css\\?v=${STYLE_VERSION}">`),
+    '404 deve usar ./css/style.css?v=<hash>'
+  );
+});
+
+test('SSG Cache Busting - dist/css/style.css continua existindo no disco após build:prod', () => {
+  buildPages(SITE_PAGES, { outputDir: PROD_OUTPUT_DIR, assets: SITE_ASSETS });
+
+  // 12. dist/css/style.css continua existindo
+  const prodCssPath = path.join(PROD_OUTPUT_DIR, 'css', 'style.css');
+  assert.ok(fs.existsSync(prodCssPath), 'dist/css/style.css deve existir após o build de produção');
+  const prodCss = fs.readFileSync(prodCssPath, 'utf-8');
+  assert.ok(prodCss.length > 1000, 'dist/css/style.css deve conter conteúdo CSS válido');
 });
