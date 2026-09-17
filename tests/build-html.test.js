@@ -748,7 +748,9 @@ test('SSG Site - Páginas de categorias: testes parametrizados de integridade, m
         'tools/financas/lucro.html',
         'tools/financas/juros.html',
         'tools/financas/financiamento-carro.html',
-        'tools/financas/financiamento-imovel.html'
+        'tools/financas/financiamento-imovel.html',
+        'tools/financas/emprestimo.html',
+        'tools/financas/amortizacao.html'
       ]
     },
     {
@@ -829,6 +831,55 @@ test('SSG Site - Páginas de categorias: testes parametrizados de integridade, m
     assert.match(html, /<div class="container footer-columns">/, `${spec.file} deve conter footer estruturado`);
     assert.match(html, /<div class="footer-bottom">/, `${spec.file} deve conter footer-bottom`);
   }
+});
+
+test('SSG Categoria - /financeira.html inclui automaticamente ferramentas Factory (emprestimo e amortizacao) e preserva as 5 legadas sem duplicatas', () => {
+  const filePath = path.join(ROOT_DIR, 'dist-pilot', 'financeira.html');
+  assert.ok(fs.existsSync(filePath), 'dist-pilot/financeira.html deve existir');
+
+  const html = fs.readFileSync(filePath, 'utf-8');
+
+  // 1. Ferramentas legadas continuam presentes
+  const legacyTools = [
+    { name: 'Calculadora de Desconto', url: './tools/financas/desconto.html' },
+    { name: 'Calculadora de Lucros', url: './tools/financas/lucro.html' },
+    { name: 'Calculadora de Juros', url: './tools/financas/juros.html' },
+    { name: 'Financiamento de Carros', url: './tools/financas/financiamento-carro.html' },
+    { name: 'Financiamento de Imóveis', url: './tools/financas/financiamento-imovel.html' }
+  ];
+
+  for (const leg of legacyTools) {
+    assert.match(html, new RegExp(`href="${leg.url.replace(/\//g, '\\/')}"`), `Deve conter link para ${leg.name}`);
+    assert.match(html, new RegExp(`>${leg.name}<`), `Deve conter texto para ${leg.name}`);
+  }
+
+  // 2. Novas ferramentas Factory presentes
+  const factoryTools = [
+    { name: 'Calculadora de Empréstimo', url: './tools/financas/emprestimo.html' },
+    { name: 'Tabela de Amortização', url: './tools/financas/amortizacao.html' }
+  ];
+
+  for (const fac of factoryTools) {
+    assert.match(html, new RegExp(`href="${fac.url.replace(/\//g, '\\/')}"`), `Deve conter link para ${fac.name}`);
+    assert.match(html, new RegExp(`>${fac.name}<`), `Deve conter texto para ${fac.name}`);
+  }
+
+  // 3. Sem duplicatas: exatamente 1 ocorrência de cada link no HTML
+  const countEmprestimo = (html.match(/tools\/financas\/emprestimo\.html/g) || []).length;
+  const countAmortizacao = (html.match(/tools\/financas\/amortizacao\.html/g) || []).length;
+  assert.equal(countEmprestimo, 1, 'Exatamente 1 ocorrência de emprestimo.html em financeira.html');
+  assert.equal(countAmortizacao, 1, 'Exatamente 1 ocorrência de amortizacao.html em financeira.html');
+
+  // 4. Total de cards na grade de categorias é exatamente 7
+  const gridSectionMatch = html.match(/<section class="tools category-tools">([\s\S]*?)<\/section>/);
+  assert.ok(gridSectionMatch, 'Deve existir section category-tools');
+  const cardMatches = gridSectionMatch[1].match(/<a\s+[^>]*class="card"[^>]*>/g);
+  assert.ok(cardMatches, 'Devem existir cards na categoria');
+  assert.equal(cardMatches.length, 7, 'financeira.html deve conter exatamente 7 cards (5 legadas + 2 factory)');
+
+  // 5. Nenhuma ferramenta de outra categoria presente
+  assert.equal(html.includes('tools/saude/imc.html'), false, 'Não deve conter ferramentas de saúde');
+  assert.equal(html.includes('tools/trabalhista/horas-extras.html'), false, 'Não deve conter ferramentas trabalhistas');
 });
 
 test('SSG Blog - buildPages(BLOG_PAGES) compila 17 páginas e copia assets do blog', () => {

@@ -30,7 +30,11 @@ function getStyleVersion() {
 const STYLE_VERSION = getStyleVersion();
 
 const { getPageJsonLd, renderJsonLdScript } = require('../src/utils/seo.js');
-const { discoverPublicFactoryTools } = require('./lib/tool-discovery.js');
+const {
+  discoverPublicFactoryTools,
+  getPublicFactoryToolsForCategory,
+  injectCategoryToolCards
+} = require('./lib/tool-discovery.js');
 
 const factoryDiscovery = discoverPublicFactoryTools({
   rootDir: ROOT_DIR,
@@ -444,7 +448,19 @@ function renderPage({ sourceFile, relativeOutputPath, componentsDir = COMPONENTS
   }
 
   const rawSource = fs.readFileSync(sourceFile, 'utf-8');
-  const { meta, content } = parsePageSource(rawSource);
+  let { meta, content } = parsePageSource(rawSource);
+
+  // Injeção automática de ferramentas Factory para páginas de categoria
+  const isCategoryPage = CATEGORIA_PAGES.some(cp => cp.relativeOutputPath === relativeOutputPath) ||
+    sourceFile.includes(path.join('src', 'pages', 'categorias'));
+  if (isCategoryPage) {
+    const factoryCategoryTools = getPublicFactoryToolsForCategory(relativeOutputPath, {
+      tools: getToolsData(),
+      rootDir: ROOT_DIR,
+      meta
+    });
+    content = injectCategoryToolCards(content, factoryCategoryTools);
+  }
 
   // Validação de campos obrigatórios
   const requiredMeta = ['title', 'description', 'canonical', 'layout'];
