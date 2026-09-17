@@ -30,6 +30,14 @@ function getStyleVersion() {
 const STYLE_VERSION = getStyleVersion();
 
 const { getPageJsonLd, renderJsonLdScript } = require('../src/utils/seo.js');
+const { discoverPublicFactoryTools } = require('./lib/tool-discovery.js');
+
+const factoryDiscovery = discoverPublicFactoryTools({
+  rootDir: ROOT_DIR,
+  toolsPath: TOOLS_JSON_PATH
+});
+const FACTORY_PAGES = factoryDiscovery.pages;
+const FACTORY_ASSETS = factoryDiscovery.assets;
 
 let cachedToolsData = null;
 function getToolsData() {
@@ -127,7 +135,8 @@ const TOOL_PAGES = [
   ...FINANCEIRO_PAGES,
   ...SAUDE_PAGES,
   ...TRABALHISTA_PAGES,
-  ...UTILIDADES_PAGES
+  ...UTILIDADES_PAGES,
+  ...FACTORY_PAGES
 ];
 
 const HOME_PAGE = {
@@ -317,7 +326,8 @@ const TOOL_ASSETS = [
   ...FINANCEIRO_ASSETS,
   ...SAUDE_ASSETS,
   ...TRABALHISTA_ASSETS,
-  ...UTILIDADES_ASSETS
+  ...UTILIDADES_ASSETS,
+  ...FACTORY_ASSETS
 ];
 
 const SITE_SPECIFIC_ASSETS = [
@@ -655,6 +665,7 @@ module.exports = {
   SAUDE_PAGES,
   TRABALHISTA_PAGES,
   UTILIDADES_PAGES,
+  FACTORY_PAGES,
   TOOL_PAGES,
   HOME_PAGE,
   CATEGORIA_PAGES,
@@ -669,6 +680,7 @@ module.exports = {
   SAUDE_ASSETS,
   TRABALHISTA_ASSETS,
   UTILIDADES_ASSETS,
+  FACTORY_ASSETS,
   TOOL_ASSETS,
   SITE_SPECIFIC_ASSETS,
   BLOG_ASSETS,

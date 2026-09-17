@@ -1,0 +1,32 @@
+{
+  "financas": {
+    "name": "Financeiro",
+    "publicUrl": "/financeira.html",
+    "directory": "tools/financas"
+  },
+  "matematica": {
+    "name": "Matemática",
+    "publicUrl": "/matematica.html",
+    "directory": "tools/matematica"
+  },
+  "saude": {
+    "name": "Saúde",
+    "publicUrl": "/saude.html",
+    "directory": "tools/saude"
+  },
+  "trabalhista": {
+    "name": "Trabalhista",
+    "publicUrl": "/trabalhista.html",
+    "directory": "tools/trabalhista"
+  },
+  "utilidades": {
+    "name": "Utilidades",
+    "publicUrl": "/conversores.html",
+    "directory": "tools/utilidades"
+  },
+  "conversores": {
+    "name": "Conversores",
+    "publicUrl": "/conversores.html",
+    "directory": "tools/conversores"
+  }
+}

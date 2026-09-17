@@ -1,0 +1,41 @@
+---
+title: {{NAME}} Online Grátis | Calculadora Master
+description: {{DESCRIPTION}}
+keywords: {{KEYWORDS}}
+canonical: {{CANONICAL}}
+layout: tool
+pageScripts: <script type="module" src="{{ROOT_PREFIX}}js/tools/{{ID}}.js"></script>
+---
+  <div class="tool-draft-badge" style="background: #fff3cd; color: #856404; padding: 8px 12px; border-radius: 4px; margin-bottom: 16px; font-size: 0.875rem; border: 1px solid #ffeeba;">
+    <strong>Em desenvolvimento:</strong> Esta ferramenta está em fase de homologação (draft).
+  </div>
+
+  <h1>{{NAME}}</h1>
+  <p>{{DESCRIPTION}}</p>
+
+  <section class="card" aria-labelledby="form-heading">
+    <h2 id="form-heading" class="sr-only">Formulário da Ferramenta</h2>
+    <div class="form-group">
+      <label for="valor">Valor base:</label>
+      <input type="number" id="valor" name="valor" step="any" placeholder="Informe o valor base">
+    </div>
+
+    <div class="tool-actions">
+      <button type="button" class="tool-btn tool-btn-primary" data-action="calculate">Calcular</button>
+      <button type="button" class="tool-btn tool-btn-secondary" data-action="clear">Limpar</button>
+    </div>
+
+    <div id="resultado" class="result-box" style="margin-top: 15px;" aria-live="polite"></div>
+  </section>
+
+  <section class="tool-content" style="margin-top: 30px;">
+    <h2>Como funciona</h2>
+    <p>Preencha os dados solicitados e clique em <strong>Calcular</strong> para ver a demonstração do resultado.</p>
+  </section>
+
+  <section class="related-tools" style="margin-top: 30px;">
+    <h2>Ferramentas Relacionadas</h2>
+    <ul>
+      {{RELATED_TOOLS_LINKS}}
+    </ul>
+  </section>

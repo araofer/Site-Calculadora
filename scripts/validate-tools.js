@@ -9,6 +9,9 @@ const path = require('path');
 const ROOT_DIR = path.resolve(__dirname, '..');
 const TOOLS_JSON_PATH = path.join(ROOT_DIR, 'data', 'tools.json');
 
+const { loadCategories, resolveCategory } = require('./lib/tool-registry.js');
+const { VALID_STATUSES, isFactoryTool, validateToolSchema } = require('./lib/tool-schema.js');
+
 const VALID_CATEGORIES = [
   'Financeiro',
   'Trabalhista',
@@ -18,18 +21,11 @@ const VALID_CATEGORIES = [
   'Utilidades'
 ];
 
-const VALID_STATUSES = ['published', 'draft', 'deprecated'];
-
 const REQUIRED_FIELDS = [
   'id',
-  'slug',
   'name',
   'category',
-  'categorySlug',
   'description',
-  'url',
-  'keywords',
-  'related',
   'status'
 ];
 
@@ -60,15 +56,76 @@ function validateTools() {
   const seenUrls = new Set();
   const allIds = new Set(tools.map(t => t.id).filter(Boolean));
 
+  const categoriesMap = fs.existsSync(path.join(ROOT_DIR, 'data', 'categories.json'))
+    ? loadCategories()
+    : null;
+  const validCategorySlugs = categoriesMap ? Object.keys(categoriesMap) : [];
+
   tools.forEach((tool, index) => {
     const prefix = `Ferramenta #${index + 1} (${tool.id || 'sem ID'}):`;
 
-    // 1. Campos obrigatórios
-    REQUIRED_FIELDS.forEach(field => {
-      if (tool[field] === undefined || tool[field] === null || tool[field] === '') {
-        errors.push(`${prefix} Campo obrigatório ausente ou vazio: "${field}".`);
+    if (isFactoryTool(tool)) {
+      // Validação pelo Tool Schema Factory
+      const schemaCheck = validateToolSchema(tool, {
+        validCategories: validCategorySlugs
+      });
+      if (!schemaCheck.valid) {
+        schemaCheck.errors.forEach(err => errors.push(err));
       }
-    });
+
+      // Validação de existência de arquivos no disco
+      const catSlug = tool.categorySlug || (resolveCategory(tool.category, categoriesMap)?.slug);
+      const sourcePagePath = path.join(ROOT_DIR, 'src', 'pages', 'tools', catSlug || '', `${tool.id}.page.html`);
+      const jsPath = path.join(ROOT_DIR, 'js', 'tools', `${tool.id}.js`);
+
+      if (!fs.existsSync(sourcePagePath)) {
+        errors.push(`${prefix} Arquivo de página fonte não encontrado: src/pages/tools/${catSlug}/${tool.id}.page.html`);
+      }
+      if (!fs.existsSync(jsPath)) {
+        errors.push(`${prefix} Módulo JS não encontrado: js/tools/${tool.id}.js`);
+      }
+
+      // Se estiver published, o arquivo compilado deve existir no repositório
+      if (tool.status === 'published') {
+        const compiledPath = path.join(ROOT_DIR, 'tools', catSlug || '', `${tool.id}.html`);
+        if (!fs.existsSync(compiledPath)) {
+          errors.push(`${prefix} Arquivo compilado publicado não encontrado: tools/${catSlug}/${tool.id}.html`);
+        }
+      }
+    } else {
+      // 1. Campos obrigatórios legados
+      const legacyRequired = ['id', 'slug', 'name', 'category', 'categorySlug', 'description', 'url', 'keywords', 'related', 'status'];
+      legacyRequired.forEach(field => {
+        if (tool[field] === undefined || tool[field] === null || tool[field] === '') {
+          errors.push(`${prefix} Campo obrigatório ausente ou vazio: "${field}".`);
+        }
+      });
+
+      // 4. Categoria válida legada
+      if (tool.category && !VALID_CATEGORIES.includes(tool.category) && !validCategorySlugs.includes(tool.category.toLowerCase())) {
+        errors.push(`${prefix} Categoria inválida: "${tool.category}". Categorias permitidas: ${VALID_CATEGORIES.join(', ')}.`);
+      }
+
+      // 5. Status válido legado
+      if (tool.status && !VALID_STATUSES.includes(tool.status)) {
+        errors.push(`${prefix} Status inválido: "${tool.status}". Status permitidos: ${VALID_STATUSES.join(', ')}.`);
+      }
+
+      // 6. Keywords
+      if (!Array.isArray(tool.keywords) || tool.keywords.length === 0) {
+        errors.push(`${prefix} O campo "keywords" deve ser um array com ao menos 1 termo.`);
+      }
+
+      // 7. Unicidade e existência de URL legada
+      if (tool.url) {
+        const relativeFilePath = tool.url.replace(/^\/+/, '');
+        const absoluteFilePath = path.join(ROOT_DIR, relativeFilePath);
+
+        if (!fs.existsSync(absoluteFilePath)) {
+          errors.push(`${prefix} Arquivo HTML não encontrado no disco: "${relativeFilePath}".`);
+        }
+      }
+    }
 
     // 2. Unicidade de ID
     if (tool.id) {
@@ -79,43 +136,20 @@ function validateTools() {
     }
 
     // 3. Unicidade de Slug
-    if (tool.slug) {
-      if (seenSlugs.has(tool.slug)) {
-        errors.push(`${prefix} Slug duplicado detectado: "${tool.slug}".`);
+    const toolSlug = tool.slug || tool.id;
+    if (toolSlug) {
+      if (seenSlugs.has(toolSlug)) {
+        errors.push(`${prefix} Slug duplicado detectado: "${toolSlug}".`);
       }
-      seenSlugs.add(tool.slug);
+      seenSlugs.add(toolSlug);
     }
 
-    // 4. Categoria válida
-    if (tool.category && !VALID_CATEGORIES.includes(tool.category)) {
-      errors.push(`${prefix} Categoria inválida: "${tool.category}". Categorias permitidas: ${VALID_CATEGORIES.join(', ')}.`);
-    }
-
-    // 5. Status válido
-    if (tool.status && !VALID_STATUSES.includes(tool.status)) {
-      errors.push(`${prefix} Status inválido: "${tool.status}". Status permitidos: ${VALID_STATUSES.join(', ')}.`);
-    }
-
-    // 6. Keywords
-    if (!Array.isArray(tool.keywords) || tool.keywords.length === 0) {
-      errors.push(`${prefix} O campo "keywords" deve ser um array com ao menos 1 termo.`);
-    }
-
-    // 7. Unicidade e existência de URL
     if (tool.url) {
       const normalizedUrl = tool.url.toLowerCase();
       if (seenUrls.has(normalizedUrl)) {
         errors.push(`${prefix} URL duplicada detectada: "${tool.url}".`);
       }
       seenUrls.add(normalizedUrl);
-
-      // Checa existência do arquivo físico no repositório
-      const relativeFilePath = tool.url.replace(/^\/+/, '');
-      const absoluteFilePath = path.join(ROOT_DIR, relativeFilePath);
-
-      if (!fs.existsSync(absoluteFilePath)) {
-        errors.push(`${prefix} Arquivo HTML não encontrado no disco: "${relativeFilePath}".`);
-      }
     }
 
     // 8. Relacionamentos
