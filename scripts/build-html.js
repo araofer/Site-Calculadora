@@ -15,6 +15,19 @@ const PAGES_DIR = path.join(SRC_DIR, 'pages');
 const DEFAULT_OUTPUT_DIR = path.join(ROOT_DIR, 'dist-pilot');
 const PROD_OUTPUT_DIR = path.join(ROOT_DIR, 'dist');
 const TOOLS_JSON_PATH = path.join(ROOT_DIR, 'data', 'tools.json');
+const STYLE_CSS_PATH = path.join(ROOT_DIR, 'css', 'style.css');
+
+const crypto = require('node:crypto');
+
+function getStyleVersion() {
+  if (!fs.existsSync(STYLE_CSS_PATH)) {
+    throw new Error(`Arquivo CSS obrigatório não encontrado: ${STYLE_CSS_PATH}`);
+  }
+  const cssContent = fs.readFileSync(STYLE_CSS_PATH, 'utf-8');
+  return crypto.createHash('sha256').update(cssContent).digest('hex').slice(0, 8);
+}
+
+const STYLE_VERSION = getStyleVersion();
 
 const { getPageJsonLd, renderJsonLdScript } = require('../src/utils/seo.js');
 
@@ -413,7 +426,7 @@ function parsePageSource(fileContent) {
  * @param {string} [options.layoutsDir] Diretório de layouts
  * @returns {string} HTML renderizado completo
  */
-function renderPage({ sourceFile, relativeOutputPath, componentsDir = COMPONENTS_DIR, layoutsDir = LAYOUTS_DIR }) {
+function renderPage({ sourceFile, relativeOutputPath, componentsDir = COMPONENTS_DIR, layoutsDir = LAYOUTS_DIR, styleVersion = STYLE_VERSION }) {
   if (!fs.existsSync(sourceFile)) {
     throw new Error(`Arquivo fonte de página não encontrado: ${sourceFile}`);
   }
@@ -470,6 +483,7 @@ function renderPage({ sourceFile, relativeOutputPath, componentsDir = COMPONENTS
   template = template.replace(/\{\{OG_TYPE\}\}/g, meta.ogType || 'website');
   template = template.replace(/\{\{OG_IMAGE\}\}/g, meta.ogImage || 'https://www.calculadoramaster.com/logo/banner.png');
   template = template.replace(/\{\{ROOT_PREFIX\}\}/g, rootPrefix);
+  template = template.replace(/\{\{STYLE_VERSION\}\}/g, styleVersion);
   template = template.replace(/\{\{EXTRA_HEAD\}\}\n?/g, meta.extraHead ? `  ${meta.extraHead}\n` : '');
 
   // Dados estruturados JSON-LD
@@ -631,6 +645,8 @@ if (require.main === module) {
 }
 
 module.exports = {
+  STYLE_VERSION,
+  getStyleVersion,
   DEFAULT_OUTPUT_DIR,
   PROD_OUTPUT_DIR,
   FINANCEIRO_LOTE1_PAGES,
