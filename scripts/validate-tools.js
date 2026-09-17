@@ -85,11 +85,12 @@ function validateTools() {
         errors.push(`${prefix} Módulo JS não encontrado: js/tools/${tool.id}.js`);
       }
 
-      // Se estiver published, o arquivo compilado deve existir no repositório
+      // Se estiver published, o arquivo compilado deve existir no build dist ou no repositório
       if (tool.status === 'published') {
-        const compiledPath = path.join(ROOT_DIR, 'tools', catSlug || '', `${tool.id}.html`);
-        if (!fs.existsSync(compiledPath)) {
-          errors.push(`${prefix} Arquivo compilado publicado não encontrado: tools/${catSlug}/${tool.id}.html`);
+        const rootCompiled = path.join(ROOT_DIR, 'tools', catSlug || '', `${tool.id}.html`);
+        const distCompiled = path.join(ROOT_DIR, 'dist', 'tools', catSlug || '', `${tool.id}.html`);
+        if (!fs.existsSync(rootCompiled) && !fs.existsSync(distCompiled)) {
+          errors.push(`${prefix} Arquivo compilado publicado não encontrado: dist/tools/${catSlug}/${tool.id}.html ou tools/${catSlug}/${tool.id}.html`);
         }
       }
     } else {

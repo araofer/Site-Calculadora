@@ -38,6 +38,7 @@ const factoryDiscovery = discoverPublicFactoryTools({
 });
 const FACTORY_PAGES = factoryDiscovery.pages;
 const FACTORY_ASSETS = factoryDiscovery.assets;
+const FACTORY_BLOG_PAGES = factoryDiscovery.articlePages || [];
 
 let cachedToolsData = null;
 function getToolsData() {
@@ -233,7 +234,8 @@ const BLOG_ARTIGOS_PAGES = [
 
 const BLOG_PAGES = [
   BLOG_INDEX_PAGE,
-  ...BLOG_ARTIGOS_PAGES
+  ...BLOG_ARTIGOS_PAGES,
+  ...FACTORY_BLOG_PAGES
 ];
 
 const INSTITUCIONAL_PAGES = [
@@ -666,6 +668,7 @@ module.exports = {
   TRABALHISTA_PAGES,
   UTILIDADES_PAGES,
   FACTORY_PAGES,
+  FACTORY_BLOG_PAGES,
   TOOL_PAGES,
   HOME_PAGE,
   CATEGORIA_PAGES,

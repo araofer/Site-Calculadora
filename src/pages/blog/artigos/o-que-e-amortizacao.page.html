@@ -1,0 +1,148 @@
+---
+title: O que é Amortização e Como Funciona a Tabela de Parcelas | Calculadora Master
+description: Entenda o conceito de amortização, como ler uma planilha de parcelas e como funciona o Sistema Price com amortização crescente e juros decrescentes.
+canonical: https://www.calculadoramaster.com/blog/artigos/o-que-e-amortizacao.html
+layout: blog
+ogType: article
+author: Arão Ferreira
+ogImage: https://www.calculadoramaster.com/blog/img/blog-calculadora.png
+---
+<article class="card">
+  <h1>O que é Amortização e Como Funciona uma Tabela de Parcelas</h1>
+  <p class="lead">
+    Ao contrair um financiamento ou empréstimo parcelado, pagar a prestação mensal não significa abater aquele valor integral da sua dívida original. Compreender a diferença entre amortização e juros é a chave para gerenciar o saldo devedor e planejar amortizações extraordinárias com inteligência.
+  </p>
+</article>
+
+<section class="card" style="margin-top: 24px;">
+  <h2>O Conceito Fundamental: O que Significa Amortizar?</h2>
+  <p>
+    No vocabulário financeiro, <strong>amortizar</strong> significa efetivamente <em>extinguir, abater ou reduzir o saldo principal de uma dívida</em> por meio de pagamentos periódicos.
+  </p>
+  <p>
+    Toda prestação cobrada por um credor é decomposta em duas partes essenciais:
+  </p>
+  <div style="background-color: var(--color-bg, #f8fafc); border-left: 4px solid var(--color-primary, #0284c7); padding: 16px; margin: 16px 0; border-radius: 0 8px 8px 0;">
+    <p style="font-size: 1.1rem; font-weight: bold; margin: 0 0 8px 0;">
+      Valor da Prestação = Parcela de Amortização + Parcela de Juros
+    </p>
+    <ul style="margin: 0; padding-left: 20px;">
+      <li><strong>Amortização:</strong> É a quantia da mensalidade que efetivamente reduz o montante que você deve (o saldo devedor principal).</li>
+      <li><strong>Juros:</strong> É a remuneração cobrada pela instituição financeira pelo empréstimo dos recursos ao longo daquele mês. Os juros não abatem a dívida principal &mdash; são o custo do crédito.</li>
+    </ul>
+  </div>
+
+  <h2>Como Ler e Interpretar uma Tabela de Amortização</h2>
+  <p>
+    Uma <strong>Tabela de Amortização</strong> (ou cronograma de quitação) é uma planilha que projeta, período a período, exatamente o que acontece com seu dinheiro até a quitação final. Cada coluna desempenha um papel financeiro específico:
+  </p>
+  <ul>
+    <li><strong>N&ordm; da Parcela (Período):</strong> A sequência cronológica de cada mensalidade (ex: do mês 1 ao mês 36).</li>
+    <li><strong>Saldo Inicial:</strong> O saldo devedor remanescente no início daquele mês, antes do pagamento da respectiva parcela. É sobre esse saldo inicial que a taxa de juros do mês será aplicada.</li>
+    <li><strong>Juros do Mês:</strong> Calculados pela multiplicação: <code>Saldo Inicial &times; Taxa de Juros</code>. Quanto maior o saldo residual, maior será a fatia de juros retida pelo banco.</li>
+    <li><strong>Amortização Real:</strong> A quantia resultante da subtração: <code>Prestação &minus; Juros</code>. É este valor que será subtraído do seu saldo devedor.</li>
+    <li><strong>Pagamento (Prestação):</strong> O valor financeiro efetivamente debitado ou pago por você naquele mês.</li>
+    <li><strong>Saldo Final Devedor:</strong> A dívida restante após o pagamento: <code>Saldo Inicial &minus; Amortização</code>. Este saldo se tornará o saldo inicial do mês subsequente.</li>
+  </ul>
+
+  <h2>Como Funciona a Tabela Price (Sistema Francês)</h2>
+  <p>
+    A ferramenta de amortização da Calculadora Master utiliza o consagrado <strong>Sistema Francês de Amortização (Tabela Price)</strong>. Nesse sistema, as parcelas mensais possuem <strong>valor constante e previsível</strong> durante todo o contrato.
+  </p>
+  <p>
+    O dinamismo matemático do Sistema Price funciona da seguinte maneira:
+  </p>
+  <ol>
+    <li>Como o saldo devedor é máximo no primeiro mês, a cobrança de juros também é máxima na primeira parcela. Por consequência, a amortização real no início é relativamente pequena.</li>
+    <li>A cada mês quitado, o saldo devedor diminui ligeiramente. Com isso, os juros do mês seguinte caem proporcionalmente.</li>
+    <li>Como o valor total da parcela continua fixo, a redução dos juros abre espaço para que a <strong>amortização cresça mês a mês</strong>.</li>
+    <li>Nas últimas parcelas do financiamento, quase a totalidade da mensalidade é composta por amortização, restando apenas uma quantia residual de juros.</li>
+  </ol>
+
+  <h2>Exemplo Prático de Cronograma Price</h2>
+  <p>
+    Imagine um financiamento de R$ 5.000,00 contratado com taxa de 2% ao mês em 4 parcelas fixas de R$ 1.313,38:
+  </p>
+  <div style="overflow-x: auto; margin: 16px 0;">
+    <table style="width: 100%; border-collapse: collapse; font-size: 0.95rem; text-align: right;">
+      <thead>
+        <tr style="background-color: var(--color-bg, #f1f5f9); border-bottom: 2px solid var(--color-border, #cbd5e1);">
+          <th style="padding: 10px; text-align: center;">Mês</th>
+          <th style="padding: 10px;">Saldo Inicial</th>
+          <th style="padding: 10px;">Juros (2%)</th>
+          <th style="padding: 10px;">Amortização</th>
+          <th style="padding: 10px;">Prestação</th>
+          <th style="padding: 10px;">Saldo Final</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="border-bottom: 1px solid var(--color-border, #e2e8f0);">
+          <td style="padding: 10px; text-align: center;">1</td>
+          <td style="padding: 10px;">R$ 5.000,00</td>
+          <td style="padding: 10px;">R$ 100,00</td>
+          <td style="padding: 10px;">R$ 1.213,38</td>
+          <td style="padding: 10px;">R$ 1.313,38</td>
+          <td style="padding: 10px;">R$ 3.786,62</td>
+        </tr>
+        <tr style="border-bottom: 1px solid var(--color-border, #e2e8f0);">
+          <td style="padding: 10px; text-align: center;">2</td>
+          <td style="padding: 10px;">R$ 3.786,62</td>
+          <td style="padding: 10px;">R$ 75,73</td>
+          <td style="padding: 10px;">R$ 1.237,65</td>
+          <td style="padding: 10px;">R$ 1.313,38</td>
+          <td style="padding: 10px;">R$ 2.548,97</td>
+        </tr>
+        <tr style="border-bottom: 1px solid var(--color-border, #e2e8f0);">
+          <td style="padding: 10px; text-align: center;">3</td>
+          <td style="padding: 10px;">R$ 2.548,97</td>
+          <td style="padding: 10px;">R$ 50,98</td>
+          <td style="padding: 10px;">R$ 1.262,40</td>
+          <td style="padding: 10px;">R$ 1.313,38</td>
+          <td style="padding: 10px;">R$ 1.286,57</td>
+        </tr>
+        <tr style="border-bottom: 1px solid var(--color-border, #e2e8f0);">
+          <td style="padding: 10px; text-align: center;">4</td>
+          <td style="padding: 10px;">R$ 1.286,57</td>
+          <td style="padding: 10px;">R$ 25,73</td>
+          <td style="padding: 10px;">R$ 1.287,65</td>
+          <td style="padding: 10px;">R$ 1.313,38</td>
+          <td style="padding: 10px;">R$ 0,00</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p style="font-size: 0.9rem; color: var(--color-text-muted, #64748b);">
+    Observe como os juros caíram de R$ 100,00 para R$ 25,73, enquanto a amortização cresceu de R$ 1.213,38 para R$ 1.287,65 até zerar a dívida.
+  </p>
+
+  <h2>Existem Outros Sistemas de Amortização?</h2>
+  <p>
+    Sim. No crédito imobiliário de longo prazo no Brasil, é muito frequente o uso do <strong>SAC (Sistema de Amortização Constante)</strong>, em que a amortização mensal é fixa e as parcelas começam mais altas e vão decrescendo. Em linhas empresariais, existem ainda o Sistema Americano e o Alemão.
+  </p>
+  <p>
+    <strong>Nota Importante:</strong> A ferramenta online de Tabela de Amortização do portal foi desenhada especificamente para o <strong>Sistema Price</strong>, que é o padrão utilizado na imensa maioria das operações comerciais, empréstimos pessoais e financiamentos ao consumidor.
+  </p>
+
+  <h2>Empréstimo vs. Amortização: Qual Ferramenta Utilizar?</h2>
+  <ul>
+    <li><strong>Use a Calculadora de Empréstimo:</strong> Quando seu foco for uma decisão rápida &mdash; descobrir quanto vai pagar por mês, comparar taxas de diferentes bancos e saber o valor global de juros da operação.</li>
+    <li><strong>Use a Tabela de Amortização:</strong> Quando você precisar auditar detalhadamente a dívida &mdash; verificar quanto deve após determinado número de parcelas ou planejar amortizações parciais antecipadas para economizar juros futuros.</li>
+  </ul>
+
+  <h2>Gere Sua Tabela Completa Gratuitamente</h2>
+  <p style="margin: 20px 0;">
+    👉 <a href="/tools/financas/amortizacao.html" style="font-weight: bold; font-size: 1.1rem;">Acessar o Gerador de Tabela de Amortização Online</a> &mdash; Visualize o cronograma completo com todas as parcelas e saldos devedores.
+  </p>
+
+  <h3>Páginas e Conteúdos Relacionados</h3>
+  <ul>
+    <li><a href="/tools/financas/emprestimo.html">Calculadora de Empréstimo Price</a> &mdash; Calcule rapidamente a parcela fixa e custo total.</li>
+    <li><a href="/tools/financas/juros.html">Calculadora de Juros</a> &mdash; Simule taxas ao mês e ao ano em regime simples ou composto.</li>
+    <li><a href="/tools/financas/financiamento-imovel.html">Financiamento Imobiliário</a> &mdash; Simulação com comparação entre tabelas SAC e Price para compra da casa própria.</li>
+    <li><a href="/blog/artigos/como-calcular-emprestimo.html">Artigo: Como Calcular Empréstimo e Entender o Custo Total</a> &mdash; Guia aprofundado sobre riscos do prazo estendido e impacto do CET.</li>
+  </ul>
+
+  <p style="margin-top: 28px;">
+    <a href="/blog/index.html">&larr; Voltar para o Índice de Artigos do Blog</a> | <a href="/index.html">Página Inicial da Calculadora Master</a>
+  </p>
+</section>

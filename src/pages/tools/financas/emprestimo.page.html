@@ -1,0 +1,116 @@
+---
+title: Calculadora de Empréstimo Online Grátis | Calculadora Master
+description: Calcule parcelas, juros e custo total de um empréstimo pelo sistema Price. Simule prazos e compare o valor final financiado com facilidade.
+keywords: calculadora de emprestimo, simular emprestimo, parcelas emprestimo, sistema price, juros emprestimo, calcular emprestimo
+canonical: https://www.calculadoramaster.com/tools/financas/emprestimo.html
+layout: tool
+pageScripts: <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>\n<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js"></script>\n<script type="module" src="{{ROOT_PREFIX}}js/tools/emprestimo.js"></script>
+---
+  <h1>Calculadora de Empréstimo</h1>
+  <p>Simule parcelas fixas, juros acumulados e o custo efetivo total de um empréstimo pelo Sistema Francês (Tabela Price).</p>
+
+  <section class="card" aria-labelledby="form-heading">
+    <h2 id="form-heading" class="sr-only">Formulário de Simulação de Empréstimo</h2>
+
+    <div class="form-group">
+      <label for="valor">Valor do Empréstimo (R$):</label>
+      <input type="text" id="valor" name="valor" inputmode="decimal" placeholder="Ex: 10.000,00" required>
+    </div>
+
+    <div class="form-group" style="margin-top: 15px;">
+      <label for="taxa">Taxa de Juros Mensal (% a.m.):</label>
+      <input type="text" id="taxa" name="taxa" inputmode="decimal" placeholder="Ex: 1,99" required>
+    </div>
+
+    <div class="form-group" style="margin-top: 15px;">
+      <label for="prazo">Prazo (Quantidade de meses):</label>
+      <input type="number" id="prazo" name="prazo" min="1" max="600" step="1" placeholder="Ex: 24" required>
+    </div>
+
+    <div class="tool-actions" style="margin-top: 20px;">
+      <button type="button" class="tool-btn tool-btn-primary" data-action="calculate">Calcular Empréstimo</button>
+      <button type="button" class="tool-btn tool-btn-secondary" data-action="clear">Limpar</button>
+    </div>
+
+    <div id="resultado" class="result-box" style="margin-top: 20px;" aria-live="polite"></div>
+
+    <div id="containerGraficoEmprestimo" class="grafico-container" style="position: relative; height: 260px; width: 100%; max-width: 100%; min-width: 0; box-sizing: border-box; margin-top: 20px; display: none; overflow: hidden;">
+      <canvas id="graficoEmprestimo"></canvas>
+    </div>
+
+    <div class="tool-actions result-actions" style="margin-top: 15px; justify-content: center; gap: 8px;">
+      <button type="button" class="tool-btn tool-btn-secondary" data-action="copy">Copiar Resultado</button>
+      <button type="button" class="tool-btn tool-btn-secondary" data-action="share">Compartilhar</button>
+      <button type="button" class="tool-btn tool-btn-secondary" data-action="print">Imprimir</button>
+      <button type="button" class="tool-btn tool-btn-secondary" data-action="pdf">Exportar PDF</button>
+    </div>
+    <div id="emprestimoStatus" class="result-action-status" role="status" aria-live="polite" style="text-align: center; font-size: 0.85rem; color: #16a34a; margin-top: 8px;"></div>
+  </section>
+
+  <section class="tool-content" style="margin-top: 36px;">
+    <h2>Como funciona o cálculo de empréstimo?</h2>
+    <p>A maioria dos empréstimos pessoais, consignados e financiamentos bancários de consumo no Brasil utiliza o <strong>Sistema Francês de Amortização (Tabela Price)</strong>. Nesse modelo, o tomador paga prestações iguais e periódicas ao longo de todo o contrato.</p>
+
+    <p>Cada prestação mensal é composta por duas parcelas que se transformam ao longo do tempo:</p>
+    <ul>
+      <li><strong>Juros:</strong> calculados sobre o saldo devedor restante do mês anterior. Como o saldo é maior no início, as primeiras parcelas contêm mais juros.</li>
+      <li><strong>Amortização:</strong> o valor que efetivamente reduz a sua dívida original. A amortização cresce a cada mês à medida que os juros caem.</li>
+    </ul>
+
+    <h3>Parcela fixa vs. Custo Total</h3>
+    <p>Um erro comum ao contratar crédito é olhar apenas para o valor da parcela mensal para verificar se "cabe no bolso". Prazos mais longos reduzem o valor mensal da parcela, mas aumentam expressivamente o <strong>custo total em juros</strong> pagos ao banco.</p>
+    <p>Para conferir a evolução detalhada de cada pagamento mês a mês, consulte também nosso artigo explicativo: <a href="{{ROOT_PREFIX}}blog/artigos/como-calcular-emprestimo.html">Como calcular um empréstimo e entender o custo total</a>.</p>
+  </section>
+
+  <section class="related-tools" style="margin-top: 36px;">
+    <h2>Ferramentas Relacionadas</h2>
+    <div class="related-tools-grid">
+      <article class="tool-card">
+        <div class="tool-card-header">
+          <span class="tool-card-category">Financeiro</span>
+        </div>
+        <h3 class="tool-card-title">Tabela de Amortização</h3>
+        <p class="tool-card-desc">Visualize o cronograma completo de amortização com a evolução mês a mês do saldo devedor.</p>
+        <div class="tool-card-footer">
+          <a href="{{ROOT_PREFIX}}tools/financas/amortizacao.html" class="tool-card-btn" aria-label="Acessar Tabela de Amortização">Acessar &rarr;</a>
+        </div>
+      </article>
+
+      <article class="tool-card">
+        <div class="tool-card-header">
+          <span class="tool-card-category">Financeiro</span>
+        </div>
+        <h3 class="tool-card-title">Calculadora de Juros</h3>
+        <p class="tool-card-desc">Compare juros simples e juros compostos para entender o rendimento e o custo financeiro.</p>
+        <div class="tool-card-footer">
+          <a href="{{ROOT_PREFIX}}tools/financas/juros.html" class="tool-card-btn" aria-label="Acessar Calculadora de Juros">Acessar &rarr;</a>
+        </div>
+      </article>
+
+      <article class="tool-card">
+        <div class="tool-card-header">
+          <span class="tool-card-category">Financeiro</span>
+        </div>
+        <h3 class="tool-card-title">Financiamento de Carro</h3>
+        <p class="tool-card-desc">Simule financiamento veicular com entrada, parcelas e valor final financiado.</p>
+        <div class="tool-card-footer">
+          <a href="{{ROOT_PREFIX}}tools/financas/financiamento-carro.html" class="tool-card-btn" aria-label="Acessar Financiamento de Carro">Acessar &rarr;</a>
+        </div>
+      </article>
+
+      <article class="tool-card">
+        <div class="tool-card-header">
+          <span class="tool-card-category">Financeiro</span>
+        </div>
+        <h3 class="tool-card-title">Financiamento Imobiliário</h3>
+        <p class="tool-card-desc">Simule o financiamento da casa própria comparando parcelas pelo Sistema SAC.</p>
+        <div class="tool-card-footer">
+          <a href="{{ROOT_PREFIX}}tools/financas/financiamento-imovel.html" class="tool-card-btn" aria-label="Acessar Financiamento Imobiliário">Acessar &rarr;</a>
+        </div>
+      </article>
+    </div>
+
+    <p style="margin-top: 30px;">
+      👉 <a href="{{ROOT_PREFIX}}index.html">Voltar para página inicial</a>
+    </p>
+  </section>

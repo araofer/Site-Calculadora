@@ -126,3 +126,158 @@ export function formatBRL(valor, opcoes = false) {
 // Aliases para compatibilidade de nomenclatura
 export const parseMoeda = parseBRLCurrency;
 export const mascaraMoeda = formatBRLCurrencyInput;
+
+/**
+ * Converte string ou número em formato financeiro (PT-BR ou padrão internacional)
+ * para número float de forma estrita, segura e determinística.
+ *
+ * Aceita:
+ * - 1000 -> 1000
+ * - 1000.50 -> 1000.50
+ * - 1000,50 -> 1000.50
+ * - 1.000 -> 1000
+ * - 1.000,50 -> 1000.50
+ * - 1.234.567,89 -> 1234567.89
+ * - 1,234.56 -> 1234.56
+ * - R$ 1.000,50 -> 1000.50
+ * - 1,5% ou 1.5% -> 1.5
+ *
+ * Rejeita (retorna NaN):
+ * - 1..000
+ * - 1,,000
+ * - 1.00.0
+ * - 1,00,0
+ * - abc
+ * - números negativos quando allowNegative for false
+ * - caracteres inválidos, pontuações consecutivas ou malformadas
+ *
+ * @param {string|number} raw Entrada bruta a ser parseada
+ * @param {Object} [options={}] Opções de parsing e validação
+ * @param {boolean} [options.allowNegative=false] Permitir números negativos
+ * @param {boolean} [options.integer=false] Exigir número inteiro
+ * @param {number} [options.min] Limite mínimo permitido (inclusivo)
+ * @param {number} [options.max] Limite máximo permitido (inclusivo)
+ * @returns {number} Número parseado ou NaN se inválido
+ */
+export function parseFinancialNumberPtBr(raw, options = {}) {
+  const allowNegative = Boolean(options && options.allowNegative);
+  const integer = Boolean(options && options.integer);
+  const min = options && typeof options.min === 'number' ? options.min : undefined;
+  const max = options && typeof options.max === 'number' ? options.max : undefined;
+
+  if (raw === undefined || raw === null) return NaN;
+
+  if (typeof raw === 'number') {
+    if (!Number.isFinite(raw)) return NaN;
+    if (!allowNegative && raw < 0) return NaN;
+    if (integer && !Number.isInteger(raw)) return NaN;
+    if (min !== undefined && raw < min) return NaN;
+    if (max !== undefined && raw > max) return NaN;
+    return raw === 0 ? 0 : raw;
+  }
+
+  if (typeof raw !== 'string') return NaN;
+
+  let str = raw.trim();
+  if (!str) return NaN;
+
+  let isNegative = false;
+  if (str.startsWith('-')) {
+    isNegative = true;
+    str = str.slice(1).trim();
+  } else if (str.startsWith('(') && str.endsWith(')')) {
+    isNegative = true;
+    str = str.slice(1, -1).trim();
+  }
+
+  // Remove prefixo de moeda BRL (ex: "R$", "r$")
+  str = str.replace(/^R\$\s*/i, '').trim();
+
+  // Verifica se o sinal negativo veio após o prefixo de moeda (ex: "R$ -100")
+  if (str.startsWith('-')) {
+    if (isNegative) return NaN;
+    isNegative = true;
+    str = str.slice(1).trim();
+  }
+
+  if (isNegative && !allowNegative) return NaN;
+
+  // Remove sufixo percentual opcional (ex: "1,5%", "1.5 %")
+  str = str.replace(/%\s*$/, '').trim();
+
+  // A string deve conter exclusivamente dígitos e os separadores '.' ou ','
+  // Não pode começar nem terminar com separador, nem ter separadores adjacentes
+  if (!/^\d+(?:[.,]\d+)*$/.test(str)) {
+    return NaN;
+  }
+
+  const hasComma = str.includes(',');
+  const hasDot = str.includes('.');
+  let cleanStr = str;
+
+  if (hasComma && hasDot) {
+    // Formato brasileiro padrão: milhares com '.' e decimais com ',' (ex: 1.234.567,89 ou 1.000,50)
+    const isBrPattern = /^\d{1,3}(\.\d{3})+,\d+$/.test(str);
+    // Formato internacional: milhares com ',' e decimais com '.' (ex: 1,234,567.89 ou 1,234.56)
+    const isIntlPattern = /^\d{1,3}(,\d{3})+\.\d+$/.test(str);
+
+    if (isBrPattern) {
+      cleanStr = str.replace(/\./g, '').replace(',', '.');
+    } else if (isIntlPattern) {
+      cleanStr = str.replace(/,/g, '');
+    } else {
+      return NaN;
+    }
+  } else if (hasComma) {
+    // Se só tem vírgula, em PT-BR aceita-se apenas 1 vírgula decimal (ex: 1000,50 ou 1,5)
+    // Se tiver mais de uma vírgula (ex: 1,00,0 ou 1,000,000 sem ponto), é inválido em PT-BR
+    const commaCount = (str.match(/,/g) || []).length;
+    if (commaCount !== 1) {
+      return NaN;
+    }
+    cleanStr = str.replace(',', '.');
+  } else if (hasDot) {
+    // Se só tem ponto:
+    // 1. Caso milhar brasileiro: grupos de 3 dígitos (ex: 1.000, 10.000, 1.000.000)
+    const isThousandsGroup = /^\d{1,3}(\.\d{3})+$/.test(str);
+    if (isThousandsGroup) {
+      cleanStr = str.replace(/\./g, '');
+    } else {
+      // 2. Se não é agrupamento de milhares válido, só pode ser decimal com exatamente 1 ponto
+      const dotCount = (str.match(/\./g) || []).length;
+      if (dotCount !== 1) {
+        // Múltiplos pontos malformados (ex: 1.00.0, 1.2.3)
+        return NaN;
+      }
+      // Ponto único decimal (ex: 1000.50, 1.5, 0.99)
+      cleanStr = str;
+    }
+  }
+
+  const num = Number(cleanStr);
+  if (!Number.isFinite(num) || Number.isNaN(num)) return NaN;
+
+  const finalVal = isNegative ? -num : num;
+
+  if (!allowNegative && finalVal < 0) return NaN;
+  if (integer && !Number.isInteger(finalVal)) return NaN;
+  if (min !== undefined && finalVal < min) return NaN;
+  if (max !== undefined && finalVal > max) return NaN;
+
+  return finalVal === 0 ? 0 : finalVal;
+}
+
+/**
+ * Converte string ou número em número inteiro positivo de forma estrita.
+ *
+ * @param {string|number} raw Entrada bruta
+ * @param {Object} [options={}] Opções
+ * @returns {number} Inteiro ou NaN
+ */
+export function parseFinancialIntegerPtBr(raw, options = {}) {
+  return parseFinancialNumberPtBr(raw, {
+    min: 1,
+    ...options,
+    integer: true
+  });
+}
