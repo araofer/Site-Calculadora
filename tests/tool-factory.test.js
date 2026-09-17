@@ -31,7 +31,9 @@ const {
 import toolDiscovery from '../scripts/lib/tool-discovery.js';
 const {
   assertPublicFactoryIntegrity,
-  discoverPublicFactoryTools
+  discoverPublicFactoryTools,
+  getPublicFactoryToolsForCategory,
+  injectCategoryToolCards
 } = toolDiscovery;
 
 import scaffolder from '../scripts/create-tool.js';
@@ -668,4 +670,125 @@ test('Templates - todos os templates base existem e contêm os placeholders nece
   const articleContent = fs.readFileSync(articleTemplate, 'utf-8');
   assert.match(articleContent, /layout: blog/);
   assert.match(articleContent, /robots: noindex, nofollow/);
+});
+
+// =============================================================================
+// 7. CATEGORY DISCOVERY & LISTING TESTS
+// =============================================================================
+test('Category Discovery - retorna apenas ferramentas Factory published+verified da categoria', () => {
+  const mockTools = [
+    {
+      id: 'tool-pub-financas',
+      name: 'Ferramenta Finanças',
+      category: 'Financeiro',
+      categorySlug: 'financas',
+      url: '/tools/financas/tool-pub-financas.html',
+      status: 'published',
+      formulaStatus: 'verified',
+      implementation: 'factory'
+    },
+    {
+      id: 'tool-draft-financas',
+      name: 'Draft Finanças',
+      category: 'Financeiro',
+      categorySlug: 'financas',
+      url: '/tools/financas/tool-draft-financas.html',
+      status: 'draft',
+      formulaStatus: 'verified',
+      implementation: 'factory'
+    },
+    {
+      id: 'tool-review-financas',
+      name: 'Review Finanças',
+      category: 'Financeiro',
+      categorySlug: 'financas',
+      url: '/tools/financas/tool-review-financas.html',
+      status: 'review',
+      formulaStatus: 'verified',
+      implementation: 'factory'
+    },
+    {
+      id: 'tool-deprec-financas',
+      name: 'Deprecated Finanças',
+      category: 'Financeiro',
+      categorySlug: 'financas',
+      url: '/tools/financas/tool-deprec-financas.html',
+      status: 'deprecated',
+      formulaStatus: 'verified',
+      implementation: 'factory'
+    },
+    {
+      id: 'tool-unverified-financas',
+      name: 'Unverified Finanças',
+      category: 'Financeiro',
+      categorySlug: 'financas',
+      url: '/tools/financas/tool-unverified-financas.html',
+      status: 'published',
+      formulaStatus: 'draft',
+      implementation: 'factory'
+    },
+    {
+      id: 'tool-pub-matematica',
+      name: 'Ferramenta Matemática',
+      category: 'Matemática',
+      categorySlug: 'matematica',
+      url: '/tools/matematica/tool-pub-matematica.html',
+      status: 'published',
+      formulaStatus: 'verified',
+      implementation: 'factory'
+    },
+    {
+      id: 'tool-legacy-financas',
+      name: 'Legada Finanças',
+      category: 'Financeiro',
+      categorySlug: 'financas',
+      url: '/tools/financas/desconto.html',
+      status: 'published'
+    }
+  ];
+
+  // Busca para financeira.html
+  const finTools = getPublicFactoryToolsForCategory('financeira.html', { tools: mockTools });
+  assert.equal(finTools.length, 1);
+  assert.equal(finTools[0].id, 'tool-pub-financas');
+
+  // Busca para matematica.html
+  const matTools = getPublicFactoryToolsForCategory('matematica.html', { tools: mockTools });
+  assert.equal(matTools.length, 1);
+  assert.equal(matTools[0].id, 'tool-pub-matematica');
+
+  // Busca para saude.html (nenhuma ferramenta)
+  const sauTools = getPublicFactoryToolsForCategory('saude.html', { tools: mockTools });
+  assert.equal(sauTools.length, 0);
+});
+
+test('Category Listing - injectCategoryToolCards injeta no grid, preserva legados e não duplica', () => {
+  const initialHtml = `
+    <div class="grid">
+      <a href="{{ROOT_PREFIX}}tools/financas/desconto.html" class="card">Calculadora de Desconto</a>
+    </div>
+  `;
+
+  const factoryTools = [
+    {
+      name: 'Calculadora de Empréstimo',
+      url: '/tools/financas/emprestimo.html'
+    },
+    {
+      name: 'Tabela de Amortização',
+      url: '/tools/financas/amortizacao.html'
+    }
+  ];
+
+  const updated = injectCategoryToolCards(initialHtml, factoryTools);
+  assert.ok(updated.includes('Calculadora de Desconto'), 'Deve preservar card legado');
+  assert.ok(updated.includes('href="{{ROOT_PREFIX}}tools/financas/emprestimo.html"'), 'Deve conter card de empréstimo');
+  assert.ok(updated.includes('href="{{ROOT_PREFIX}}tools/financas/amortizacao.html"'), 'Deve conter card de amortização');
+
+  // Segunda chamada não deve duplicar cards
+  const reUpdated = injectCategoryToolCards(updated, factoryTools);
+  const countEmprestimo = (reUpdated.match(/tools\/financas\/emprestimo\.html/g) || []).length;
+  const countAmortizacao = (reUpdated.match(/tools\/financas\/amortizacao\.html/g) || []).length;
+  assert.equal(countEmprestimo, 1, 'Não deve duplicar card de empréstimo');
+  assert.equal(countAmortizacao, 1, 'Não deve duplicar card de amortização');
 });
