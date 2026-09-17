@@ -50,6 +50,18 @@ function generateSitemap() {
     blogPages.push(...articles);
   }
 
+  // Artigos de ferramentas Factory públicas
+  const factoryArticles = tools
+    .filter(isPublicTool)
+    .filter(tool => tool.article)
+    .map(tool => (tool.article.startsWith('/') ? tool.article : `/${tool.article}`));
+
+  for (const artUrl of factoryArticles) {
+    if (!blogPages.includes(artUrl)) {
+      blogPages.push(artUrl);
+    }
+  }
+
   const allUrls = [
     ...STATIC_PAGES,
     ...toolUrls,

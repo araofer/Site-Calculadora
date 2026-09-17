@@ -63,6 +63,17 @@ function assertPublicFactoryIntegrity(tool, { rootDir = ROOT_DIR, categories = n
       `Módulo JavaScript obrigatório não encontrado para ferramenta factory publicada "${tool.id}": ${absoluteJs}`
     );
   }
+
+  // 5. Existência do artigo fonte quando declarado
+  if (tool.article) {
+    const articleRel = tool.article.replace(/^\//, '');
+    const articleSource = path.join(rootDir, 'src', 'pages', articleRel.replace(/\.html$/, '.page.html'));
+    if (!fs.existsSync(articleSource)) {
+      throw new Error(
+        `Artigo fonte obrigatório não encontrado para ferramenta factory publicada "${tool.id}": ${articleSource}`
+      );
+    }
+  }
 }
 
 /**
@@ -75,7 +86,7 @@ function assertPublicFactoryIntegrity(tool, { rootDir = ROOT_DIR, categories = n
  * @param {string} [options.toolsPath]
  * @param {Record<string, Object>} [options.categories]
  * @param {string} [options.categoriesPath]
- * @returns {{pages: Array<{sourceFile: string, relativeOutputPath: string, tool: Object}>, assets: Array<{src: string, dest: string}>}}
+ * @returns {{pages: Array<{sourceFile: string, relativeOutputPath: string, tool: Object}>, assets: Array<{src: string, dest: string}>, articlePages: Array<{sourceFile: string, relativeOutputPath: string}>}}
  */
 function discoverPublicFactoryTools({
   rootDir = ROOT_DIR,
@@ -91,6 +102,7 @@ function discoverPublicFactoryTools({
 
   const pages = [];
   const assets = [];
+  const articlePages = [];
 
   for (const tool of factoryTools) {
     // Draft, review e deprecated NUNCA entram no build público
@@ -114,9 +126,34 @@ function discoverPublicFactoryTools({
       src: paths.jsPath,
       dest: paths.jsPath
     });
+
+    // Artigo editorial vinculado
+    if (tool.article) {
+      const articleRel = tool.article.replace(/^\//, '');
+      const articleSource = path.join(rootDir, 'src', 'pages', articleRel.replace(/\.html$/, '.page.html'));
+      if (fs.existsSync(articleSource)) {
+        articlePages.push({
+          sourceFile: articleSource,
+          relativeOutputPath: articleRel
+        });
+      }
+    }
   }
 
-  return { pages, assets };
+  // Descoberta de cálculos compartilhados utilizados por ferramentas públicas
+  const calcDir = path.join(rootDir, 'js', 'core', 'calculations');
+  if (fs.existsSync(calcDir) && factoryTools.some(isPublicTool)) {
+    const calcFiles = fs.readdirSync(calcDir).filter(f => f.endsWith('.js')).sort();
+    for (const f of calcFiles) {
+      const relPath = path.join('js', 'core', 'calculations', f).replace(/\\/g, '/');
+      assets.push({
+        src: relPath,
+        dest: relPath
+      });
+    }
+  }
+
+  return { pages, assets, articlePages };
 }
 
 module.exports = {

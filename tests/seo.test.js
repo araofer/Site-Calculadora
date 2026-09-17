@@ -316,7 +316,7 @@ test('SEO SSG - Exatamente as 15 calculadoras geradas contêm JSON-LD válido no
     toolSchemaCount++;
   }
 
-  assert.equal(toolSchemaCount, 15, 'Exatamente 15 calculadoras devem receber o schema WebApplication');
+  assert.equal(toolSchemaCount, 17, 'Exatamente 17 calculadoras devem receber o schema WebApplication');
 });
 
 test('SEO SSG - Home, Categorias e Institucionais recebem schemas adequados', () => {
@@ -358,7 +358,7 @@ test('SEO SSG - Artigos do Blog contêm schema BlogPosting e BreadcrumbList sem 
   const blogArticleFiles = fs.readdirSync(path.join(ROOT_DIR, 'src', 'pages', 'blog', 'artigos'))
     .filter(f => f.endsWith('.page.html'));
 
-  assert.equal(blogArticleFiles.length, 14, 'Devem existir 14 artigos de blog');
+  assert.equal(blogArticleFiles.length, 16, 'Devem existir 16 artigos de blog');
 
   for (const file of blogArticleFiles) {
     const htmlName = file.replace('.page.html', '.html');
@@ -437,7 +437,7 @@ test('SEO SSG - Páginas noindex (login, cadastro, 404) NÃO recebem JSON-LD e p
   }
 });
 
-test('SEO SSG - Build produz exatamente 43 páginas e 62 assets', () => {
-  assert.equal(SITE_PAGES.length, 43, 'SITE_PAGES deve continuar tendo 43 páginas');
-  assert.equal(SITE_ASSETS.length, 62, 'SITE_ASSETS deve continuar tendo 62 assets');
+test('SEO SSG - Build produz exatamente 47 páginas e 65 assets', () => {
+  assert.equal(SITE_PAGES.length, 47, 'SITE_PAGES deve ter 47 páginas');
+  assert.equal(SITE_ASSETS.length, 65, 'SITE_ASSETS deve ter 65 assets');
 });

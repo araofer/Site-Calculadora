@@ -1,0 +1,118 @@
+---
+title: Tabela de Amortização Online Grátis | Calculadora Master
+description: Gere a tabela Price com detalhamento de parcelas, juros, amortização e saldo devedor mês a mês. Simule e planeje sua quitação.
+keywords: tabela de amortizacao, amortizacao price, cronograma de parcelas, simular amortizacao, saldo devedor
+canonical: https://www.calculadoramaster.com/tools/financas/amortizacao.html
+layout: tool
+pageScripts: <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>\n<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js"></script>\n<script type="module" src="{{ROOT_PREFIX}}js/tools/amortizacao.js"></script>
+---
+  <h1>Tabela de Amortização</h1>
+  <p>Gere o cronograma detalhado de parcelas pelo Sistema Price. Acompanhe a amortização da dívida, a queda dos juros e o saldo devedor mês a mês.</p>
+
+  <section class="card" aria-labelledby="form-heading">
+    <h2 id="form-heading" class="sr-only">Formulário da Tabela de Amortização</h2>
+
+    <div class="form-group">
+      <label for="valor">Valor Financiado / Principal (R$):</label>
+      <input type="text" id="valor" name="valor" inputmode="decimal" placeholder="Ex: 50.000,00" required>
+    </div>
+
+    <div class="form-group" style="margin-top: 15px;">
+      <label for="taxa">Taxa de Juros Mensal (% a.m.):</label>
+      <input type="text" id="taxa" name="taxa" inputmode="decimal" placeholder="Ex: 1,50" required>
+    </div>
+
+    <div class="form-group" style="margin-top: 15px;">
+      <label for="prazo">Prazo (Quantidade de parcelas):</label>
+      <input type="number" id="prazo" name="prazo" min="1" max="480" step="1" placeholder="Ex: 36" required>
+    </div>
+
+    <div class="tool-actions" style="margin-top: 20px;">
+      <button type="button" class="tool-btn tool-btn-primary" data-action="calculate">Gerar Tabela de Amortização</button>
+      <button type="button" class="tool-btn tool-btn-secondary" data-action="clear">Limpar</button>
+    </div>
+
+    <div id="resultado" class="result-box" style="margin-top: 20px;" aria-live="polite"></div>
+
+    <div id="containerGraficoAmortizacao" class="grafico-container" style="position: relative; height: 260px; width: 100%; max-width: 100%; min-width: 0; box-sizing: border-box; margin-top: 20px; display: none; overflow: hidden;">
+      <canvas id="graficoAmortizacao"></canvas>
+    </div>
+
+    <div class="tool-actions result-actions" style="margin-top: 15px; justify-content: center; gap: 8px;">
+      <button type="button" class="tool-btn tool-btn-secondary" data-action="copy">Copiar Resumo</button>
+      <button type="button" class="tool-btn tool-btn-secondary" data-action="share">Compartilhar</button>
+      <button type="button" class="tool-btn tool-btn-secondary" data-action="print">Imprimir Tabela</button>
+      <button type="button" class="tool-btn tool-btn-secondary" data-action="pdf">Exportar PDF</button>
+    </div>
+    <div id="amortizacaoStatus" class="result-action-status" role="status" aria-live="polite" style="text-align: center; font-size: 0.85rem; color: #16a34a; margin-top: 8px;"></div>
+  </section>
+
+  <section class="tool-content" style="margin-top: 36px;">
+    <h2>O que é uma Tabela de Amortização?</h2>
+    <p>A tabela de amortização é um relatório contábil e financeiro que detalha todas as prestações de uma operação de crédito do início ao fim. Ela permite enxergar claramente o destino de cada real pago.</p>
+
+    <h3>Como ler cada coluna da tabela:</h3>
+    <ul>
+      <li><strong>Nº da Parcela:</strong> a ordem cronológica do pagamento periódico.</li>
+      <li><strong>Saldo Inicial:</strong> o saldo devedor restante antes do pagamento daquela prestação.</li>
+      <li><strong>Juros:</strong> a remuneração cobrada pelo credor, obtida multiplicando o saldo devedor pela taxa periódica.</li>
+      <li><strong>Amortização:</strong> o valor que efetivamente abate a sua dívida original.</li>
+      <li><strong>Prestação:</strong> o total pago naquele mês (Amortização + Juros). No Sistema Price, esse valor é constante.</li>
+      <li><strong>Saldo Final:</strong> o valor que resta quitar após o pagamento da parcela.</li>
+    </ul>
+
+    <p>Para entender a fundo a mecânica das tabelas financeiras e como utilizá-las para acelerar a quitação de dívidas, leia nosso artigo completo: <a href="{{ROOT_PREFIX}}blog/artigos/o-que-e-amortizacao.html">O que é amortização e como funciona uma tabela de parcelas</a>.</p>
+  </section>
+
+  <section class="related-tools" style="margin-top: 36px;">
+    <h2>Ferramentas Relacionadas</h2>
+    <div class="related-tools-grid">
+      <article class="tool-card">
+        <div class="tool-card-header">
+          <span class="tool-card-category">Financeiro</span>
+        </div>
+        <h3 class="tool-card-title">Calculadora de Empréstimo</h3>
+        <p class="tool-card-desc">Calcule parcelas rápidas, juros e custo total para tomada de decisão em crédito pessoal.</p>
+        <div class="tool-card-footer">
+          <a href="{{ROOT_PREFIX}}tools/financas/emprestimo.html" class="tool-card-btn" aria-label="Acessar Calculadora de Empréstimo">Acessar &rarr;</a>
+        </div>
+      </article>
+
+      <article class="tool-card">
+        <div class="tool-card-header">
+          <span class="tool-card-category">Financeiro</span>
+        </div>
+        <h3 class="tool-card-title">Calculadora de Juros</h3>
+        <p class="tool-card-desc">Simule juros simples e compostos para avaliar rendimentos e custos acumulados.</p>
+        <div class="tool-card-footer">
+          <a href="{{ROOT_PREFIX}}tools/financas/juros.html" class="tool-card-btn" aria-label="Acessar Calculadora de Juros">Acessar &rarr;</a>
+        </div>
+      </article>
+
+      <article class="tool-card">
+        <div class="tool-card-header">
+          <span class="tool-card-category">Financeiro</span>
+        </div>
+        <h3 class="tool-card-title">Financiamento de Carro</h3>
+        <p class="tool-card-desc">Simule financiamento de veículos pela Tabela Price com valor de entrada.</p>
+        <div class="tool-card-footer">
+          <a href="{{ROOT_PREFIX}}tools/financas/financiamento-carro.html" class="tool-card-btn" aria-label="Acessar Financiamento de Carro">Acessar &rarr;</a>
+        </div>
+      </article>
+
+      <article class="tool-card">
+        <div class="tool-card-header">
+          <span class="tool-card-category">Financeiro</span>
+        </div>
+        <h3 class="tool-card-title">Financiamento Imobiliário</h3>
+        <p class="tool-card-desc">Simule financiamento imobiliário e compare amortizações constantes no Sistema SAC.</p>
+        <div class="tool-card-footer">
+          <a href="{{ROOT_PREFIX}}tools/financas/financiamento-imovel.html" class="tool-card-btn" aria-label="Acessar Financiamento Imobiliário">Acessar &rarr;</a>
+        </div>
+      </article>
+    </div>
+
+    <p style="margin-top: 30px;">
+      👉 <a href="{{ROOT_PREFIX}}index.html">Voltar para página inicial</a>
+    </p>
+  </section>

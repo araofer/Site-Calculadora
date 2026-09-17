@@ -397,5 +397,73 @@
     ],
     "featured": false,
     "status": "published"
+  },
+  {
+    "id": "emprestimo",
+    "slug": "emprestimo",
+    "name": "Calculadora de Empréstimo",
+    "category": "Financeiro",
+    "categorySlug": "financas",
+    "audience": "universal",
+    "description": "Calcule parcelas, juros e custo total de um empréstimo pelo sistema Price.",
+    "url": "/tools/financas/emprestimo.html",
+    "status": "published",
+    "formulaStatus": "verified",
+    "implementation": "factory",
+    "features": {
+      "chart": true,
+      "table": true,
+      "pdf": true,
+      "copy": true,
+      "share": true,
+      "print": true,
+      "favorite": true,
+      "article": true
+    },
+    "keywords": [
+      "emprestimo",
+      "calculadora de empréstimo"
+    ],
+    "related": [
+      "juros",
+      "amortizacao",
+      "financiamento-carro",
+      "financiamento-imovel"
+    ],
+    "article": "/blog/artigos/como-calcular-emprestimo.html"
+  },
+  {
+    "id": "amortizacao",
+    "slug": "amortizacao",
+    "name": "Tabela de Amortização",
+    "category": "Financeiro",
+    "categorySlug": "financas",
+    "audience": "universal",
+    "description": "Gere a tabela Price com detalhamento de parcelas, juros, amortização e saldo devedor.",
+    "url": "/tools/financas/amortizacao.html",
+    "status": "published",
+    "formulaStatus": "verified",
+    "implementation": "factory",
+    "features": {
+      "chart": true,
+      "table": true,
+      "pdf": true,
+      "copy": true,
+      "share": true,
+      "print": true,
+      "favorite": true,
+      "article": true
+    },
+    "keywords": [
+      "amortizacao",
+      "tabela de amortização"
+    ],
+    "related": [
+      "emprestimo",
+      "juros",
+      "financiamento-carro",
+      "financiamento-imovel"
+    ],
+    "article": "/blog/artigos/o-que-e-amortizacao.html"
   }
 ]
