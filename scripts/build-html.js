@@ -33,7 +33,9 @@ const { getPageJsonLd, renderJsonLdScript } = require('../src/utils/seo.js');
 const {
   discoverPublicFactoryTools,
   getPublicFactoryToolsForCategory,
-  injectCategoryToolCards
+  injectCategoryToolCards,
+  getAllPublicFactoryTools,
+  injectHomeToolCards
 } = require('./lib/tool-discovery.js');
 
 const factoryDiscovery = discoverPublicFactoryTools({
@@ -460,6 +462,16 @@ function renderPage({ sourceFile, relativeOutputPath, componentsDir = COMPONENTS
       meta
     });
     content = injectCategoryToolCards(content, factoryCategoryTools);
+  }
+
+  // Injeção automática de ferramentas Factory para a página inicial (Home)
+  const isHomePage = relativeOutputPath === 'index.html';
+  if (isHomePage) {
+    const publicFactoryTools = getAllPublicFactoryTools({
+      tools: getToolsData(),
+      rootDir: ROOT_DIR
+    });
+    content = injectHomeToolCards(content, publicFactoryTools);
   }
 
   // Validação de campos obrigatórios

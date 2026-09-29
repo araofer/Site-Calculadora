@@ -882,6 +882,60 @@ test('SSG Categoria - /financeira.html inclui automaticamente ferramentas Factor
   assert.equal(html.includes('tools/trabalhista/horas-extras.html'), false, 'Não deve conter ferramentas trabalhistas');
 });
 
+test('SSG Home - /index.html inclui automaticamente ferramentas Factory (emprestimo e amortizacao) na seção Todas as Ferramentas sem duplicatas', () => {
+  const filePath = path.join(ROOT_DIR, 'dist-pilot', 'index.html');
+  assert.ok(fs.existsSync(filePath), 'dist-pilot/index.html deve existir');
+
+  const html = fs.readFileSync(filePath, 'utf-8');
+
+  // 1. Ferramentas legadas continuam presentes na seção de ferramentas
+  const legacyTools = [
+    'tools/trabalhista/horas-extras.html',
+    'tools/financas/financiamento-carro.html',
+    'tools/financas/financiamento-imovel.html',
+    'tools/financas/desconto.html',
+    'tools/financas/juros.html',
+    'tools/financas/lucro.html',
+    'tools/financas/porcentagem.html',
+    'tools/financas/dividir-conta.html',
+    'tools/saude/imc.html',
+    'tools/saude/idade.html',
+    'tools/utilidades/combustivel.html',
+    'tools/utilidades/contador.html',
+    'tools/utilidades/senha.html',
+    'tools/utilidades/qr-code.html',
+    'tools/utilidades/whatsapp.html'
+  ];
+
+  for (const legUrl of legacyTools) {
+    assert.match(html, new RegExp(`href="\\./${legUrl.replace(/\//g, '\\/')}"`), `Deve conter link para ${legUrl}`);
+  }
+
+  // 2. Novas ferramentas Factory presentes
+  const factoryTools = [
+    { name: 'Calculadora de Empréstimo', url: './tools/financas/emprestimo.html' },
+    { name: 'Tabela de Amortização', url: './tools/financas/amortizacao.html' }
+  ];
+
+  for (const fac of factoryTools) {
+    assert.match(html, new RegExp(`href="${fac.url.replace(/\//g, '\\/')}"`), `Deve conter link para ${fac.name}`);
+    assert.match(html, new RegExp(`>${fac.name}<`), `Deve conter texto para ${fac.name}`);
+  }
+
+  // 3. Sem duplicatas: exatamente 1 ocorrência de cada link no HTML da home
+  const countEmprestimo = (html.match(/tools\/financas\/emprestimo\.html/g) || []).length;
+  const countAmortizacao = (html.match(/tools\/financas\/amortizacao\.html/g) || []).length;
+  assert.equal(countEmprestimo, 1, 'Exatamente 1 ocorrência de emprestimo.html em index.html');
+  assert.equal(countAmortizacao, 1, 'Exatamente 1 ocorrência de amortizacao.html em index.html');
+
+  // 4. Total de cards na grade "Todas as Ferramentas" é exatamente 17 (15 legadas + 2 factory)
+  const gridSectionMatch = html.match(/<div\s+class="tools-cards-grid"[^>]*>([\s\S]*?)<\/div>\s*<\/div>\s*<\/section>/);
+  assert.ok(gridSectionMatch, 'Deve existir container tools-cards-grid');
+  const cardMatches = gridSectionMatch[1].match(/<article\s+class="tool-card">/g);
+  assert.ok(cardMatches, 'Devem existir cards na grade Todas as Ferramentas');
+  assert.equal(cardMatches.length, 17, 'index.html deve conter exatamente 17 cards na grade Todas as Ferramentas (15 legadas + 2 factory)');
+});
+
 test('SSG Blog - buildPages(BLOG_PAGES) compila 17 páginas e copia assets do blog', () => {
   const results = buildPages(BLOG_PAGES, { assets: [...COMMON_ASSETS, ...BLOG_ASSETS] });
   assert.equal(results.length, 17, 'BLOG_PAGES deve gerar exatamente 17 páginas (1 index + 16 artigos)');

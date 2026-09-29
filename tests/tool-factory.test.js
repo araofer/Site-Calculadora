@@ -30,10 +30,16 @@ const {
 
 import toolDiscovery from '../scripts/lib/tool-discovery.js';
 const {
+  escapeHtml,
+  sanitizeToolUrl,
+  hasCssClass,
+  findContainerBounds,
   assertPublicFactoryIntegrity,
   discoverPublicFactoryTools,
   getPublicFactoryToolsForCategory,
-  injectCategoryToolCards
+  injectCategoryToolCards,
+  getAllPublicFactoryTools,
+  injectHomeToolCards
 } = toolDiscovery;
 
 import scaffolder from '../scripts/create-tool.js';
@@ -791,4 +797,419 @@ test('Category Listing - injectCategoryToolCards injeta no grid, preserva legado
   const countAmortizacao = (reUpdated.match(/tools\/financas\/amortizacao\.html/g) || []).length;
   assert.equal(countEmprestimo, 1, 'Não deve duplicar card de empréstimo');
   assert.equal(countAmortizacao, 1, 'Não deve duplicar card de amortização');
+});
+
+test('Home Listing - getAllPublicFactoryTools retorna somente ferramentas factory públicas (published + verified)', () => {
+  const mockTools = [
+    {
+      id: 'tool-pub-1',
+      name: 'Ferramenta Pública 1',
+      category: 'Financeiro',
+      url: '/tools/financas/tool-pub-1.html',
+      status: 'published',
+      formulaStatus: 'verified',
+      implementation: 'factory'
+    },
+    {
+      id: 'tool-draft',
+      name: 'Ferramenta Draft',
+      category: 'Financeiro',
+      url: '/tools/financas/tool-draft.html',
+      status: 'draft',
+      formulaStatus: 'verified',
+      implementation: 'factory'
+    },
+    {
+      id: 'tool-review',
+      name: 'Ferramenta Review',
+      category: 'Financeiro',
+      url: '/tools/financas/tool-review.html',
+      status: 'review',
+      formulaStatus: 'verified',
+      implementation: 'factory'
+    },
+    {
+      id: 'tool-deprecated',
+      name: 'Ferramenta Deprecated',
+      category: 'Financeiro',
+      url: '/tools/financas/tool-deprecated.html',
+      status: 'deprecated',
+      formulaStatus: 'verified',
+      implementation: 'factory'
+    },
+    {
+      id: 'tool-unverified',
+      name: 'Ferramenta Unverified',
+      category: 'Financeiro',
+      url: '/tools/financas/tool-unverified.html',
+      status: 'published',
+      formulaStatus: 'draft',
+      implementation: 'factory'
+    },
+    {
+      id: 'tool-pub-2',
+      name: 'Ferramenta Pública 2',
+      category: 'Matemática',
+      url: '/tools/matematica/tool-pub-2.html',
+      status: 'published',
+      formulaStatus: 'verified',
+      implementation: 'factory'
+    },
+    {
+      id: 'tool-legacy',
+      name: 'Ferramenta Legada',
+      category: 'Financeiro',
+      url: '/tools/financas/desconto.html',
+      status: 'published'
+    }
+  ];
+
+  const tools = getAllPublicFactoryTools({ tools: mockTools });
+  assert.equal(tools.length, 2);
+  assert.equal(tools[0].id, 'tool-pub-1');
+  assert.equal(tools[1].id, 'tool-pub-2');
+});
+
+test('Home Listing - injectHomeToolCards injeta no container de cards, preserva legados e não duplica', () => {
+  const initialHtml = `
+      <div class="tools-cards-grid" data-tools-grid="all">
+        <article class="tool-card">
+          <div class="tool-card-header">
+            <span class="tool-card-category">Trabalhista</span>
+          </div>
+          <h3 class="tool-card-title">Calculadora de Horas Extras</h3>
+          <p class="tool-card-desc">Calcule o valor da hora normal.</p>
+          <div class="tool-card-footer">
+            <a href="{{ROOT_PREFIX}}tools/trabalhista/horas-extras.html" class="tool-card-btn">Calcular agora &rarr;</a>
+          </div>
+        </article>
+      </div>
+  `;
+
+  const factoryTools = [
+    {
+      name: 'Calculadora de Empréstimo',
+      category: 'Financeiro',
+      description: 'Calcule parcelas e juros.',
+      url: '/tools/financas/emprestimo.html'
+    },
+    {
+      name: 'Tabela de Amortização',
+      category: 'Financeiro',
+      description: 'Gere a tabela Price.',
+      url: '/tools/financas/amortizacao.html'
+    }
+  ];
+
+  const updated = injectHomeToolCards(initialHtml, factoryTools);
+  assert.ok(updated.includes('Calculadora de Horas Extras'), 'Deve preservar card legado');
+  assert.ok(updated.includes('href="{{ROOT_PREFIX}}tools/financas/emprestimo.html"'), 'Deve conter card de empréstimo');
+  assert.ok(updated.includes('href="{{ROOT_PREFIX}}tools/financas/amortizacao.html"'), 'Deve conter card de amortização');
+  assert.ok(updated.includes('class="tool-card-category"'), 'Deve conter categoria no cabeçalho');
+
+  // Segunda chamada não deve duplicar cards
+  const reUpdated = injectHomeToolCards(updated, factoryTools);
+  const countEmprestimo = (reUpdated.match(/tools\/financas\/emprestimo\.html/g) || []).length;
+  const countAmortizacao = (reUpdated.match(/tools\/financas\/amortizacao\.html/g) || []).length;
+  assert.equal(countEmprestimo, 1, 'Não deve duplicar card de empréstimo');
+  assert.equal(countAmortizacao, 1, 'Não deve duplicar card de amortização');
+
+  // Teste de fallback caso não tenha data-tools-grid="all", mas tenha classe tools-cards-grid
+  const fallbackHtml = `
+      <div class="tools-cards-grid">
+        <article class="tool-card">
+          <h3 class="tool-card-title">Card Legado</h3>
+        </article>
+      </div>
+  `;
+  const fallbackUpdated = injectHomeToolCards(fallbackHtml, factoryTools);
+  assert.ok(fallbackUpdated.includes('href="{{ROOT_PREFIX}}tools/financas/emprestimo.html"'), 'Deve injetar mesmo sem data-tools-grid explícito via classe tools-cards-grid');
+
+  // Teste defensivo com lista vazia ou nula
+  assert.equal(injectHomeToolCards(initialHtml, []), initialHtml);
+  assert.equal(injectHomeToolCards(initialHtml, null), initialHtml);
+});
+
+test('Security - escapeHtml escapa caracteres &, <, >, ", e apostrofos', () => {
+  assert.equal(escapeHtml(null), '');
+  assert.equal(escapeHtml(undefined), '');
+  assert.equal(escapeHtml('Texto Simples'), 'Texto Simples');
+  assert.equal(
+    escapeHtml('Cálculo & Economia <script>alert("xss")</script> \'aspas\''),
+    'Cálculo &amp; Economia &lt;script&gt;alert(&quot;xss&quot;)&lt;/script&gt; &#39;aspas&#39;'
+  );
+});
+
+test('Security - sanitizeToolUrl aceita caminhos relativos válidos e rejeita esquemas maliciosos', () => {
+  // URLs relativas válidas
+  assert.equal(sanitizeToolUrl('/tools/financas/emprestimo.html'), 'tools/financas/emprestimo.html');
+  assert.equal(sanitizeToolUrl('tools/financas/amortizacao.html'), 'tools/financas/amortizacao.html');
+  assert.equal(sanitizeToolUrl('tools/matematica/regra-de-tres.html'), 'tools/matematica/regra-de-tres.html');
+
+  // Esquemas perigosos rejeitados
+  assert.equal(sanitizeToolUrl('javascript:alert(1)'), null);
+  assert.equal(sanitizeToolUrl('JAVASCRIPT:alert(1)'), null);
+  assert.equal(sanitizeToolUrl('javascript://%0aalert(1)'), null);
+  assert.equal(sanitizeToolUrl('data:text/html,<script>alert(1)</script>'), null);
+  assert.equal(sanitizeToolUrl('vbscript:msgbox(1)'), null);
+  assert.equal(sanitizeToolUrl('file:///etc/passwd'), null);
+  assert.equal(sanitizeToolUrl('http://evil.com'), null);
+  assert.equal(sanitizeToolUrl('https://evil.com'), null);
+
+  // Tentativas de evasão via entidades HTML (XSS bypass)
+  assert.equal(sanitizeToolUrl('javascript&#58;alert(1)'), null);
+  assert.equal(sanitizeToolUrl('javascript&colon;alert(1)'), null);
+  assert.equal(sanitizeToolUrl('tools/calc.html&quot;/onmouseover=alert(1)'), null);
+  assert.equal(sanitizeToolUrl('tools/calc.html&#34;/onmouseover=alert(1)'), null);
+
+  // Tentativas de evasão via percent-encoding
+  assert.equal(sanitizeToolUrl('tools/calc.html%22onmouseover=alert(1)'), null);
+  assert.equal(sanitizeToolUrl('tools/calc.html%3Cscript%3E'), null);
+
+  // URLs relativas a protocolo e caminhos com backslash
+  assert.equal(sanitizeToolUrl('//evil.com/phishing'), null);
+  assert.equal(sanitizeToolUrl('\\\\evil.com\\share'), null);
+
+  // Caracteres que quebram atributos ou tentam XSS
+  assert.equal(sanitizeToolUrl('tools/calc.html" onclick="alert(1)'), null);
+  assert.equal(sanitizeToolUrl('tools/calc.html\'><script>'), null);
+  assert.equal(sanitizeToolUrl('tools/calc.html`'), null);
+  assert.equal(sanitizeToolUrl('tools/calc.html\n'), null);
+  assert.equal(sanitizeToolUrl('tools/calc:foo.html'), null);
+  assert.equal(sanitizeToolUrl('tools/calc.html?param=1'), null);
+  assert.equal(sanitizeToolUrl('tools/calc.html#hash'), null);
+  assert.equal(sanitizeToolUrl(''), null);
+  assert.equal(sanitizeToolUrl(null), null);
+});
+
+test('Security CSS - hasCssClass previne falsos positivos com sufixos hifenizados', () => {
+  assert.equal(hasCssClass('<div class="grid">', 'grid'), true);
+  assert.equal(hasCssClass('<div class="header-grid">', 'grid'), false);
+  assert.equal(hasCssClass('<div class="categories-grid">', 'grid'), false);
+  assert.equal(hasCssClass('<div class="tools-cards-grid">', 'grid'), false);
+  assert.equal(hasCssClass('<div class="featured-grid">', 'grid'), false);
+  assert.equal(hasCssClass('<div class="main grid secondary">', 'grid'), true);
+  assert.equal(hasCssClass('<div class="tools-cards-grid">', 'tools-cards-grid'), true);
+  assert.equal(hasCssClass('<div class="sub-tools-cards-grid">', 'tools-cards-grid'), false);
+  assert.equal(hasCssClass('<div>', 'grid'), false);
+});
+
+test('Security XSS - injectHomeToolCards escapa dados dinamicos e rejeita URLs maliciosas', () => {
+  const initialHtml = `
+    <div class="tools-cards-grid" data-tools-grid="all">
+      <article class="tool-card">
+        <h3 class="tool-card-title">Card Legado</h3>
+      </article>
+    </div>
+  `;
+
+  const maliciousTools = [
+    {
+      name: '<script>alert("XSS-NAME")</script>',
+      category: '<b>Categoria<script></b>',
+      description: '<img src=x onerror=alert("XSS-DESC")> & "aspas" \'simples\'',
+      url: '/tools/financas/teste-xss.html'
+    },
+    {
+      name: 'Ferramenta Esquema Malicioso',
+      category: 'Financeiro',
+      description: 'Tentativa de javascript:',
+      url: 'javascript:alert("XSS-URL")'
+    },
+    {
+      name: 'Ferramenta Entidade Maliciosa',
+      category: 'Financeiro',
+      description: 'Tentativa de entidade:',
+      url: 'tools/calc.html&quot;/onmouseover=alert(1)'
+    },
+    {
+      name: 'Ferramenta Data URL',
+      category: 'Financeiro',
+      description: 'Tentativa de data:',
+      url: 'data:text/html,<script>alert(1)</script>'
+    }
+  ];
+
+  const result = injectHomeToolCards(initialHtml, maliciousTools);
+
+  // 1. Tags HTML maliciosas não devem estar presentes de forma não-escapada
+  assert.equal(result.includes('<script>'), false, 'Não deve conter tag <script> não escapada');
+  assert.equal(result.includes('<img src=x'), false, 'Não deve conter tag <img> maliciosa');
+  assert.equal(result.includes('<b>Categoria'), false, 'Não deve conter tag <b> não escapada');
+
+  // 2. Valores devem aparecer devidamente escapados
+  assert.ok(result.includes('&lt;script&gt;alert(&quot;XSS-NAME&quot;)&lt;/script&gt;'), 'Nome deve estar escapado');
+  assert.ok(result.includes('&lt;b&gt;Categoria&lt;script&gt;&lt;/b&gt;'), 'Categoria deve estar escapada');
+  assert.ok(result.includes('&lt;img src=x onerror=alert(&quot;XSS-DESC&quot;)&gt; &amp; &quot;aspas&quot; &#39;simples&#39;'), 'Descrição deve estar escapada');
+
+  // 3. URLs maliciosas e tentativas de quebra de atributo não são injetadas
+  assert.equal(result.includes('javascript:'), false, 'URL com javascript: não deve ser injetada');
+  assert.equal(result.includes('&quot;/onmouseover'), false, 'Tentativa de quebra de atributo não deve ser injetada');
+  assert.equal(result.includes('data:text/html'), false, 'URL com data: não deve ser injetada');
+  assert.equal(result.includes('Ferramenta Esquema Malicioso'), false, 'Ferramenta com URL maliciosa não deve gerar card');
+  assert.equal(result.includes('Ferramenta Entidade Maliciosa'), false, 'Ferramenta com entidade na URL não deve gerar card');
+  assert.equal(result.includes('Ferramenta Data URL'), false, 'Ferramenta com data URL não deve gerar card');
+
+  // 4. Ferramenta válida com payload sanitizado foi injetada com URL segura
+  assert.ok(result.includes('href="{{ROOT_PREFIX}}tools/financas/teste-xss.html"'), 'URL segura deve ser preservada');
+});
+
+test('Security XSS - injectCategoryToolCards escapa nome da ferramenta e rejeita URLs maliciosas', () => {
+  const initialHtml = `
+    <div class="grid">
+      <a href="{{ROOT_PREFIX}}tools/financas/desconto.html" class="card">Desconto</a>
+    </div>
+  `;
+
+  const maliciousTools = [
+    {
+      name: '<script>alert("XSS")</script> & "Lucro"',
+      url: '/tools/financas/calc-segura.html'
+    },
+    {
+      name: 'Tentativa Javascript',
+      url: 'javascript:alert(1)'
+    },
+    {
+      name: 'Tentativa Breakout',
+      url: 'tools/calc.html&quot;/onmouseover=alert(1)'
+    }
+  ];
+
+  const result = injectCategoryToolCards(initialHtml, maliciousTools);
+  assert.equal(result.includes('<script>'), false, 'Não deve conter script não escapado');
+  assert.ok(result.includes('&lt;script&gt;alert(&quot;XSS&quot;)&lt;/script&gt; &amp; &quot;Lucro&quot;'), 'Nome deve estar escapado');
+  assert.equal(result.includes('javascript:'), false, 'URL com javascript: deve ser rejeitada');
+  assert.equal(result.includes('&quot;/onmouseover'), false, 'Breakout deve ser rejeitado');
+  assert.equal(result.includes('Tentativa Javascript'), false, 'Card com javascript: não deve ser criado');
+  assert.equal(result.includes('Tentativa Breakout'), false, 'Card com breakout não deve ser criado');
+  assert.ok(result.includes('href="{{ROOT_PREFIX}}tools/financas/calc-segura.html"'), 'Card seguro deve ser inserido');
+});
+
+test('HTML Parser - findContainerBounds ignora comentarios HTML com divs ficticias, blocos script/style e rastreia aninhamento', () => {
+  const htmlWithComments = `
+    <!-- <div class="tools-cards-grid" data-tools-grid="all">fake comment grid with "quotes" and <tags> and > inside</div> -->
+    <!-- comment 2 --!>
+    <script>
+      const fake = '<div class="tools-cards-grid"></div>';
+      // <!-- <div>
+    </script>
+    <style>
+      div.tools-cards-grid { color: red; }
+    </style>
+    <div class="header-grid">Not target</div>
+    <div class="tools-cards-grid" data-tools-grid="all" data-title="hello > world">
+      <!-- <div> nested comment </div> -->
+      <!-- </div> stray close inside -->
+      <article class="tool-card">
+        <div class="tool-card-header">
+          <div class="inner-badge"><span>Cat</span></div>
+        </div>
+        <p>Texto com <span data-info="a > b">conteudo</span></p>
+      </article>
+      <!-- <div> final comment </div> -->
+    </div>
+    <!-- <div> after container </div> -->
+    <div class="after-grid">Done</div>
+  `;
+
+  const bounds = findContainerBounds(htmlWithComments, tag => /data-tools-grid="all"/i.test(tag) || hasCssClass(tag, 'tools-cards-grid'));
+  assert.ok(bounds, 'Deve encontrar limites do contêiner');
+
+  const openTag = htmlWithComments.slice(bounds.openTagStart, bounds.openTagEnd);
+  const closeTag = htmlWithComments.slice(bounds.closeTagStart, bounds.closeTagEnd);
+  const inner = htmlWithComments.slice(bounds.openTagEnd, bounds.closeTagStart);
+
+  assert.equal(openTag, '<div class="tools-cards-grid" data-tools-grid="all" data-title="hello > world">');
+  assert.equal(closeTag, '</div>');
+  assert.ok(inner.includes('nested comment'), 'Conteúdo interno deve conter o comentário interno preservado');
+  assert.ok(inner.includes('inner-badge'), 'Conteúdo interno deve conter as divs aninhadas');
+  assert.ok(!inner.includes('Not target'), 'Conteúdo interno não deve conter elementos anteriores');
+  assert.ok(!inner.includes('Done'), 'Conteúdo interno não deve ultrapassar o contêiner');
+});
+
+test('Home Listing - injectHomeToolCards lida com comentarios e divs aninhadas sem corromper layout', () => {
+  const complexHtml = `
+    <!-- <div class="tools-cards-grid" data-tools-grid="all">comentada</div> -->
+    <div class="tools-cards-grid" data-tools-grid="all">
+      <!-- <div> comentario antes </div> -->
+      <article class="tool-card">
+        <div class="tool-card-header">
+          <span class="tool-card-category">Trabalhista</span>
+        </div>
+        <h3 class="tool-card-title">Horas Extras</h3>
+        <p class="tool-card-desc">Calculo de horas.</p>
+        <div class="tool-card-footer">
+          <a href="{{ROOT_PREFIX}}tools/trabalhista/horas-extras.html" class="tool-card-btn">Calcular</a>
+        </div>
+      </article>
+      <!-- <div> comentario depois </div> -->
+    </div>
+    <div class="outra-secao">
+      <p>Conteudo fora da grade</p>
+    </div>
+  `;
+
+  const factoryTools = [
+    {
+      name: 'Calculadora de Empréstimo',
+      category: 'Financeiro',
+      description: 'Parcelas e juros.',
+      url: '/tools/financas/emprestimo.html'
+    }
+  ];
+
+  const updated = injectHomeToolCards(complexHtml, factoryTools);
+  assert.ok(updated.includes('<!-- <div class="tools-cards-grid" data-tools-grid="all">comentada</div> -->'), 'Preserva comentário anterior');
+  assert.ok(updated.includes('<!-- <div> comentario antes </div> -->'), 'Preserva comentário antes do card');
+  assert.ok(updated.includes('<!-- <div> comentario depois </div> -->'), 'Preserva comentário depois do card');
+  assert.ok(updated.includes('Horas Extras'), 'Preserva card legado com suas divs aninhadas');
+  assert.ok(updated.includes('Calculadora de Empréstimo'), 'Insere novo card da Factory');
+  assert.ok(updated.includes('<div class="outra-secao">'), 'Preserva elementos após o container');
+
+  // Assegura que o novo card está dentro do contêiner e antes da outra seção
+  const cardIndex = updated.indexOf('Calculadora de Empréstimo');
+  const outraSecaoIndex = updated.indexOf('<div class="outra-secao">');
+  assert.ok(cardIndex < outraSecaoIndex, 'Card inserido deve estar antes da outra seção');
+});
+
+test('Category Listing - injectCategoryToolCards com comentarios, divs aninhadas e preservacao estrutural', () => {
+  const categoryHtml = `
+    <!-- <div class="grid">comentada</div> -->
+    <section class="tools category-tools">
+      <div class="container">
+        <!-- <div> antes da grid </div> -->
+        <div class="grid">
+          <!-- <div> dentro da grid </div> -->
+          <a href="{{ROOT_PREFIX}}tools/financas/desconto.html" class="card">Calculadora de Desconto</a>
+          <div class="sub-bloco"><span>Informação extra</span></div>
+          <!-- </div> stray no comentario -->
+        </div>
+      </div>
+    </section>
+    <footer>Rodape</footer>
+  `;
+
+  const factoryTools = [
+    {
+      name: 'Calculadora de Empréstimo',
+      url: '/tools/financas/emprestimo.html'
+    }
+  ];
+
+  const updated = injectCategoryToolCards(categoryHtml, factoryTools);
+
+  // Preservação estrutural completa
+  assert.ok(updated.includes('<section class="tools category-tools">'), 'Preserva section category-tools');
+  assert.ok(updated.includes('<div class="container">'), 'Preserva container');
+  assert.ok(updated.includes('<!-- <div> dentro da grid </div> -->'), 'Preserva comentário interno');
+  assert.ok(updated.includes('<div class="sub-bloco"><span>Informação extra</span></div>'), 'Preserva div aninhada');
+  assert.ok(updated.includes('Calculadora de Desconto'), 'Preserva card legado');
+  assert.ok(updated.includes('href="{{ROOT_PREFIX}}tools/financas/emprestimo.html"'), 'Injeta card da Factory');
+  assert.ok(updated.includes('<footer>Rodape</footer>'), 'Preserva footer');
+
+  // Inserção no local correto: antes do fechamento de <div class="grid">
+  const emprestimoIdx = updated.indexOf('href="{{ROOT_PREFIX}}tools/financas/emprestimo.html"');
+  const footerIdx = updated.indexOf('<footer>Rodape</footer>');
+  assert.ok(emprestimoIdx < footerIdx, 'Card de empréstimo deve estar antes do footer');
 });

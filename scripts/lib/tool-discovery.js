@@ -236,8 +236,218 @@ function getPublicFactoryToolsForCategory(categoryIdentifier, {
 }
 
 /**
+ * Escapa caracteres especiais HTML para prevenir XSS.
+ * Trata rigorosamente: &, <, >, ", '
+ *
+ * @param {string|null|undefined} str
+ * @returns {string}
+ */
+function escapeHtml(str) {
+  if (str === null || str === undefined) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+/**
+ * Sanitiza e valida URLs de ferramentas para inclusão segura em atributos href.
+ * Rejeita esquemas perigosos (javascript:, data:, vbscript:, file:, etc.),
+ * URLs relativas a protocolo (//), entidades HTML (&), percent-encoding (%),
+ * aspas, delimitadores, quebras de linha e caracteres maliciosos.
+ *
+ * Preserva exclusivamente caminhos relativos válidos compatíveis com ROOT_PREFIX.
+ *
+ * @param {string|null|undefined} url
+ * @returns {string|null} Caminho relativo sanitizado (sem barra inicial) ou null se inválido
+ */
+function sanitizeToolUrl(url) {
+  if (!url || typeof url !== 'string') return null;
+
+  // Rejeita espaços ou caracteres de controle em qualquer posição
+  if (/[\x00-\x20\x7F-\x9F]/.test(url)) {
+    return null;
+  }
+
+  // Rejeita entidades HTML (&), percent-encoding (%), aspas, delimitadores e caracteres de esquema
+  if (/[&%"'<>`\\:]/.test(url)) {
+    return null;
+  }
+
+  // Rejeita URLs relativas a protocolo (//)
+  if (url.startsWith('//')) {
+    return null;
+  }
+
+  // Remove barras iniciais para integração correta com ROOT_PREFIX
+  const relPath = url.replace(/^\/+/, '');
+
+  // Caminho resultante não pode ser vazio, nem iniciar com barra ou ponto
+  if (!relPath || relPath.startsWith('/') || relPath.startsWith('.')) {
+    return null;
+  }
+
+  // Validação estrita de caminho seguro: segmentos alfanuméricos com hífens/underscores e extensão opcional
+  if (!/^[a-zA-Z0-9_-]+(?:\/[a-zA-Z0-9_-]+)*(?:\.[a-zA-Z0-9]+)?$/.test(relPath)) {
+    return null;
+  }
+
+  return relPath;
+}
+
+/**
+ * Verifica se uma tag HTML contém uma classe CSS específica como token isolado (separado por espaços).
+ * Evita falsos positivos com sufixos/prefixos hifenizados (ex: 'header-grid' não casa com 'grid').
+ *
+ * @param {string} tagString Texto da tag HTML
+ * @param {string} className Nome da classe CSS a localizar
+ * @returns {boolean}
+ */
+function hasCssClass(tagString, className) {
+  if (!tagString || !className) return false;
+  const match = tagString.match(/class\s*=\s*(?:"([^"]*)"|'([^']*)')/i);
+  if (!match) return false;
+  const classes = (match[1] || match[2] || '').trim().split(/\s+/);
+  return classes.includes(className);
+}
+
+/**
+ * Localiza os limites (início e fim das tags de abertura e fechamento)
+ * de um contêiner <div> no documento HTML via máquina de estados linear (O(N)),
+ * rastreando aninhamento (depth) e ignorando rigorosamente comentários HTML
+ * (incluindo HTML5 <!-- ... --!>), blocos CDATA, DOCTYPE e blocos <script>/<style>.
+ *
+ * @param {string} html Conteúdo HTML completo
+ * @param {function(string): boolean} isTargetOpenTag Predicado que identifica a tag de abertura desejada
+ * @returns {{ openTagStart: number, openTagEnd: number, closeTagStart: number, closeTagEnd: number } | null}
+ */
+function findContainerBounds(html, isTargetOpenTag) {
+  if (!html || typeof html !== 'string' || typeof isTargetOpenTag !== 'function') {
+    return null;
+  }
+
+  let i = 0;
+  const n = html.length;
+  let inside = false;
+  let depth = 0;
+  let openTagStart = -1;
+  let openTagEnd = -1;
+
+  while (i < n) {
+    // 1. Comentários HTML: <!-- ... --> e HTML5 <!-- ... --!>
+    if (html.startsWith('<!--', i)) {
+      let endIdx = html.indexOf('-->', i + 4);
+      const endBangIdx = html.indexOf('--!>', i + 4);
+      if (endBangIdx !== -1 && (endIdx === -1 || endBangIdx < endIdx)) {
+        endIdx = endBangIdx + 1; // --!> tem 4 caracteres, endIdx + 3 torna-se endBangIdx + 4
+      }
+      if (endIdx === -1) {
+        break; // Comentário não-fechado estende-se até o fim do documento
+      }
+      i = endIdx + 3;
+      continue;
+    }
+
+    // 2. Blocos CDATA: <![CDATA[ ... ]]>
+    if (html.startsWith('<![CDATA[', i)) {
+      const endCdata = html.indexOf(']]>', i + 9);
+      i = (endCdata === -1) ? n : endCdata + 3;
+      continue;
+    }
+
+    // 3. Comentários bogus / declarações DOCTYPE: <! ... > ou <? ... >
+    if (html.startsWith('<!', i) || html.startsWith('<?', i)) {
+      const endBogus = html.indexOf('>', i + 2);
+      i = (endBogus === -1) ? n : endBogus + 1;
+      continue;
+    }
+
+    // 4. Elementos HTML: < ... >
+    if (html[i] === '<') {
+      const tagStart = i;
+      i++;
+
+      const isClose = (i < n && html[i] === '/');
+      if (isClose) i++;
+
+      // Nome da tag
+      const nameStart = i;
+      while (i < n && /[a-zA-Z0-9-]/.test(html[i])) {
+        i++;
+      }
+      const tagName = html.slice(nameStart, i).toLowerCase();
+
+      // Ignora blocos de texto bruto de <script> ou <style> (não processa HTML interno)
+      if (!isClose && (tagName === 'script' || tagName === 'style')) {
+        while (i < n && html[i] !== '>') i++;
+        if (i < n) i++;
+        const closeTagStr = '</' + tagName + '>';
+        const closeIdx = html.toLowerCase().indexOf(closeTagStr, i);
+        i = (closeIdx !== -1) ? closeIdx + closeTagStr.length : n;
+        continue;
+      }
+
+      // Lê atributos até o fechamento > (respeitando aspas simples e duplas)
+      let inQuote = null;
+      let selfClosing = false;
+      while (i < n) {
+        const c = html[i];
+        if (inQuote) {
+          if (c === inQuote) inQuote = null;
+        } else {
+          if (c === '"' || c === "'") {
+            inQuote = c;
+          } else if (c === '>') {
+            if (i > 0 && html[i - 1] === '/') selfClosing = true;
+            i++;
+            break;
+          }
+        }
+        i++;
+      }
+      const tagEnd = i;
+      const fullTag = html.slice(tagStart, tagEnd);
+
+      if (tagName !== 'div') {
+        continue;
+      }
+
+      if (!inside) {
+        if (!isClose && isTargetOpenTag(fullTag)) {
+          inside = true;
+          depth = 1;
+          openTagStart = tagStart;
+          openTagEnd = tagEnd;
+        }
+      } else {
+        if (isClose) {
+          depth--;
+          if (depth === 0) {
+            return {
+              openTagStart,
+              openTagEnd,
+              closeTagStart: tagStart,
+              closeTagEnd: tagEnd
+            };
+          }
+        } else if (!selfClosing) {
+          depth++;
+        }
+      }
+      continue;
+    }
+
+    i++;
+  }
+
+  return null;
+}
+
+/**
  * Injeta os cards das ferramentas Factory na seção grid da página de categoria,
- * preservando a ordem, ferramentas legadas e garantindo que não existam duplicatas.
+ * preservando a ordem, ferramentas legadas, escapando valores e garantindo que não existam duplicatas.
  *
  * @param {string} content Conteúdo HTML da página de categoria
  * @param {Array<Object>} factoryTools Lista de ferramentas Factory a injetar
@@ -248,11 +458,19 @@ function injectCategoryToolCards(content, factoryTools) {
     return content;
   }
 
-  // Deduplicação: filtra ferramentas cujo link ou URL relativa já esteja no conteúdo
+  const bounds = findContainerBounds(content, tag => /data-category-grid/i.test(tag) || hasCssClass(tag, 'grid'));
+  if (!bounds) {
+    return content;
+  }
+
+  const existingInside = content.slice(bounds.openTagEnd, bounds.closeTagStart);
+
+  // Deduplicação e sanitização: filtra ferramentas com URL segura e não presente
   const toolsToAdd = factoryTools.filter(tool => {
     if (!tool || !tool.url) return false;
-    const relUrl = tool.url.replace(/^\/+/, '');
-    return !content.includes(relUrl);
+    const safeUrl = sanitizeToolUrl(tool.url);
+    if (!safeUrl) return false;
+    return !existingInside.includes(safeUrl);
   });
 
   if (toolsToAdd.length === 0) {
@@ -260,25 +478,103 @@ function injectCategoryToolCards(content, factoryTools) {
   }
 
   const cardsHtml = toolsToAdd.map(tool => {
-    const relUrl = tool.url.replace(/^\/+/, '');
-    return `        <a href="{{ROOT_PREFIX}}${relUrl}" class="card">${tool.name}</a>`;
+    const safeUrl = escapeHtml(sanitizeToolUrl(tool.url));
+    const escapedName = escapeHtml(tool.name);
+    return `        <a href="{{ROOT_PREFIX}}${safeUrl}" class="card">${escapedName}</a>`;
   }).join('\n');
 
-  // Insere antes do fechamento de <div class="grid">
-  const gridRegex = /(<div\s+class="grid">)([\s\S]*?)(<\/div>)/;
-  const match = content.match(gridRegex);
-  if (match) {
-    const existingContent = match[2].replace(/\s+$/, '');
-    const updatedGrid = `${match[1]}${existingContent}\n${cardsHtml}\n      ${match[3]}`;
-    return content.replace(gridRegex, updatedGrid);
+  const trimmedInside = existingInside.replace(/\s+$/, '');
+  const updatedInside = trimmedInside ? `${trimmedInside}\n${cardsHtml}` : `\n${cardsHtml}`;
+  return content.slice(0, bounds.openTagEnd) + updatedInside + '\n      ' + content.slice(bounds.closeTagStart);
+}
+
+/**
+ * Retorna todas as ferramentas Factory públicas (published + verified).
+ * Ferramentas em draft, review ou deprecated NUNCA são retornadas.
+ * Ferramentas legadas NUNCA são retornadas.
+ *
+ * @param {Object} [options]
+ * @param {Array<Object>} [options.tools]
+ * @param {string} [options.toolsPath]
+ * @returns {Array<Object>}
+ */
+function getAllPublicFactoryTools({
+  tools = null,
+  toolsPath = undefined
+} = {}) {
+  const toolList = tools || loadTools(toolsPath);
+
+  return toolList.filter(tool => {
+    if (!isFactoryTool(tool)) return false;
+    return isPublicTool(tool);
+  });
+}
+
+/**
+ * Injeta os cards das ferramentas Factory na seção "Todas as Ferramentas" da Home,
+ * preservando a ordem, ferramentas legadas, escapando valores contra XSS e garantindo ausência de duplicatas.
+ *
+ * @param {string} content Conteúdo HTML da página inicial
+ * @param {Array<Object>} factoryTools Lista de ferramentas Factory a injetar
+ * @returns {string}
+ */
+function injectHomeToolCards(content, factoryTools) {
+  if (!content || !Array.isArray(factoryTools) || factoryTools.length === 0) {
+    return content;
   }
 
-  return content;
+  // Localiza o container da grade "Todas as Ferramentas"
+  // Prioridade: data-tools-grid="all" ou classe tools-cards-grid
+  const bounds = findContainerBounds(content, tag => /data-tools-grid="all"/i.test(tag) || hasCssClass(tag, 'tools-cards-grid'));
+  if (!bounds) {
+    return content;
+  }
+
+  const existingInside = content.slice(bounds.openTagEnd, bounds.closeTagStart);
+
+  // Deduplicação e sanitização: filtra ferramentas com URL segura e não presente
+  const toolsToAdd = factoryTools.filter(tool => {
+    if (!tool || !tool.url) return false;
+    const safeUrl = sanitizeToolUrl(tool.url);
+    if (!safeUrl) return false;
+    return !existingInside.includes(safeUrl);
+  });
+
+  if (toolsToAdd.length === 0) {
+    return content;
+  }
+
+  const cardsHtml = toolsToAdd.map(tool => {
+    const safeUrl = escapeHtml(sanitizeToolUrl(tool.url));
+    const escapedCategory = escapeHtml(tool.category || 'Geral');
+    const escapedName = escapeHtml(tool.name);
+    const escapedDesc = escapeHtml(tool.description || '');
+    return `        <article class="tool-card">
+          <div class="tool-card-header">
+            <span class="tool-card-category">${escapedCategory}</span>
+          </div>
+          <h3 class="tool-card-title">${escapedName}</h3>
+          <p class="tool-card-desc">${escapedDesc}</p>
+          <div class="tool-card-footer">
+            <a href="{{ROOT_PREFIX}}${safeUrl}" class="tool-card-btn">Calcular agora &rarr;</a>
+          </div>
+        </article>`;
+  }).join('\n\n');
+
+  const trimmedInside = existingInside.replace(/\s+$/, '');
+  const updatedInside = trimmedInside ? `${trimmedInside}\n\n${cardsHtml}` : `\n\n${cardsHtml}`;
+  return content.slice(0, bounds.openTagEnd) + updatedInside + '\n      ' + content.slice(bounds.closeTagStart);
 }
 
 module.exports = {
+  escapeHtml,
+  sanitizeToolUrl,
+  hasCssClass,
+  findContainerBounds,
   assertPublicFactoryIntegrity,
   discoverPublicFactoryTools,
   getPublicFactoryToolsForCategory,
-  injectCategoryToolCards
+  injectCategoryToolCards,
+  getAllPublicFactoryTools,
+  injectHomeToolCards
 };
