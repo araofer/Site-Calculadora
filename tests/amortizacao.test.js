@@ -1,6 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 
+import fs from 'node:fs';
+import path from 'node:path';
+
 import {
   parseNumberPtBr,
   normalizeAmortizacaoInput,
@@ -8,8 +11,17 @@ import {
   calculateAmortizacao,
   formatAmortizacaoResult,
   getAmortizacaoChartData,
-  getAmortizacaoPdfPayload
+  getAmortizacaoPdfPayload,
+  setupTabelaAmortizacao
 } from '../js/tools/amortizacao.js';
+
+import {
+  isFavorite,
+  addFavorite,
+  toggleFavorite,
+  removeFavorite,
+  _resetMemoryForTesting
+} from '../js/core/favorites.js';
 
 const EPSILON = 1e-4;
 
@@ -112,6 +124,7 @@ test('Amortização - formatAmortizacaoResult formata corretamente o cronograma 
   assert.equal(fmt.formattedSchedule.length, 6);
   assert.ok(fmt.formattedSchedule[0].paymentFmt.includes('R$'));
   assert.ok(fmt.formattedSchedule[5].closingBalanceFmt.includes('R$'));
+  assert.ok(fmt.totalJurosFmt.includes('R$'));
 });
 
 test('Amortização - getAmortizacaoChartData monta labels e dataset com amostragem limpa', () => {
@@ -157,4 +170,103 @@ test('Amortização - getAmortizacaoPdfPayload gera estrutura completa para expo
 
   assert.ok(Array.isArray(payload.notes));
   assert.ok(payload.notes.length > 0);
+});
+
+test('Amortização - HTML/renderização não produz "undefined" no campo "Total em Juros" e exibe valor calculado', () => {
+  const valor = '10.000,00';
+  const taxa = '1,50';
+  const prazo = '12';
+
+  const res = calculateAmortizacao({ valor, taxa, prazo });
+  const fmt = formatAmortizacaoResult(res);
+
+  assert.equal(res.valido, true);
+  assert.ok(fmt.totalJurosFmt, 'Propriedade totalJurosFmt deve estar presente');
+  assert.notEqual(fmt.totalJurosFmt, 'undefined');
+  assert.ok(fmt.totalJurosFmt.includes('R$'));
+
+  const elements = {
+    valor: { value: valor, addEventListener: () => {} },
+    taxa: { value: taxa, addEventListener: () => {} },
+    prazo: { value: prazo, addEventListener: () => {} },
+    resultado: { innerHTML: '' },
+    amortizacaoStatus: { textContent: '' },
+    graficoAmortizacao: {},
+    containerGraficoAmortizacao: { style: {} }
+  };
+
+  const buttons = {};
+  const querySelector = (sel) => {
+    const match = sel.match(/\[data-action="([^"]+)"\]/);
+    if (match) {
+      const action = match[1];
+      if (!buttons[action]) {
+        buttons[action] = {
+          _listeners: {},
+          addEventListener(evt, fn) { this._listeners[evt] = fn; },
+          click() { if (this._listeners['click']) this._listeners['click'](); }
+        };
+      }
+      return buttons[action];
+    }
+    return null;
+  };
+
+  const prevDoc = globalThis.document;
+  try {
+    globalThis.document = {
+      getElementById: (id) => elements[id] || null,
+      querySelector
+    };
+
+    setupTabelaAmortizacao();
+    buttons.calculate.click();
+
+    const html = elements.resultado.innerHTML;
+    assert.ok(html.length > 0, 'O resultado HTML deve ser renderizado');
+    assert.ok(!html.includes('undefined'), 'HTML renderizado não deve conter "undefined"');
+
+    // Garante que o card visual "Total em Juros" exibe o valor calculado e não undefined
+    const cardMatch = html.match(/Total em Juros<\/span>\s*<strong[^>]*>([^<]+)<\/strong>/i);
+    assert.ok(cardMatch, 'Card visual "Total em Juros" deve existir no HTML');
+    assert.notEqual(cardMatch[1].trim(), 'undefined', 'Campo "Total em Juros" não pode ser "undefined"');
+    assert.equal(cardMatch[1].trim(), fmt.totalJurosFmt, 'Campo "Total em Juros" deve conter o valor calculado formatado');
+  } finally {
+    if (prevDoc === undefined) {
+      delete globalThis.document;
+    } else {
+      globalThis.document = prevDoc;
+    }
+  }
+});
+
+test('Amortização - favorito é reconhecido e gerenciado corretamente pelo core de favoritos', () => {
+  _resetMemoryForTesting();
+  try {
+    assert.equal(isFavorite('amortizacao'), false);
+    assert.equal(addFavorite('amortizacao'), true);
+    assert.equal(isFavorite('amortizacao'), true);
+    assert.equal(toggleFavorite('amortizacao'), false);
+    assert.equal(isFavorite('amortizacao'), false);
+    assert.equal(toggleFavorite('amortizacao'), true);
+    assert.equal(isFavorite('amortizacao'), true);
+    assert.equal(removeFavorite('amortizacao'), true);
+    assert.equal(isFavorite('amortizacao'), false);
+  } finally {
+    _resetMemoryForTesting();
+  }
+});
+
+test('Amortização - markup dos botões segue alinhamento e espaçamento de Lucro sem conflito inline', () => {
+  const pagePath = path.join(process.cwd(), 'src', 'pages', 'tools', 'financas', 'amortizacao.page.html');
+  const content = fs.readFileSync(pagePath, 'utf-8');
+
+  // Botões principais usam container padrão .tool-actions
+  assert.match(content, /<div class="tool-actions">\s*<button[^>]*data-action="calculate"/);
+  assert.match(content, /<button[^>]*data-action="clear"/);
+
+  // Ações secundárias usam .tool-actions.result-actions sem conflito de centralização ou gap restritivo
+  assert.match(content, /<div class="tool-actions result-actions"/);
+  assert.ok(!content.includes('justify-content: center'), 'Não deve conter centralização inline que desalinhe os botões');
+  assert.ok(!content.includes('gap: 8px'), 'Não deve conter gap inline conflitante com padrão de 12px / responsivo');
 });

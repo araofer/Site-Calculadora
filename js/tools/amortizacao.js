@@ -267,7 +267,7 @@ export function setupTabelaAmortizacao() {
         { label: 'Taxa de Juros', value: `${fmt.taxaMensalFmt} a.m.` },
         { label: 'Quantidade de Parcelas', value: `${fmt.prazoMeses} meses` },
         { label: 'Prestação (Price)', value: fmt.valorParcelaFmt },
-        { label: 'Juros Totais', value: fmt.jurosTotaisFmt },
+        { label: 'Juros Totais', value: fmt.totalJurosFmt },
         { label: 'Total Pago', value: fmt.totalPagoFmt }
       ];
     }
@@ -404,7 +404,7 @@ export function setupTabelaAmortizacao() {
           </div>
           <div style="background:#fff; padding:12px; border-radius:6px; border:1px solid #edf2f7; text-align:center;">
             <span style="display:block; font-size:0.8rem; color:#64748b;">Total em Juros</span>
-            <strong style="font-size:1.2rem; color:#b91c1c;">${fmt.jurosTotaisFmt}</strong>
+            <strong style="font-size:1.2rem; color:#b91c1c;">${fmt.totalJurosFmt}</strong>
           </div>
           <div style="background:#fff; padding:12px; border-radius:6px; border:1px solid #edf2f7; text-align:center;">
             <span style="display:block; font-size:0.8rem; color:#64748b;">Total a Pagar</span>

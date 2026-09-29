@@ -358,8 +358,8 @@ test('14. isolamento entre IDs diferentes ao favoritar e desfavoritar', () => {
   }
 });
 
-test('15. exatamente 15 IDs reconhecidos no catálogo oficial', () => {
-  assert.equal(VALID_TOOL_IDS.size, 15, 'Catálogo deve conter exatamente 15 IDs de ferramentas');
+test('15. exatamente 17 IDs reconhecidos no catálogo oficial', () => {
+  assert.equal(VALID_TOOL_IDS.size, 17, 'Catálogo deve conter exatamente 17 IDs de ferramentas');
   const expected = [
     'horas-extras',
     'financiamento-carro',
@@ -375,7 +375,9 @@ test('15. exatamente 15 IDs reconhecidos no catálogo oficial', () => {
     'contador',
     'senha',
     'qr-code',
-    'whatsapp'
+    'whatsapp',
+    'emprestimo',
+    'amortizacao'
   ];
   for (const id of expected) {
     assert.ok(VALID_TOOL_IDS.has(id), `ID "${id}" deve estar presente no conjunto de IDs válidos`);
@@ -501,6 +503,118 @@ test('21. nenhuma emissão GA4 na inicialização ou reload dos botões', () => 
     assert.equal(env.events.length, 0, 'Nenhum evento GA4 disparado na inicialização');
     assert.equal(btn.getAttribute('aria-pressed'), 'true');
     assert.ok(btn.textContent.includes('Favoritado'));
+  } finally {
+    env.restore();
+  }
+});
+
+test('22. regressão: favorito de Empréstimo funciona de ponta a ponta (click, DOM, storage e analytics)', () => {
+  const env = setupTestEnvironment();
+  try {
+    const { btn, container, statusEl } = createMockButton({
+      'data-tool-id': 'emprestimo',
+      'data-tool-category': 'financas',
+      'data-tool-name': 'Calculadora de Empréstimo'
+    });
+
+    initFavoriteButtons(container);
+    assert.equal(btn.getAttribute('aria-pressed'), 'false');
+    assert.ok(btn.textContent.includes('Favoritar'));
+    assert.equal(isFavorite('emprestimo'), false);
+
+    // Clicar para favoritar
+    btn.click();
+    assert.equal(btn.getAttribute('aria-pressed'), 'true');
+    assert.ok(btn.textContent.includes('Favoritado'));
+    assert.equal(isFavorite('emprestimo'), true);
+    assert.deepEqual(getFavorites(), ['emprestimo']);
+    assert.ok(statusEl.textContent.includes('adicionada aos favoritos'));
+
+    assert.equal(env.events.length, 1);
+    assert.deepEqual(env.events[0], {
+      actionType: 'event',
+      eventName: 'calculator_action',
+      payload: {
+        calculator_id: 'emprestimo',
+        calculator_category: 'financas',
+        action: 'favorite_add'
+      }
+    });
+
+    // Clicar para desfavoritar
+    btn.click();
+    assert.equal(btn.getAttribute('aria-pressed'), 'false');
+    assert.ok(btn.textContent.includes('Favoritar'));
+    assert.equal(isFavorite('emprestimo'), false);
+    assert.deepEqual(getFavorites(), []);
+    assert.ok(statusEl.textContent.includes('removida dos favoritos'));
+
+    assert.equal(env.events.length, 2);
+    assert.deepEqual(env.events[1], {
+      actionType: 'event',
+      eventName: 'calculator_action',
+      payload: {
+        calculator_id: 'emprestimo',
+        calculator_category: 'financas',
+        action: 'favorite_remove'
+      }
+    });
+  } finally {
+    env.restore();
+  }
+});
+
+test('23. regressão: favorito de Amortização funciona de ponta a ponta (click, DOM, storage e analytics)', () => {
+  const env = setupTestEnvironment();
+  try {
+    const { btn, container, statusEl } = createMockButton({
+      'data-tool-id': 'amortizacao',
+      'data-tool-category': 'financas',
+      'data-tool-name': 'Tabela de Amortização'
+    });
+
+    initFavoriteButtons(container);
+    assert.equal(btn.getAttribute('aria-pressed'), 'false');
+    assert.ok(btn.textContent.includes('Favoritar'));
+    assert.equal(isFavorite('amortizacao'), false);
+
+    // Clicar para favoritar
+    btn.click();
+    assert.equal(btn.getAttribute('aria-pressed'), 'true');
+    assert.ok(btn.textContent.includes('Favoritado'));
+    assert.equal(isFavorite('amortizacao'), true);
+    assert.deepEqual(getFavorites(), ['amortizacao']);
+    assert.ok(statusEl.textContent.includes('adicionada aos favoritos'));
+
+    assert.equal(env.events.length, 1);
+    assert.deepEqual(env.events[0], {
+      actionType: 'event',
+      eventName: 'calculator_action',
+      payload: {
+        calculator_id: 'amortizacao',
+        calculator_category: 'financas',
+        action: 'favorite_add'
+      }
+    });
+
+    // Clicar para desfavoritar
+    btn.click();
+    assert.equal(btn.getAttribute('aria-pressed'), 'false');
+    assert.ok(btn.textContent.includes('Favoritar'));
+    assert.equal(isFavorite('amortizacao'), false);
+    assert.deepEqual(getFavorites(), []);
+    assert.ok(statusEl.textContent.includes('removida dos favoritos'));
+
+    assert.equal(env.events.length, 2);
+    assert.deepEqual(env.events[1], {
+      actionType: 'event',
+      eventName: 'calculator_action',
+      payload: {
+        calculator_id: 'amortizacao',
+        calculator_category: 'financas',
+        action: 'favorite_remove'
+      }
+    });
   } finally {
     env.restore();
   }

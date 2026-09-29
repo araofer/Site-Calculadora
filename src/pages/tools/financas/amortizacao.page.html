@@ -27,7 +27,7 @@ pageScripts: <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart
       <input type="number" id="prazo" name="prazo" min="1" max="480" step="1" placeholder="Ex: 36" required>
     </div>
 
-    <div class="tool-actions" style="margin-top: 20px;">
+    <div class="tool-actions">
       <button type="button" class="tool-btn tool-btn-primary" data-action="calculate">Gerar Tabela de Amortização</button>
       <button type="button" class="tool-btn tool-btn-secondary" data-action="clear">Limpar</button>
     </div>
@@ -38,13 +38,13 @@ pageScripts: <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart
       <canvas id="graficoAmortizacao"></canvas>
     </div>
 
-    <div class="tool-actions result-actions" style="margin-top: 15px; justify-content: center; gap: 8px;">
+    <div class="tool-actions result-actions" style="margin-top: 15px; margin-bottom: 0;">
       <button type="button" class="tool-btn tool-btn-secondary" data-action="copy">Copiar Resumo</button>
       <button type="button" class="tool-btn tool-btn-secondary" data-action="share">Compartilhar</button>
       <button type="button" class="tool-btn tool-btn-secondary" data-action="print">Imprimir Tabela</button>
       <button type="button" class="tool-btn tool-btn-secondary" data-action="pdf">Exportar PDF</button>
     </div>
-    <div id="amortizacaoStatus" class="result-action-status" role="status" aria-live="polite" style="text-align: center; font-size: 0.85rem; color: #16a34a; margin-top: 8px;"></div>
+    <div id="amortizacaoStatus" class="result-action-status" role="status" aria-live="polite"></div>
   </section>
 
   <section class="tool-content" style="margin-top: 36px;">

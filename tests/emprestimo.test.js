@@ -1,6 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 
+import fs from 'node:fs';
+import path from 'node:path';
+
 import {
   parseNumberPtBr,
   normalizeEmprestimoInput,
@@ -10,6 +13,14 @@ import {
   getEmprestimoChartData,
   getEmprestimoPdfPayload
 } from '../js/tools/emprestimo.js';
+
+import {
+  isFavorite,
+  addFavorite,
+  toggleFavorite,
+  removeFavorite,
+  _resetMemoryForTesting
+} from '../js/core/favorites.js';
 
 const EPSILON = 1e-4;
 
@@ -178,4 +189,35 @@ test('Empréstimo - getEmprestimoPdfPayload gera estrutura completa para exportR
 
   assert.ok(Array.isArray(payload.notes));
   assert.ok(payload.notes.length > 0);
+});
+
+test('Empréstimo - favorito é reconhecido e gerenciado corretamente pelo core de favoritos', () => {
+  _resetMemoryForTesting();
+  try {
+    assert.equal(isFavorite('emprestimo'), false);
+    assert.equal(addFavorite('emprestimo'), true);
+    assert.equal(isFavorite('emprestimo'), true);
+    assert.equal(toggleFavorite('emprestimo'), false);
+    assert.equal(isFavorite('emprestimo'), false);
+    assert.equal(toggleFavorite('emprestimo'), true);
+    assert.equal(isFavorite('emprestimo'), true);
+    assert.equal(removeFavorite('emprestimo'), true);
+    assert.equal(isFavorite('emprestimo'), false);
+  } finally {
+    _resetMemoryForTesting();
+  }
+});
+
+test('Empréstimo - markup dos botões segue alinhamento e espaçamento de Lucro sem conflito inline', () => {
+  const pagePath = path.join(process.cwd(), 'src', 'pages', 'tools', 'financas', 'emprestimo.page.html');
+  const content = fs.readFileSync(pagePath, 'utf-8');
+
+  // Botões principais usam container padrão .tool-actions
+  assert.match(content, /<div class="tool-actions">\s*<button[^>]*data-action="calculate"/);
+  assert.match(content, /<button[^>]*data-action="clear"/);
+
+  // Ações secundárias usam .tool-actions.result-actions sem conflito de centralização ou gap restritivo
+  assert.match(content, /<div class="tool-actions result-actions"/);
+  assert.ok(!content.includes('justify-content: center'), 'Não deve conter centralização inline que desalinhe os botões');
+  assert.ok(!content.includes('gap: 8px'), 'Não deve conter gap inline conflitante com padrão de 12px / responsivo');
 });
