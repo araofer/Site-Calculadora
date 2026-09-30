@@ -681,6 +681,34 @@ const TOOLS_CATALOG = [
         "financiamento-imovel"
       ],
       "status": "published"
+    },
+    {
+      "id": "regra-de-tres",
+      "slug": "regra-de-tres",
+      "nome": "Calculadora de Regra de Três",
+      "name": "Calculadora de Regra de Três",
+      "categoria": "Matemática",
+      "category": "Matemática",
+      "categorySlug": "matematica",
+      "descricao": "Calcule regra de três simples direta ou inversa com explicação do resultado.",
+      "description": "Calcule regra de três simples direta ou inversa com explicação do resultado.",
+      "url": "tools/matematica/regra-de-tres.html",
+      "termos": [
+        "regra de tres",
+        "calculadora de regra de três"
+      ],
+      "keywords": [
+        "regra de tres",
+        "calculadora de regra de três"
+      ],
+      "destaque": false,
+      "featured": false,
+      "related": [
+        "porcentagem",
+        "desconto",
+        "juros"
+      ],
+      "status": "published"
     }
   ];
 

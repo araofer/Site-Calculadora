@@ -465,5 +465,38 @@
       "financiamento-imovel"
     ],
     "article": "/blog/artigos/o-que-e-amortizacao.html"
+  },
+  {
+    "id": "regra-de-tres",
+    "slug": "regra-de-tres",
+    "name": "Calculadora de Regra de Três",
+    "category": "Matemática",
+    "categorySlug": "matematica",
+    "audience": "universal",
+    "description": "Calcule regra de três simples direta ou inversa com explicação do resultado.",
+    "url": "/tools/matematica/regra-de-tres.html",
+    "status": "published",
+    "formulaStatus": "verified",
+    "implementation": "factory",
+    "features": {
+      "chart": false,
+      "table": false,
+      "pdf": false,
+      "copy": true,
+      "share": true,
+      "print": true,
+      "favorite": true,
+      "article": true
+    },
+    "keywords": [
+      "regra de tres",
+      "calculadora de regra de três"
+    ],
+    "related": [
+      "porcentagem",
+      "desconto",
+      "juros"
+    ],
+    "article": "/blog/artigos/como-fazer-regra-de-tres-simples.html"
   }
 ]

@@ -244,7 +244,7 @@ test('SEO Helper - getPageJsonLd retorna null para noindex, login, cadastro e 40
 // 2. TESTES DE INTEGRAÇÃO COM AS 15 CALCULADORAS E SSG
 // ----------------------------------------------------
 
-test('SEO SSG - Exatamente as 15 calculadoras geradas contêm JSON-LD válido no HTML', () => {
+test('SEO SSG - Exatamente as 18 calculadoras geradas contêm JSON-LD válido no HTML', () => {
   // Compila todas as páginas do site no dist-pilot
   buildPages(SITE_PAGES, { outputDir: DEFAULT_OUTPUT_DIR, assets: SITE_ASSETS });
 
@@ -316,7 +316,7 @@ test('SEO SSG - Exatamente as 15 calculadoras geradas contêm JSON-LD válido no
     toolSchemaCount++;
   }
 
-  assert.equal(toolSchemaCount, 17, 'Exatamente 17 calculadoras devem receber o schema WebApplication');
+  assert.equal(toolSchemaCount, 18, 'Exatamente 18 calculadoras devem receber o schema WebApplication');
 });
 
 test('SEO SSG - Home, Categorias e Institucionais recebem schemas adequados', () => {
@@ -358,7 +358,7 @@ test('SEO SSG - Artigos do Blog contêm schema BlogPosting e BreadcrumbList sem 
   const blogArticleFiles = fs.readdirSync(path.join(ROOT_DIR, 'src', 'pages', 'blog', 'artigos'))
     .filter(f => f.endsWith('.page.html'));
 
-  assert.equal(blogArticleFiles.length, 16, 'Devem existir 16 artigos de blog');
+  assert.equal(blogArticleFiles.length, 17, 'Devem existir 17 artigos de blog');
 
   for (const file of blogArticleFiles) {
     const htmlName = file.replace('.page.html', '.html');
@@ -437,7 +437,7 @@ test('SEO SSG - Páginas noindex (login, cadastro, 404) NÃO recebem JSON-LD e p
   }
 });
 
-test('SEO SSG - Build produz exatamente 47 páginas e 65 assets', () => {
-  assert.equal(SITE_PAGES.length, 47, 'SITE_PAGES deve ter 47 páginas');
-  assert.equal(SITE_ASSETS.length, 65, 'SITE_ASSETS deve ter 65 assets');
+test('SEO SSG - Build produz exatamente 49 páginas e 66 assets', () => {
+  assert.equal(SITE_PAGES.length, 49, 'SITE_PAGES deve ter 49 páginas');
+  assert.equal(SITE_ASSETS.length, 66, 'SITE_ASSETS deve ter 66 assets');
 });
