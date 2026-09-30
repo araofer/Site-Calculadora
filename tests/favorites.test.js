@@ -358,8 +358,8 @@ test('14. isolamento entre IDs diferentes ao favoritar e desfavoritar', () => {
   }
 });
 
-test('15. exatamente 17 IDs reconhecidos no catálogo oficial', () => {
-  assert.equal(VALID_TOOL_IDS.size, 17, 'Catálogo deve conter exatamente 17 IDs de ferramentas');
+test('15. exatamente 18 IDs reconhecidos no catálogo oficial', () => {
+  assert.equal(VALID_TOOL_IDS.size, 18, 'Catálogo deve conter exatamente 18 IDs de ferramentas');
   const expected = [
     'horas-extras',
     'financiamento-carro',
@@ -377,7 +377,8 @@ test('15. exatamente 17 IDs reconhecidos no catálogo oficial', () => {
     'qr-code',
     'whatsapp',
     'emprestimo',
-    'amortizacao'
+    'amortizacao',
+    'regra-de-tres'
   ];
   for (const id of expected) {
     assert.ok(VALID_TOOL_IDS.has(id), `ID "${id}" deve estar presente no conjunto de IDs válidos`);
@@ -612,6 +613,87 @@ test('23. regressão: favorito de Amortização funciona de ponta a ponta (click
       payload: {
         calculator_id: 'amortizacao',
         calculator_category: 'financas',
+        action: 'favorite_remove'
+      }
+    });
+  } finally {
+    env.restore();
+  }
+});
+
+test('24. regressão: favorito de Regra de Três funciona de ponta a ponta (click, DOM, storage e analytics)', () => {
+  const env = setupTestEnvironment();
+  try {
+    // 1. Validação direta do core
+    assert.equal(isFavorite('regra-de-tres'), false);
+    assert.equal(addFavorite('regra-de-tres'), true);
+    assert.equal(isFavorite('regra-de-tres'), true);
+    assert.deepEqual(getFavorites(), ['regra-de-tres']);
+
+    // Não quebra os 17 IDs existentes
+    assert.equal(isFavorite('emprestimo'), false);
+    assert.equal(isFavorite('amortizacao'), false);
+    assert.equal(isFavorite('juros'), false);
+
+    // Toggle para remover
+    assert.equal(toggleFavorite('regra-de-tres'), false);
+    assert.equal(isFavorite('regra-de-tres'), false);
+    assert.deepEqual(getFavorites(), []);
+
+    // Toggle para adicionar
+    assert.equal(toggleFavorite('regra-de-tres'), true);
+    assert.equal(isFavorite('regra-de-tres'), true);
+
+    // Remoção explícita
+    assert.equal(removeFavorite('regra-de-tres'), true);
+    assert.equal(isFavorite('regra-de-tres'), false);
+
+    // 2. Integração com DOM, MockButton e GA4
+    const { btn, container, statusEl } = createMockButton({
+      'data-tool-id': 'regra-de-tres',
+      'data-tool-category': 'matematica',
+      'data-tool-name': 'Calculadora de Regra de Três'
+    });
+
+    initFavoriteButtons(container);
+    assert.equal(btn.getAttribute('aria-pressed'), 'false');
+    assert.ok(btn.textContent.includes('Favoritar'));
+    assert.equal(isFavorite('regra-de-tres'), false);
+
+    // Clicar para favoritar
+    btn.click();
+    assert.equal(btn.getAttribute('aria-pressed'), 'true');
+    assert.ok(btn.textContent.includes('Favoritado'));
+    assert.equal(isFavorite('regra-de-tres'), true);
+    assert.deepEqual(getFavorites(), ['regra-de-tres']);
+    assert.ok(statusEl.textContent.includes('adicionada aos favoritos'));
+
+    assert.equal(env.events.length, 1);
+    assert.deepEqual(env.events[0], {
+      actionType: 'event',
+      eventName: 'calculator_action',
+      payload: {
+        calculator_id: 'regra-de-tres',
+        calculator_category: 'matematica',
+        action: 'favorite_add'
+      }
+    });
+
+    // Clicar para desfavoritar
+    btn.click();
+    assert.equal(btn.getAttribute('aria-pressed'), 'false');
+    assert.ok(btn.textContent.includes('Favoritar'));
+    assert.equal(isFavorite('regra-de-tres'), false);
+    assert.deepEqual(getFavorites(), []);
+    assert.ok(statusEl.textContent.includes('removida dos favoritos'));
+
+    assert.equal(env.events.length, 2);
+    assert.deepEqual(env.events[1], {
+      actionType: 'event',
+      eventName: 'calculator_action',
+      payload: {
+        calculator_id: 'regra-de-tres',
+        calculator_category: 'matematica',
         action: 'favorite_remove'
       }
     });

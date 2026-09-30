@@ -26,7 +26,8 @@ export const VALID_TOOL_IDS = new Set([
   'qr-code',
   'whatsapp',
   'emprestimo',
-  'amortizacao'
+  'amortizacao',
+  'regra-de-tres'
 ]);
 
 let memoryFavorites = null;

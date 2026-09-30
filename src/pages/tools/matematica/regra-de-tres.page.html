@@ -1,0 +1,116 @@
+---
+title: Calculadora de Regra de Três Simples Online | Calculadora Master
+description: Calcule regra de três simples direta ou inversa com passo a passo e fórmula explicada. Simule proporções de forma rápida e precisa.
+keywords: regra de tres, regra de tres simples, regra de tres direta, regra de tres inversa, calcular regra de tres, proporcao matematica
+canonical: https://www.calculadoramaster.com/tools/matematica/regra-de-tres.html
+layout: tool
+pageScripts: <script type="module" src="{{ROOT_PREFIX}}js/tools/regra-de-tres.js"></script>
+---
+  <h1>Calculadora de Regra de Três Simples</h1>
+  <p>Resolva proporções matemáticas direta ou inversamente proporcionais com demonstração passo a passo da fórmula e dos cálculos.</p>
+
+  <section class="card" aria-labelledby="form-heading">
+    <h2 id="form-heading" class="sr-only">Formulário de Regra de Três</h2>
+
+    <div class="form-group" style="margin-bottom: 20px;">
+      <label style="display: block; font-weight: 600; margin-bottom: 8px;">Tipo de Proporcionalidade:</label>
+      <div style="display: flex; gap: 16px; flex-wrap: wrap;">
+        <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+          <input type="radio" name="modoRegra" value="direct" checked>
+          <span><strong>Direta:</strong> grandezas variam no mesmo sentido (mais produz mais)</span>
+        </label>
+        <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+          <input type="radio" name="modoRegra" value="inverse">
+          <span><strong>Inversa:</strong> grandezas variam em sentidos opostos (mais operários levam menos tempo)</span>
+        </label>
+      </div>
+    </div>
+
+    <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px; margin-bottom: 20px;">
+      <div style="display: grid; grid-template-columns: 1fr auto 1fr; gap: 12px; align-items: center; text-align: center;">
+        <div>
+          <label for="valorA" style="display: block; font-size: 0.875rem; font-weight: 600; color: #475569; margin-bottom: 4px;">Valor A</label>
+          <input type="text" id="valorA" name="valorA" inputmode="decimal" placeholder="Ex: 2" required style="width: 100%; text-align: center;">
+        </div>
+        <div style="font-size: 1.5rem; color: #64748b; font-weight: bold;" aria-hidden="true">→</div>
+        <div>
+          <label for="valorB" style="display: block; font-size: 0.875rem; font-weight: 600; color: #475569; margin-bottom: 4px;">Valor B</label>
+          <input type="text" id="valorB" name="valorB" inputmode="decimal" placeholder="Ex: 10" required style="width: 100%; text-align: center;">
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr auto 1fr; gap: 12px; align-items: center; text-align: center; margin-top: 16px;">
+        <div>
+          <label for="valorC" style="display: block; font-size: 0.875rem; font-weight: 600; color: #475569; margin-bottom: 4px;">Valor C</label>
+          <input type="text" id="valorC" name="valorC" inputmode="decimal" placeholder="Ex: 5" required style="width: 100%; text-align: center;">
+        </div>
+        <div style="font-size: 1.5rem; color: #64748b; font-weight: bold;" aria-hidden="true">→</div>
+        <div>
+          <span style="display: block; font-size: 0.875rem; font-weight: 600; color: #0284c7; margin-bottom: 4px;">Valor X (Resultado)</span>
+          <div style="background: #e0f2fe; border: 2px dashed #0284c7; border-radius: 6px; padding: 9px 12px; font-weight: bold; color: #0369a1; font-size: 1.1rem;">
+            X
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tool-actions" style="margin-top: 20px;">
+      <button type="button" class="tool-btn tool-btn-primary" data-action="calculate">Calcular Regra de Três</button>
+      <button type="button" class="tool-btn tool-btn-secondary" data-action="clear">Limpar</button>
+    </div>
+
+    <div id="resultado" class="result-box" style="margin-top: 20px;" aria-live="polite"></div>
+
+    <div class="tool-actions result-actions" style="margin-top: 15px; justify-content: center; gap: 8px;">
+      <button type="button" class="tool-btn tool-btn-secondary" data-action="copy">Copiar Resultado</button>
+      <button type="button" class="tool-btn tool-btn-secondary" data-action="share">Compartilhar</button>
+      <button type="button" class="tool-btn tool-btn-secondary" data-action="print">Imprimir</button>
+    </div>
+    <div id="regraDeTresStatus" class="result-action-status" role="status" aria-live="polite" style="text-align: center; font-size: 0.85rem; color: #16a34a; margin-top: 8px;"></div>
+  </section>
+
+  <section class="tool-content" style="margin-top: 36px;">
+    <h2>O que é Regra de Três Simples?</h2>
+    <p>A regra de três simples é um método prático da aritmética que permite descobrir um quarto valor desconhecido (X) a partir de três valores conhecidos, desde que haja uma relação de proporcionalidade entre eles.</p>
+
+    <h3>1. Regra de Três Direta</h3>
+    <p>Ocorre quando as duas grandezas variam no <strong>mesmo sentido</strong>: se uma grandeza aumenta, a outra aumenta na mesma proporção; se uma diminui, a outra diminui proporcionalmente.</p>
+    <ul>
+      <li><strong>Fórmula:</strong> <code>X = (B × C) ÷ A</code></li>
+      <li><strong>Exemplo:</strong> Se 2 litros de tinta pintam 10 m² de parede, quantos metros serão pintados com 5 litros? Como mais tinta pinta mais área, multiplicamos cruzado: <code>X = (10 × 5) ÷ 2 = 25 m²</code>.</li>
+    </ul>
+
+    <h3>2. Regra de Três Inversa</h3>
+    <p>Ocorre quando as grandezas variam em <strong>sentidos opostos</strong>: se uma grandeza aumenta, a outra diminui na proporção inversa.</p>
+    <ul>
+      <li><strong>Fórmula:</strong> <code>X = (A × B) ÷ C</code></li>
+      <li><strong>Exemplo:</strong> Se 2 operários concluem uma obra em 10 dias, quanto tempo levarão 5 operários no mesmo ritmo? Mais trabalhadores farão o trabalho em menos tempo: multiplicamos em linha reta: <code>X = (2 × 10) ÷ 5 = 4 dias</code>.</li>
+    </ul>
+
+    <h3>Como saber se a proporção é direta ou inversa?</h3>
+    <p>Faça uma pergunta simples à situação: <em>"Se eu aumentar a primeira grandeza, a segunda vai aumentar ou diminuir?"</em></p>
+    <ul>
+      <li>Se a resposta for <strong>aumentar</strong>: a relação é <strong>direta</strong>.</li>
+      <li>Se a resposta for <strong>diminuir</strong>: a relação é <strong>inversa</strong>.</li>
+    </ul>
+
+    <p>Para um guia aprofundado com macetes, métodos de setas e exercícios resolvidos, confira nosso artigo completo: <a href="{{ROOT_PREFIX}}blog/artigos/como-fazer-regra-de-tres-simples.html">Como fazer regra de três simples passo a passo</a>.</p>
+  </section>
+
+  <section class="related-tools" style="margin-top: 36px;">
+    <h2>Ferramentas Matemáticas e Financeiras Relacionadas</h2>
+    <ul style="list-style: none; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px;">
+      <li style="border: 1px solid #e2e8f0; border-radius: 6px; padding: 12px; background: #fff;">
+        <a href="{{ROOT_PREFIX}}tools/financas/porcentagem.html" style="font-weight: 600; color: #0284c7; text-decoration: none;">Calculadora de Porcentagem</a>
+        <p style="font-size: 0.85rem; color: #64748b; margin: 4px 0 0 0;">Calcule acréscimos, descontos e variações percentuais.</p>
+      </li>
+      <li style="border: 1px solid #e2e8f0; border-radius: 6px; padding: 12px; background: #fff;">
+        <a href="{{ROOT_PREFIX}}tools/financas/desconto.html" style="font-weight: 600; color: #0284c7; text-decoration: none;">Calculadora de Desconto</a>
+        <p style="font-size: 0.85rem; color: #64748b; margin: 4px 0 0 0;">Descubra o valor economizado e o preço final com desconto.</p>
+      </li>
+      <li style="border: 1px solid #e2e8f0; border-radius: 6px; padding: 12px; background: #fff;">
+        <a href="{{ROOT_PREFIX}}tools/financas/juros.html" style="font-weight: 600; color: #0284c7; text-decoration: none;">Calculadora de Juros</a>
+        <p style="font-size: 0.85rem; color: #64748b; margin: 4px 0 0 0;">Simule rendimentos e evolução com juros simples e compostos.</p>
+      </li>
+    </ul>
+  </section>
