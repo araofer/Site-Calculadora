@@ -12,61 +12,59 @@ pageScripts: <script type="module" src="{{ROOT_PREFIX}}js/tools/regra-de-tres.js
   <section class="card" aria-labelledby="form-heading">
     <h2 id="form-heading" class="sr-only">Formulário de Regra de Três</h2>
 
-    <div class="form-group" style="margin-bottom: 20px;">
-      <label style="display: block; font-weight: 600; margin-bottom: 8px;">Tipo de Proporcionalidade:</label>
-      <div style="display: flex; gap: 16px; flex-wrap: wrap;">
-        <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
-          <input type="radio" name="modoRegra" value="direct" checked>
-          <span><strong>Direta:</strong> grandezas variam no mesmo sentido (mais produz mais)</span>
+    <div class="form-group regra-proporcao-group">
+      <label class="regra-group-label">Tipo de Proporcionalidade:</label>
+      <div class="regra-proporcao-options">
+        <label class="regra-proporcao-option">
+          <input type="radio" name="modoRegra" value="direct" checked class="regra-radio">
+          <span class="regra-radio-label"><strong>Direta:</strong> grandezas variam no mesmo sentido (mais produz mais)</span>
         </label>
-        <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
-          <input type="radio" name="modoRegra" value="inverse">
-          <span><strong>Inversa:</strong> grandezas variam em sentidos opostos (mais operários levam menos tempo)</span>
+        <label class="regra-proporcao-option">
+          <input type="radio" name="modoRegra" value="inverse" class="regra-radio">
+          <span class="regra-radio-label"><strong>Inversa:</strong> grandezas variam em sentidos opostos (mais operários levam menos tempo)</span>
         </label>
       </div>
     </div>
 
-    <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px; margin-bottom: 20px;">
-      <div style="display: grid; grid-template-columns: 1fr auto 1fr; gap: 12px; align-items: center; text-align: center;">
-        <div>
-          <label for="valorA" style="display: block; font-size: 0.875rem; font-weight: 600; color: #475569; margin-bottom: 4px;">Valor A</label>
-          <input type="text" id="valorA" name="valorA" inputmode="decimal" placeholder="Ex: 2" required style="width: 100%; text-align: center;">
+    <div class="regra-grid-container">
+      <div class="regra-grid-row">
+        <div class="regra-field">
+          <label for="valorA">Valor A</label>
+          <input type="text" id="valorA" name="valorA" class="regra-input" inputmode="decimal" placeholder="Ex: 2" required>
         </div>
-        <div style="font-size: 1.5rem; color: #64748b; font-weight: bold;" aria-hidden="true">→</div>
-        <div>
-          <label for="valorB" style="display: block; font-size: 0.875rem; font-weight: 600; color: #475569; margin-bottom: 4px;">Valor B</label>
-          <input type="text" id="valorB" name="valorB" inputmode="decimal" placeholder="Ex: 10" required style="width: 100%; text-align: center;">
+        <div class="regra-arrow" aria-hidden="true">→</div>
+        <div class="regra-field">
+          <label for="valorB">Valor B</label>
+          <input type="text" id="valorB" name="valorB" class="regra-input" inputmode="decimal" placeholder="Ex: 10" required>
         </div>
       </div>
 
-      <div style="display: grid; grid-template-columns: 1fr auto 1fr; gap: 12px; align-items: center; text-align: center; margin-top: 16px;">
-        <div>
-          <label for="valorC" style="display: block; font-size: 0.875rem; font-weight: 600; color: #475569; margin-bottom: 4px;">Valor C</label>
-          <input type="text" id="valorC" name="valorC" inputmode="decimal" placeholder="Ex: 5" required style="width: 100%; text-align: center;">
+      <div class="regra-grid-row">
+        <div class="regra-field">
+          <label for="valorC">Valor C</label>
+          <input type="text" id="valorC" name="valorC" class="regra-input" inputmode="decimal" placeholder="Ex: 5" required>
         </div>
-        <div style="font-size: 1.5rem; color: #64748b; font-weight: bold;" aria-hidden="true">→</div>
-        <div>
-          <span style="display: block; font-size: 0.875rem; font-weight: 600; color: #0284c7; margin-bottom: 4px;">Valor X (Resultado)</span>
-          <div style="background: #e0f2fe; border: 2px dashed #0284c7; border-radius: 6px; padding: 9px 12px; font-weight: bold; color: #0369a1; font-size: 1.1rem;">
-            X
-          </div>
+        <div class="regra-arrow" aria-hidden="true">→</div>
+        <div class="regra-field">
+          <span class="regra-field-label regra-field-label-highlight">Valor X (Resultado)</span>
+          <div class="regra-box-x" aria-label="Resultado X">X</div>
         </div>
       </div>
     </div>
 
-    <div class="tool-actions" style="margin-top: 20px;">
+    <div class="tool-actions">
       <button type="button" class="tool-btn tool-btn-primary" data-action="calculate">Calcular Regra de Três</button>
       <button type="button" class="tool-btn tool-btn-secondary" data-action="clear">Limpar</button>
     </div>
 
     <div id="resultado" class="result-box" style="margin-top: 20px;" aria-live="polite"></div>
 
-    <div class="tool-actions result-actions" style="margin-top: 15px; justify-content: center; gap: 8px;">
+    <div class="tool-actions result-actions" style="margin-top: 15px; margin-bottom: 0;">
       <button type="button" class="tool-btn tool-btn-secondary" data-action="copy">Copiar Resultado</button>
       <button type="button" class="tool-btn tool-btn-secondary" data-action="share">Compartilhar</button>
       <button type="button" class="tool-btn tool-btn-secondary" data-action="print">Imprimir</button>
     </div>
-    <div id="regraDeTresStatus" class="result-action-status" role="status" aria-live="polite" style="text-align: center; font-size: 0.85rem; color: #16a34a; margin-top: 8px;"></div>
+    <div id="regraDeTresStatus" class="result-action-status" role="status" aria-live="polite"></div>
   </section>
 
   <section class="tool-content" style="margin-top: 36px;">

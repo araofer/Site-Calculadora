@@ -480,7 +480,9 @@ function injectCategoryToolCards(content, factoryTools) {
   const cardsHtml = toolsToAdd.map(tool => {
     const safeUrl = escapeHtml(sanitizeToolUrl(tool.url));
     const escapedName = escapeHtml(tool.name);
-    return `        <a href="{{ROOT_PREFIX}}${safeUrl}" class="card">${escapedName}</a>`;
+    const escapedDesc = escapeHtml(tool.description || '');
+    const titleAttr = escapedDesc ? ` title="${escapedDesc}"` : '';
+    return `        <a href="{{ROOT_PREFIX}}${safeUrl}" class="card"${titleAttr}>${escapedName}</a>`;
   }).join('\n');
 
   const trimmedInside = existingInside.replace(/\s+$/, '');
