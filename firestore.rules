@@ -1,0 +1,36 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    match /usuarios/{uid} {
+
+      function isOwner() {
+        return request.auth != null
+            && request.auth.uid == uid;
+      }
+
+      // Documento principal do usuário
+      allow create: if isOwner();
+      allow read: if isOwner();
+      allow update: if isOwner()
+                    && request.resource.data.criadoEm == resource.data.criadoEm;
+      allow delete: if isOwner();
+
+      // Carros cadastrados pelo usuário
+      match /carros/{carroId} {
+        allow read, write: if isOwner();
+      }
+
+      // Imóveis e simulações do usuário
+      match /imoveis/{imovelId} {
+        allow read, write: if isOwner();
+      }
+
+      // Histórico de cálculos/simulações
+      match /historico/{registroId} {
+        allow read, write: if isOwner();
+      }
+    }
+  }
+}

@@ -40,3 +40,6 @@ Thumbs.db
 *serviceAccount*.json
 *firebase-admin*.json
 *credentials*.json
+
+# Firebase Agent Skills (instaladas localmente)
+.agents/skills/
