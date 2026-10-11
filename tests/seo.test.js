@@ -234,10 +234,12 @@ test('SEO Helper - buildBlogIndexJsonLd gera CollectionPage + BreadcrumbList par
   assert.equal(schema['@graph'][1].itemListElement.length, 2);
 });
 
-test('SEO Helper - getPageJsonLd retorna null para noindex, login, cadastro e 404', () => {
+test('SEO Helper - getPageJsonLd retorna null para páginas noindex, login, cadastro e 404', () => {
   assert.equal(getPageJsonLd({ relativeOutputPath: 'login.html', meta: { robots: 'noindex, nofollow' } }), null);
   assert.equal(getPageJsonLd({ relativeOutputPath: 'cadastro.html', meta: { robots: 'noindex, nofollow' } }), null);
   assert.equal(getPageJsonLd({ relativeOutputPath: '404.html', meta: { robots: 'noindex, nofollow' } }), null);
+  assert.equal(getPageJsonLd({ relativeOutputPath: 'minha-conta.html', meta: { robots: 'noindex, follow' } }), null);
+  assert.equal(getPageJsonLd({ relativeOutputPath: 'meus-carros.html', meta: { robots: 'noindex, follow' } }), null);
 });
 
 // ----------------------------------------------------
@@ -428,16 +430,27 @@ test('SEO SSG - Blog Index contém CollectionPage e BreadcrumbList', () => {
   assert.ok(parsed['@graph'].some(e => e['@type'] === 'BreadcrumbList'));
 });
 
-test('SEO SSG - Páginas noindex (login, cadastro, 404) NÃO recebem JSON-LD e preservam robots noindex', () => {
-  const noindexPages = ['login.html', 'cadastro.html', '404.html'];
+test('SEO SSG - Páginas noindex não recebem JSON-LD e preservam meta robots', () => {
+  const noindexPages = [
+    'login.html',
+    'cadastro.html',
+    '404.html',
+    'minha-conta.html',
+    'meus-carros.html'
+  ];
+
   for (const pageRel of noindexPages) {
     const html = fs.readFileSync(path.join(DEFAULT_OUTPUT_DIR, pageRel), 'utf-8');
     assert.ok(!html.includes('<script type="application/ld+json">'), `${pageRel} NÃO deve conter JSON-LD`);
-    assert.ok(html.includes('noindex'), `${pageRel} deve preservar meta robots noindex`);
+    assert.match(
+      html,
+      /<meta name="robots" content="[^"]*noindex[^"]*">/,
+      `${pageRel} deve preservar a meta robots com noindex`
+    );
   }
 });
 
-test('SEO SSG - Build produz exatamente 49 páginas e 66 assets', () => {
-  assert.equal(SITE_PAGES.length, 49, 'SITE_PAGES deve ter 49 páginas');
-  assert.equal(SITE_ASSETS.length, 66, 'SITE_ASSETS deve ter 66 assets');
+test('SEO SSG - Build produz exatamente 51 páginas e 68 assets', () => {
+  assert.equal(SITE_PAGES.length, 51, 'SITE_PAGES deve ter 51 páginas');
+  assert.equal(SITE_ASSETS.length, 68, 'SITE_ASSETS deve ter 68 assets');
 });

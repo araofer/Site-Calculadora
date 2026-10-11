@@ -1,26 +1,20 @@
-# 1. Define o arquivo principal
+# Arquivo principal
 DirectoryIndex index.html
 
-# 2. Impede a listagem de diretórios (Segurança)
+# Impede a listagem de diretórios
 Options -Indexes
 
-# 3. Ativa URLs Amigáveis (Remove o .html dos links)
 RewriteEngine On
 
-# Redireciona para tirar o .html da URL (SEO)
+# HTTPS e domínio canônico em um único redirecionamento
+RewriteCond %{HTTPS} off [OR]
+RewriteCond %{HTTP_HOST} !^www\.calculadoramaster\.com$ [NC]
+RewriteRule ^ https://www.calculadoramaster.com%{REQUEST_URI} [R=301,L]
+
+# URLs amigáveis: serve o arquivo .html sem exigir a extensão na URL
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME}\.html -f
 RewriteRule ^([^\.]+)$ $1.html [NC,L]
 
-RewriteEngine On
-
-# 1. Redireciona de HTTP para HTTPS (Segurança)
-RewriteCond %{HTTPS} off
-RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
-
-# 2. Redireciona de Sem-WWW para WWW (Padronização)
-RewriteCond %{HTTP_HOST} !^www\. [NC]
-RewriteRule ^(.*)$ https://www.calculadoramaster.com/$1 [L,R=301]
-
-# Página 404 personalizada - Calculadora Master
+# Página 404 personalizada
 ErrorDocument 404 /404.html

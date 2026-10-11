@@ -10,16 +10,96 @@ service cloud.firestore {
             && request.auth.uid == uid;
       }
 
+      function validUserCreate() {
+        return request.resource.data.keys().hasAll([
+                 'nome', 'email', 'criadoEm'
+               ])
+            && request.resource.data.keys().hasOnly([
+                 'nome', 'email', 'criadoEm'
+               ])
+            && request.resource.data.nome is string
+            && request.resource.data.nome.size() > 0
+            && request.resource.data.nome.size() <= 100
+            && request.resource.data.email is string
+            && request.resource.data.email.size() > 0
+            && request.resource.data.email.size() <= 254
+            && request.auth.token.email is string
+            && request.resource.data.email == request.auth.token.email
+            && request.resource.data.criadoEm is timestamp;
+      }
+
       // Documento principal do usuário
-      allow create: if isOwner();
+      allow create: if isOwner() && validUserCreate();
+
       allow read: if isOwner();
+
+      // Permite atualizar somente o nome do perfil.
+      // E-mail e data de criação não podem ser alterados.
       allow update: if isOwner()
-                    && request.resource.data.criadoEm == resource.data.criadoEm;
+                    && request.resource.data.diff(resource.data)
+                         .affectedKeys().hasOnly(['nome'])
+                    && request.resource.data.nome is string
+                    && request.resource.data.nome.size() > 0
+                    && request.resource.data.nome.size() <= 100
+                    && request.resource.data.criadoEm
+                         == resource.data.criadoEm;
+
       allow delete: if isOwner();
 
       // Carros cadastrados pelo usuário
       match /carros/{carroId} {
-        allow read, write: if isOwner();
+
+        function validCar() {
+          return request.resource.data.keys().hasAll([
+                   'marca',
+                   'modelo',
+                   'ano',
+                   'combustivel',
+                   'quilometragem',
+                   'criadoEm'
+                 ])
+              && request.resource.data.keys().hasOnly([
+                   'marca',
+                   'modelo',
+                   'ano',
+                   'combustivel',
+                   'quilometragem',
+                   'criadoEm'
+                 ])
+              && request.resource.data.marca is string
+              && request.resource.data.marca.size() > 0
+              && request.resource.data.marca.size() <= 50
+              && request.resource.data.modelo is string
+              && request.resource.data.modelo.size() > 0
+              && request.resource.data.modelo.size() <= 60
+              && request.resource.data.ano is int
+              && request.resource.data.ano >= 1900
+              && request.resource.data.ano <= 2100
+              && request.resource.data.combustivel in [
+                   'Flex',
+                   'Gasolina',
+                   'Etanol',
+                   'Diesel',
+                   'GNV',
+                   'Elétrico',
+                   'Híbrido',
+                   'Outro'
+                 ]
+              && request.resource.data.quilometragem is int
+              && request.resource.data.quilometragem >= 0
+              && request.resource.data.criadoEm is timestamp;
+        }
+
+        allow read: if isOwner();
+
+        allow create: if isOwner() && validCar();
+
+        allow update: if isOwner()
+                      && validCar()
+                      && request.resource.data.criadoEm
+                           == resource.data.criadoEm;
+
+        allow delete: if isOwner();
       }
 
       // Imóveis e simulações do usuário
@@ -27,10 +107,6 @@ service cloud.firestore {
         allow read, write: if isOwner();
       }
 
-      // Histórico de cálculos/simulações
-      match /historico/{registroId} {
-        allow read, write: if isOwner();
-      }
     }
   }
 }

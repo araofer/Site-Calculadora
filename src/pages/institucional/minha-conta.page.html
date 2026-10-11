@@ -1,0 +1,89 @@
+---
+title: Minha Conta - Calculadora Master
+description: Gerencie seus dados e informações da sua conta Calculadora Master.
+canonical: https://www.calculadoramaster.com/minha-conta.html
+layout: site
+robots: noindex, follow
+pageScripts: <script type="module" src="/js/minha-conta.js"></script>
+---
+
+<section class="account-section">
+  <div class="container account-container">
+    <div class="account-card">
+
+      <div class="account-header">
+        <h1>Minha Conta</h1>
+        <p>Confira e gerencie os dados da sua conta Calculadora Master.</p>
+      </div>
+
+      <div id="conta-message" class="account-message"></div>
+
+      <div class="account-info">
+        <div class="account-info-item">
+          <span class="account-label">Nome</span>
+          <strong id="conta-nome">Carregando...</strong>
+        </div>
+
+        <div class="account-info-item">
+          <span class="account-label">E-mail</span>
+          <strong id="conta-email">Carregando...</strong>
+        </div>
+
+        <div class="account-info-item">
+          <span class="account-label">Conta criada em</span>
+          <strong id="conta-criado">Carregando...</strong>
+        </div>
+      </div>
+
+      <div class="account-profile">
+        <div class="account-profile-header">
+          <h2>Meu Perfil</h2>
+          <p>
+            Atualize seu nome de identificação na plataforma.
+          </p>
+        </div>
+
+        <form id="perfil-form" class="account-profile-form">
+
+          <div class="account-form-field">
+            <label for="perfil-nome">Nome</label>
+
+            <input
+              type="text"
+              id="perfil-nome"
+              name="nome"
+              autocomplete="name"
+              maxlength="100"
+              placeholder="Digite seu nome"
+              required
+            />
+          </div>
+
+          <button
+            type="submit"
+            class="account-save-button"
+          >
+            Salvar alterações
+          </button>
+
+        </form>
+
+        <div
+          id="perfil-message"
+          class="account-profile-message"
+          aria-live="polite"
+        ></div>
+      </div>
+
+      <div class="account-actions">
+        <a
+          href="/"
+          class="account-back-link"
+        >
+          Voltar para as calculadoras
+        </a>
+      </div>
+
+    </div>
+  </div>
+</section>

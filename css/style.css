@@ -757,6 +757,14 @@ textarea:focus-visible {
     outline-offset: 3px;
   }
 
+  .nav .mobile-auth-link {
+    color: #fff;
+  }
+
+  .nav .mobile-auth-link:hover {
+    color: #fff;
+  }
+
 
   input,
   select,
@@ -1233,6 +1241,126 @@ textarea:focus-visible {
 
 .auth-footer-text a:hover {
   text-decoration: underline;
+}
+
+/* ===================================================== */
+/* MINHA CONTA                                             */
+/* ===================================================== */
+.account-section {
+  padding: 60px 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.account-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.account-card {
+  width: 100%;
+  max-width: 760px;
+  padding: 40px;
+  background-color: #fff;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+}
+
+.account-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.account-header h1 {
+  margin: 0 0 10px;
+  font-size: 30px;
+  color: #1a1a1a;
+}
+
+.account-header p {
+  margin: 0;
+  color: #666;
+  font-size: 15px;
+}
+
+.account-message {
+  min-height: 20px;
+  margin-bottom: 15px;
+  font-size: 14px;
+  text-align: center;
+}
+
+.account-message.error {
+  color: #d93025;
+  font-weight: 600;
+}
+
+.account-info {
+  display: grid;
+  gap: 14px;
+}
+
+.account-info-item {
+  padding: 18px 20px;
+  background-color: #f7f8fa;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+}
+
+.account-label {
+  display: block;
+  margin-bottom: 6px;
+  color: #666;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.account-info-item strong {
+  display: block;
+  color: #1a1a1a;
+  font-size: 16px;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.account-actions {
+  display: flex;
+  justify-content: center;
+  margin-top: 28px;
+}
+
+.account-back-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0 22px;
+  border-radius: 8px;
+  background-color: #1e2a38;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+}
+
+.account-back-link:hover {
+  background-color: #2d3d50;
+}
+
+@media (max-width: 600px) {
+  .account-section {
+    padding: 40px 16px;
+  }
+
+  .account-card {
+    padding: 28px 20px;
+  }
+
+  .account-header h1 {
+    font-size: 26px;
+  }
 }
 
 /* SAUDAÇÃO DE USUÁRIO LOGADO NO HEADER */
@@ -2790,4 +2918,192 @@ main.container {
   .favorite-status {
     display: none !important;
   }
+}
+
+/* ===================================================== */
+/* PERFIL - MINHA CONTA                                  */
+/* ===================================================== */
+
+.account-profile {
+  margin-top: 32px;
+  padding-top: 30px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.account-profile-header {
+  margin-bottom: 22px;
+}
+
+.account-profile-header h2 {
+  margin: 0 0 8px;
+  text-align: center;
+  font-size: 22px;
+  color: #1a1a1a;
+}
+
+.account-profile-header p {
+  margin: 0;
+  text-align: center;
+  color: #666;
+  font-size: 14px;
+}
+
+.account-profile-form {
+  width: 100%;
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+.account-form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.account-form-field label {
+  color: #444;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.account-form-field input {
+  width: 100%;
+  min-height: 46px;
+  padding: 0 14px;
+  box-sizing: border-box;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background-color: #fff;
+  color: #1a1a1a;
+  font-size: 15px;
+  outline: none;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.account-form-field input:focus {
+  border-color: #1e2a38;
+  box-shadow: 0 0 0 3px rgba(30, 42, 56, 0.1);
+}
+
+.account-form-field input::placeholder {
+  color: #999;
+}
+
+.account-save-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 46px;
+  margin-top: 18px;
+  padding: 0 20px;
+  border: none;
+  border-radius: 8px;
+  background-color: #1e2a38;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.account-save-button:hover {
+  background-color: #2d3d50;
+}
+
+.account-save-button:active {
+  transform: translateY(1px);
+}
+
+.account-profile-message {
+  min-height: 20px;
+  margin-top: 12px;
+  text-align: center;
+  font-size: 14px;
+}
+
+.account-profile-message.success {
+  color: #188038;
+  font-weight: 600;
+}
+
+.account-profile-message.error {
+  color: #d93025;
+  font-weight: 600;
+}
+
+@media (max-width: 600px) {
+  .account-profile {
+    margin-top: 26px;
+    padding-top: 24px;
+  }
+
+  .account-profile-header h2 {
+    font-size: 20px;
+  }
+
+  .account-profile-form {
+    max-width: 100%;
+  }
+
+  .account-form-field input {
+    min-height: 48px;
+  }
+
+  .account-save-button {
+    min-height: 48px;
+  }
+}
+/* AJUSTE MOBILE - BOTAO VOLTAR */
+@media (max-width: 600px) {
+  .account-back-link {
+    padding-right: 12px;
+    padding-left: 12px;
+    font-size: 13px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+}
+
+
+/* Botão de exclusão dos veículos cadastrados */
+.carro-delete-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  margin-top: 8px;
+  padding: 0 18px;
+  border: 1px solid #d93025;
+  border-radius: 8px;
+  background-color: #fff;
+  color: #b3261e;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.carro-delete-button:hover:not(:disabled) {
+  background-color: #fce8e6;
+}
+
+.carro-delete-button:focus-visible {
+  outline: 3px solid rgba(217, 48, 37, 0.25);
+  outline-offset: 2px;
+}
+
+.carro-delete-button:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.carro-delete-button:disabled {
+  opacity: 0.65;
+  cursor: wait;
 }

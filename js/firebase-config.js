@@ -2,8 +2,14 @@
 // SDK modular via CDN (não requer build/bundler)
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import {
+  connectAuthEmulator,
+  getAuth
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import {
+  connectFirestoreEmulator,
+  getFirestore
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCAXjJbAqvPwnqJg65FXXOjRm8k3_GG-8s",
@@ -18,3 +24,21 @@ const firebaseConfig = {
 export const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
+
+// Emuladores apenas no ambiente local.
+// Em produção, o site continua usando o Firebase real.
+const usarEmuladores = [
+  "localhost",
+  "127.0.0.1",
+  "::1"
+].includes(window.location.hostname);
+
+if (usarEmuladores) {
+  connectAuthEmulator(
+    auth,
+    "http://127.0.0.1:9099",
+    { disableWarnings: true }
+  );
+
+  connectFirestoreEmulator(db, "127.0.0.1", 8080);
+}

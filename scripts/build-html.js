@@ -270,6 +270,14 @@ const INSTITUCIONAL_PAGES = [
     relativeOutputPath: 'cadastro.html'
   },
   {
+    sourceFile: path.join(PAGES_DIR, 'institucional', 'minha-conta.page.html'),
+    relativeOutputPath: 'minha-conta.html'
+  },
+  {
+    sourceFile: path.join(PAGES_DIR, 'institucional', 'meus-carros.page.html'),
+    relativeOutputPath: 'meus-carros.html'
+  },
+  {
     sourceFile: path.join(PAGES_DIR, 'institucional', '404.page.html'),
     relativeOutputPath: '404.html'
   }
@@ -295,6 +303,11 @@ const COMMON_ASSETS = [
   { src: 'logo/logo.png', dest: 'logo/logo.png' },
   { src: 'logo/favicon.png', dest: 'logo/favicon.png' },
   { src: 'logo/banner.png', dest: 'logo/banner.png' }
+];
+
+const ACCOUNT_ASSETS = [
+  { src: 'js/minha-conta.js', dest: 'js/minha-conta.js' },
+  { src: 'js/meus-carros.js', dest: 'js/meus-carros.js' }
 ];
 
 const FINANCEIRO_ASSETS = [
@@ -379,6 +392,7 @@ const BLOG_ASSETS = [
 
 const SITE_ASSETS = [
   ...TOOL_ASSETS,
+  ...ACCOUNT_ASSETS,
   ...SITE_SPECIFIC_ASSETS,
   ...BLOG_ASSETS
 ];
@@ -594,6 +608,24 @@ function copyPilotAssets(outputDir = DEFAULT_OUTPUT_DIR, assets = DEFAULT_ASSETS
 }
 
 /**
+ * Copia a configuração do servidor para o diretório de produção.
+ * O .htaccess não faz parte da lista SITE_ASSETS.
+ *
+ * @param {string} [outputDir] Diretório de saída da produção
+ */
+function copyProductionConfig(outputDir = PROD_OUTPUT_DIR) {
+  const srcPath = path.join(ROOT_DIR, '.htaccess');
+  const destPath = path.join(outputDir, '.htaccess');
+
+  if (!fs.existsSync(srcPath)) {
+    throw new Error(`Configuração obrigatória não encontrada: ${srcPath}`);
+  }
+
+  fs.mkdirSync(outputDir, { recursive: true });
+  fs.copyFileSync(srcPath, destPath);
+}
+
+/**
  * Executa o build de uma coleção de páginas e copia os assets necessários.
  *
  * @param {Array<{sourceFile: string, relativeOutputPath: string}>} [pages] Lista de páginas a compilar
@@ -677,6 +709,11 @@ if (require.main === module) {
     }
 
     const results = buildPages(pagesToBuild, { outputDir, assets: assetsToCopy });
+
+    if (scope === 'prod') {
+      copyProductionConfig(outputDir);
+    }
+
     console.log(`\nBuild SSG concluído com sucesso: ${results.length} página(s) gerada(s).`);
   } catch (err) {
     console.error('Falha na execução do build SSG multipágina:', err.message);
@@ -721,6 +758,7 @@ module.exports = {
   parsePageSource,
   renderPage,
   copyPilotAssets,
+  copyProductionConfig,
   buildPilot,
   buildPages
 };

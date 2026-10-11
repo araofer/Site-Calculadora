@@ -41,6 +41,7 @@ const {
   SITE_ASSETS,
   DEFAULT_ASSETS,
   copyPilotAssets,
+  copyProductionConfig,
   PROD_OUTPUT_DIR
 } = ssg;
 
@@ -666,10 +667,10 @@ test('SSG Multipage - Contrato estrutural e ordem dos elementos em .nav-containe
   }
 });
 
-test('SSG Site - buildPages(SITE_PAGES) compila 49 páginas e copia 66 assets', () => {
+test('SSG Site - buildPages(SITE_PAGES) compila 51 páginas e copia 68 assets', () => {
   const results = buildPages(SITE_PAGES, { assets: SITE_ASSETS });
-  assert.equal(results.length, 49, 'SITE_PAGES deve gerar exatamente 49 páginas (18 ferramentas + Home + 5 categorias + 18 blog + 7 institucionais)');
-  assert.equal(SITE_ASSETS.length, 66, 'SITE_ASSETS deve conter exatamente 66 assets');
+  assert.equal(results.length, 51, 'SITE_PAGES deve gerar exatamente 51 páginas (18 ferramentas + Home + 5 categorias + 18 blog + 9 institucionais)');
+  assert.equal(SITE_ASSETS.length, 68, 'SITE_ASSETS deve conter exatamente 68 assets');
 
   for (const page of SITE_PAGES) {
     const fullPath = path.join(ROOT_DIR, 'dist-pilot', page.relativeOutputPath);
@@ -1139,9 +1140,9 @@ test('SSG Blog - 14 artigos: metadados, canonical, H1, og:type=article, og:image
   }
 });
 
-test('SSG Institucional - buildPages(INSTITUCIONAL_PAGES) compila 7 páginas institucionais', () => {
+test('SSG Institucional - buildPages(INSTITUCIONAL_PAGES) compila 9 páginas institucionais', () => {
   const results = buildPages(INSTITUCIONAL_PAGES, { assets: SITE_ASSETS });
-  assert.equal(results.length, 7, 'INSTITUCIONAL_PAGES deve gerar exatamente 7 páginas');
+  assert.equal(results.length, 9, 'INSTITUCIONAL_PAGES deve gerar exatamente 9 páginas');
 
   for (const page of INSTITUCIONAL_PAGES) {
     const fullPath = path.join(ROOT_DIR, 'dist-pilot', page.relativeOutputPath);
@@ -1281,9 +1282,9 @@ test('SSG Institucional - Validação detalhada das 7 páginas: metadados, canon
   }
 });
 
-test('PROD - buildPages com PROD_OUTPUT_DIR gera todas as 49 páginas e 66 assets em dist/', () => {
+test('PROD - build gera 51 páginas, 68 assets e configuração .htaccess em dist/', () => {
   const result = buildPages(SITE_PAGES, { outputDir: PROD_OUTPUT_DIR, assets: SITE_ASSETS });
-  assert.equal(result.length, 49, 'build:prod deve compilar exatamente 49 páginas');
+  assert.equal(result.length, 51, 'build:prod deve compilar exatamente 51 páginas');
 
   for (const page of SITE_PAGES) {
     const pagePath = path.join(PROD_OUTPUT_DIR, page.relativeOutputPath);
@@ -1297,9 +1298,21 @@ test('PROD - buildPages com PROD_OUTPUT_DIR gera todas as 49 páginas e 66 asset
     const assetPath = path.join(PROD_OUTPUT_DIR, asset.dest);
     assert.ok(fs.existsSync(assetPath), `Asset de produção deve existir: ${asset.dest}`);
   }
+
+  copyProductionConfig(PROD_OUTPUT_DIR);
+
+  const productionHtaccess = path.join(PROD_OUTPUT_DIR, '.htaccess');
+  const sourceHtaccess = path.join(ROOT_DIR, '.htaccess');
+
+  assert.ok(fs.existsSync(productionHtaccess), 'dist/.htaccess deve existir');
+  assert.equal(
+    fs.readFileSync(productionHtaccess, 'utf-8'),
+    fs.readFileSync(sourceHtaccess, 'utf-8'),
+    'dist/.htaccess deve corresponder ao arquivo-fonte'
+  );
 });
 
-test('PROD - Todas as 49 páginas e 66 assets em dist/ são idênticos a dist-pilot/', () => {
+test('PROD - Todas as 51 páginas e 68 assets em dist/ são idênticos a dist-pilot/', () => {
   const pilotDir = path.join(ROOT_DIR, 'dist-pilot');
   // Assegura que dist-pilot está compilado
   buildPages(SITE_PAGES, { outputDir: pilotDir, assets: SITE_ASSETS });
@@ -1457,16 +1470,16 @@ test('SSG Cache Busting - STYLE_VERSION é hash hexadecimal curto determinístic
   assert.equal(getStyleVersion(), expectedHash, 'getStyleVersion() deve retornar o mesmo hash determinístico');
 });
 
-test('SSG Cache Busting - Todas as 49 páginas usam a mesma versão de style.css, 66 assets e caminhos CSS válidos', () => {
+test('SSG Cache Busting - Todas as 51 páginas usam a mesma versão de style.css, 68 assets e caminhos CSS válidos', () => {
   const results = buildPages(SITE_PAGES, { assets: SITE_ASSETS });
 
-  // 10. 49 páginas continuam
-  assert.equal(results.length, 49, 'SITE_PAGES deve compilar exatamente 49 páginas');
+  // 10. 51 páginas continuam
+  assert.equal(results.length, 51, 'SITE_PAGES deve compilar exatamente 51 páginas');
 
-  // 11. 66 assets continuam
-  assert.equal(SITE_ASSETS.length, 66, 'SITE_ASSETS deve permanecer exatamente com 66 assets');
+  // 11. 68 assets continuam
+  assert.equal(SITE_ASSETS.length, 68, 'SITE_ASSETS deve permanecer exatamente com 68 assets');
 
-  // 4. todas as 47 páginas usam a mesma versão
+  // 4. todas as 51 páginas usam a mesma versão
   for (const page of SITE_PAGES) {
     const fullPath = path.join(ROOT_DIR, 'dist-pilot', page.relativeOutputPath);
     assert.ok(fs.existsSync(fullPath), `Arquivo deve existir: ${page.relativeOutputPath}`);

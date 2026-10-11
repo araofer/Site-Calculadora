@@ -4,8 +4,8 @@
  * 1. npm test
  * 2. npm run build:data
  * 3. npm run build:prod
- * 4. Validação de exatamente 43 páginas em dist/
- * 5. Validação de todos os 58 assets em dist/
+ * 4. Validação da quantidade de páginas declaradas em SITE_PAGES em dist/
+ * 5. Validação de todos os assets declarados em SITE_ASSETS em dist/
  * 6. Verificação de equivalência funcional dist/ vs dist-pilot/
  * 7. Verificação de imports ESM locais e transitivos em dist/js/
  * 8. Verificação de links relativos, canonical, robots, auth, cookie consent, ausência de placeholders e undefined
@@ -124,12 +124,30 @@ async function runProdAudit() {
     summary.pagesCount = match ? parseInt(match[1], 10) : 0;
 
     const distHtmls = listHtmlFiles(DIST_PROD_DIR);
-    if (distHtmls.length === 43 && summary.pagesCount === 43) {
+    const pagesOk =
+      distHtmls.length === SITE_PAGES.length &&
+      summary.pagesCount === SITE_PAGES.length;
+
+    const sourceHtaccess = path.join(ROOT_DIR, '.htaccess');
+    const productionHtaccess = path.join(DIST_PROD_DIR, '.htaccess');
+    const htaccessOk =
+      fs.existsSync(sourceHtaccess) &&
+      fs.existsSync(productionHtaccess) &&
+      fs.readFileSync(sourceHtaccess).equals(fs.readFileSync(productionHtaccess));
+
+    if (pagesOk && htaccessOk) {
       summary.buildProd = 'PASS';
     } else {
       summary.buildProd = 'FAIL';
       allOk = false;
-      console.error(`Contagem incorreta de páginas em dist/: ${distHtmls.length} (esperado 43)`);
+
+      if (!pagesOk) {
+        console.error(`Contagem incorreta de páginas em dist/: ${distHtmls.length} (esperado ${SITE_PAGES.length})`);
+      }
+
+      if (!htaccessOk) {
+        console.error('Configuração .htaccess ausente ou divergente em dist/.');
+      }
     }
   } catch (err) {
     summary.buildProd = 'FAIL';

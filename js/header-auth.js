@@ -59,6 +59,11 @@ function renderizarLogado(container, nomeExibido, isMobile) {
   spanGreeting.className = "user-greeting";
   spanGreeting.textContent = `Olá, ${nomeExibido}`;
 
+  const linkConta = document.createElement("a");
+  linkConta.href = "/minha-conta.html";
+  linkConta.textContent = "Minha Conta";
+  linkConta.className = isMobile ? "mobile-auth-link" : "btn-login";
+
   const linkLogout = document.createElement("a");
   linkLogout.href = "#";
   linkLogout.textContent = "Sair";
@@ -66,6 +71,7 @@ function renderizarLogado(container, nomeExibido, isMobile) {
   linkLogout.addEventListener("click", executarLogout);
 
   container.appendChild(spanGreeting);
+  container.appendChild(linkConta);
   container.appendChild(linkLogout);
 }
 
