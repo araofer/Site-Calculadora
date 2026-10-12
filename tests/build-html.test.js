@@ -10,6 +10,8 @@ import ssg from '../scripts/build-html.js';
 const {
   STYLE_VERSION,
   getStyleVersion,
+  FAVORITES_VERSION,
+  getFavoritesVersion,
   calculateRootPrefix,
   parsePageSource,
   renderPage,
@@ -156,7 +158,7 @@ test('SSG Piloto - HTML gerado contém componente de Header com links corretos',
 test('SSG Piloto - HTML gerado contém componente de Footer e scripts de encerramento', () => {
   const filePath = path.join(ROOT_DIR, 'dist-pilot', 'tools', 'financas', 'desconto.html');
   const html = fs.readFileSync(filePath, 'utf-8');
-  assert.match(html, /<footer class="footer">/);
+  assert.match(html, /<footer class="tool-footer">/);
   assert.match(html, /<a href="\.\.\/\.\.\/politica\.html">Política de Privacidade<\/a>/);
   assert.match(html, /<a href="\.\.\/\.\.\/termos\.html">Termos de Uso<\/a>/);
   assert.match(html, /<script type="module" src="\.\.\/\.\.\/js\/header-auth\.js"><\/script>/);
@@ -1474,6 +1476,20 @@ test('SSG Cache Busting - STYLE_VERSION é hash hexadecimal curto determinístic
   assert.equal(getStyleVersion(), expectedHash, 'getStyleVersion() deve retornar o mesmo hash determinístico');
 });
 
+test('SSG Cache Busting - FAVORITES_VERSION corresponde ao hash de js/core/favorites.js', () => {
+  assert.match(FAVORITES_VERSION, /^[a-f0-9]{8}$/);
+  assert.equal(FAVORITES_VERSION.length, 8);
+
+  const rawFavorites = fs.readFileSync(
+    path.join(ROOT_DIR, 'js', 'core', 'favorites.js'),
+    'utf-8'
+  );
+  const expectedHash = crypto.createHash('sha256').update(rawFavorites).digest('hex').slice(0, 8);
+
+  assert.equal(FAVORITES_VERSION, expectedHash);
+  assert.equal(getFavoritesVersion(), expectedHash);
+});
+
 test('SSG Cache Busting - Todas as 54 páginas usam a mesma versão de style.css, 71 assets e caminhos CSS válidos', () => {
   const results = buildPages(SITE_PAGES, { assets: SITE_ASSETS });
 
@@ -1508,6 +1524,25 @@ test('SSG Cache Busting - Todas as 54 páginas usam a mesma versão de style.css
       fs.existsSync(resolvedCssPath),
       `Arquivo CSS referenciado em ${page.relativeOutputPath} deve existir no disco em: ${resolvedCssPath}`
     );
+
+    if (html.includes('js/core/favorites.js')) {
+      const expectedFavoritesScript =
+        `<script type="module" src="${prefix}js/core/favorites.js?v=${FAVORITES_VERSION}"></script>`;
+
+      assert.ok(
+        html.includes(expectedFavoritesScript),
+        `${page.relativeOutputPath} deve carregar favorites.js com a versão ${FAVORITES_VERSION}`
+      );
+
+      const resolvedFavoritesPath = path.resolve(
+        path.dirname(fullPath),
+        `${prefix}js/core/favorites.js`
+      );
+      assert.ok(
+        fs.existsSync(resolvedFavoritesPath),
+        `Arquivo favorites.js referenciado em ${page.relativeOutputPath} deve existir: ${resolvedFavoritesPath}`
+      );
+    }
   }
 });
 
@@ -1560,4 +1595,26 @@ test('SSG Cache Busting - dist/css/style.css continua existindo no disco após b
   assert.ok(fs.existsSync(prodCssPath), 'dist/css/style.css deve existir após o build de produção');
   const prodCss = fs.readFileSync(prodCssPath, 'utf-8');
   assert.ok(prodCss.length > 1000, 'dist/css/style.css deve conter conteúdo CSS válido');
+});
+
+
+test('SSG - rodapé exclusivo nas ferramentas e rodapé institucional preservado', () => {
+  const toolHtml = renderPage({
+    sourceFile: path.join(ROOT_DIR, 'src', 'pages', 'tools', 'financas', 'desconto.page.html'),
+    relativeOutputPath: 'tools/financas/desconto.html'
+  });
+
+  assert.match(toolHtml, /<footer class="tool-footer">/);
+  assert.match(toolHtml, /class="tool-footer-bottom"/);
+  assert.match(toolHtml, /Calculadoras/);
+  assert.match(toolHtml, /js\/core\/favorites\.js\?v=/);
+
+  const siteHtml = renderPage({
+    sourceFile: path.join(ROOT_DIR, 'src', 'pages', 'institucional', 'sobre.page.html'),
+    relativeOutputPath: 'sobre.html'
+  });
+
+  assert.match(siteHtml, /class="footer-top"/);
+  assert.match(siteHtml, /class="container footer-columns"/);
+  assert.doesNotMatch(siteHtml, /<footer class="tool-footer">/);
 });

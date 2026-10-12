@@ -16,6 +16,7 @@ const DEFAULT_OUTPUT_DIR = path.join(ROOT_DIR, 'dist-pilot');
 const PROD_OUTPUT_DIR = path.join(ROOT_DIR, 'dist');
 const TOOLS_JSON_PATH = path.join(ROOT_DIR, 'data', 'tools.json');
 const STYLE_CSS_PATH = path.join(ROOT_DIR, 'css', 'style.css');
+const FAVORITES_JS_PATH = path.join(ROOT_DIR, 'js', 'core', 'favorites.js');
 
 const crypto = require('node:crypto');
 
@@ -28,6 +29,16 @@ function getStyleVersion() {
 }
 
 const STYLE_VERSION = getStyleVersion();
+
+function getFavoritesVersion() {
+  if (!fs.existsSync(FAVORITES_JS_PATH)) {
+    throw new Error(`Arquivo JavaScript obrigatório não encontrado: ${FAVORITES_JS_PATH}`);
+  }
+  const favoritesContent = fs.readFileSync(FAVORITES_JS_PATH, 'utf-8');
+  return crypto.createHash('sha256').update(favoritesContent).digest('hex').slice(0, 8);
+}
+
+const FAVORITES_VERSION = getFavoritesVersion();
 
 const { getPageJsonLd, renderJsonLdScript } = require('../src/utils/seo.js');
 const {
@@ -491,7 +502,7 @@ function parsePageSource(fileContent) {
  * @param {string} [options.layoutsDir] Diretório de layouts
  * @returns {string} HTML renderizado completo
  */
-function renderPage({ sourceFile, relativeOutputPath, componentsDir = COMPONENTS_DIR, layoutsDir = LAYOUTS_DIR, styleVersion = STYLE_VERSION }) {
+function renderPage({ sourceFile, relativeOutputPath, componentsDir = COMPONENTS_DIR, layoutsDir = LAYOUTS_DIR, styleVersion = STYLE_VERSION, favoritesVersion = FAVORITES_VERSION }) {
   if (!fs.existsSync(sourceFile)) {
     throw new Error(`Arquivo fonte de página não encontrado: ${sourceFile}`);
   }
@@ -537,7 +548,7 @@ function renderPage({ sourceFile, relativeOutputPath, componentsDir = COMPONENTS
 
   // Carregamento de componentes essenciais
   const defaultHeader = meta.layout === 'site' ? 'site-header' : 'header';
-  const defaultFooter = meta.layout === 'site' ? 'site-footer' : 'footer';
+  const defaultFooter = meta.layout === 'tool' ? 'tool-footer' : meta.layout === 'site' ? 'site-footer' : 'footer';
   const headerFile = `${meta.header || defaultHeader}.html`;
   const footerFile = `${meta.footer || defaultFooter}.html`;
   const headerPath = path.join(componentsDir, headerFile);
@@ -571,6 +582,7 @@ function renderPage({ sourceFile, relativeOutputPath, componentsDir = COMPONENTS
   template = template.replace(/\{\{OG_IMAGE\}\}/g, meta.ogImage || 'https://www.calculadoramaster.com/logo/banner.png');
   template = template.replace(/\{\{ROOT_PREFIX\}\}/g, rootPrefix);
   template = template.replace(/\{\{STYLE_VERSION\}\}/g, styleVersion);
+  template = template.replace(/\{\{FAVORITES_VERSION\}\}/g, favoritesVersion);
   template = template.replace(/\{\{EXTRA_HEAD\}\}\n?/g, meta.extraHead ? `  ${meta.extraHead}\n` : '');
 
   // Dados estruturados JSON-LD
@@ -757,6 +769,8 @@ if (require.main === module) {
 module.exports = {
   STYLE_VERSION,
   getStyleVersion,
+  FAVORITES_VERSION,
+  getFavoritesVersion,
   DEFAULT_OUTPUT_DIR,
   PROD_OUTPUT_DIR,
   FINANCEIRO_LOTE1_PAGES,
