@@ -1,0 +1,156 @@
+---
+title: Calculadora de Margem e Markup Online Grátis | Calculadora Master
+description: Calcule margem de lucro, markup, lucro e preço de venda sugerido com base nos custos e no percentual desejado.
+keywords: calculadora de margem e markup, margem de lucro, markup, preço de venda, custo, lucro, precificação
+canonical: https://www.calculadoramaster.com/tools/financas/margem-markup.html
+layout: tool
+pageScripts: <script type="module" src="{{ROOT_PREFIX}}js/tools/margem-markup.js"></script>
+---
+
+<div class="tool-draft-badge" style="background:#fff3cd;color:#856404;padding:8px 12px;border-radius:4px;margin-bottom:16px;font-size:.875rem;border:1px solid #ffeeba;">
+  <strong>Em desenvolvimento:</strong> esta ferramenta está em fase de homologação.
+</div>
+
+<h1>Calculadora de Margem e Markup</h1>
+<p>Analise seu preço de venda ou descubra quanto cobrar para alcançar a margem de lucro ou o markup desejado.</p>
+
+<div class="card" style="margin:20px 0;">
+  <form id="formMargemMarkup">
+    <div class="form-group">
+      <label for="modoCalculo">O que você deseja calcular?</label>
+      <select id="modoCalculo" name="modoCalculo">
+        <option value="analisar">Analisar um preço de venda existente</option>
+        <option value="margem">Simular preço por margem desejada</option>
+        <option value="markup">Simular preço por markup desejado</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="custo">Custo total (R$):</label>
+      <input type="text" id="custo" name="custo"
+        inputmode="decimal" autocomplete="off"
+        placeholder="100,00" required>
+      <p>Informe o custo do produto ou serviço, incluindo os gastos que deseja considerar.</p>
+    </div>
+
+    <div id="grupoPrecoVenda" class="form-group">
+      <label for="precoVenda">Preço de venda atual (R$):</label>
+      <input type="text" id="precoVenda" name="precoVenda"
+        inputmode="decimal" autocomplete="off"
+        placeholder="150,00" required>
+    </div>
+
+    <div id="grupoPercentual" class="form-group" hidden>
+      <label id="labelPercentual" for="percentualDesejado">Margem de lucro desejada (%):</label>
+      <input type="number" id="percentualDesejado" name="percentualDesejado"
+        min="0" step="0.01" placeholder="30">
+      <p id="ajudaPercentual">Informe o percentual que deseja alcançar.</p>
+    </div>
+
+    <div class="tool-actions">
+      <button type="submit" id="botaoCalcularMargemMarkup" class="tool-btn tool-btn-primary">
+        Analisar preço
+      </button>
+      <button type="button" id="limparMargemMarkup" class="tool-btn tool-btn-secondary">
+        Limpar
+      </button>
+    </div>
+  </form>
+
+  <p id="erroMargemMarkup" role="alert" aria-live="assertive" hidden></p>
+
+  <section id="resultadoMargemMarkup" aria-live="polite" hidden>
+    <h2 id="tituloResultadoMargemMarkup">Resultado do cálculo</h2>
+    <p id="descricaoResultadoMargemMarkup"></p>
+
+    <div class="card" style="margin:16px 0;padding:16px;">
+      <p>Custo informado:
+        <strong id="custoResultadoMargemMarkup"></strong>
+      </p>
+      <p><strong id="labelPrecoResultadoMargemMarkup">Preço de venda:</strong>
+        <strong id="precoResultadoMargemMarkup"></strong>
+      </p>
+      <p>Resultado da operação:
+        <strong id="lucroResultadoMargemMarkup"></strong>
+      </p>
+      <p>Margem sobre o preço de venda:
+        <strong id="margemResultadoMargemMarkup"></strong>
+      </p>
+      <p>Markup sobre o custo:
+        <strong id="markupResultadoMargemMarkup"></strong>
+      </p>
+    </div>
+
+    <div class="tool-actions">
+      <button type="button" id="copiarMargemMarkup"
+        class="tool-btn tool-btn-secondary" hidden>
+        Copiar resultado
+      </button>
+      <button type="button" id="compartilharMargemMarkup"
+        class="tool-btn tool-btn-secondary" hidden>
+        Compartilhar
+      </button>
+      <button type="button" id="imprimirMargemMarkup"
+        class="tool-btn tool-btn-secondary" hidden>
+        Imprimir
+      </button>
+    </div>
+  </section>
+
+  <p id="statusMargemMarkup" class="result-action-status"
+    role="status" aria-live="polite"></p>
+</div>
+
+<section class="content">
+  <h2>Qual é a diferença entre margem e markup?</h2>
+  <p>A margem compara o lucro com o preço final da venda. O markup compara o lucro com o custo. Embora estejam relacionados, são percentuais diferentes.</p>
+
+  <h3>Fórmula da margem de lucro</h3>
+  <p><strong>Margem (%) = (Preço de venda − Custo) ÷ Preço de venda × 100</strong></p>
+
+  <h3>Fórmula do markup</h3>
+  <p><strong>Markup (%) = (Preço de venda − Custo) ÷ Custo × 100</strong></p>
+
+  <h3>Preço sugerido por margem</h3>
+  <p><strong>Preço de venda = Custo ÷ (1 − Margem desejada ÷ 100)</strong></p>
+  <p>A margem desejada deve ser menor que 100%.</p>
+
+  <h3>Preço sugerido por markup</h3>
+  <p><strong>Preço de venda = Custo × (1 + Markup desejado ÷ 100)</strong></p>
+
+  <h3>Exemplo prático</h3>
+  <p>Se um produto custa R$ 100,00 e é vendido por R$ 150,00, o lucro é R$ 50,00, a margem é aproximadamente 33,33% e o markup é 50%.</p>
+
+  <p>Os resultados são estimativas com base nos valores informados. Para decisões de precificação, considere também impostos, taxas, despesas indiretas e outros custos que se apliquem ao seu negócio.</p>
+
+  <section class="related-tools">
+    <h2>Calculadoras relacionadas</h2>
+    <div class="related-tools-grid">
+      <article class="tool-card">
+        <div class="tool-card-header">
+          <span class="tool-card-category">Financeiro</span>
+        </div>
+        <h3 class="tool-card-title">Calculadora de Preço de Serviço</h3>
+        <p class="tool-card-desc">Sugira preços com base nos custos do serviço e na margem desejada.</p>
+        <div class="tool-card-footer">
+          <a href="preco-servico.html" class="tool-card-btn">Calcular agora &rarr;</a>
+        </div>
+      </article>
+
+      <article class="tool-card">
+        <div class="tool-card-header">
+          <span class="tool-card-category">Financeiro</span>
+        </div>
+        <h3 class="tool-card-title">Calculadora de Lucro</h3>
+        <p class="tool-card-desc">Analise custos, preço de venda e lucro de uma operação.</p>
+        <div class="tool-card-footer">
+          <a href="lucro.html" class="tool-card-btn">Calcular agora &rarr;</a>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <p style="margin-top:30px;">
+    <a href="{{ROOT_PREFIX}}index.html">Voltar para a página inicial</a>
+  </p>
+</section>

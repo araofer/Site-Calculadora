@@ -29,7 +29,8 @@ export const VALID_TOOL_IDS = new Set([
   'amortizacao',
   'regra-de-tres',
   'preco-servico',
-  'valor-hora'
+  'valor-hora',
+  'margem-markup'
 ]);
 
 let memoryFavorites = null;

@@ -569,5 +569,37 @@
       "prestador de serviços"
     ],
     "related": []
+  },
+  {
+    "id": "margem-markup",
+    "slug": "margem-markup",
+    "name": "Calculadora de Margem e Markup",
+    "category": "Financeiro",
+    "categorySlug": "financas",
+    "audience": "brasil",
+    "description": "Calcule margem de lucro, markup e preço de venda sugerido.",
+    "url": "/tools/financas/margem-markup.html",
+    "status": "draft",
+    "formulaStatus": "draft",
+    "implementation": "factory",
+    "features": {
+      "chart": false,
+      "table": false,
+      "pdf": false,
+      "copy": true,
+      "share": true,
+      "print": true,
+      "favorite": true,
+      "article": false
+    },
+    "keywords": [
+      "margem de lucro",
+      "markup",
+      "preço de venda",
+      "custo",
+      "lucro",
+      "precificação"
+    ],
+    "related": []
   }
 ]
