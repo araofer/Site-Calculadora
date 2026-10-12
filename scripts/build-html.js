@@ -548,9 +548,9 @@ function renderPage({ sourceFile, relativeOutputPath, componentsDir = COMPONENTS
 
   // Carregamento de componentes essenciais
   const defaultHeader = meta.layout === 'site' ? 'site-header' : 'header';
-  const defaultFooter = meta.layout === 'tool' ? 'tool-footer' : meta.layout === 'site' ? 'site-footer' : 'footer';
+  const defaultFooter = 'site-footer';
   const headerFile = `${meta.header || defaultHeader}.html`;
-  const footerFile = `${meta.footer || defaultFooter}.html`;
+  const footerFile = `${defaultFooter}.html`;
   const headerPath = path.join(componentsDir, headerFile);
   const footerPath = path.join(componentsDir, footerFile);
 

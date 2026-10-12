@@ -158,9 +158,9 @@ test('SSG Piloto - HTML gerado contém componente de Header com links corretos',
 test('SSG Piloto - HTML gerado contém componente de Footer e scripts de encerramento', () => {
   const filePath = path.join(ROOT_DIR, 'dist-pilot', 'tools', 'financas', 'desconto.html');
   const html = fs.readFileSync(filePath, 'utf-8');
-  assert.match(html, /<footer class="tool-footer">/);
-  assert.match(html, /<a href="\.\.\/\.\.\/politica\.html">Política de Privacidade<\/a>/);
-  assert.match(html, /<a href="\.\.\/\.\.\/termos\.html">Termos de Uso<\/a>/);
+  assert.match(html, /<footer class="footer">/);
+  assert.match(html, /<a href="\.\.\/\.\.\/politica\.html">Privacidade<\/a>/);
+  assert.match(html, /<a href="\.\.\/\.\.\/termos\.html">Termos de Serviço<\/a>/);
   assert.match(html, /<script type="module" src="\.\.\/\.\.\/js\/header-auth\.js"><\/script>/);
   assert.match(html, /<script src="\.\.\/\.\.\/js\/cookie-consent\.js"><\/script>/);
 });
@@ -1261,14 +1261,10 @@ test('SSG Institucional - Validação detalhada das 7 páginas: metadados, canon
     assert.match(html, /<header class="header">/, `${spec.file} deve conter header`);
     assert.match(html, /financeira\.html/, `${spec.file} deve conter link para financeira`);
 
-    // Footer
-    if (spec.hasSiteFooter) {
-      assert.match(html, /<div class="container footer-columns">/, `${spec.file} deve conter footer estruturado com 3 colunas`);
-    }
-    if (spec.hasAuthFooter) {
-      assert.ok(!html.includes('footer-columns'), `${spec.file} não deve conter footer de 3 colunas`);
-      assert.match(html, /<div class="footer-bottom">/, `${spec.file} deve conter footer-bottom`);
-    }
+    // Footer padrão da home em todas as páginas
+    assert.match(html, /<footer class="footer">/, `${spec.file} deve conter o rodapé padrão`);
+    assert.match(html, /<div class="container footer-columns">/, `${spec.file} deve conter as 3 colunas do rodapé`);
+    assert.match(html, /<div class="footer-bottom">/, `${spec.file} deve conter a parte inferior do rodapé`);
 
     // Scripts essenciais
     assert.match(html, /header-auth\.js/, `${spec.file} deve carregar header-auth.js`);
@@ -1598,15 +1594,17 @@ test('SSG Cache Busting - dist/css/style.css continua existindo no disco após b
 });
 
 
-test('SSG - rodapé exclusivo nas ferramentas e rodapé institucional preservado', () => {
+test('SSG - todas as páginas usam o rodapé padrão da home', () => {
   const toolHtml = renderPage({
     sourceFile: path.join(ROOT_DIR, 'src', 'pages', 'tools', 'financas', 'desconto.page.html'),
     relativeOutputPath: 'tools/financas/desconto.html'
   });
 
-  assert.match(toolHtml, /<footer class="tool-footer">/);
-  assert.match(toolHtml, /class="tool-footer-bottom"/);
-  assert.match(toolHtml, /Calculadoras/);
+  assert.match(toolHtml, /<footer class="footer">/);
+  assert.match(toolHtml, /class="footer-top"/);
+  assert.match(toolHtml, /class="container footer-columns"/);
+  assert.match(toolHtml, /class="footer-bottom"/);
+  assert.doesNotMatch(toolHtml, /<footer class="tool-footer">/);
   assert.match(toolHtml, /js\/core\/favorites\.js\?v=/);
 
   const siteHtml = renderPage({
@@ -1614,7 +1612,9 @@ test('SSG - rodapé exclusivo nas ferramentas e rodapé institucional preservado
     relativeOutputPath: 'sobre.html'
   });
 
+  assert.match(siteHtml, /<footer class="footer">/);
   assert.match(siteHtml, /class="footer-top"/);
   assert.match(siteHtml, /class="container footer-columns"/);
+  assert.match(siteHtml, /class="footer-bottom"/);
   assert.doesNotMatch(siteHtml, /<footer class="tool-footer">/);
 });
