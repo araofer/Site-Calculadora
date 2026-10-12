@@ -780,6 +780,38 @@ const TOOLS_CATALOG = [
       "featured": false,
       "related": [],
       "status": "published"
+    },
+    {
+      "id": "margem-markup",
+      "slug": "margem-markup",
+      "nome": "Calculadora de Margem e Markup",
+      "name": "Calculadora de Margem e Markup",
+      "categoria": "Financeiro",
+      "category": "Financeiro",
+      "categorySlug": "financas",
+      "descricao": "Calcule margem de lucro, markup e preço de venda sugerido.",
+      "description": "Calcule margem de lucro, markup e preço de venda sugerido.",
+      "url": "tools/financas/margem-markup.html",
+      "termos": [
+        "margem de lucro",
+        "markup",
+        "preço de venda",
+        "custo",
+        "lucro",
+        "precificação"
+      ],
+      "keywords": [
+        "margem de lucro",
+        "markup",
+        "preço de venda",
+        "custo",
+        "lucro",
+        "precificação"
+      ],
+      "destaque": false,
+      "featured": false,
+      "related": [],
+      "status": "published"
     }
   ];
 

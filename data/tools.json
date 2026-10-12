@@ -579,8 +579,8 @@
     "audience": "brasil",
     "description": "Calcule margem de lucro, markup e preço de venda sugerido.",
     "url": "/tools/financas/margem-markup.html",
-    "status": "draft",
-    "formulaStatus": "draft",
+    "status": "published",
+    "formulaStatus": "verified",
     "implementation": "factory",
     "features": {
       "chart": false,
