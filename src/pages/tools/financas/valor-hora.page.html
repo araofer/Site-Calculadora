@@ -1,0 +1,122 @@
+---
+title: Calculadora de Valor da Hora Online Grátis | Calculadora Master
+description: Calcule quanto cobrar por hora de trabalho considerando renda desejada, despesas profissionais, reserva financeira e horas faturáveis.
+keywords: calculadora valor da hora, preço por hora, freelancer, autônomo, prestador de serviços, MEI
+canonical: https://www.calculadoramaster.com/tools/financas/valor-hora.html
+layout: tool
+pageScripts: <script type="module" src="{{ROOT_PREFIX}}js/tools/valor-hora.js"></script>
+---
+
+<h1>Calculadora de Valor da Hora</h1>
+<p>Descubra quanto cobrar por hora para cobrir suas despesas, alcançar a renda desejada e reservar uma parte do faturamento.</p>
+
+<div class="card" style="margin:20px 0;">
+  <h2>Informe seus valores mensais</h2>
+
+  <form id="formValorHora">
+    <div class="form-group">
+      <label for="rendaDesejada">Renda mensal desejada (R$):</label>
+      <input type="text" id="rendaDesejada" name="rendaDesejada"
+        inputmode="numeric" autocomplete="off" placeholder="3.000,00" required>
+    </div>
+
+    <div class="form-group">
+      <label for="despesasMensais">Despesas profissionais mensais (R$):</label>
+      <input type="text" id="despesasMensais" name="despesasMensais"
+        inputmode="numeric" autocomplete="off" placeholder="1.000,00">
+      <p>Inclua ferramentas, internet, transporte e outros custos profissionais. Se não tiver despesas, deixe em branco.</p>
+    </div>
+
+    <div class="form-group">
+      <label for="reservaPercentual">Reserva para impostos e imprevistos (%):</label>
+      <input type="number" id="reservaPercentual" name="reservaPercentual"
+        min="0" max="99.99" step="0.01" placeholder="20" required>
+      <p>Informe 20 para reservar 20% do faturamento. Use o percentual adequado à sua situação.</p>
+    </div>
+
+    <div class="form-group">
+      <label for="horasFaturaveis">Horas faturáveis por mês:</label>
+      <input type="number" id="horasFaturaveis" name="horasFaturaveis"
+        min="0.01" step="0.01" placeholder="100" required>
+      <p>Considere apenas as horas que você espera conseguir cobrar dos clientes.</p>
+    </div>
+
+    <div class="tool-actions">
+      <button type="submit" class="tool-btn tool-btn-primary">Calcular valor da hora</button>
+      <button type="button" id="limparValorHora" class="tool-btn tool-btn-secondary">Limpar</button>
+    </div>
+  </form>
+
+  <p id="erroValorHora" role="alert" aria-live="assertive" hidden></p>
+
+  <section id="resultadoValorHora" aria-live="polite" hidden>
+    <h2 style="margin-top:20px;">Seu resultado estimado</h2>
+
+    <p>Valor mínimo recomendado por hora:
+      <strong id="valorHoraResultado"></strong>
+    </p>
+
+    <p>Faturamento mensal necessário:
+      <strong id="receitaMensalResultado"></strong>
+    </p>
+
+    <p>Reserva mensal estimada:
+      <strong id="reservaMensalResultado"></strong>
+    </p>
+
+    <div class="tool-actions">
+      <button type="button" id="copiarValorHora"
+        class="tool-btn tool-btn-secondary" hidden>Copiar resultado</button>
+    </div>
+  </section>
+
+  <p id="statusValorHora" class="result-action-status"
+    role="status" aria-live="polite"></p>
+</div>
+
+<section class="content">
+  <h2>Como calcular o valor da sua hora?</h2>
+  <p>Primeiro, some a renda mensal que deseja receber às despesas profissionais. Depois, considere o percentual do faturamento que pretende reservar e divida a receita necessária pelas horas que poderá cobrar dos clientes.</p>
+
+  <h3>Fórmula do faturamento necessário</h3>
+  <p><strong>Faturamento mensal = (Renda desejada + Despesas mensais) ÷ (1 − Reserva percentual ÷ 100)</strong></p>
+
+  <h3>Fórmula do valor por hora</h3>
+  <p><strong>Valor por hora = Faturamento mensal necessário ÷ Horas faturáveis por mês</strong></p>
+
+  <h3>Exemplo prático</h3>
+  <p>Imagine uma renda desejada de R$ 3.000,00, despesas de R$ 1.000,00, reserva de 20% e 100 horas faturáveis no mês. O faturamento necessário será R$ 5.000,00 e o valor recomendado será R$ 50,00 por hora.</p>
+
+  <p><strong>Importante:</strong> o resultado é uma estimativa para planejamento financeiro. O percentual de reserva não representa uma alíquota tributária oficial e deve ser ajustado à sua realidade.</p>
+
+  <section class="related-tools">
+    <h2>Ferramentas relacionadas</h2>
+    <div class="related-tools-grid">
+      <article class="tool-card">
+        <div class="tool-card-header">
+          <span class="tool-card-category">Financeiro</span>
+        </div>
+        <h3 class="tool-card-title">Calculadora de Preço de Serviço</h3>
+        <p class="tool-card-desc">Calcule preços com base nos custos e na margem desejada.</p>
+        <div class="tool-card-footer">
+          <a href="preco-servico.html" class="tool-card-btn">Calcular agora &rarr;</a>
+        </div>
+      </article>
+
+      <article class="tool-card">
+        <div class="tool-card-header">
+          <span class="tool-card-category">Financeiro</span>
+        </div>
+        <h3 class="tool-card-title">Calculadora de Lucro</h3>
+        <p class="tool-card-desc">Analise custos, preços de venda e lucro.</p>
+        <div class="tool-card-footer">
+          <a href="lucro.html" class="tool-card-btn">Calcular agora &rarr;</a>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <p style="margin-top:30px;">
+    <a href="{{ROOT_PREFIX}}index.html">Voltar para a página inicial</a>
+  </p>
+</section>

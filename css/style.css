@@ -3107,3 +3107,38 @@ main.container {
   opacity: 0.65;
   cursor: wait;
 }
+
+
+/* Calculadora de Preço de Serviço: alinhamento dos botões. */
+.preco-servico-actions {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  gap: 12px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.preco-servico-actions > .tool-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  height: 44px;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+  .preco-servico-actions {
+    flex-direction: row;
+    align-items: stretch;
+  }
+
+  .preco-servico-actions > .tool-btn {
+    flex: 1 1 140px;
+    width: auto;
+  }
+}

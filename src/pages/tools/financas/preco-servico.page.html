@@ -1,0 +1,111 @@
+---
+title: Calculadora de Preço de Serviço Online Grátis | Calculadora Master
+description: Calcule o preço ideal para seus serviços considerando materiais, mão de obra, deslocamento, outras despesas e margem de lucro desejada.
+keywords: calculadora de preço de serviço, precificação de serviços, preço de mão de obra, orçamento de serviço, margem de lucro, MEI
+canonical: https://www.calculadoramaster.com/tools/financas/preco-servico.html
+layout: tool
+pageScripts: <script type="module" src="{{ROOT_PREFIX}}js/tools/preco-servico.js"></script>
+---
+  <h1>Calculadora de Preço de Serviço</h1>
+  <p>Descubra quanto cobrar pelo seu serviço considerando os custos e a margem de lucro que você deseja alcançar.</p>
+
+  <div class="card" style="margin:20px 0;">
+    <h2>Informe os custos do serviço</h2>
+
+    <form id="formPrecoServico">
+      <label for="materiais">Materiais e insumos (R$):</label><br>
+      <input type="text" id="materiais" name="materiais" inputmode="numeric" autocomplete="off" data-money-input placeholder="0,00">
+      <br><br>
+
+      <label for="maoDeObra">Mão de obra (R$):</label><br>
+      <input type="text" id="maoDeObra" name="maoDeObra" inputmode="numeric" autocomplete="off" data-money-input placeholder="0,00">
+      <br><br>
+
+      <label for="deslocamento">Deslocamento e transporte (R$):</label><br>
+      <input type="text" id="deslocamento" name="deslocamento" inputmode="numeric" autocomplete="off" data-money-input placeholder="0,00">
+      <br><br>
+
+      <label for="outrasDespesas">Outras despesas (R$):</label><br>
+      <input type="text" id="outrasDespesas" name="outrasDespesas" inputmode="numeric" autocomplete="off" data-money-input placeholder="0,00">
+      <br><br>
+
+      <label for="margemDesejada">Margem de lucro desejada (%):</label><br>
+      <input type="number" id="margemDesejada" name="margemDesejada" min="0" max="99.99" step="0.01" placeholder="Ex.: 30" required>
+      <p>Informe a margem como percentual do preço final. Exemplo: 30 significa 30%.</p>
+
+      <div class="tool-actions preco-servico-actions">
+        <button type="submit" class="tool-btn tool-btn-primary">Calcular preço</button>
+        <button type="button" id="limparPrecoServico" class="tool-btn tool-btn-secondary">Limpar</button>
+      </div>
+    </form>
+
+    <p id="erroPrecoServico" role="alert" aria-live="assertive" hidden></p>
+
+    <section id="resultadoPrecoServico" aria-live="polite" hidden>
+      <h2 style="margin-top:20px;">Resultado do orçamento</h2>
+
+      <p>Custo total: <strong id="custoTotalResultado"></strong></p>
+      <p>Preço sugerido para cobrar: <strong id="precoSugeridoResultado"></strong></p>
+      <p>Lucro estimado: <strong id="lucroEstimadoResultado"></strong></p>
+      <p>Margem de lucro efetiva: <strong id="margemEfetivaResultado"></strong></p>
+      <p>Markup sobre o custo: <strong id="markupResultado"></strong></p>
+
+      <div class="tool-actions">
+        <button type="button" id="copiarPrecoServico" class="tool-btn tool-btn-secondary" hidden>Copiar resultado</button>
+      </div>
+    </section>
+
+    <p id="statusPrecoServico" class="result-action-status" role="status" aria-live="polite"></p>
+  </div>
+
+  <section class="content">
+    <h2>Como calcular o preço de um serviço?</h2>
+
+    <p>Primeiro, some os gastos com materiais, mão de obra, deslocamento e outras despesas. Depois, informe a margem de lucro desejada para calcular o preço sugerido.</p>
+
+    <h3>Fórmula do preço de serviço</h3>
+    <p><strong>Preço sugerido = Custo total ÷ (1 − Margem desejada ÷ 100)</strong></p>
+
+    <p>Por exemplo, se o custo total for R$ 400,00 e a margem desejada for 25%, o preço sugerido será aproximadamente R$ 533,33. O lucro estimado será R$ 133,33.</p>
+
+    <p>A margem é calculada sobre o preço final, enquanto o markup compara o lucro com o custo. São indicadores diferentes.</p>
+
+    <h2>Para quem esta calculadora é útil?</h2>
+    <ul>
+      <li>Pedreiros, pintores e profissionais da construção.</li>
+      <li>Eletricistas, encanadores e técnicos autônomos.</li>
+      <li>Prestadores de serviços e profissionais MEI.</li>
+      <li>Pequenos negócios que precisam montar orçamentos.</li>
+    </ul>
+
+    <section class="related-tools">
+      <h2>Você também pode precisar</h2>
+      <div class="related-tools-grid">
+        <article class="tool-card">
+          <div class="tool-card-header">
+            <span class="tool-card-category">Financeiro</span>
+          </div>
+          <h3 class="tool-card-title">Calculadora de Lucro</h3>
+          <p class="tool-card-desc">Analise custos, preço de venda e margem de lucro.</p>
+          <div class="tool-card-footer">
+            <a href="lucro.html" class="tool-card-btn">Calcular agora &rarr;</a>
+          </div>
+        </article>
+
+        <article class="tool-card">
+          <div class="tool-card-header">
+            <span class="tool-card-category">Financeiro</span>
+          </div>
+          <h3 class="tool-card-title">Calculadora de Porcentagem</h3>
+          <p class="tool-card-desc">Calcule percentuais, aumentos e reduções.</p>
+          <div class="tool-card-footer">
+            <a href="porcentagem.html" class="tool-card-btn">Calcular agora &rarr;</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <p style="margin-top:30px;">
+      👉 <a href="{{ROOT_PREFIX}}index.html">Voltar para a página inicial</a>
+    </p>
+  </section>

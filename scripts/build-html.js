@@ -89,6 +89,10 @@ const FINANCEIRO_LOTE2_PAGES = [
   {
     sourceFile: path.join(PAGES_DIR, 'tools', 'financas', 'dividir-conta.page.html'),
     relativeOutputPath: 'tools/financas/dividir-conta.html'
+  },
+  {
+    sourceFile: path.join(PAGES_DIR, 'tools', 'financas', 'preco-servico.page.html'),
+    relativeOutputPath: 'tools/financas/preco-servico.html'
   }
 ];
 
@@ -138,12 +142,22 @@ const UTILIDADES_PAGES = [
   }
 ];
 
-const TOOL_PAGES = [
+const LEGACY_TOOL_PAGES = [
   ...FINANCEIRO_PAGES,
   ...SAUDE_PAGES,
   ...TRABALHISTA_PAGES,
-  ...UTILIDADES_PAGES,
-  ...FACTORY_PAGES
+  ...UTILIDADES_PAGES
+];
+
+const LEGACY_TOOL_OUTPUT_PATHS = new Set(
+  LEGACY_TOOL_PAGES.map(page => page.relativeOutputPath)
+);
+
+const TOOL_PAGES = [
+  ...LEGACY_TOOL_PAGES,
+  ...FACTORY_PAGES.filter(
+    page => !LEGACY_TOOL_OUTPUT_PATHS.has(page.relativeOutputPath)
+  )
 ];
 
 const HOME_PAGE = {
@@ -319,6 +333,7 @@ const FINANCEIRO_ASSETS = [
   { src: 'js/tools/financiamento-carro.js', dest: 'js/tools/financiamento-carro.js' },
   { src: 'js/tools/financiamento-imovel.js', dest: 'js/tools/financiamento-imovel.js' },
   { src: 'js/tools/dividir-conta.js', dest: 'js/tools/dividir-conta.js' },
+  { src: 'js/tools/preco-servico.js', dest: 'js/tools/preco-servico.js' },
   { src: 'js/core/currency.js', dest: 'js/core/currency.js' },
   { src: 'js/core/pdf-export.js', dest: 'js/core/pdf-export.js' },
   { src: 'js/core/result-actions.js', dest: 'js/core/result-actions.js' },
@@ -343,13 +358,31 @@ const UTILIDADES_ASSETS = [
   { src: 'js/tools/qr-code.js', dest: 'js/tools/qr-code.js' }
 ];
 
-const TOOL_ASSETS = [
+const TOOL_ASSET_ENTRIES = [
   ...FINANCEIRO_ASSETS,
   ...SAUDE_ASSETS,
   ...TRABALHISTA_ASSETS,
   ...UTILIDADES_ASSETS,
   ...FACTORY_ASSETS
 ];
+
+const TOOL_ASSETS_BY_DEST = new Map();
+
+for (const asset of TOOL_ASSET_ENTRIES) {
+  const existing = TOOL_ASSETS_BY_DEST.get(asset.dest);
+
+  if (existing && existing.src !== asset.src) {
+    throw new Error(
+      `Assets diferentes apontam para o mesmo destino: ${asset.dest}`
+    );
+  }
+
+  if (!existing) {
+    TOOL_ASSETS_BY_DEST.set(asset.dest, asset);
+  }
+}
+
+const TOOL_ASSETS = [...TOOL_ASSETS_BY_DEST.values()];
 
 const SITE_SPECIFIC_ASSETS = [
   { src: 'logo/banner.webp', dest: 'logo/banner.webp' },

@@ -358,8 +358,8 @@ test('14. isolamento entre IDs diferentes ao favoritar e desfavoritar', () => {
   }
 });
 
-test('15. exatamente 18 IDs reconhecidos no catálogo oficial', () => {
-  assert.equal(VALID_TOOL_IDS.size, 18, 'Catálogo deve conter exatamente 18 IDs de ferramentas');
+test('15. exatamente 20 IDs reconhecidos no catálogo oficial', () => {
+  assert.equal(VALID_TOOL_IDS.size, 20, 'Catálogo deve conter exatamente 20 IDs de ferramentas');
   const expected = [
     'horas-extras',
     'financiamento-carro',
@@ -378,7 +378,9 @@ test('15. exatamente 18 IDs reconhecidos no catálogo oficial', () => {
     'whatsapp',
     'emprestimo',
     'amortizacao',
-    'regra-de-tres'
+    'regra-de-tres',
+    'preco-servico',
+    'valor-hora'
   ];
   for (const id of expected) {
     assert.ok(VALID_TOOL_IDS.has(id), `ID "${id}" deve estar presente no conjunto de IDs válidos`);
@@ -699,5 +701,34 @@ test('24. regressão: favorito de Regra de Três funciona de ponta a ponta (clic
     });
   } finally {
     env.restore();
+  }
+});
+
+
+test('preco-servico pode ser adicionado e removido dos favoritos', () => {
+  const estavaFavorito = isFavorite('preco-servico');
+
+  assert.equal(addFavorite('preco-servico'), true);
+  assert.equal(isFavorite('preco-servico'), true);
+  assert.equal(removeFavorite('preco-servico'), true);
+  assert.equal(isFavorite('preco-servico'), false);
+
+  if (estavaFavorito) {
+    assert.equal(addFavorite('preco-servico'), true);
+    assert.equal(isFavorite('preco-servico'), true);
+  }
+});
+
+test('valor-hora pode ser adicionado e removido dos favoritos', () => {
+  const estavaFavorito = isFavorite('valor-hora');
+
+  assert.equal(addFavorite('valor-hora'), true);
+  assert.equal(isFavorite('valor-hora'), true);
+  assert.equal(removeFavorite('valor-hora'), true);
+  assert.equal(isFavorite('valor-hora'), false);
+
+  if (estavaFavorito) {
+    assert.equal(addFavorite('valor-hora'), true);
+    assert.equal(isFavorite('valor-hora'), true);
   }
 });

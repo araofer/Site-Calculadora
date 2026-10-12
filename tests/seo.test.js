@@ -246,7 +246,7 @@ test('SEO Helper - getPageJsonLd retorna null para páginas noindex, login, cada
 // 2. TESTES DE INTEGRAÇÃO COM AS 15 CALCULADORAS E SSG
 // ----------------------------------------------------
 
-test('SEO SSG - Exatamente as 18 calculadoras geradas contêm JSON-LD válido no HTML', () => {
+test('SEO SSG - Exatamente as 20 calculadoras geradas contêm JSON-LD válido no HTML', () => {
   // Compila todas as páginas do site no dist-pilot
   buildPages(SITE_PAGES, { outputDir: DEFAULT_OUTPUT_DIR, assets: SITE_ASSETS });
 
@@ -318,7 +318,7 @@ test('SEO SSG - Exatamente as 18 calculadoras geradas contêm JSON-LD válido no
     toolSchemaCount++;
   }
 
-  assert.equal(toolSchemaCount, 18, 'Exatamente 18 calculadoras devem receber o schema WebApplication');
+  assert.equal(toolSchemaCount, 20, 'Exatamente 20 calculadoras devem receber o schema WebApplication');
 });
 
 test('SEO SSG - Home, Categorias e Institucionais recebem schemas adequados', () => {
@@ -450,7 +450,7 @@ test('SEO SSG - Páginas noindex não recebem JSON-LD e preservam meta robots', 
   }
 });
 
-test('SEO SSG - Build produz exatamente 51 páginas e 68 assets', () => {
-  assert.equal(SITE_PAGES.length, 51, 'SITE_PAGES deve ter 51 páginas');
-  assert.equal(SITE_ASSETS.length, 68, 'SITE_ASSETS deve ter 68 assets');
+test('SEO SSG - Build produz exatamente 53 páginas e 70 assets', () => {
+  assert.equal(SITE_PAGES.length, 53, 'SITE_PAGES deve ter 53 páginas');
+  assert.equal(SITE_ASSETS.length, 70, 'SITE_ASSETS deve ter 70 assets');
 });

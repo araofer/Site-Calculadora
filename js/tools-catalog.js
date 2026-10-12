@@ -263,6 +263,47 @@ const TOOLS_CATALOG = [
       "status": "published"
     },
     {
+      "id": "preco-servico",
+      "slug": "preco-servico",
+      "nome": "Calculadora de Preço de Serviço",
+      "name": "Calculadora de Preço de Serviço",
+      "categoria": "Financeiro",
+      "category": "Financeiro",
+      "categorySlug": "financas",
+      "descricao": "Calcule quanto cobrar por um serviço considerando materiais, mão de obra, deslocamento, despesas e margem de lucro.",
+      "description": "Calcule quanto cobrar por um serviço considerando materiais, mão de obra, deslocamento, despesas e margem de lucro.",
+      "url": "tools/financas/preco-servico.html",
+      "termos": [
+        "calculadora de preço de serviço",
+        "precificação de serviços",
+        "orçamento de serviço",
+        "mão de obra",
+        "margem de lucro",
+        "MEI",
+        "pedreiro",
+        "prestador de serviço"
+      ],
+      "keywords": [
+        "calculadora de preço de serviço",
+        "precificação de serviços",
+        "orçamento de serviço",
+        "mão de obra",
+        "margem de lucro",
+        "MEI",
+        "pedreiro",
+        "prestador de serviço"
+      ],
+      "destaque": false,
+      "featured": false,
+      "related": [
+        "lucro",
+        "porcentagem",
+        "desconto",
+        "juros"
+      ],
+      "status": "published"
+    },
+    {
       "id": "porcentagem",
       "slug": "porcentagem",
       "nome": "Calculadora de Porcentagem",
@@ -708,6 +749,36 @@ const TOOLS_CATALOG = [
         "desconto",
         "juros"
       ],
+      "status": "published"
+    },
+    {
+      "id": "valor-hora",
+      "slug": "valor-hora",
+      "nome": "Calculadora de Valor da Hora",
+      "name": "Calculadora de Valor da Hora",
+      "categoria": "Financeiro",
+      "category": "Financeiro",
+      "categorySlug": "financas",
+      "descricao": "Descubra quanto cobrar por hora de trabalho considerando sua renda desejada, despesas profissionais, reserva financeira e horas faturáveis.",
+      "description": "Descubra quanto cobrar por hora de trabalho considerando sua renda desejada, despesas profissionais, reserva financeira e horas faturáveis.",
+      "url": "tools/financas/valor-hora.html",
+      "termos": [
+        "valor da hora",
+        "preço por hora",
+        "freelancer",
+        "autônomo",
+        "prestador de serviços"
+      ],
+      "keywords": [
+        "valor da hora",
+        "preço por hora",
+        "freelancer",
+        "autônomo",
+        "prestador de serviços"
+      ],
+      "destaque": false,
+      "featured": false,
+      "related": [],
       "status": "published"
     }
   ];

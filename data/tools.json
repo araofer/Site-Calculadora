@@ -166,6 +166,46 @@
     "status": "published"
   },
   {
+    "id": "preco-servico",
+    "slug": "preco-servico",
+    "name": "Calculadora de Preço de Serviço",
+    "category": "Financeiro",
+    "categorySlug": "financas",
+    "description": "Calcule quanto cobrar por um serviço considerando materiais, mão de obra, deslocamento, despesas e margem de lucro.",
+    "url": "/tools/financas/preco-servico.html",
+    "keywords": [
+      "calculadora de preço de serviço",
+      "precificação de serviços",
+      "orçamento de serviço",
+      "mão de obra",
+      "margem de lucro",
+      "MEI",
+      "pedreiro",
+      "prestador de serviço"
+    ],
+    "related": [
+      "lucro",
+      "porcentagem",
+      "desconto",
+      "juros"
+    ],
+    "featured": false,
+    "status": "published",
+    "audience": "universal",
+    "formulaStatus": "verified",
+    "implementation": "factory",
+    "features": {
+      "chart": false,
+      "table": false,
+      "pdf": false,
+      "copy": true,
+      "share": true,
+      "print": true,
+      "favorite": true,
+      "article": false
+    }
+  },
+  {
     "id": "porcentagem",
     "slug": "porcentagem",
     "name": "Calculadora de Porcentagem",
@@ -498,5 +538,36 @@
       "juros"
     ],
     "article": "/blog/artigos/como-fazer-regra-de-tres-simples.html"
+  },
+  {
+    "id": "valor-hora",
+    "slug": "valor-hora",
+    "name": "Calculadora de Valor da Hora",
+    "category": "Financeiro",
+    "categorySlug": "financas",
+    "audience": "brasil",
+    "description": "Descubra quanto cobrar por hora de trabalho considerando sua renda desejada, despesas profissionais, reserva financeira e horas faturáveis.",
+    "url": "/tools/financas/valor-hora.html",
+    "status": "published",
+    "formulaStatus": "verified",
+    "implementation": "factory",
+    "features": {
+      "chart": false,
+      "table": false,
+      "pdf": false,
+      "copy": true,
+      "share": true,
+      "print": true,
+      "favorite": true,
+      "article": false
+    },
+    "keywords": [
+      "valor da hora",
+      "preço por hora",
+      "freelancer",
+      "autônomo",
+      "prestador de serviços"
+    ],
+    "related": []
   }
 ]
