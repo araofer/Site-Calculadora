@@ -358,8 +358,8 @@ test('14. isolamento entre IDs diferentes ao favoritar e desfavoritar', () => {
   }
 });
 
-test('15. exatamente 21 IDs reconhecidos no catálogo oficial', () => {
-  assert.equal(VALID_TOOL_IDS.size, 21, 'Catálogo deve conter exatamente 21 IDs de ferramentas');
+test('15. exatamente 22 IDs reconhecidos no catálogo oficial', () => {
+  assert.equal(VALID_TOOL_IDS.size, 22, 'Catálogo deve conter exatamente 22 IDs de ferramentas');
   const expected = [
     'horas-extras',
     'financiamento-carro',
@@ -381,7 +381,8 @@ test('15. exatamente 21 IDs reconhecidos no catálogo oficial', () => {
     'regra-de-tres',
     'preco-servico',
     'valor-hora',
-    'margem-markup'
+    'margem-markup',
+    'pisos-revestimentos'
   ];
   for (const id of expected) {
     assert.ok(VALID_TOOL_IDS.has(id), `ID "${id}" deve estar presente no conjunto de IDs válidos`);
@@ -745,5 +746,19 @@ test('margem-markup pode ser adicionado e removido dos favoritos', () => {
   if (estavaFavorito) {
     assert.equal(addFavorite('margem-markup'), true);
     assert.equal(isFavorite('margem-markup'), true);
+  }
+});
+
+test('pisos-revestimentos pode ser adicionado e removido dos favoritos', () => {
+  const estavaFavorito = isFavorite('pisos-revestimentos');
+
+  assert.equal(addFavorite('pisos-revestimentos'), true);
+  assert.equal(isFavorite('pisos-revestimentos'), true);
+  assert.equal(removeFavorite('pisos-revestimentos'), true);
+  assert.equal(isFavorite('pisos-revestimentos'), false);
+
+  if (estavaFavorito) {
+    assert.equal(addFavorite('pisos-revestimentos'), true);
+    assert.equal(isFavorite('pisos-revestimentos'), true);
   }
 });

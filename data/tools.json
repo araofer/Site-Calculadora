@@ -601,5 +601,37 @@
       "precificação"
     ],
     "related": []
+  },
+  {
+    "id": "pisos-revestimentos",
+    "slug": "pisos-revestimentos",
+    "name": "Calculadora de Pisos e Revestimentos",
+    "category": "Utilidades",
+    "categorySlug": "utilidades",
+    "audience": "brasil",
+    "description": "Calcule a área a revestir, estime a quantidade de peças e caixas de pisos ou revestimentos e o custo dos materiais.",
+    "url": "/tools/utilidades/pisos-revestimentos.html",
+    "status": "draft",
+    "formulaStatus": "draft",
+    "implementation": "factory",
+    "features": {
+      "chart": false,
+      "table": false,
+      "pdf": false,
+      "copy": true,
+      "share": true,
+      "print": true,
+      "favorite": true,
+      "article": false
+    },
+    "keywords": [
+      "calculadora de pisos",
+      "calculadora de revestimentos",
+      "quantidade de piso",
+      "caixas de piso",
+      "metragem de revestimento"
+    ],
+    "related": [],
+    "shortName": "Pisos e Revestimentos"
   }
 ]

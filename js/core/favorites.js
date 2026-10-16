@@ -30,7 +30,8 @@ export const VALID_TOOL_IDS = new Set([
   'regra-de-tres',
   'preco-servico',
   'valor-hora',
-  'margem-markup'
+  'margem-markup',
+  'pisos-revestimentos'
 ]);
 
 let memoryFavorites = null;

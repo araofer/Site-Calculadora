@@ -1,0 +1,113 @@
+---
+title: Calculadora de Pisos e Revestimentos Online Grátis | Calculadora Master
+description: Calcule a área a revestir, a quantidade de peças e caixas, o desperdício e o custo estimado de pisos e revestimentos.
+keywords: calculadora de pisos, calculadora de revestimentos, quantidade de piso, caixas de piso, metragem de revestimento
+canonical: https://www.calculadoramaster.com/tools/utilidades/pisos-revestimentos.html
+layout: tool
+pageScripts: <script type="module" src="{{ROOT_PREFIX}}js/tools/pisos-revestimentos.js"></script>
+---
+
+<div class="tool-draft-badge" style="background:#fff3cd;color:#856404;padding:8px 12px;border-radius:4px;margin-bottom:16px;font-size:.875rem;border:1px solid #ffeeba;">
+  <strong>Em desenvolvimento:</strong> ferramenta em fase de homologação.
+</div>
+
+<h1>Calculadora de Pisos e Revestimentos</h1>
+<p>Estime a quantidade de peças e caixas para revestir pisos ou paredes, incluindo desperdício e custo dos materiais.</p>
+
+<div class="card" style="margin:20px 0;">
+  <form id="formPisosRevestimentos">
+    <div class="form-group">
+      <label for="superficie">Tipo de superfície:</label>
+      <select id="superficie" name="superficie">
+        <option value="piso">Piso</option>
+        <option value="parede">Parede</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label id="labelMedidaPrincipal" for="medidaPrincipal">Comprimento do piso (m):</label>
+      <input type="number" id="medidaPrincipal" name="medidaPrincipal"
+        min="0.01" step="0.01" inputmode="decimal" placeholder="4,00" required>
+    </div>
+
+    <div class="form-group">
+      <label for="largura">Largura da superfície (m):</label>
+      <input type="number" id="largura" name="largura"
+        min="0.01" step="0.01" inputmode="decimal" placeholder="3,00" required>
+    </div>
+
+    <div class="form-group">
+      <label for="comprimentoPeca">Comprimento da peça (cm):</label>
+      <input type="number" id="comprimentoPeca" name="comprimentoPeca"
+        min="0.1" step="0.1" inputmode="decimal" placeholder="60" required>
+    </div>
+
+    <div class="form-group">
+      <label for="larguraPeca">Largura da peça (cm):</label>
+      <input type="number" id="larguraPeca" name="larguraPeca"
+        min="0.1" step="0.1" inputmode="decimal" placeholder="60" required>
+    </div>
+
+    <div class="form-group">
+      <label for="desperdicio">Desperdício estimado (%):</label>
+      <input type="number" id="desperdicio" name="desperdicio"
+        min="0" max="100" step="0.5" value="10" required>
+      <p>O padrão é 10%. Ajuste conforme os cortes e o tipo de instalação.</p>
+    </div>
+
+    <div class="form-group">
+      <label for="rendimentoCaixa">Rendimento por caixa (m²):</label>
+      <input type="number" id="rendimentoCaixa" name="rendimentoCaixa"
+        min="0.01" step="0.01" inputmode="decimal" placeholder="2,00" required>
+    </div>
+
+    <div class="form-group">
+      <label for="precoCaixa">Preço por caixa (R$) — opcional:</label>
+      <input type="number" id="precoCaixa" name="precoCaixa"
+        min="0.01" step="0.01" inputmode="decimal" placeholder="80,00">
+    </div>
+
+    <div class="tool-actions">
+      <button type="submit" class="tool-btn tool-btn-primary">Calcular materiais</button>
+      <button type="button" id="limparPisosRevestimentos" class="tool-btn tool-btn-secondary">Limpar</button>
+    </div>
+  </form>
+
+  <p id="erroPisosRevestimentos" role="alert" aria-live="assertive" hidden></p>
+
+  <section id="resultadoPisosRevestimentos" aria-live="polite" hidden>
+    <h2>Resultado estimado</h2>
+    <div class="card" style="margin:16px 0;padding:16px;">
+      <p>Área original: <strong id="saidaArea"></strong></p>
+      <p>Área com desperdício: <strong id="saidaAreaComDesperdicio"></strong></p>
+      <p>Área de cada peça: <strong id="saidaAreaPeca"></strong></p>
+      <p>Quantidade estimada de peças: <strong id="saidaQuantidadePecas"></strong></p>
+      <p>Quantidade de caixas: <strong id="saidaQuantidadeCaixas"></strong></p>
+      <p id="linhaPrecoCaixa" hidden>Preço por caixa: <strong id="saidaPrecoCaixa"></strong></p>
+      <p id="linhaCusto" hidden>Custo total estimado: <strong id="saidaCusto"></strong></p>
+    </div>
+
+    <p>Esta é uma estimativa. Cortes, paginação, recortes, lotes e condições de instalação podem alterar a quantidade real necessária.</p>
+
+    <div class="tool-actions result-actions">
+      <button type="button" id="copiarPisosRevestimentos" class="tool-btn tool-btn-secondary" hidden>Copiar resultado</button>
+      <button type="button" id="compartilharPisosRevestimentos" class="tool-btn tool-btn-secondary" hidden>Compartilhar</button>
+      <button type="button" id="imprimirPisosRevestimentos" class="tool-btn tool-btn-secondary" hidden>Imprimir</button>
+    </div>
+  </section>
+
+  <p id="statusPisosRevestimentos" class="result-action-status" role="status" aria-live="polite"></p>
+</div>
+
+<section class="content">
+  <h2>Como calcular pisos e revestimentos?</h2>
+  <p>Multiplique o comprimento pela largura da superfície para encontrar a área em metros quadrados. Para paredes, use a altura e a largura.</p>
+
+  <h3>Como funciona o desperdício?</h3>
+  <p>O percentual adicional ajuda a considerar cortes e perdas durante a instalação. O padrão desta calculadora é 10%, mas a necessidade pode variar conforme o ambiente e a paginação.</p>
+
+  <h3>Como calcular a quantidade de caixas?</h3>
+  <p>Divida a área acrescida do desperdício pelo rendimento informado na embalagem. A calculadora arredonda a quantidade de caixas para cima, pois não é possível comprar uma fração de caixa.</p>
+
+  <p>Confira sempre o rendimento real na embalagem e confirme as medidas do ambiente antes de comprar os materiais.</p>
+</section>
