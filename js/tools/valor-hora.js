@@ -1,3 +1,5 @@
+import { createResultActions } from "../core/result-actions.js";
+
 /**
  * Calculadora de Valor da Hora — Calculadora Master.
  * Funções puras separadas da interface.
@@ -190,6 +192,8 @@ export function setupTool() {
   const painelResultado = document.getElementById('resultadoValorHora');
   const status = document.getElementById('statusValorHora');
   const botaoCopiar = document.getElementById('copiarValorHora');
+  const botaoCompartilhar = document.getElementById('compartilharValorHora');
+  const botaoImprimir = document.getElementById('imprimirValorHora');
   const botaoLimpar = document.getElementById('limparValorHora');
 
   const camposMonetarios = [
@@ -225,7 +229,46 @@ export function setupTool() {
     });
   }
 
-  let ultimoResumo = '';
+  let ultimoResultado = null;
+
+  const acoes = createResultActions({
+    title: "Calculadora de Valor da Hora — Calculadora Master",
+    statusElement: status,
+    getSections: () => {
+      if (!ultimoResultado) return [];
+
+      return [
+        {
+          label: "Renda mensal desejada",
+          value: formatarMoeda(ultimoResultado.rendaDesejada)
+        },
+        {
+          label: "Despesas profissionais mensais",
+          value: formatarMoeda(ultimoResultado.despesasMensais)
+        },
+        {
+          label: "Reserva percentual",
+          value: `${ultimoResultado.reservaPercentual}%`
+        },
+        {
+          label: "Reserva mensal estimada",
+          value: formatarMoeda(ultimoResultado.reservaMensal)
+        },
+        {
+          label: "Faturamento mensal necessário",
+          value: formatarMoeda(ultimoResultado.receitaMensalNecessaria)
+        },
+        {
+          label: "Horas faturáveis por mês",
+          value: ultimoResultado.horasFaturaveis
+        },
+        {
+          label: "Valor recomendado por hora",
+          value: formatarMoeda(ultimoResultado.valorHora)
+        }
+      ];
+    }
+  });
 
   form.addEventListener('submit', (evento) => {
     evento.preventDefault();
@@ -247,8 +290,10 @@ export function setupTool() {
 
       if (painelResultado) painelResultado.hidden = true;
       if (botaoCopiar) botaoCopiar.hidden = true;
+      if (botaoCompartilhar) botaoCompartilhar.hidden = true;
+      if (botaoImprimir) botaoImprimir.hidden = true;
 
-      ultimoResumo = '';
+      ultimoResultado = null;
       return;
     }
 
@@ -270,10 +315,12 @@ export function setupTool() {
       saidaReserva.textContent = formatarMoeda(resultado.reservaMensal);
     }
 
-    ultimoResumo = formatResult(resultado);
+    ultimoResultado = resultado;
 
     if (painelResultado) painelResultado.hidden = false;
     if (botaoCopiar) botaoCopiar.hidden = false;
+    if (botaoCompartilhar) botaoCompartilhar.hidden = false;
+    if (botaoImprimir) botaoImprimir.hidden = false;
   });
 
   if (botaoLimpar) {
@@ -287,33 +334,32 @@ export function setupTool() {
 
       if (painelResultado) painelResultado.hidden = true;
       if (botaoCopiar) botaoCopiar.hidden = true;
+      if (botaoCompartilhar) botaoCompartilhar.hidden = true;
+      if (botaoImprimir) botaoImprimir.hidden = true;
       if (status) status.textContent = '';
 
-      ultimoResumo = '';
+      ultimoResultado = null;
     });
   }
 
   if (botaoCopiar) {
     botaoCopiar.addEventListener('click', async () => {
-      if (!ultimoResumo) return;
+      if (!ultimoResultado) return;
+      await acoes.copy();
+    });
+  }
 
-      try {
-        if (
-          typeof navigator === 'undefined' ||
-          !navigator.clipboard?.writeText
-        ) {
-          throw new Error('Área de transferência indisponível.');
-        }
+  if (botaoCompartilhar) {
+    botaoCompartilhar.addEventListener('click', async () => {
+      if (!ultimoResultado) return;
+      await acoes.share();
+    });
+  }
 
-        await navigator.clipboard.writeText(ultimoResumo);
-
-        if (status) status.textContent = 'Resultado copiado com sucesso.';
-      } catch {
-        if (status) {
-          status.textContent =
-            'Não foi possível copiar automaticamente. Selecione e copie o resultado.';
-        }
-      }
+  if (botaoImprimir) {
+    botaoImprimir.addEventListener('click', () => {
+      if (!ultimoResultado) return;
+      acoes.print();
     });
   }
 }
