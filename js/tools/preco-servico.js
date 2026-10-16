@@ -1,3 +1,5 @@
+import { createResultActions } from "../core/result-actions.js";
+
 function arredondar(valor) {
   return Math.round((valor + Number.EPSILON) * 100) / 100;
 }
@@ -133,6 +135,8 @@ export function setupCalculadoraPrecoServico() {
   const painelResultado = document.getElementById("resultadoPrecoServico");
   const status = document.getElementById("statusPrecoServico");
   const botaoCopiar = document.getElementById("copiarPrecoServico");
+  const botaoCompartilhar = document.getElementById("compartilharPrecoServico");
+  const botaoImprimir = document.getElementById("imprimirPrecoServico");
 
   const camposMonetarios = CAMPOS_CUSTO
     .map(({ campo }) => document.getElementById(campo))
@@ -228,7 +232,27 @@ export function setupCalculadoraPrecoServico() {
       maximumFractionDigits: 2
     })}%`;
 
-  let ultimoResumo = "";
+  let ultimoResultado = null;
+
+  const acoes = createResultActions({
+    title: "Calculadora de Preço de Serviço — Calculadora Master",
+    statusElement: status,
+    getSections: () => {
+      if (!ultimoResultado) return [];
+
+      return [
+        { label: "Materiais", value: formatarMoeda(ultimoResultado.custos.materiais) },
+        { label: "Mão de obra", value: formatarMoeda(ultimoResultado.custos.maoDeObra) },
+        { label: "Deslocamento", value: formatarMoeda(ultimoResultado.custos.deslocamento) },
+        { label: "Outras despesas", value: formatarMoeda(ultimoResultado.custos.outrasDespesas) },
+        { label: "Custo total", value: formatarMoeda(ultimoResultado.custoTotal) },
+        { label: "Preço sugerido", value: formatarMoeda(ultimoResultado.precoSugerido) },
+        { label: "Lucro estimado", value: formatarMoeda(ultimoResultado.lucroEstimado) },
+        { label: "Margem efetiva", value: formatarPercentual(ultimoResultado.margemEfetiva) },
+        { label: "Markup", value: formatarPercentual(ultimoResultado.markup) }
+      ];
+    }
+  });
 
   form.addEventListener("submit", (evento) => {
     evento.preventDefault();
@@ -248,7 +272,9 @@ export function setupCalculadoraPrecoServico() {
       erro.hidden = false;
       painelResultado.hidden = true;
       botaoCopiar.hidden = true;
-      ultimoResumo = "";
+      botaoCompartilhar.hidden = true;
+      botaoImprimir.hidden = true;
+      ultimoResultado = null;
       return;
     }
 
@@ -270,21 +296,12 @@ export function setupCalculadoraPrecoServico() {
     document.getElementById("markupResultado").textContent =
       formatarPercentual(resultado.markup);
 
-    ultimoResumo = [
-      "Calculadora de Preço de Serviço — Calculadora Master",
-      `Materiais: ${formatarMoeda(resultado.custos.materiais)}`,
-      `Mão de obra: ${formatarMoeda(resultado.custos.maoDeObra)}`,
-      `Deslocamento: ${formatarMoeda(resultado.custos.deslocamento)}`,
-      `Outras despesas: ${formatarMoeda(resultado.custos.outrasDespesas)}`,
-      `Custo total: ${formatarMoeda(resultado.custoTotal)}`,
-      `Preço sugerido: ${formatarMoeda(resultado.precoSugerido)}`,
-      `Lucro estimado: ${formatarMoeda(resultado.lucroEstimado)}`,
-      `Margem efetiva: ${formatarPercentual(resultado.margemEfetiva)}`,
-      `Markup: ${formatarPercentual(resultado.markup)}`
-    ].join("\n");
+    ultimoResultado = resultado;
 
     painelResultado.hidden = false;
     botaoCopiar.hidden = false;
+    botaoCompartilhar.hidden = false;
+    botaoImprimir.hidden = false;
   });
 
   document.getElementById("limparPrecoServico").addEventListener("click", () => {
@@ -293,27 +310,29 @@ export function setupCalculadoraPrecoServico() {
     erro.hidden = true;
     painelResultado.hidden = true;
     botaoCopiar.hidden = true;
+    botaoCompartilhar.hidden = true;
+    botaoImprimir.hidden = true;
     status.textContent = "";
-    ultimoResumo = "";
+    ultimoResultado = null;
   });
 
-  botaoCopiar.addEventListener("click", async () => {
-    if (!ultimoResumo) return;
+  if (botaoCopiar) {
+    botaoCopiar.addEventListener("click", async () => {
+      if (ultimoResultado) await acoes.copy();
+    });
+  }
 
-    if (!navigator.clipboard?.writeText) {
-      status.textContent =
-        "Não foi possível copiar automaticamente neste navegador.";
-      return;
-    }
+  if (botaoCompartilhar) {
+    botaoCompartilhar.addEventListener("click", async () => {
+      if (ultimoResultado) await acoes.share();
+    });
+  }
 
-    try {
-      await navigator.clipboard.writeText(ultimoResumo);
-      status.textContent = "Resumo do orçamento copiado.";
-    } catch {
-      status.textContent =
-        "Não foi possível copiar. Tente selecionar e copiar o resultado.";
-    }
-  });
+  if (botaoImprimir) {
+    botaoImprimir.addEventListener("click", () => {
+      if (ultimoResultado) acoes.print();
+    });
+  }
 }
 
 if (typeof document !== "undefined") {
