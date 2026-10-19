@@ -5,6 +5,8 @@ import {
   STORAGE_KEY,
   VALID_TOOL_IDS,
   getFavorites,
+  getStoredFavorites,
+  getFavoriteStorageStatus,
   isFavorite,
   addFavorite,
   removeFavorite,
@@ -358,8 +360,8 @@ test('14. isolamento entre IDs diferentes ao favoritar e desfavoritar', () => {
   }
 });
 
-test('15. exatamente 22 IDs reconhecidos no catálogo oficial', () => {
-  assert.equal(VALID_TOOL_IDS.size, 22, 'Catálogo deve conter exatamente 22 IDs de ferramentas');
+test('15. exatamente 27 IDs reconhecidos no catálogo oficial', () => {
+  assert.equal(VALID_TOOL_IDS.size, 27, 'Catálogo deve conter exatamente 27 IDs de ferramentas');
   const expected = [
     'horas-extras',
     'financiamento-carro',
@@ -382,7 +384,12 @@ test('15. exatamente 22 IDs reconhecidos no catálogo oficial', () => {
     'preco-servico',
     'valor-hora',
     'margem-markup',
-    'pisos-revestimentos'
+    'pisos-revestimentos',
+    'orcamento-domestico',
+    'conta-luz',
+    'consumo-agua',
+    'comparador-precos',
+    'custo-por-porcao'
   ];
   for (const id of expected) {
     assert.ok(VALID_TOOL_IDS.has(id), `ID "${id}" deve estar presente no conjunto de IDs válidos`);
@@ -760,5 +767,60 @@ test('pisos-revestimentos pode ser adicionado e removido dos favoritos', () => {
   if (estavaFavorito) {
     assert.equal(addFavorite('pisos-revestimentos'), true);
     assert.equal(isFavorite('pisos-revestimentos'), true);
+  }
+});
+
+test('a listagem pode ler IDs fora do catálogo sem apagar o dado original', () => {
+  const env = setupTestEnvironment({
+    [STORAGE_KEY]: JSON.stringify(['juros', 'ferramenta-antiga', 'juros'])
+  });
+  try {
+    assert.deepEqual(getStoredFavorites(), {
+      ids: ['juros', 'ferramenta-antiga', 'juros'],
+      valid: true,
+      readError: ''
+    });
+    assert.deepEqual(getFavorites(), ['juros']);
+    assert.deepEqual(JSON.parse(env.storage._getStore()[STORAGE_KEY]), ['juros', 'ferramenta-antiga', 'juros']);
+  } finally {
+    env.restore();
+  }
+});
+
+test('remover um ID antigo preserva os demais favoritos conhecidos e antigos', () => {
+  const env = setupTestEnvironment({
+    [STORAGE_KEY]: JSON.stringify(['juros', 'ferramenta-antiga', 'lucro'])
+  });
+  try {
+    assert.equal(removeFavorite('ferramenta-antiga'), true);
+    assert.deepEqual(JSON.parse(env.storage._getStore()[STORAGE_KEY]), ['juros', 'lucro']);
+    assert.deepEqual(getFavorites(), ['juros', 'lucro']);
+  } finally {
+    env.restore();
+  }
+});
+
+test('adicionar uma ferramenta atual preserva IDs antigos que ainda estão salvos', () => {
+  const env = setupTestEnvironment({
+    [STORAGE_KEY]: JSON.stringify(['ferramenta-antiga'])
+  });
+  try {
+    assert.equal(addFavorite('juros'), true);
+    assert.deepEqual(JSON.parse(env.storage._getStore()[STORAGE_KEY]), ['ferramenta-antiga', 'juros']);
+    assert.deepEqual(getFavorites(), ['juros']);
+  } finally {
+    env.restore();
+  }
+});
+
+test('falha de gravação fica disponível para a interface informar o usuário', () => {
+  const env = setupTestEnvironment();
+  try {
+    env.storage._setThrowOnSet(true);
+    assert.equal(addFavorite('juros'), true);
+    assert.match(getFavoriteStorageStatus().writeError, /Não foi possível salvar/);
+    assert.deepEqual(getFavorites(), ['juros']);
+  } finally {
+    env.restore();
   }
 });

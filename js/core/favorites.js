@@ -31,10 +31,27 @@ export const VALID_TOOL_IDS = new Set([
   'preco-servico',
   'valor-hora',
   'margem-markup',
+  'orcamento-domestico',
+  'conta-luz',
+  'consumo-agua',
+  'comparador-precos',
+  'custo-por-porcao',
   'pisos-revestimentos'
 ]);
 
 let memoryFavorites = null;
+let lastStorageReadError = '';
+let lastStorageWriteError = '';
+
+function dispatchFavoritesChange() {
+  try {
+    if (typeof window !== 'undefined' && typeof window.dispatchEvent === 'function' && typeof CustomEvent === 'function') {
+      window.dispatchEvent(new CustomEvent('calculadora:favoriteschange'));
+    }
+  } catch (_) {
+    // Atualizar os favoritos nunca depende de suporte a eventos customizados.
+  }
+}
 
 /**
  * Obtém com segurança a referência ao localStorage disponível no ambiente.
@@ -62,20 +79,69 @@ function getStorage() {
  * @returns {boolean} true se persistido no storage, false se apenas em memória
  */
 function persistFavorites(favoritesArray) {
-  memoryFavorites = new Set(favoritesArray);
+  memoryFavorites = new Set(favoritesArray.filter(id => typeof id === 'string' && VALID_TOOL_IDS.has(id)));
 
   const storage = getStorage();
   if (!storage) {
+    lastStorageWriteError = 'O armazenamento local não está disponível neste navegador.';
     return false;
   }
 
   try {
     storage.setItem(STORAGE_KEY, JSON.stringify(favoritesArray));
+    lastStorageWriteError = '';
     return true;
-  } catch (_) {
+  } catch (error) {
     // QuotaExceededError, SecurityError, etc.
+    lastStorageWriteError = error && error.message
+      ? 'Não foi possível salvar seus favoritos neste navegador.'
+      : 'Não foi possível salvar seus favoritos neste navegador.';
     return false;
   }
+}
+
+/**
+ * Lê os valores persistidos sem filtrar IDs que já não existam no catálogo.
+ * Assim a tela de favoritos pode explicar e permitir remover itens antigos.
+ * @returns {{ids: Array<unknown>, valid: boolean, readError: string}}
+ */
+export function getStoredFavorites() {
+  const storage = getStorage();
+  if (!storage) {
+    lastStorageReadError = 'O armazenamento local não está disponível neste navegador.';
+    return {
+      ids: memoryFavorites !== null ? Array.from(memoryFavorites) : [],
+      valid: true,
+      readError: lastStorageReadError
+    };
+  }
+
+  try {
+    const raw = storage.getItem(STORAGE_KEY);
+    lastStorageReadError = '';
+    if (raw === null || raw === undefined || raw === '') {
+      return { ids: [], valid: true, readError: '' };
+    }
+    const parsed = JSON.parse(raw);
+    if (!Array.isArray(parsed)) {
+      return { ids: [], valid: false, readError: 'Os dados salvos dos favoritos estão em um formato inesperado e foram preservados.' };
+    }
+    return { ids: parsed.slice(), valid: true, readError: '' };
+  } catch (_) {
+    lastStorageReadError = 'Não foi possível ler os favoritos salvos neste navegador.';
+    return {
+      ids: memoryFavorites !== null ? Array.from(memoryFavorites) : [],
+      valid: false,
+      readError: lastStorageReadError
+    };
+  }
+}
+
+export function getFavoriteStorageStatus() {
+  return {
+    readError: lastStorageReadError,
+    writeError: lastStorageWriteError
+  };
 }
 
 /**
@@ -151,13 +217,15 @@ export function addFavorite(toolId) {
   const id = toolId.trim();
   if (!VALID_TOOL_IDS.has(id)) return false;
 
-  const current = getFavorites();
+  const stored = getStoredFavorites();
+  const current = stored.valid ? stored.ids : getFavorites();
   if (current.includes(id)) {
     return true;
   }
 
   current.push(id);
   persistFavorites(current);
+  dispatchFavoritesChange();
   return true;
 }
 
@@ -168,18 +236,16 @@ export function addFavorite(toolId) {
  * @returns {boolean} true se removida ou inexistente, false se ID inválido
  */
 export function removeFavorite(toolId) {
-  if (typeof toolId !== 'string') return false;
+  if (typeof toolId !== 'string' || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/i.test(toolId.trim())) return false;
   const id = toolId.trim();
-  if (!VALID_TOOL_IDS.has(id)) return false;
-
-  const current = getFavorites();
-  const index = current.indexOf(id);
-  if (index === -1) {
+  const stored = getStoredFavorites();
+  const current = stored.valid ? stored.ids : getFavorites();
+  if (!current.includes(id)) {
     return true;
   }
 
-  current.splice(index, 1);
-  persistFavorites(current);
+  persistFavorites(current.filter(item => item !== id));
+  dispatchFavoritesChange();
   return true;
 }
 
@@ -316,6 +382,8 @@ export function initFavoriteButtons(root = (typeof document !== 'undefined' ? do
  */
 export function _resetMemoryForTesting() {
   memoryFavorites = null;
+  lastStorageReadError = '';
+  lastStorageWriteError = '';
 }
 
 // Auto-inicialização em ambiente de navegador

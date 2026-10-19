@@ -85,8 +85,8 @@ function resolveCategory(categoryInput, categories = null) {
     matemática: 'matematica',
     utilidade: 'utilidades',
     utilidades: 'utilidades',
-    conversor: 'conversores',
-    conversores: 'conversores'
+    conversor: 'utilidades',
+    conversores: 'utilidades'
   };
 
   if (legacyAliases[inputNorm] && cats[legacyAliases[inputNorm]]) {

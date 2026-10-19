@@ -426,6 +426,108 @@ input, textarea {
   border-radius: 8px;
 }
 
+/* Campos de calculadoras: limites consistentes em todos os tamanhos de tela. */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+  margin-bottom: 18px;
+}
+
+.form-group[hidden] {
+  display: none;
+}
+
+.form-group label {
+  display: block;
+  margin: 0;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea,
+.account-form-field select {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+.form-group p {
+  margin: 0;
+}
+
+.tool-calculator-card {
+  margin: 20px 0;
+}
+
+/* Cards de calculadora não devem herdar a tipografia dos cards de navegação. */
+.card.tool-calculator-card {
+  font-weight: 400;
+  text-align: left;
+}
+
+.card.tool-calculator-card > .tool-form-title {
+  font-weight: 600;
+  text-align: center;
+}
+
+.card.tool-calculator-card .form-group label {
+  font-weight: 600;
+  text-align: left;
+}
+
+.card.tool-calculator-card .form-group p {
+  font-weight: 400;
+  text-align: left;
+  padding: 0;
+}
+
+.card.tool-result-card {
+  width: 100%;
+  min-width: 0;
+  margin: 16px 0;
+  padding: 16px;
+  box-sizing: border-box;
+  overflow-wrap: anywhere;
+  font-weight: 400;
+  text-align: left;
+}
+
+.card.tool-result-card p {
+  font-weight: 400;
+  text-align: left;
+  padding: 0;
+}
+
+.tool-calculator-card > #descricaoResultadoMargemMarkup,
+.tool-calculator-card > .tool-result-note {
+  padding: 0;
+}
+
+#labelPrecoResultadoMargemMarkup {
+  font-weight: 400;
+}
+
+.card.tool-result-card strong {
+  font-weight: 700;
+}
+
+.tool-result-card p:last-child {
+  margin-bottom: 0;
+}
+
+.tool-result-title {
+  margin-top: 20px;
+}
+
+.tool-return-link {
+  margin-top: 30px;
+}
+
 /* BOTÕES */
 button {
   padding: 10px 20px;
@@ -2549,12 +2651,15 @@ main.container {
   .newsletter-section,
   .cookie-banner,
   .cookie-consent,
-  #cookie-consent-banner {
+  #cookie-consent-banner,
+  #cm-cookie-banner,
+  .cm-cookie-banner {
     display: none !important;
   }
 
   /* Conteúdo secundário, anúncios e ações na impressão */
   .related-tools,
+  .budget-explanatory-content,
   .ad,
   .ads,
   .adsbygoogle,
@@ -2567,6 +2672,11 @@ main.container {
 
   /* Controles de ação que não fazem parte do resultado impresso */
   .tool-actions:not(.result-actions),
+  #formValorHora,
+  #formPrecoServico,
+  #formMargemMarkup,
+  #formPisosRevestimentos,
+  #formOrcamentoDomestico,
   button {
     display: none !important;
   }
@@ -2616,9 +2726,316 @@ main.container {
   }
 }
 
+/* Linhas dinâmicas do orçamento doméstico. */
+.budget-expense-row {
+  display: grid;
+  grid-template-columns: minmax(150px, 1fr) minmax(180px, 1.4fr) minmax(130px, 0.8fr) auto;
+  align-items: end;
+  gap: 12px;
+  margin: 0 0 14px;
+  padding: 14px;
+  border: 1px solid #dbe3ea;
+  border-radius: 10px;
+  background: #fff;
+}
+
+.budget-expense-row .form-group {
+  margin: 0;
+}
+
+.budget-expense-row .budget-remove-expense {
+  width: auto;
+  min-height: 44px;
+  margin: 0;
+  white-space: nowrap;
+}
+
+.budget-empty-expenses {
+  margin: 0 0 14px;
+  color: #596579;
+}
+
+.budget-category-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.budget-category-list li {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 9px 0;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.budget-category-list li:last-child {
+  border-bottom: 0;
+}
+
+.budget-category-list li strong {
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+
+.budget-category-list .budget-largest-category {
+  color: #075985;
+  font-weight: 700;
+}
+
+.budget-status-positive {
+  color: #166534;
+}
+
+.budget-status-balanced {
+  color: #334155;
+}
+
+.budget-status-negative {
+  color: #b91c1c;
+}
+
+/* Calculadora de Conta de Luz */
+.bill-explanatory-content .related-tools { margin-top: 2rem; }
+.tool-calculator-card #formContaLuz fieldset.form-group {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.25rem;
+  align-items: center;
+  justify-content: flex-start;
+  border: 0;
+  padding: 0;
+  margin-left: 0;
+  margin-right: 0;
+}
+#formContaLuz fieldset legend { flex-basis: 100%; font-weight: 600; }
+#formContaLuz fieldset label { display: inline-flex; gap: 0.45rem; align-items: center; }
+#formContaLuz fieldset input[type="radio"] { width: auto; margin: 0; }
+#camposConsumoMensalLuz[hidden], #camposLeiturasLuz[hidden], #mediasResultadoLuz[hidden] { display: none; }
+#formConsumoAgua fieldset.form-group {
+  display: flex; flex-direction: row; flex-wrap: wrap; gap: 0.75rem 1.25rem;
+  align-items: center; justify-content: flex-start; border: 0; padding: 0;
+  margin-left: 0; margin-right: 0;
+}
+#formConsumoAgua fieldset legend { flex-basis: 100%; font-weight: 600; }
+#formConsumoAgua fieldset label { display: inline-flex; gap: 0.45rem; align-items: center; }
+#formConsumoAgua fieldset input[type="radio"] { width: auto; margin: 0; }
+#camposConsumoMensalAgua[hidden], #camposLeiturasAgua[hidden], #projecaoResultadoAgua[hidden] { display: none; }
+.bill-total { border-top: 1px solid #d9e0e7; padding-top: 0.75rem; font-size: 1.1rem; }
+.bill-total strong { color: var(--primary-color, #14532d); }
+.unit-comparator-product {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: end;
+  gap: 12px;
+  min-width: 0;
+  margin: 0 0 16px;
+  padding: 16px;
+  border: 1px solid #dbe3ea;
+  border-radius: 10px;
+  background: #fff;
+}
+.unit-comparator-product h3,
+.unit-comparator-product .unit-comparator-remove { grid-column: 1 / -1; }
+.unit-comparator-product h3 { margin: 0; }
+.unit-comparator-product .form-group { min-width: 0; margin: 0; }
+.unit-comparator-product select { min-width: 0; max-width: 100%; }
+.unit-comparator-remove { justify-self: start; width: auto; margin: 0; }
+.unit-comparator-results { padding-left: 1.5rem; }
+.unit-comparator-results li { padding: 12px; border-bottom: 1px solid #e5e7eb; }
+.unit-comparator-results li:last-child { border-bottom: 0; }
+.unit-comparator-results h4 { margin: 0 0 8px; }
+.unit-comparator-results p { margin: 0; overflow-wrap: anywhere; }
+.unit-comparator-best { background: #f0fdf4; border-radius: 8px; }
+.unit-comparator-badge { color: #166534; font-size: 0.85em; }
+.portion-recipe-fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 18px;
+}
+.portion-recipe-fields .form-group { min-width: 0; margin: 0; }
+.portion-ingredient-row { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.portion-ingredient-row select { min-width: 0; max-width: 100%; }
+@media (max-width: 768px) {
+  .unit-comparator-product { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 480px) {
+  .unit-comparator-product { grid-template-columns: minmax(0, 1fr); padding: 12px; }
+  .portion-recipe-fields { grid-template-columns: minmax(0, 1fr); }
+}
+@media print {
+  .bill-explanatory-content, #formContaLuz, #erroContaLuz, #statusContaLuz,
+  #formConsumoAgua, #erroConsumoAgua, #statusConsumoAgua,
+  #resultadoContaLuz .result-actions, #resultadoConsumoAgua .result-actions { display: none !important; }
+  #resultadoContaLuz[hidden], #resultadoConsumoAgua[hidden] { display: none !important; }
+}
+@media print {
+  #formComparadorPrecos, #erroComparadorPrecos, #statusComparadorPrecos,
+  .unit-comparator-explanatory-content, #resultadoComparadorPrecos .result-actions { display: none !important; }
+  #resultadoComparadorPrecos[hidden] { display: none !important; }
+  #formCustoPorPorcao, #erroCustoPorPorcao, #statusCustoPorPorcao,
+  .portion-cost-explanatory-content, #resultadoCustoPorPorcao .result-actions { display: none !important; }
+  #resultadoCustoPorPorcao[hidden] { display: none !important; }
+}
+
+@media (max-width: 768px) {
+  .budget-expense-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 480px) {
+  .budget-expense-row {
+    grid-template-columns: minmax(0, 1fr);
+    padding: 12px;
+  }
+
+  .budget-category-list li {
+    align-items: flex-start;
+  }
+}
+
 /* ===================================================== */
 /* BOTÃO DE FAVORITOS (.favorite-button)                 */
 /* ===================================================== */
+.favorites-section {
+  padding: 0 0 48px;
+}
+
+.favorites-list {
+  display: grid;
+  gap: 14px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.favorites-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  min-width: 0;
+  padding: 18px 20px;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 2px 8px rgb(15 23 42 / 5%);
+}
+
+.favorites-item-link {
+  min-width: 0;
+  color: #0f766e;
+  font-size: 1.05rem;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.favorites-item-category {
+  margin-right: auto;
+  color: #4b5563;
+  font-size: 0.9rem;
+}
+
+.favorites-item-unavailable {
+  margin-right: auto;
+  color: #4b5563;
+  overflow-wrap: anywhere;
+}
+
+.favorites-remove-button {
+  flex: 0 0 auto;
+  width: auto;
+  min-height: 40px;
+  margin: 0;
+  padding: 8px 14px;
+  border: 1px solid #b91c1c;
+  border-radius: 8px;
+  background: #fff;
+  color: #991b1b;
+  font: inherit;
+  cursor: pointer;
+}
+
+.favorites-remove-button:hover {
+  background: #fef2f2;
+}
+
+.favorites-remove-button:focus-visible,
+.favorites-item-link:focus-visible,
+.favorites-empty a:focus-visible {
+  outline: 3px solid #0f766e;
+  outline-offset: 3px;
+}
+
+.favorites-feedback {
+  margin: 0 0 16px;
+  padding: 12px 14px;
+  border-radius: 8px;
+  background: #ecfdf5;
+  color: #166534;
+}
+
+.favorites-feedback-error {
+  background: #fef2f2;
+  color: #991b1b;
+}
+
+.favorites-empty {
+  padding: 28px 20px;
+  border: 1px dashed #9ca3af;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.favorites-empty[hidden],
+.favorites-feedback[hidden] {
+  display: none;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (max-width: 768px) {
+  .favorites-item {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 10px;
+    padding: 16px;
+  }
+
+  .favorites-item-link,
+  .favorites-item-unavailable {
+    display: block;
+    width: auto;
+    max-width: 100%;
+  }
+
+  .favorites-item-category {
+    margin-right: 0;
+  }
+
+  .favorites-remove-button {
+    align-self: flex-start;
+  }
+}
+
+@media (max-width: 600px) {
+  .favorites-remove-button {
+    width: 100%;
+  }
+}
+
 .tool-header-actions {
   display: flex;
   align-items: center;
@@ -3106,41 +3523,6 @@ main.container {
 .carro-delete-button:disabled {
   opacity: 0.65;
   cursor: wait;
-}
-
-
-/* Calculadora de Preço de Serviço: alinhamento dos botões. */
-.preco-servico-actions {
-  display: flex;
-  flex-direction: row;
-  align-items: stretch;
-  justify-content: flex-start;
-  flex-wrap: wrap;
-  gap: 12px;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.preco-servico-actions > .tool-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 44px;
-  height: 44px;
-  margin: 0;
-  box-sizing: border-box;
-}
-
-@media (max-width: 768px) {
-  .preco-servico-actions {
-    flex-direction: row;
-    align-items: stretch;
-  }
-
-  .preco-servico-actions > .tool-btn {
-    flex: 1 1 140px;
-    width: auto;
-  }
 }
 
 

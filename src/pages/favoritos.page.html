@@ -1,0 +1,27 @@
+---
+title: Meus Favoritos | Calculadora Master
+description: Acesse e gerencie as calculadoras que você salvou nos favoritos neste navegador.
+canonical: https://www.calculadoramaster.com/favoritos.html
+robots: noindex, follow
+layout: site
+pageScripts: <script src="{{ROOT_PREFIX}}js/tools-catalog.js"></script>\n<script type="module" src="{{ROOT_PREFIX}}js/favorites-page.js"></script>
+---
+<section class="page-header favorites-page-header">
+  <div class="container">
+    <h1>Meus favoritos</h1>
+    <p>Suas calculadoras salvas neste navegador.</p>
+  </div>
+</section>
+
+<section class="favorites-section" aria-labelledby="favorites-title">
+  <div class="container">
+    <h2 id="favorites-title" class="visually-hidden">Calculadoras favoritas</h2>
+    <p id="favorites-feedback" class="favorites-feedback" role="status" aria-live="polite" hidden></p>
+    <p id="favorites-error" class="favorites-feedback favorites-feedback-error" role="alert" hidden></p>
+    <ul id="favorites-list" class="favorites-list" aria-label="Calculadoras favoritas"></ul>
+    <div id="favorites-empty" class="favorites-empty" hidden>
+      <p>Você ainda não salvou nenhuma calculadora.</p>
+      <a id="favorites-empty-link" class="btn-primary" href="{{ROOT_PREFIX}}index.html">Explorar calculadoras</a>
+    </div>
+  </div>
+</section>

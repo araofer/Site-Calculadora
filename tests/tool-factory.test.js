@@ -242,6 +242,10 @@ test('Registry - resolve categorias por slug e apelidos legados', () => {
   assert.equal(catMatematica.slug, 'matematica');
   assert.equal(catMatematica.name, 'Matemática');
 
+  const catConversores = resolveCategory('conversores');
+  assert.equal(catConversores.slug, 'utilidades');
+  assert.equal(catConversores.publicUrl, '/conversores.html');
+
   assert.equal(resolveCategory('inexistente'), null);
   assert.equal(resolveCategory(''), null);
 });

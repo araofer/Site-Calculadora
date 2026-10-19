@@ -202,6 +202,17 @@ export function setupCalculadoraPrecoServico() {
       evento.preventDefault();
 
       const texto = evento.clipboardData?.getData("text") ?? "";
+
+      // Preserve a negative paste so the calculator's numeric validator can
+      // explain why it is invalid instead of silently turning it positive.
+      if (/^\s*-/.test(texto)) {
+        campo.dataset.rawDigits = texto.trim();
+        campo.dataset.replaceOnNextInput = "false";
+        campo.value = texto.trim();
+        campo.setSelectionRange(campo.value.length, campo.value.length);
+        return;
+      }
+
       const colados = limparDigitos(texto);
 
       const selecionouTudo =

@@ -1,0 +1,67 @@
+---
+title: Comparador de Preços por Unidade | Calculadora Master
+description: Compare preços de embalagens por kg, litro, metro ou unidade e identifique a opção com menor preço unitário.
+keywords: comparador de preços, preço por unidade, preço por kg, preço por litro, supermercado, economia
+canonical: https://www.calculadoramaster.com/tools/utilidades/comparador-precos.html
+layout: tool
+pageScripts: <script type="module" src="{{ROOT_PREFIX}}js/tools/comparador-precos.js"></script>
+---
+
+<h1>Comparador de Preços por Unidade</h1>
+<p>Compare embalagens pela quantidade e pelo preço unitário. A opção com menor preço por unidade pode ter um desembolso total maior; confira os dois valores antes de escolher.</p>
+
+<div class="card tool-calculator-card unit-comparator-card">
+  <form id="formComparadorPrecos" novalidate>
+    <section aria-labelledby="tituloProdutosComparador">
+      <h2 id="tituloProdutosComparador" class="tool-form-title">Produtos para comparar</h2>
+      <p>Informe de 2 a 5 produtos. Use unidades da mesma dimensão na comparação: massa com massa, volume com volume, comprimento com comprimento ou unidades com unidades.</p>
+      <div id="linhasProdutosComparador" aria-live="polite"></div>
+      <button type="button" id="adicionarProdutoComparador" class="tool-btn tool-btn-secondary">Adicionar produto</button>
+    </section>
+    <div class="tool-actions">
+      <button type="submit" class="tool-btn tool-btn-primary">Comparar preços</button>
+      <button type="button" id="limparComparadorPrecos" class="tool-btn tool-btn-secondary">Limpar</button>
+    </div>
+  </form>
+
+  <p id="erroComparadorPrecos" role="alert" aria-live="assertive" hidden></p>
+  <section id="resultadoComparadorPrecos" aria-live="polite" aria-atomic="true" hidden>
+    <h2 class="tool-result-title">Resultado da comparação</h2>
+    <div class="card tool-result-card">
+      <p>Dimensão comparada: <strong id="dimensaoComparadorResultado"></strong></p>
+      <p>Menor preço unitário: <strong id="melhorOpcaoComparadorResultado"></strong></p>
+      <p>Diferença entre o maior e o menor preço unitário: <strong id="diferencaComparadorResultado"></strong></p>
+      <p>Economia percentual em relação ao maior preço unitário: <strong id="percentualComparadorResultado"></strong></p>
+      <p>Economia estimada na maior quantidade informada: <strong id="economiaEquivalenteComparadorResultado"></strong></p>
+      <p>Menor desembolso total: <strong id="menorDesembolsoComparadorResultado"></strong></p>
+      <small>O menor preço por unidade e o menor valor pago no caixa são comparações diferentes. A economia equivalente projeta a diferença de preço unitário na maior quantidade total informada.</small>
+    </div>
+    <div class="card tool-result-card">
+      <h3>Detalhes por produto</h3>
+      <ol id="listaResultadosComparador" class="unit-comparator-results"></ol>
+    </div>
+    <div class="tool-actions result-actions">
+      <button type="button" id="copiarComparadorPrecos" class="tool-btn tool-btn-secondary" hidden>Copiar resultado</button>
+      <button type="button" id="compartilharComparadorPrecos" class="tool-btn tool-btn-secondary" hidden>Compartilhar</button>
+      <button type="button" id="imprimirComparadorPrecos" class="tool-btn tool-btn-secondary" hidden>Imprimir</button>
+    </div>
+  </section>
+  <p id="statusComparadorPrecos" class="result-action-status" role="status" aria-live="polite"></p>
+</div>
+
+<section class="content unit-comparator-explanatory-content">
+  <h2>Como comparar</h2>
+  <p>O cálculo multiplica o preço e a quantidade da embalagem pelo número de embalagens informado. Depois, divide o preço total pela quantidade total normalizada. Assim, embalagens de tamanhos diferentes podem ser comparadas na mesma unidade-base.</p>
+  <ul>
+    <li><strong>Massa:</strong> mg e g são convertidos para kg.</li>
+    <li><strong>Volume:</strong> mL é convertido para L.</li>
+    <li><strong>Comprimento:</strong> mm e cm são convertidos para m.</li>
+    <li><strong>Quantidade:</strong> comparada em unidades.</li>
+  </ul>
+  <p>Não compare dimensões diferentes: massa não equivale a volume, comprimento ou quantidade. O resultado considera apenas o preço e as quantidades que você informar; não considera qualidade, desperdício, frete, promoções condicionais nem outras características dos produtos. Os dados ficam somente no formulário e não são salvos automaticamente.</p>
+  <section class="related-tools"><h2>Ferramentas relacionadas</h2><div class="related-tools-grid">
+    <article class="tool-card"><div class="tool-card-header"><span class="tool-card-category">Utilidades</span></div><h3 class="tool-card-title">Calculadora de Consumo de Água</h3><p class="tool-card-desc">Estime consumo e custo da água com a tarifa informada.</p><div class="tool-card-footer"><a href="consumo-agua.html" class="tool-card-btn">Calcular agora &rarr;</a></div></article>
+    <article class="tool-card"><div class="tool-card-header"><span class="tool-card-category">Financeiro</span></div><h3 class="tool-card-title">Calculadora de Preço de Serviço</h3><p class="tool-card-desc">Calcule custos e preço sugerido para seus serviços.</p><div class="tool-card-footer"><a href="../financas/preco-servico.html" class="tool-card-btn">Calcular agora &rarr;</a></div></article>
+  </div></section>
+  <p class="tool-return-link"><a href="{{ROOT_PREFIX}}conversores.html">Voltar para as calculadoras e utilidades</a></p>
+</section>

@@ -21,6 +21,10 @@ const VALID_CATEGORIES = [
   'Utilidades'
 ];
 
+// Durante build:data, valida fontes e schema antes da compilação. A validação
+// completa (incluindo HTML publicado) continua obrigatória após build:prod.
+const SOURCE_ONLY = process.argv.includes('--source-only');
+
 const REQUIRED_FIELDS = [
   'id',
   'name',
@@ -86,7 +90,7 @@ function validateTools() {
       }
 
       // Se estiver published, o arquivo compilado deve existir no build dist ou no repositório
-      if (tool.status === 'published') {
+      if (tool.status === 'published' && !SOURCE_ONLY) {
         const rootCompiled = path.join(ROOT_DIR, 'tools', catSlug || '', `${tool.id}.html`);
         const distCompiled = path.join(ROOT_DIR, 'dist', 'tools', catSlug || '', `${tool.id}.html`);
         if (!fs.existsSync(rootCompiled) && !fs.existsSync(distCompiled)) {
@@ -179,8 +183,10 @@ function validateTools() {
     process.exit(1);
   }
 
-  console.log(`\n✓ ${tools.length} ferramentas validadas com sucesso`);
-  console.log('✓ URLs válidas e arquivos existentes no disco');
+  console.log(`\n✓ ${tools.length} ferramentas ${SOURCE_ONLY ? 'e fontes' : ''} validadas com sucesso`);
+  console.log(SOURCE_ONLY
+    ? '✓ URLs, páginas-fonte e módulos existentes no disco'
+    : '✓ URLs e arquivos compilados existentes no disco');
   console.log('✓ IDs e slugs únicos');
   console.log('✓ Relacionamentos válidos (sem auto-recomendações, máx 4)');
   console.log('✓ Categorias e campos obrigatórios válidos\n');

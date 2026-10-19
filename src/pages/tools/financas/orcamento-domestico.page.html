@@ -1,0 +1,111 @@
+---
+title: Calculadora de Orçamento Doméstico Online | Calculadora Master
+description: Organize as receitas e despesas mensais da família, calcule o saldo disponível e identifique os maiores gastos por categoria.
+keywords: orçamento doméstico, orçamento familiar, controle de despesas, receitas mensais, saldo familiar, planejamento financeiro
+canonical: https://www.calculadoramaster.com/tools/financas/orcamento-domestico.html
+layout: tool
+pageScripts: <script type="module" src="{{ROOT_PREFIX}}js/tools/orcamento-domestico.js"></script>
+---
+
+<h1>Calculadora de Orçamento Doméstico</h1>
+<p>Organize as receitas e despesas do mês, veja o saldo da família e descubra quais categorias concentram os maiores gastos.</p>
+
+<div class="card tool-calculator-card">
+  <form id="formOrcamentoDomestico" novalidate>
+    <section aria-labelledby="tituloReceitasOrcamento">
+      <h2 id="tituloReceitasOrcamento" class="tool-form-title">Receitas mensais</h2>
+
+      <div class="form-group">
+        <label for="rendaPrincipalOrcamento">Salário ou renda principal (R$):</label>
+        <input type="text" id="rendaPrincipalOrcamento" name="rendaPrincipal" inputmode="decimal" autocomplete="off" placeholder="Ex.: 4.500,00" aria-describedby="ajudaReceitasOrcamento">
+      </div>
+
+      <div class="form-group">
+        <label for="rendasAdicionaisOrcamento">Rendas adicionais (R$):</label>
+        <input type="text" id="rendasAdicionaisOrcamento" name="rendasAdicionais" inputmode="decimal" autocomplete="off" placeholder="Ex.: 350,00">
+      </div>
+
+      <div class="form-group">
+        <label for="outrasReceitasOrcamento">Outras receitas mensais (R$):</label>
+        <input type="text" id="outrasReceitasOrcamento" name="outrasReceitas" inputmode="decimal" autocomplete="off" placeholder="Ex.: 200,00">
+      </div>
+      <p id="ajudaReceitasOrcamento" class="tool-result-note">Preencha os valores disponíveis. Campos vazios são considerados zero; informe pelo menos uma receita maior que zero para calcular os percentuais.</p>
+    </section>
+
+    <section class="budget-expenses-section" aria-labelledby="tituloDespesasOrcamento">
+      <h2 id="tituloDespesasOrcamento" class="tool-form-title">Despesas mensais</h2>
+      <p>Adicione cada despesa com uma descrição, categoria e valor. Você pode remover ou incluir linhas antes de calcular.</p>
+      <div id="linhasDespesasOrcamento" aria-live="polite"></div>
+      <button type="button" id="adicionarDespesaOrcamento" class="tool-btn tool-btn-secondary">Adicionar despesa</button>
+    </section>
+
+    <div class="tool-actions">
+      <button type="submit" class="tool-btn tool-btn-primary">Calcular orçamento</button>
+      <button type="button" id="limparOrcamentoDomestico" class="tool-btn tool-btn-secondary">Limpar</button>
+    </div>
+  </form>
+
+  <p id="erroOrcamentoDomestico" role="alert" aria-live="assertive" hidden></p>
+
+  <section id="resultadoOrcamentoDomestico" aria-live="polite" aria-atomic="true" hidden>
+    <h2 class="tool-result-title">Resumo do mês</h2>
+    <div class="card tool-result-card">
+      <p>Total de receitas: <strong id="totalReceitasOrcamento"></strong></p>
+      <p>Total de despesas: <strong id="totalDespesasOrcamento"></strong></p>
+      <p>Saldo mensal: <strong id="saldoOrcamento"></strong></p>
+      <p>Renda comprometida com despesas: <strong id="percentualComprometidoOrcamento"></strong></p>
+      <p>Renda restante para economizar: <strong id="percentualRestanteOrcamento"></strong></p>
+      <p>Situação: <strong id="situacaoOrcamento"></strong></p>
+    </div>
+
+    <div class="card tool-result-card">
+      <h3>Despesas por categoria</h3>
+      <p id="semDespesasPorCategoria" hidden>Nenhuma despesa foi informada.</p>
+      <ol id="resumoCategoriasOrcamento" class="budget-category-list"></ol>
+    </div>
+
+    <div class="tool-actions result-actions">
+      <button type="button" id="copiarOrcamentoDomestico" class="tool-btn tool-btn-secondary" hidden>Copiar resultado</button>
+      <button type="button" id="compartilharOrcamentoDomestico" class="tool-btn tool-btn-secondary" hidden>Compartilhar</button>
+      <button type="button" id="imprimirOrcamentoDomestico" class="tool-btn tool-btn-secondary" hidden>Imprimir</button>
+    </div>
+  </section>
+
+  <p id="statusOrcamentoDomestico" class="result-action-status" role="status" aria-live="polite"></p>
+</div>
+
+<section class="content budget-explanatory-content">
+  <h2>Como usar o orçamento doméstico</h2>
+  <p>Informe as receitas que entram no mês e adicione despesas com descrição, categoria e valor. O saldo é a diferença entre receitas e despesas; se ficar positivo, ele indica quanto pode sobrar para objetivos ou poupança. Se ficar negativo, o déficit aparece integralmente no resultado.</p>
+
+  <h3>Fórmulas utilizadas</h3>
+  <ul>
+    <li><strong>Total de receitas:</strong> soma das rendas informadas.</li>
+    <li><strong>Total de despesas:</strong> soma dos valores de cada despesa.</li>
+    <li><strong>Saldo mensal:</strong> receitas menos despesas.</li>
+    <li><strong>Renda comprometida:</strong> despesas divididas pelas receitas e multiplicadas por 100.</li>
+    <li><strong>Renda restante:</strong> saldo positivo dividido pelas receitas e multiplicado por 100.</li>
+  </ul>
+
+  <p>Os percentuais ficam indisponíveis quando o total de receitas é zero. Os valores não são salvos nem enviados automaticamente. Se você escolher Compartilhar, o resumo do cálculo será entregue ao mecanismo de compartilhamento do seu dispositivo.</p>
+
+  <section class="related-tools">
+    <h2>Ferramentas relacionadas</h2>
+    <div class="related-tools-grid">
+      <article class="tool-card">
+        <div class="tool-card-header"><span class="tool-card-category">Financeiro</span></div>
+        <h3 class="tool-card-title">Calculadora de Valor da Hora</h3>
+        <p class="tool-card-desc">Estime o valor por hora considerando renda desejada e despesas profissionais.</p>
+        <div class="tool-card-footer"><a href="valor-hora.html" class="tool-card-btn">Calcular agora &rarr;</a></div>
+      </article>
+      <article class="tool-card">
+        <div class="tool-card-header"><span class="tool-card-category">Financeiro</span></div>
+        <h3 class="tool-card-title">Dividir Conta</h3>
+        <p class="tool-card-desc">Confira como dividir um valor entre diferentes pessoas.</p>
+        <div class="tool-card-footer"><a href="dividir-conta.html" class="tool-card-btn">Calcular agora &rarr;</a></div>
+      </article>
+    </div>
+  </section>
+
+  <p class="tool-return-link"><a href="{{ROOT_PREFIX}}financeira.html">Voltar para as calculadoras financeiras</a></p>
+</section>

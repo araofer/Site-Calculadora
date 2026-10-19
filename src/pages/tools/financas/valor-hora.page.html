@@ -10,8 +10,8 @@ pageScripts: <script type="module" src="{{ROOT_PREFIX}}js/tools/valor-hora.js"><
 <h1>Calculadora de Valor da Hora</h1>
 <p>Descubra quanto cobrar por hora para cobrir suas despesas, alcançar a renda desejada e reservar uma parte do faturamento.</p>
 
-<div class="card" style="margin:20px 0;">
-  <h2>Informe seus valores mensais</h2>
+<div class="card tool-calculator-card">
+  <h2 class="tool-form-title">Informe seus valores mensais</h2>
 
   <form id="formValorHora">
     <div class="form-group">
@@ -23,22 +23,22 @@ pageScripts: <script type="module" src="{{ROOT_PREFIX}}js/tools/valor-hora.js"><
     <div class="form-group">
       <label for="despesasMensais">Despesas profissionais mensais (R$):</label>
       <input type="text" id="despesasMensais" name="despesasMensais"
-        inputmode="numeric" autocomplete="off" placeholder="1.000,00">
-      <p>Inclua ferramentas, internet, transporte e outros custos profissionais. Se não tiver despesas, deixe em branco.</p>
+        inputmode="numeric" autocomplete="off" placeholder="1.000,00" aria-describedby="ajudaDespesasMensais">
+      <p id="ajudaDespesasMensais">Inclua ferramentas, internet, transporte e outros custos profissionais. Se não tiver despesas, deixe em branco.</p>
     </div>
 
     <div class="form-group">
       <label for="reservaPercentual">Reserva para impostos e imprevistos (%):</label>
       <input type="number" id="reservaPercentual" name="reservaPercentual"
-        min="0" max="99.99" step="0.01" placeholder="20" required>
-      <p>Informe 20 para reservar 20% do faturamento. Use o percentual adequado à sua situação.</p>
+        min="0" max="99.99" step="0.01" placeholder="20" aria-describedby="ajudaReservaPercentual" required>
+      <p id="ajudaReservaPercentual">Informe 20 para reservar 20% do faturamento. Use o percentual adequado à sua situação.</p>
     </div>
 
     <div class="form-group">
       <label for="horasFaturaveis">Horas faturáveis por mês:</label>
       <input type="number" id="horasFaturaveis" name="horasFaturaveis"
-        min="0.01" step="0.01" placeholder="100" required>
-      <p>Considere apenas as horas que você espera conseguir cobrar dos clientes.</p>
+        min="0.01" step="0.01" placeholder="100" aria-describedby="ajudaHorasFaturaveis" required>
+      <p id="ajudaHorasFaturaveis">Considere apenas as horas que você espera conseguir cobrar dos clientes.</p>
     </div>
 
     <div class="tool-actions">
@@ -49,22 +49,24 @@ pageScripts: <script type="module" src="{{ROOT_PREFIX}}js/tools/valor-hora.js"><
 
   <p id="erroValorHora" role="alert" aria-live="assertive" hidden></p>
 
-  <section id="resultadoValorHora" aria-live="polite" hidden>
-    <h2 style="margin-top:20px;">Seu resultado estimado</h2>
+  <section id="resultadoValorHora" aria-live="polite" aria-atomic="true" hidden>
+    <h2 class="tool-result-title">Seu resultado estimado</h2>
 
-    <p>Valor mínimo recomendado por hora:
-      <strong id="valorHoraResultado"></strong>
-    </p>
+    <div class="card tool-result-card">
+      <p>Valor mínimo recomendado por hora:
+        <strong id="valorHoraResultado"></strong>
+      </p>
 
-    <p>Faturamento mensal necessário:
-      <strong id="receitaMensalResultado"></strong>
-    </p>
+      <p>Faturamento mensal necessário:
+        <strong id="receitaMensalResultado"></strong>
+      </p>
 
-    <p>Reserva mensal estimada:
-      <strong id="reservaMensalResultado"></strong>
-    </p>
+      <p>Reserva mensal estimada:
+        <strong id="reservaMensalResultado"></strong>
+      </p>
+    </div>
 
-    <div class="tool-actions">
+    <div class="tool-actions result-actions">
       <button type="button" id="copiarValorHora"
         class="tool-btn tool-btn-secondary" hidden>Copiar resultado</button>
       <button type="button" id="compartilharValorHora"
@@ -120,7 +122,7 @@ pageScripts: <script type="module" src="{{ROOT_PREFIX}}js/tools/valor-hora.js"><
     </div>
   </section>
 
-  <p style="margin-top:30px;">
+  <p class="tool-return-link">
     <a href="{{ROOT_PREFIX}}index.html">Voltar para a página inicial</a>
   </p>
 </section>

@@ -23,10 +23,5 @@
     "name": "Utilidades",
     "publicUrl": "/conversores.html",
     "directory": "tools/utilidades"
-  },
-  "conversores": {
-    "name": "Conversores",
-    "publicUrl": "/conversores.html",
-    "directory": "tools/conversores"
   }
 }

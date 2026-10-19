@@ -812,6 +812,207 @@ const TOOLS_CATALOG = [
       "featured": false,
       "related": [],
       "status": "published"
+    },
+    {
+      "id": "orcamento-domestico",
+      "slug": "orcamento-domestico",
+      "nome": "Calculadora de Orçamento Doméstico",
+      "name": "Calculadora de Orçamento Doméstico",
+      "categoria": "Financeiro",
+      "category": "Financeiro",
+      "categorySlug": "financas",
+      "descricao": "Organize as receitas e despesas mensais da família, veja o saldo disponível e identifique as categorias com maiores gastos.",
+      "description": "Organize as receitas e despesas mensais da família, veja o saldo disponível e identifique as categorias com maiores gastos.",
+      "url": "tools/financas/orcamento-domestico.html",
+      "termos": [
+        "orçamento doméstico",
+        "orçamento familiar",
+        "controle de despesas",
+        "receitas e despesas mensais",
+        "saldo familiar",
+        "planejamento financeiro"
+      ],
+      "keywords": [
+        "orçamento doméstico",
+        "orçamento familiar",
+        "controle de despesas",
+        "receitas e despesas mensais",
+        "saldo familiar",
+        "planejamento financeiro"
+      ],
+      "destaque": false,
+      "featured": false,
+      "related": [
+        "dividir-conta",
+        "valor-hora"
+      ],
+      "status": "published"
+    },
+    {
+      "id": "conta-luz",
+      "slug": "conta-luz",
+      "nome": "Calculadora de Conta de Luz",
+      "name": "Calculadora de Conta de Luz",
+      "categoria": "Utilidades",
+      "category": "Utilidades",
+      "categorySlug": "utilidades",
+      "descricao": "Estime o custo da energia elétrica residencial pelo consumo informado ou pelas leituras do medidor.",
+      "description": "Estime o custo da energia elétrica residencial pelo consumo informado ou pelas leituras do medidor.",
+      "url": "tools/utilidades/conta-luz.html",
+      "termos": [
+        "conta de luz",
+        "energia elétrica",
+        "consumo kWh",
+        "tarifa por kWh",
+        "leitura do medidor"
+      ],
+      "keywords": [
+        "conta de luz",
+        "energia elétrica",
+        "consumo kWh",
+        "tarifa por kWh",
+        "leitura do medidor"
+      ],
+      "destaque": false,
+      "featured": false,
+      "related": [
+        "orcamento-domestico",
+        "pisos-revestimentos"
+      ],
+      "status": "published"
+    },
+    {
+      "id": "consumo-agua",
+      "slug": "consumo-agua",
+      "nome": "Calculadora de Consumo de Água",
+      "name": "Calculadora de Consumo de Água",
+      "categoria": "Utilidades",
+      "category": "Utilidades",
+      "categorySlug": "utilidades",
+      "descricao": "Estime o consumo e o custo da água pelo consumo mensal ou pelas leituras do hidrômetro, usando a tarifa informada.",
+      "description": "Estime o consumo e o custo da água pelo consumo mensal ou pelas leituras do hidrômetro, usando a tarifa informada.",
+      "url": "tools/utilidades/consumo-agua.html",
+      "termos": [
+        "consumo de água",
+        "calculadora água",
+        "hidrômetro",
+        "custo da água",
+        "conta de água",
+        "tarifa por m³"
+      ],
+      "keywords": [
+        "consumo de água",
+        "calculadora água",
+        "hidrômetro",
+        "custo da água",
+        "conta de água",
+        "tarifa por m³"
+      ],
+      "destaque": false,
+      "featured": false,
+      "related": [
+        "conta-luz",
+        "pisos-revestimentos"
+      ],
+      "status": "published"
+    },
+    {
+      "id": "comparador-precos",
+      "slug": "comparador-precos",
+      "nome": "Comparador de Preços por Unidade",
+      "name": "Comparador de Preços por Unidade",
+      "categoria": "Utilidades",
+      "category": "Utilidades",
+      "categorySlug": "utilidades",
+      "descricao": "Compare preços de embalagens por kg, litro, metro ou unidade e identifique a opção com menor preço unitário.",
+      "description": "Compare preços de embalagens por kg, litro, metro ou unidade e identifique a opção com menor preço unitário.",
+      "url": "tools/utilidades/comparador-precos.html",
+      "termos": [
+        "comparador de preços",
+        "preço por unidade",
+        "preço por kg",
+        "preço por litro",
+        "supermercado",
+        "economia"
+      ],
+      "keywords": [
+        "comparador de preços",
+        "preço por unidade",
+        "preço por kg",
+        "preço por litro",
+        "supermercado",
+        "economia"
+      ],
+      "destaque": false,
+      "featured": false,
+      "related": [
+        "consumo-agua",
+        "preco-servico"
+      ],
+      "status": "published"
+    },
+    {
+      "id": "custo-por-porcao",
+      "slug": "custo-por-porcao",
+      "nome": "Calculadora de Custo por Porção",
+      "name": "Calculadora de Custo por Porção",
+      "categoria": "Utilidades",
+      "category": "Utilidades",
+      "categorySlug": "utilidades",
+      "descricao": "Calcule o custo proporcional dos ingredientes de uma receita e o custo por porção.",
+      "description": "Calcule o custo proporcional dos ingredientes de uma receita e o custo por porção.",
+      "url": "tools/utilidades/custo-por-porcao.html",
+      "termos": [
+        "custo por porção",
+        "custo de receita",
+        "ingredientes",
+        "custo proporcional",
+        "custo de alimentos"
+      ],
+      "keywords": [
+        "custo por porção",
+        "custo de receita",
+        "ingredientes",
+        "custo proporcional",
+        "custo de alimentos"
+      ],
+      "destaque": false,
+      "featured": false,
+      "related": [
+        "comparador-precos",
+        "orcamento-domestico"
+      ],
+      "status": "published"
+    },
+    {
+      "id": "pisos-revestimentos",
+      "slug": "pisos-revestimentos",
+      "nome": "Calculadora de Pisos e Revestimentos",
+      "name": "Calculadora de Pisos e Revestimentos",
+      "categoria": "Utilidades",
+      "category": "Utilidades",
+      "categorySlug": "utilidades",
+      "descricao": "Calcule a área a revestir, estime a quantidade de peças e caixas de pisos ou revestimentos e o custo dos materiais.",
+      "description": "Calcule a área a revestir, estime a quantidade de peças e caixas de pisos ou revestimentos e o custo dos materiais.",
+      "url": "tools/utilidades/pisos-revestimentos.html",
+      "termos": [
+        "calculadora de pisos",
+        "calculadora de revestimentos",
+        "quantidade de piso",
+        "caixas de piso",
+        "metragem de revestimento"
+      ],
+      "keywords": [
+        "calculadora de pisos",
+        "calculadora de revestimentos",
+        "quantidade de piso",
+        "caixas de piso",
+        "metragem de revestimento"
+      ],
+      "destaque": false,
+      "featured": false,
+      "related": [],
+      "status": "published"
     }
   ];
 

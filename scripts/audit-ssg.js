@@ -83,7 +83,7 @@ async function runAudit() {
 
   // 2. build:data (validação do catálogo e sitemap)
   try {
-    const buildDataOutput = execSync('node scripts/validate-tools.js && node scripts/generate-catalog.js && node scripts/generate-sitemap.js && node scripts/validate-tools.js', {
+    const buildDataOutput = execSync('npm run build:data', {
       cwd: ROOT_DIR,
       encoding: 'utf-8',
       stdio: ['pipe', 'pipe', 'pipe']

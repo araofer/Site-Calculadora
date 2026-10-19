@@ -7,14 +7,11 @@ layout: tool
 pageScripts: <script type="module" src="{{ROOT_PREFIX}}js/tools/pisos-revestimentos.js"></script>
 ---
 
-<div class="tool-draft-badge" style="background:#fff3cd;color:#856404;padding:8px 12px;border-radius:4px;margin-bottom:16px;font-size:.875rem;border:1px solid #ffeeba;">
-  <strong>Em desenvolvimento:</strong> ferramenta em fase de homologação.
-</div>
-
 <h1>Calculadora de Pisos e Revestimentos</h1>
 <p>Estime a quantidade de peças e caixas para revestir pisos ou paredes, incluindo desperdício e custo dos materiais.</p>
 
-<div class="card" style="margin:20px 0;">
+<div class="card tool-calculator-card">
+  <h2 class="tool-form-title">Informe as medidas e os materiais</h2>
   <form id="formPisosRevestimentos">
     <div class="form-group">
       <label for="superficie">Tipo de superfície:</label>
@@ -75,9 +72,9 @@ pageScripts: <script type="module" src="{{ROOT_PREFIX}}js/tools/pisos-revestimen
 
   <p id="erroPisosRevestimentos" role="alert" aria-live="assertive" hidden></p>
 
-  <section id="resultadoPisosRevestimentos" aria-live="polite" hidden>
-    <h2>Resultado estimado</h2>
-    <div class="card" style="margin:16px 0;padding:16px;">
+  <section id="resultadoPisosRevestimentos" aria-live="polite" aria-atomic="true" hidden>
+    <h2 class="tool-result-title">Resultado estimado</h2>
+    <div class="card tool-result-card">
       <p>Área original: <strong id="saidaArea"></strong></p>
       <p>Área com desperdício: <strong id="saidaAreaComDesperdicio"></strong></p>
       <p>Área de cada peça: <strong id="saidaAreaPeca"></strong></p>
@@ -87,7 +84,7 @@ pageScripts: <script type="module" src="{{ROOT_PREFIX}}js/tools/pisos-revestimen
       <p id="linhaCusto" hidden>Custo total estimado: <strong id="saidaCusto"></strong></p>
     </div>
 
-    <p>Esta é uma estimativa. Cortes, paginação, recortes, lotes e condições de instalação podem alterar a quantidade real necessária.</p>
+    <p class="tool-result-note">Esta é uma estimativa. Cortes, paginação, recortes, lotes e condições de instalação podem alterar a quantidade real necessária.</p>
 
     <div class="tool-actions result-actions">
       <button type="button" id="copiarPisosRevestimentos" class="tool-btn tool-btn-secondary" hidden>Copiar resultado</button>
@@ -110,4 +107,35 @@ pageScripts: <script type="module" src="{{ROOT_PREFIX}}js/tools/pisos-revestimen
   <p>Divida a área acrescida do desperdício pelo rendimento informado na embalagem. A calculadora arredonda a quantidade de caixas para cima, pois não é possível comprar uma fração de caixa.</p>
 
   <p>Confira sempre o rendimento real na embalagem e confirme as medidas do ambiente antes de comprar os materiais.</p>
+
+  <section class="related-tools">
+    <h2>Calculadoras relacionadas</h2>
+    <div class="related-tools-grid">
+      <article class="tool-card">
+        <div class="tool-card-header">
+          <span class="tool-card-category">Financeiro</span>
+        </div>
+        <h3 class="tool-card-title">Calculadora de Preço de Serviço</h3>
+        <p class="tool-card-desc">Estime o preço de serviços de instalação com base nos custos e na margem desejada.</p>
+        <div class="tool-card-footer">
+          <a href="{{ROOT_PREFIX}}tools/financas/preco-servico.html" class="tool-card-btn">Calcular agora &rarr;</a>
+        </div>
+      </article>
+
+      <article class="tool-card">
+        <div class="tool-card-header">
+          <span class="tool-card-category">Matemática</span>
+        </div>
+        <h3 class="tool-card-title">Calculadora de Porcentagem</h3>
+        <p class="tool-card-desc">Calcule percentuais para estimar ajustes e desperdícios nos materiais.</p>
+        <div class="tool-card-footer">
+          <a href="{{ROOT_PREFIX}}tools/financas/porcentagem.html" class="tool-card-btn">Calcular agora &rarr;</a>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <p class="tool-return-link">
+    <a href="{{ROOT_PREFIX}}index.html">Voltar para a página inicial</a>
+  </p>
 </section>

@@ -1,0 +1,70 @@
+---
+title: Calculadora de Custo por Porção | Calculadora Master
+description: Calcule o custo proporcional de cada ingrediente, de uma receita e por porção.
+keywords: custo por porção, custo de receita, ingredientes, custo de alimentos
+canonical: https://www.calculadoramaster.com/tools/utilidades/custo-por-porcao.html
+layout: tool
+pageScripts: <script type="module" src="{{ROOT_PREFIX}}js/tools/custo-por-porcao.js"></script>
+---
+
+<h1>Calculadora de Custo por Porção</h1>
+<p>Informe o preço e o conteúdo das embalagens, além da quantidade realmente usada na receita. O cálculo considera apenas o custo proporcional dos ingredientes.</p>
+
+<div class="card tool-calculator-card unit-comparator-card">
+  <form id="formCustoPorPorcao" novalidate>
+    <section aria-labelledby="tituloReceitaCusto">
+      <h2 id="tituloReceitaCusto" class="tool-form-title">Receita</h2>
+      <div class="portion-recipe-fields">
+        <div class="form-group">
+          <label for="nomeReceitaCusto">Nome da receita (opcional):</label>
+          <input id="nomeReceitaCusto" name="recipeName" type="text" maxlength="100" autocomplete="off" placeholder="Ex.: Arroz com molho">
+        </div>
+        <div class="form-group">
+          <label for="porcoesReceitaCusto">Número de porções:</label>
+          <input id="porcoesReceitaCusto" name="portions" type="text" inputmode="decimal" autocomplete="off" placeholder="Ex.: 4" required>
+        </div>
+      </div>
+    </section>
+    <section aria-labelledby="tituloIngredientesCusto">
+      <h2 id="tituloIngredientesCusto" class="tool-form-title">Ingredientes</h2>
+      <p>Use unidades compatíveis em cada ingrediente: massa com massa, volume com volume ou unidade com unidade. Não há conversão entre massa e volume.</p>
+      <div id="linhasIngredientesCusto" aria-live="polite"></div>
+      <p id="limiteIngredientesCusto" role="status" hidden>Limite de 20 ingredientes atingido.</p>
+      <button type="button" id="adicionarIngredienteCusto" class="tool-btn tool-btn-secondary">Adicionar ingrediente</button>
+    </section>
+    <div class="tool-actions">
+      <button type="submit" class="tool-btn tool-btn-primary">Calcular custo</button>
+      <button type="button" id="limparCustoPorPorcao" class="tool-btn tool-btn-secondary">Limpar</button>
+    </div>
+  </form>
+  <p id="erroCustoPorPorcao" role="alert" aria-live="assertive" hidden></p>
+  <section id="resultadoCustoPorPorcao" aria-live="polite" aria-atomic="true" hidden>
+    <h2 class="tool-result-title">Resumo do custo da receita</h2>
+    <div class="card tool-result-card">
+      <p>Receita: <strong id="nomeReceitaResultadoCusto"></strong></p>
+      <p>Porções: <strong id="porcoesResultadoCusto"></strong></p>
+      <p>Custo total da receita: <strong id="totalResultadoCusto"></strong></p>
+      <p class="bill-total">Custo por porção: <strong id="porPorcaoResultadoCusto"></strong></p>
+      <h3>Detalhamento dos ingredientes</h3>
+      <ol id="listaIngredientesResultadoCusto" class="unit-comparator-results"></ol>
+    </div>
+    <div class="tool-actions result-actions">
+      <button type="button" id="copiarCustoPorPorcao" class="tool-btn tool-btn-secondary" hidden>Copiar resultado</button>
+      <button type="button" id="compartilharCustoPorPorcao" class="tool-btn tool-btn-secondary" hidden>Compartilhar ferramenta</button>
+      <button type="button" id="imprimirCustoPorPorcao" class="tool-btn tool-btn-secondary" hidden>Imprimir</button>
+    </div>
+  </section>
+  <p id="statusCustoPorPorcao" class="result-action-status" role="status" aria-live="polite"></p>
+</div>
+
+<section class="content portion-cost-explanatory-content">
+  <h2>Como o custo é calculado</h2>
+  <p>O custo de cada ingrediente é proporcional à parte da embalagem usada na receita. Os custos individuais são somados e o total é dividido pelo número de porções informado.</p>
+  <p>Exemplo: uma embalagem de arroz de 1 kg custa R$ 8,00 e a receita usa 300 g; o custo proporcional do arroz é R$ 2,40. A calculadora não converte massa em volume nem aplica equivalências culinárias entre ingredientes.</p>
+  <p>O preço zero é aceito para itens sem custo de compra informado. Os dados preenchidos ficam somente no formulário e não são armazenados automaticamente.</p>
+  <section class="related-tools"><h2>Ferramentas relacionadas</h2><div class="related-tools-grid">
+    <article class="tool-card"><div class="tool-card-header"><span class="tool-card-category">Utilidades</span></div><h3 class="tool-card-title">Comparador de Preços por Unidade</h3><p class="tool-card-desc">Compare embalagens por kg, litro ou unidade.</p><div class="tool-card-footer"><a href="comparador-precos.html" class="tool-card-btn">Comparar agora &rarr;</a></div></article>
+    <article class="tool-card"><div class="tool-card-header"><span class="tool-card-category">Financeiro</span></div><h3 class="tool-card-title">Calculadora de Orçamento Doméstico</h3><p class="tool-card-desc">Organize receitas e despesas mensais.</p><div class="tool-card-footer"><a href="../financas/orcamento-domestico.html" class="tool-card-btn">Calcular agora &rarr;</a></div></article>
+  </div></section>
+  <p class="tool-return-link"><a href="{{ROOT_PREFIX}}conversores.html">Voltar para as calculadoras e utilidades</a></p>
+</section>

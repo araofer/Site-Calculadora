@@ -1,0 +1,79 @@
+---
+title: Calculadora de Consumo de Água | Calculadora Master
+description: Estime consumo e custo da água pelo consumo mensal ou pelas leituras do hidrômetro, usando a tarifa informada por você.
+keywords: consumo de água, calculadora água, hidrômetro, custo água, conta de água
+canonical: https://www.calculadoramaster.com/tools/utilidades/consumo-agua.html
+layout: tool
+pageScripts: <script type="module" src="{{ROOT_PREFIX}}js/tools/consumo-agua.js"></script>
+---
+
+<h1>Calculadora de Consumo de Água</h1>
+<p>Estime o consumo e o custo da água com a tarifa efetiva informada por você. O resultado é uma estimativa, não uma fatura real da concessionária.</p>
+
+<div class="card tool-calculator-card">
+  <form id="formConsumoAgua" novalidate>
+    <fieldset class="form-group">
+      <legend>Como deseja informar o consumo?</legend>
+      <label><input type="radio" name="modoConsumoAgua" value="monthly" checked> Consumo mensal</label>
+      <label><input type="radio" name="modoConsumoAgua" value="readings"> Leituras do hidrômetro</label>
+    </fieldset>
+
+    <section id="camposConsumoMensalAgua" aria-labelledby="tituloConsumoMensalAgua">
+      <h2 id="tituloConsumoMensalAgua" class="tool-form-title">Consumo mensal</h2>
+      <div class="form-group"><label for="consumoMensalAgua">Consumo de água no período (m³):</label><input type="text" id="consumoMensalAgua" inputmode="decimal" autocomplete="off" placeholder="Ex.: 15,5"></div>
+    </section>
+
+    <section id="camposLeiturasAgua" aria-labelledby="tituloLeiturasAgua" hidden>
+      <h2 id="tituloLeiturasAgua" class="tool-form-title">Leituras do hidrômetro</h2>
+      <div class="form-group"><label for="leituraAnteriorAgua">Leitura anterior (m³):</label><input type="text" id="leituraAnteriorAgua" inputmode="decimal" autocomplete="off" placeholder="Ex.: 1.245,5"></div>
+      <div class="form-group"><label for="leituraAtualAgua">Leitura atual (m³):</label><input type="text" id="leituraAtualAgua" inputmode="decimal" autocomplete="off" placeholder="Ex.: 1.260,5"></div>
+      <div class="form-group"><label for="diasPeriodoAgua">Dias do período:</label><input type="text" id="diasPeriodoAgua" inputmode="numeric" autocomplete="off" placeholder="Ex.: 30"></div>
+    </section>
+
+    <div class="form-group"><label for="tarifaAgua">Tarifa efetiva (R$/m³):</label><input type="text" id="tarifaAgua" inputmode="decimal" autocomplete="off" placeholder="Ex.: 5,20"><small>Informe a tarifa efetiva que deseja usar, em reais por metro cúbico.</small></div>
+    <div class="form-group"><label for="adicionaisAgua">Cobranças adicionais (R$), opcional:</label><input type="text" id="adicionaisAgua" inputmode="decimal" autocomplete="off" placeholder="Ex.: 12,00"></div>
+
+    <div class="tool-actions"><button type="submit" class="tool-btn tool-btn-primary">Calcular</button><button type="button" id="limparConsumoAgua" class="tool-btn tool-btn-secondary">Limpar</button></div>
+  </form>
+
+  <p id="erroConsumoAgua" role="alert" aria-live="assertive" hidden></p>
+  <section id="resultadoConsumoAgua" aria-live="polite" aria-atomic="true" hidden>
+    <h2 class="tool-result-title">Estimativa do período</h2>
+    <div class="card tool-result-card">
+      <p>Consumo do período: <strong id="consumoResultadoAgua"></strong></p>
+      <p>Tarifa efetiva: <strong id="tarifaResultadoAgua"></strong></p>
+      <p>Custo estimado da água no período: <strong id="custoAguaResultado"></strong></p>
+      <p>Cobranças adicionais: <strong id="adicionaisResultadoAgua"></strong></p>
+      <p class="bill-total">Total estimado do período: <strong id="totalResultadoAgua"></strong></p>
+      <div id="projecaoResultadoAgua" hidden>
+        <p>Média diária: <strong id="mediaDiariaAgua"></strong></p>
+        <p>Média mensal estimada (30 dias): <strong id="mediaMensalAgua"></strong></p>
+        <p>Custo mensal estimado pela média: <strong id="custoMensalAgua"></strong></p>
+        <small>A estimativa mensal é uma projeção baseada no consumo observado, não uma fatura real.</small>
+      </div>
+    </div>
+    <div class="tool-actions result-actions">
+      <button type="button" id="copiarConsumoAgua" class="tool-btn tool-btn-secondary" hidden>Copiar resultado</button>
+      <button type="button" id="compartilharConsumoAgua" class="tool-btn tool-btn-secondary" hidden>Compartilhar</button>
+      <button type="button" id="imprimirConsumoAgua" class="tool-btn tool-btn-secondary" hidden>Imprimir</button>
+    </div>
+  </section>
+  <p id="statusConsumoAgua" class="result-action-status" role="status" aria-live="polite"></p>
+</div>
+
+<section class="content bill-explanatory-content">
+  <h2>Como funciona a estimativa</h2>
+  <p>No modo mensal, o custo da água é o consumo em m³ multiplicado pela tarifa efetiva informada. No modo de leituras, o consumo é a leitura atual menos a anterior. O custo do período usa o consumo medido; a projeção mensal de 30 dias e seu custo aparecem separadamente.</p>
+  <ul>
+    <li><strong>Custo da água:</strong> consumo × tarifa por m³.</li>
+    <li><strong>Total estimado:</strong> custo da água + cobranças adicionais informadas.</li>
+    <li><strong>Média diária:</strong> consumo medido ÷ dias do período.</li>
+    <li><strong>Média mensal estimada:</strong> média diária × 30 dias.</li>
+  </ul>
+  <p>A tarifa deve ser informada pelo usuário. O custo real pode variar conforme a concessionária, faixas e estrutura tarifária, cobrança mínima, coleta e tratamento de esgoto, taxas locais e outras regras. O campo de cobranças adicionais serve para valores conhecidos e não pressupõe uma estrutura comum a todas as concessionárias. Não são aplicadas tarifas progressivas presumidas. Seus dados não são salvos nem enviados automaticamente.</p>
+  <section class="related-tools"><h2>Ferramentas relacionadas</h2><div class="related-tools-grid">
+    <article class="tool-card"><div class="tool-card-header"><span class="tool-card-category">Utilidades</span></div><h3 class="tool-card-title">Calculadora de Conta de Luz</h3><p class="tool-card-desc">Estime o custo de energia pelo consumo ou pelas leituras do medidor.</p><div class="tool-card-footer"><a href="conta-luz.html" class="tool-card-btn">Calcular agora &rarr;</a></div></article>
+    <article class="tool-card"><div class="tool-card-header"><span class="tool-card-category">Utilidades</span></div><h3 class="tool-card-title">Calculadora de Pisos e Revestimentos</h3><p class="tool-card-desc">Estime materiais e custos de uma obra ou reforma.</p><div class="tool-card-footer"><a href="pisos-revestimentos.html" class="tool-card-btn">Calcular agora &rarr;</a></div></article>
+  </div></section>
+  <p class="tool-return-link"><a href="{{ROOT_PREFIX}}conversores.html">Voltar para as calculadoras e utilidades</a></p>
+</section>

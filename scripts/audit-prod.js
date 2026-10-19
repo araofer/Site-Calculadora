@@ -101,7 +101,7 @@ async function runProdAudit() {
 
   // 2. build:data
   try {
-    execSync('node scripts/validate-tools.js && node scripts/generate-catalog.js && node scripts/generate-sitemap.js && node scripts/validate-tools.js', {
+    execSync('npm run build:data', {
       cwd: ROOT_DIR,
       encoding: 'utf-8',
       stdio: ['pipe', 'pipe', 'pipe']
@@ -115,7 +115,7 @@ async function runProdAudit() {
 
   // 3. build:prod (geração completa de dist/)
   try {
-    const buildProdOutput = execSync('node scripts/build-html.js --scope=prod', {
+    const buildProdOutput = execSync('npm run build:prod', {
       cwd: ROOT_DIR,
       encoding: 'utf-8',
       stdio: ['pipe', 'pipe', 'pipe']
@@ -566,6 +566,25 @@ async function runProdAudit() {
 
                     if (evalRes.scrollWidth > evalRes.clientWidth) {
                       console.error(`Overflow horizontal mobile detectado em dist/${page.relativeOutputPath}: scrollWidth=${evalRes.scrollWidth} clientWidth=${evalRes.clientWidth}`);
+
+                      const overflowElements = await evalExpr(`Array.from(document.querySelectorAll("body *")).map(el => {
+                        const r = el.getBoundingClientRect();
+                        return {
+                          tag: el.tagName.toLowerCase(),
+                          id: el.id,
+                          className: typeof el.className === "string" ? el.className : "",
+                          left: Math.round(r.left),
+                          right: Math.round(r.right),
+                          width: Math.round(r.width),
+                          text: (el.innerText || "").trim().replace(/\\s+/g, " ").slice(0, 70)
+                        };
+                      }).filter(el => el.right > document.documentElement.clientWidth + 1 || el.left < -1)
+                        .sort((a, b) => b.right - a.right)
+                        .slice(0, 12)`);
+
+                      console.error("Elementos fora da viewport:", JSON.stringify(overflowElements, null, 2));
+                      console.error("bodyScrollWidth:", evalRes.bodyScrollWidth);
+
                       mobileAllOk = false;
                       allOk = false;
                     }

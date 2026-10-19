@@ -160,6 +160,7 @@ export async function shareResult(options = {}, statusElement) {
     } catch (err) {
       // Se usuário cancelar com AbortError: não mostrar erro e NÃO copiar automaticamente
       if (err && (err.name === 'AbortError' || err.name === 'Abort')) {
+        updateStatus(statusElement, 'Compartilhamento cancelado.');
         return false;
       }
       // Outro erro: prosseguir para fallback

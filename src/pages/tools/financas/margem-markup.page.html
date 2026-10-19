@@ -6,29 +6,28 @@ canonical: https://www.calculadoramaster.com/tools/financas/margem-markup.html
 layout: tool
 pageScripts: <script type="module" src="{{ROOT_PREFIX}}js/tools/margem-markup.js"></script>
 ---
-
-
-
 <h1>Calculadora de Margem e Markup</h1>
 <p>Analise seu preço de venda ou descubra quanto cobrar para alcançar a margem de lucro ou o markup desejado.</p>
 
-<div class="card" style="margin:20px 0;">
+<div class="card tool-calculator-card">
+  <h2 class="tool-form-title">Informe os dados de custo e venda</h2>
   <form id="formMargemMarkup">
     <div class="form-group">
       <label for="modoCalculo">O que você deseja calcular?</label>
-      <select id="modoCalculo" name="modoCalculo">
+      <select id="modoCalculo" name="modoCalculo" aria-describedby="ajudaModoCalculo">
         <option value="analisar">Analisar um preço de venda existente</option>
         <option value="margem">Simular preço por margem desejada</option>
         <option value="markup">Simular preço por markup desejado</option>
       </select>
+      <p id="ajudaModoCalculo">Escolha analisar um preço existente ou simular um preço com margem ou markup desejado.</p>
     </div>
 
     <div class="form-group">
       <label for="custo">Custo total (R$):</label>
       <input type="text" id="custo" name="custo"
         inputmode="decimal" autocomplete="off"
-        placeholder="100,00" required>
-      <p>Informe o custo do produto ou serviço, incluindo os gastos que deseja considerar.</p>
+        placeholder="100,00" aria-describedby="ajudaCusto" required>
+      <p id="ajudaCusto">Informe o custo do produto ou serviço, incluindo os gastos que deseja considerar.</p>
     </div>
 
     <div id="grupoPrecoVenda" class="form-group">
@@ -41,7 +40,7 @@ pageScripts: <script type="module" src="{{ROOT_PREFIX}}js/tools/margem-markup.js
     <div id="grupoPercentual" class="form-group" hidden>
       <label id="labelPercentual" for="percentualDesejado">Margem de lucro desejada (%):</label>
       <input type="number" id="percentualDesejado" name="percentualDesejado"
-        min="0" step="0.01" placeholder="30">
+        min="0" step="0.01" placeholder="30" aria-describedby="ajudaPercentual">
       <p id="ajudaPercentual">Informe o percentual que deseja alcançar.</p>
     </div>
 
@@ -57,15 +56,15 @@ pageScripts: <script type="module" src="{{ROOT_PREFIX}}js/tools/margem-markup.js
 
   <p id="erroMargemMarkup" role="alert" aria-live="assertive" hidden></p>
 
-  <section id="resultadoMargemMarkup" aria-live="polite" hidden>
-    <h2 id="tituloResultadoMargemMarkup">Resultado do cálculo</h2>
+  <section id="resultadoMargemMarkup" aria-live="polite" aria-atomic="true" hidden>
+    <h2 id="tituloResultadoMargemMarkup" class="tool-result-title">Resultado do cálculo</h2>
     <p id="descricaoResultadoMargemMarkup"></p>
 
-    <div class="card" style="margin:16px 0;padding:16px;">
+    <div class="card tool-result-card">
       <p>Custo informado:
         <strong id="custoResultadoMargemMarkup"></strong>
       </p>
-      <p><strong id="labelPrecoResultadoMargemMarkup">Preço de venda:</strong>
+      <p><span id="labelPrecoResultadoMargemMarkup">Preço de venda:</span>
         <strong id="precoResultadoMargemMarkup"></strong>
       </p>
       <p>Resultado da operação:
@@ -79,7 +78,7 @@ pageScripts: <script type="module" src="{{ROOT_PREFIX}}js/tools/margem-markup.js
       </p>
     </div>
 
-    <div class="tool-actions">
+    <div class="tool-actions result-actions">
       <button type="button" id="copiarMargemMarkup"
         class="tool-btn tool-btn-secondary" hidden>
         Copiar resultado
@@ -148,7 +147,7 @@ pageScripts: <script type="module" src="{{ROOT_PREFIX}}js/tools/margem-markup.js
     </div>
   </section>
 
-  <p style="margin-top:30px;">
+  <p class="tool-return-link">
     <a href="{{ROOT_PREFIX}}index.html">Voltar para a página inicial</a>
   </p>
 </section>

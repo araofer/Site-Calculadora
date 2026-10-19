@@ -1,0 +1,93 @@
+---
+title: Calculadora de Conta de Luz Online | Calculadora Master
+description: Estime o custo de energia elétrica residencial pelo consumo mensal ou pelas leituras do medidor, com tarifa informada por você.
+keywords: conta de luz, calculadora de energia, consumo kWh, custo de energia elétrica, leitura do medidor
+canonical: https://www.calculadoramaster.com/tools/utilidades/conta-luz.html
+layout: tool
+pageScripts: <script type="module" src="{{ROOT_PREFIX}}js/tools/conta-luz.js"></script>
+---
+
+<h1>Calculadora de Conta de Luz</h1>
+<p>Estime o custo da energia elétrica com seu consumo e a tarifa efetiva informada. O resultado é uma estimativa, não uma reprodução exata da fatura da distribuidora.</p>
+
+<div class="card tool-calculator-card">
+  <form id="formContaLuz" novalidate>
+    <fieldset class="form-group">
+      <legend>Como deseja informar o consumo?</legend>
+      <label><input type="radio" name="modoContaLuz" value="monthly" checked> Consumo mensal</label>
+      <label><input type="radio" name="modoContaLuz" value="readings"> Leituras do medidor</label>
+    </fieldset>
+
+    <section id="camposConsumoMensalLuz" aria-labelledby="tituloConsumoMensalLuz">
+      <h2 id="tituloConsumoMensalLuz" class="tool-form-title">Consumo mensal</h2>
+      <div class="form-group">
+        <label for="consumoMensalLuz">Consumo do período (kWh):</label>
+        <input type="text" id="consumoMensalLuz" inputmode="decimal" autocomplete="off" placeholder="Ex.: 250,5">
+      </div>
+    </section>
+
+    <section id="camposLeiturasLuz" aria-labelledby="tituloLeiturasLuz" hidden>
+      <h2 id="tituloLeiturasLuz" class="tool-form-title">Leituras do medidor</h2>
+      <div class="form-group"><label for="leituraAnteriorLuz">Leitura anterior (kWh):</label><input type="text" id="leituraAnteriorLuz" inputmode="decimal" autocomplete="off" placeholder="Ex.: 12.450"></div>
+      <div class="form-group"><label for="leituraAtualLuz">Leitura atual (kWh):</label><input type="text" id="leituraAtualLuz" inputmode="decimal" autocomplete="off" placeholder="Ex.: 12.700"></div>
+      <div class="form-group"><label for="diasPeriodoLuz">Dias do período:</label><input type="text" id="diasPeriodoLuz" inputmode="numeric" autocomplete="off" placeholder="Ex.: 30"></div>
+    </section>
+
+    <div class="form-group">
+      <label for="tarifaLuz">Tarifa efetiva (R$/kWh):</label>
+      <input type="text" id="tarifaLuz" inputmode="decimal" autocomplete="off" placeholder="Ex.: 0,92" aria-describedby="ajudaTarifaLuz">
+      <small id="ajudaTarifaLuz">Informe a tarifa efetiva que deseja usar, em reais por kWh.</small>
+    </div>
+    <div class="form-group">
+      <label for="adicionaisLuz">Custos adicionais (R$), opcional:</label>
+      <input type="text" id="adicionaisLuz" inputmode="decimal" autocomplete="off" placeholder="Ex.: 8,50">
+    </div>
+
+    <div class="tool-actions">
+      <button type="submit" class="tool-btn tool-btn-primary">Calcular estimativa</button>
+      <button type="button" id="limparContaLuz" class="tool-btn tool-btn-secondary">Limpar</button>
+    </div>
+  </form>
+
+  <p id="erroContaLuz" role="alert" aria-live="assertive" hidden></p>
+  <section id="resultadoContaLuz" aria-live="polite" aria-atomic="true" hidden>
+    <h2 class="tool-result-title">Estimativa do período</h2>
+    <div class="card tool-result-card">
+      <p>Consumo do período: <strong id="consumoResultadoLuz"></strong></p>
+      <p>Tarifa efetiva: <strong id="tarifaResultadoLuz"></strong></p>
+      <p>Custo de energia: <strong id="custoEnergiaResultadoLuz"></strong></p>
+      <p>Custos adicionais: <strong id="adicionaisResultadoLuz"></strong></p>
+      <p class="bill-total">Total estimado: <strong id="totalResultadoLuz"></strong></p>
+      <div id="mediasResultadoLuz" hidden>
+        <p>Média diária: <strong id="mediaDiariaResultadoLuz"></strong></p>
+        <p>Média mensal estimada (30 dias): <strong id="mediaMensalResultadoLuz"></strong></p>
+      </div>
+    </div>
+    <div class="tool-actions result-actions">
+      <button type="button" id="copiarContaLuz" class="tool-btn tool-btn-secondary" hidden>Copiar resultado</button>
+      <button type="button" id="compartilharContaLuz" class="tool-btn tool-btn-secondary" hidden>Compartilhar</button>
+      <button type="button" id="imprimirContaLuz" class="tool-btn tool-btn-secondary" hidden>Imprimir</button>
+    </div>
+  </section>
+  <p id="statusContaLuz" class="result-action-status" role="status" aria-live="polite"></p>
+</div>
+
+<section class="content bill-explanatory-content">
+  <h2>Como funciona a estimativa</h2>
+  <p>No modo mensal, o custo de energia é o consumo em kWh multiplicado pela tarifa efetiva informada. No modo de leituras, o consumo é a leitura atual menos a anterior; o custo corresponde ao período medido, enquanto a média mensal é uma projeção separada para 30 dias.</p>
+  <ul>
+    <li><strong>Custo de energia:</strong> consumo × tarifa por kWh.</li>
+    <li><strong>Total estimado:</strong> custo de energia + custos adicionais opcionais.</li>
+    <li><strong>Média diária:</strong> consumo medido ÷ dias do período.</li>
+    <li><strong>Média mensal estimada:</strong> média diária × 30 dias.</li>
+  </ul>
+  <p>O valor pode diferir da conta real por tributos, bandeiras tarifárias, tarifas específicas da distribuidora, iluminação pública e outros componentes. Não são aplicadas alíquotas presumidas. Seus dados permanecem no formulário e não são salvos ou enviados automaticamente.</p>
+  <section class="related-tools">
+    <h2>Ferramentas relacionadas</h2>
+    <div class="related-tools-grid">
+      <article class="tool-card"><div class="tool-card-header"><span class="tool-card-category">Financeiro</span></div><h3 class="tool-card-title">Calculadora de Orçamento Doméstico</h3><p class="tool-card-desc">Organize as receitas e despesas mensais da família.</p><div class="tool-card-footer"><a href="../financas/orcamento-domestico.html" class="tool-card-btn">Calcular agora &rarr;</a></div></article>
+      <article class="tool-card"><div class="tool-card-header"><span class="tool-card-category">Utilidades</span></div><h3 class="tool-card-title">Calculadora de Pisos e Revestimentos</h3><p class="tool-card-desc">Estime materiais e custos de uma obra ou reforma.</p><div class="tool-card-footer"><a href="pisos-revestimentos.html" class="tool-card-btn">Calcular agora &rarr;</a></div></article>
+    </div>
+  </section>
+  <p class="tool-return-link"><a href="{{ROOT_PREFIX}}conversores.html">Voltar para as calculadoras e utilidades</a></p>
+</section>

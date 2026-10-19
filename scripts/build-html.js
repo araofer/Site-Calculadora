@@ -176,6 +176,11 @@ const HOME_PAGE = {
   relativeOutputPath: 'index.html'
 };
 
+const FAVORITES_PAGE = {
+  sourceFile: path.join(PAGES_DIR, 'favoritos.page.html'),
+  relativeOutputPath: 'favoritos.html'
+};
+
 const CATEGORIA_PAGES = [
   {
     sourceFile: path.join(PAGES_DIR, 'categorias', 'financeira.page.html'),
@@ -311,6 +316,7 @@ const INSTITUCIONAL_PAGES = [
 const SITE_PAGES = [
   ...TOOL_PAGES,
   HOME_PAGE,
+  FAVORITES_PAGE,
   ...CATEGORIA_PAGES,
   ...BLOG_PAGES,
   ...INSTITUCIONAL_PAGES
@@ -398,7 +404,8 @@ const TOOL_ASSETS = [...TOOL_ASSETS_BY_DEST.values()];
 const SITE_SPECIFIC_ASSETS = [
   { src: 'logo/banner.webp', dest: 'logo/banner.webp' },
   { src: 'js/tools-catalog.js', dest: 'js/tools-catalog.js' },
-  { src: 'js/home-search.js', dest: 'js/home-search.js' }
+  { src: 'js/home-search.js', dest: 'js/home-search.js' },
+  { src: 'js/favorites-page.js', dest: 'js/favorites-page.js' }
 ];
 
 const BLOG_ASSETS = [
@@ -653,21 +660,23 @@ function copyPilotAssets(outputDir = DEFAULT_OUTPUT_DIR, assets = DEFAULT_ASSETS
 }
 
 /**
- * Copia a configuração do servidor para o diretório de produção.
- * O .htaccess não faz parte da lista SITE_ASSETS.
+ * Copia os arquivos de raiz pública necessários para a publicação.
+ * Estes arquivos não fazem parte da lista SITE_ASSETS.
  *
  * @param {string} [outputDir] Diretório de saída da produção
  */
 function copyProductionConfig(outputDir = PROD_OUTPUT_DIR) {
-  const srcPath = path.join(ROOT_DIR, '.htaccess');
-  const destPath = path.join(outputDir, '.htaccess');
-
-  if (!fs.existsSync(srcPath)) {
-    throw new Error(`Configuração obrigatória não encontrada: ${srcPath}`);
-  }
-
+  const rootFiles = ['.htaccess', 'sitemap.xml', 'robots.txt'];
   fs.mkdirSync(outputDir, { recursive: true });
-  fs.copyFileSync(srcPath, destPath);
+
+  for (const filename of rootFiles) {
+    const srcPath = path.join(ROOT_DIR, filename);
+    const destPath = path.join(outputDir, filename);
+    if (!fs.existsSync(srcPath)) {
+      throw new Error(`Arquivo obrigatório de publicação não encontrado: ${srcPath}`);
+    }
+    fs.copyFileSync(srcPath, destPath);
+  }
 }
 
 /**
@@ -783,6 +792,7 @@ module.exports = {
   FACTORY_BLOG_PAGES,
   TOOL_PAGES,
   HOME_PAGE,
+  FAVORITES_PAGE,
   CATEGORIA_PAGES,
   BLOG_INDEX_PAGE,
   BLOG_ARTIGOS_PAGES,

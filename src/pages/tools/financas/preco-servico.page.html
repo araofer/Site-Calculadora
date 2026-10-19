@@ -9,31 +9,37 @@ pageScripts: <script type="module" src="{{ROOT_PREFIX}}js/tools/preco-servico.js
   <h1>Calculadora de Preço de Serviço</h1>
   <p>Descubra quanto cobrar pelo seu serviço considerando os custos e a margem de lucro que você deseja alcançar.</p>
 
-  <div class="card" style="margin:20px 0;">
-    <h2>Informe os custos do serviço</h2>
+  <div class="card tool-calculator-card">
+    <h2 class="tool-form-title">Informe os custos do serviço</h2>
 
     <form id="formPrecoServico">
-      <label for="materiais">Materiais e insumos (R$):</label><br>
-      <input type="text" id="materiais" name="materiais" inputmode="numeric" autocomplete="off" data-money-input placeholder="0,00">
-      <br><br>
+      <div class="form-group">
+        <label for="materiais">Materiais e insumos (R$):</label>
+        <input type="text" id="materiais" name="materiais" inputmode="numeric" autocomplete="off" data-money-input placeholder="0,00">
+      </div>
 
-      <label for="maoDeObra">Mão de obra (R$):</label><br>
-      <input type="text" id="maoDeObra" name="maoDeObra" inputmode="numeric" autocomplete="off" data-money-input placeholder="0,00">
-      <br><br>
+      <div class="form-group">
+        <label for="maoDeObra">Mão de obra (R$):</label>
+        <input type="text" id="maoDeObra" name="maoDeObra" inputmode="numeric" autocomplete="off" data-money-input placeholder="0,00">
+      </div>
 
-      <label for="deslocamento">Deslocamento e transporte (R$):</label><br>
-      <input type="text" id="deslocamento" name="deslocamento" inputmode="numeric" autocomplete="off" data-money-input placeholder="0,00">
-      <br><br>
+      <div class="form-group">
+        <label for="deslocamento">Deslocamento e transporte (R$):</label>
+        <input type="text" id="deslocamento" name="deslocamento" inputmode="numeric" autocomplete="off" data-money-input placeholder="0,00">
+      </div>
 
-      <label for="outrasDespesas">Outras despesas (R$):</label><br>
-      <input type="text" id="outrasDespesas" name="outrasDespesas" inputmode="numeric" autocomplete="off" data-money-input placeholder="0,00">
-      <br><br>
+      <div class="form-group">
+        <label for="outrasDespesas">Outras despesas (R$):</label>
+        <input type="text" id="outrasDespesas" name="outrasDespesas" inputmode="numeric" autocomplete="off" data-money-input placeholder="0,00">
+      </div>
 
-      <label for="margemDesejada">Margem de lucro desejada (%):</label><br>
-      <input type="number" id="margemDesejada" name="margemDesejada" min="0" max="99.99" step="0.01" placeholder="Ex.: 30" required>
-      <p>Informe a margem como percentual do preço final. Exemplo: 30 significa 30%.</p>
+      <div class="form-group">
+        <label for="margemDesejada">Margem de lucro desejada (%):</label>
+        <input type="number" id="margemDesejada" name="margemDesejada" min="0" max="99.99" step="0.01" placeholder="Ex.: 30" aria-describedby="ajudaMargemDesejada" required>
+        <p id="ajudaMargemDesejada">Informe a margem como percentual do preço final. Exemplo: 30 significa 30%.</p>
+      </div>
 
-      <div class="tool-actions preco-servico-actions">
+      <div class="tool-actions">
         <button type="submit" class="tool-btn tool-btn-primary">Calcular preço</button>
         <button type="button" id="limparPrecoServico" class="tool-btn tool-btn-secondary">Limpar</button>
       </div>
@@ -41,16 +47,18 @@ pageScripts: <script type="module" src="{{ROOT_PREFIX}}js/tools/preco-servico.js
 
     <p id="erroPrecoServico" role="alert" aria-live="assertive" hidden></p>
 
-    <section id="resultadoPrecoServico" aria-live="polite" hidden>
-      <h2 style="margin-top:20px;">Resultado do orçamento</h2>
+    <section id="resultadoPrecoServico" aria-live="polite" aria-atomic="true" hidden>
+      <h2 class="tool-result-title">Resultado do orçamento</h2>
 
-      <p>Custo total: <strong id="custoTotalResultado"></strong></p>
-      <p>Preço sugerido para cobrar: <strong id="precoSugeridoResultado"></strong></p>
-      <p>Lucro estimado: <strong id="lucroEstimadoResultado"></strong></p>
-      <p>Margem de lucro efetiva: <strong id="margemEfetivaResultado"></strong></p>
-      <p>Markup sobre o custo: <strong id="markupResultado"></strong></p>
+      <div class="card tool-result-card">
+        <p>Custo total: <strong id="custoTotalResultado"></strong></p>
+        <p>Preço sugerido para cobrar: <strong id="precoSugeridoResultado"></strong></p>
+        <p>Lucro estimado: <strong id="lucroEstimadoResultado"></strong></p>
+        <p>Margem de lucro efetiva: <strong id="margemEfetivaResultado"></strong></p>
+        <p>Markup sobre o custo: <strong id="markupResultado"></strong></p>
+      </div>
 
-      <div class="tool-actions">
+      <div class="tool-actions result-actions">
         <button type="button" id="copiarPrecoServico" class="tool-btn tool-btn-secondary" hidden>Copiar resultado</button>
         <button type="button" id="compartilharPrecoServico" class="tool-btn tool-btn-secondary" hidden>Compartilhar</button>
         <button type="button" id="imprimirPrecoServico" class="tool-btn tool-btn-secondary" hidden>Imprimir</button>
@@ -107,7 +115,7 @@ pageScripts: <script type="module" src="{{ROOT_PREFIX}}js/tools/preco-servico.js
       </div>
     </section>
 
-    <p style="margin-top:30px;">
-      👉 <a href="{{ROOT_PREFIX}}index.html">Voltar para a página inicial</a>
+    <p class="tool-return-link">
+      <a href="{{ROOT_PREFIX}}index.html">Voltar para a página inicial</a>
     </p>
   </section>
