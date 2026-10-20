@@ -1,0 +1,208 @@
+---
+title: Calculadora de Projeção de Faturamento MEI Online Grátis | Limite Anual - Calculadora Master
+description: Projete o faturamento bruto anual do MEI mês a mês com crescimento composto, acompanhe o percentual utilizado do limite anual e estime a margem restante.
+keywords: projeção de faturamento mei, calculadora limite mei, faturamento anual mei 81000, calcular receita bruta mei, planejamento mei
+canonical: https://www.calculadoramaster.com/tools/financas/projecao-faturamento-mei.html
+layout: tool
+pageScripts: <script type="module" src="{{ROOT_PREFIX}}js/tools/projecao-faturamento-mei.js"></script>
+---
+
+<h1>Calculadora de Projeção de Faturamento MEI</h1>
+
+<p>Projete a evolução do faturamento bruto do Microempreendedor Individual (MEI) para os meses restantes do ano, acompanhe o percentual utilizado do limite anual aplicável e descubra qual é a média mensal compatível para manter o CNPJ dentro do limite.</p>
+
+<div class="card tool-calculator-card">
+  <h2 class="tool-form-title">Dados de Faturamento Bruto e Período</h2>
+
+  <form id="formProjecaoMei" novalidate>
+    <div class="form-group">
+      <label for="faturamentoAcumuladoMei">Faturamento bruto já acumulado no ano (R$):</label>
+      <p id="ajudaFaturamentoAcumuladoMei">Some apenas a receita bruta dos meses já realizados no ano (sem descontar despesas e sem incluir os meses futuros que serão projetados).</p>
+      <input
+        type="text"
+        id="faturamentoAcumuladoMei"
+        name="faturamentoAcumuladoMei"
+        inputmode="decimal"
+        value="0"
+        placeholder="Ex: 36000,00"
+        autocomplete="off"
+        aria-describedby="ajudaFaturamentoAcumuladoMei"
+      >
+    </div>
+
+    <div class="form-group">
+      <label for="faturamentoMensalReferenciaMei">Faturamento bruto mensal de referência (R$):</label>
+      <p id="ajudaFaturamentoMensalReferenciaMei">Receita bruta mensal base (como o último mês fechado) a partir da qual os meses futuros serão projetados.</p>
+      <input
+        type="text"
+        id="faturamentoMensalReferenciaMei"
+        name="faturamentoMensalReferenciaMei"
+        inputmode="decimal"
+        placeholder="Ex: 6000,00"
+        autocomplete="off"
+        aria-describedby="ajudaFaturamentoMensalReferenciaMei"
+        required
+      >
+    </div>
+
+    <div class="form-group">
+      <label for="mesesRestantesMei">Quantidade de meses restantes a projetar (1 a 12):</label>
+      <p id="ajudaMesesRestantesMei">Número de meses futuros até o encerramento do ano-calendário ou período de análise.</p>
+      <input
+        type="number"
+        id="mesesRestantesMei"
+        name="mesesRestantesMei"
+        inputmode="numeric"
+        min="1"
+        max="12"
+        step="1"
+        value="6"
+        aria-describedby="ajudaMesesRestantesMei"
+        required
+      >
+    </div>
+
+    <div class="form-group">
+      <label for="crescimentoMensalMei">Crescimento mensal esperado (%):</label>
+      <p id="ajudaCrescimentoMensalMei">Taxa composta aplicada a cada mês futuro. Informe 0 para faturamento constante ou valor negativo para queda esperada.</p>
+      <input
+        type="text"
+        id="crescimentoMensalMei"
+        name="crescimentoMensalMei"
+        inputmode="decimal"
+        value="0"
+        placeholder="Ex: 2,5"
+        autocomplete="off"
+        aria-describedby="ajudaCrescimentoMensalMei"
+      >
+    </div>
+
+    <div class="form-group">
+      <label for="limiteAnualMei">Limite anual de faturamento bruto para comparação (R$):</label>
+      <p id="ajudaLimiteAnualMei">Padrão de R$ 81.000,00 (LC nº 123/2006, art. 18-A). Ajuste se você tiver limite proporcional no ano de abertura ou se for MEI Caminhoneiro (R$ 251.600,00).</p>
+      <input
+        type="text"
+        id="limiteAnualMei"
+        name="limiteAnualMei"
+        inputmode="decimal"
+        value="81000,00"
+        placeholder="Ex: 81000,00"
+        autocomplete="off"
+        aria-describedby="ajudaLimiteAnualMei"
+        required
+      >
+    </div>
+
+    <div class="tool-actions">
+      <button type="submit" id="btnCalcularProjecaoMei" class="tool-btn tool-btn-primary">Projetar faturamento</button>
+      <button type="button" id="btnLimparProjecaoMei" class="tool-btn tool-btn-secondary">Limpar campos</button>
+    </div>
+  </form>
+
+  <p id="erroProjecaoMei" role="alert" aria-live="assertive" hidden></p>
+
+  <section id="resultadoProjecaoMei" aria-live="polite" aria-atomic="true" hidden>
+    <h2 class="tool-result-title">Indicadores da Projeção Anual</h2>
+
+    <div class="card tool-result-card">
+      <p>Situação em relação ao limite informado: <strong id="resSituacaoLimiteMei" class="budget-status-positive">—</strong></p>
+      <p id="resAvisoLimiteMei" class="mei-limit-alert"></p>
+      <p>Faturamento acumulado já realizado: <strong id="resFaturamentoAcumuladoMei">R$ 0,00</strong></p>
+      <p>Total projetado para os meses restantes: <strong id="resTotalProjetadoRestanteMei">R$ 0,00</strong></p>
+      <p class="bill-total">Faturamento bruto anual projetado: <strong id="resFaturamentoAnualProjetadoMei">R$ 0,00</strong></p>
+      <p>Limite anual considerado na comparação: <strong id="resLimiteAnualMei">R$ 81.000,00</strong></p>
+      <p>Percentual do limite anual utilizado: <strong id="resPercentualLimiteMei">0,00%</strong></p>
+      <p>Valor restante até o limite: <strong id="resValorRestanteLimiteMei">R$ 0,00</strong></p>
+      <p>Valor que ultrapassaria o limite: <strong id="resValorExcedenteLimiteMei">R$ 0,00</strong></p>
+      <p>Média mensal projetada nos meses futuros: <strong id="resMediaMensalProjetadaMei">R$ 0,00</strong></p>
+      <p>Faturamento mensal médio compatível com o limite restante: <strong id="resMensalCompativelLimiteMei">R$ 0,00/mês</strong></p>
+    </div>
+
+    <h3 class="mei-table-heading">Tabela Mensal de Projeção (Meses Futuros)</h3>
+    <div class="mei-projection-table-wrapper">
+      <table class="mei-projection-table">
+        <thead>
+          <tr>
+            <th scope="col">Período</th>
+            <th scope="col">Faturamento Projetado</th>
+            <th scope="col">Acumulado no Ano</th>
+            <th scope="col">% do Limite</th>
+          </tr>
+        </thead>
+        <tbody id="tabelaProjecaoMeiBody"></tbody>
+      </table>
+    </div>
+
+    <p class="tool-result-note">
+      Aviso legal e contábil: o enquadramento do MEI considera a <strong>receita bruta total</strong> (vendas e serviços sem deduzir custos ou despesas). O faturamento acumulado informado refere-se exclusivamente aos meses já encerrados e a tabela projeta apenas os meses futuros, evitando contagem duplicada. Esta ferramenta tem finalidade de planejamento financeiro e não substitui a orientação de um contador ou consulta à legislação tributária vigente.
+    </p>
+
+    <div class="tool-actions result-actions">
+      <button type="button" id="btnCopiarProjecaoMei" class="tool-btn tool-btn-secondary" hidden>Copiar projeção</button>
+      <button type="button" id="btnCompartilharProjecaoMei" class="tool-btn tool-btn-secondary" hidden>Compartilhar link</button>
+      <button type="button" id="btnImprimirProjecaoMei" class="tool-btn tool-btn-secondary" hidden>Imprimir</button>
+    </div>
+  </section>
+
+  <p id="statusProjecaoMei" class="result-action-status" role="status" aria-live="polite"></p>
+</div>
+
+<section class="content mei-projection-explanatory-content">
+  <h2>Como funciona a projeção de faturamento bruto do MEI</h2>
+
+  <p>O acompanhamento mensal do faturamento bruto permite ao Microempreendedor Individual antecipar se a receita anual ficará dentro do teto da categoria ou se será necessário planejar a transição para Microempresa (ME) junto a uma assessoria contábil.</p>
+
+  <h3>Fórmula da projeção composta e premissas</h3>
+  <ul>
+    <li><strong>Sem contagem duplicada:</strong> o valor informado em <em>Faturamento bruto já acumulado</em> representa somente os meses já encerrados no ano. Os <em>meses restantes</em> projetam exclusivamente o período futuro.</li>
+    <li><strong>Projeção mensal composta:</strong> para cada mês futuro, aplica-se <code>faturamento projetado = faturamento do mês anterior × (1 + crescimento percentual ÷ 100)</code>, partindo do faturamento mensal de referência.</li>
+    <li><strong>Crescimento zero:</strong> quando o crescimento mensal é <code>0%</code>, todos os meses futuros mantêm exatamente o faturamento mensal de referência.</li>
+    <li><strong>Receita bruta vs. lucro:</strong> o limite legal do MEI incide sobre o faturamento bruto total (notas emitidas e vendas realizadas), sem subtrair compras de mercadorias, aluguel ou despesas operacionais.</li>
+    <li><strong>Média mensal compatível com o limite restante:</strong> divide o saldo disponível do limite anual (<code>limite anual − acumulado já realizado</code>) pela quantidade de meses restantes.</li>
+  </ul>
+
+  <h3>Sobre o limite anual configurável</h3>
+  <p>O campo de limite anual vem preenchido com <strong>R$ 81.000,00</strong> (regra geral prevista no art. 18-A, § 1º da Lei Complementar nº 123/2006). Caso a empresa tenha sido aberta ao longo do próprio ano-calendário, o limite é proporcional ao número de meses de atividade (R$ 6.750,00 multiplicado pelos meses ativos). Já para o <strong>MEI Caminhoneiro</strong> (transportador autônomo de cargas, art. 18-F da LC nº 123/2006), o limite anual específico é de <strong>R$ 251.600,00</strong>. Você pode editar livremente o campo de limite para refletir a sua situação exata.</p>
+
+  <section class="related-tools">
+    <h2>Ferramentas Relacionadas</h2>
+    <div class="related-tools-grid">
+      <article class="tool-card">
+        <div class="tool-card-header">
+          <span class="tool-card-category">Financeiro</span>
+        </div>
+        <h3 class="tool-card-title">Calculadora de Preço de Serviço</h3>
+        <p class="tool-card-desc">Defina o preço ideal dos seus serviços considerando custos operacionais, impostos e margem.</p>
+        <div class="tool-card-footer">
+          <a href="{{ROOT_PREFIX}}tools/financas/preco-servico.html" class="tool-card-btn">Acessar</a>
+        </div>
+      </article>
+
+      <article class="tool-card">
+        <div class="tool-card-header">
+          <span class="tool-card-category">Financeiro</span>
+        </div>
+        <h3 class="tool-card-title">Calculadora de Valor da Hora</h3>
+        <p class="tool-card-desc">Descubra quanto cobrar por hora de trabalho para atingir sua meta de remuneração líquida.</p>
+        <div class="tool-card-footer">
+          <a href="{{ROOT_PREFIX}}tools/financas/valor-hora.html" class="tool-card-btn">Acessar</a>
+        </div>
+      </article>
+
+      <article class="tool-card">
+        <div class="tool-card-header">
+          <span class="tool-card-category">Financeiro</span>
+        </div>
+        <h3 class="tool-card-title">Calculadora de Margem de Lucro e Markup</h3>
+        <p class="tool-card-desc">Calcule a margem sobre a venda e o índice de markup para precificar produtos com segurança.</p>
+        <div class="tool-card-footer">
+          <a href="{{ROOT_PREFIX}}tools/financas/margem-markup.html" class="tool-card-btn">Acessar</a>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <p class="tool-return-link">
+    <a href="{{ROOT_PREFIX}}index.html">← Voltar para a página inicial</a>
+  </p>
+</section>

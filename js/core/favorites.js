@@ -36,7 +36,10 @@ export const VALID_TOOL_IDS = new Set([
   'consumo-agua',
   'comparador-precos',
   'custo-por-porcao',
-  'pisos-revestimentos'
+  'pisos-revestimentos',
+  'tinta',
+  'orcamento-pedreiro',
+  'projecao-faturamento-mei'
 ]);
 
 let memoryFavorites = null;

@@ -650,9 +650,27 @@
     "status": "published",
     "formulaStatus": "verified",
     "implementation": "factory",
-    "features": { "chart": false, "table": false, "pdf": false, "copy": true, "share": true, "print": true, "favorite": true, "article": false },
-    "keywords": ["conta de luz", "energia elétrica", "consumo kWh", "tarifa por kWh", "leitura do medidor"],
-    "related": ["orcamento-domestico", "pisos-revestimentos"],
+    "features": {
+      "chart": false,
+      "table": false,
+      "pdf": false,
+      "copy": true,
+      "share": true,
+      "print": true,
+      "favorite": true,
+      "article": false
+    },
+    "keywords": [
+      "conta de luz",
+      "energia elétrica",
+      "consumo kWh",
+      "tarifa por kWh",
+      "leitura do medidor"
+    ],
+    "related": [
+      "orcamento-domestico",
+      "pisos-revestimentos"
+    ],
     "shortName": "Conta de Luz"
   },
   {
@@ -667,9 +685,28 @@
     "status": "published",
     "formulaStatus": "verified",
     "implementation": "factory",
-    "features": { "chart": false, "table": false, "pdf": false, "copy": true, "share": true, "print": true, "favorite": true, "article": false },
-    "keywords": ["consumo de água", "calculadora água", "hidrômetro", "custo da água", "conta de água", "tarifa por m³"],
-    "related": ["conta-luz", "pisos-revestimentos"],
+    "features": {
+      "chart": false,
+      "table": false,
+      "pdf": false,
+      "copy": true,
+      "share": true,
+      "print": true,
+      "favorite": true,
+      "article": false
+    },
+    "keywords": [
+      "consumo de água",
+      "calculadora água",
+      "hidrômetro",
+      "custo da água",
+      "conta de água",
+      "tarifa por m³"
+    ],
+    "related": [
+      "conta-luz",
+      "pisos-revestimentos"
+    ],
     "shortName": "Consumo de Água"
   },
   {
@@ -684,9 +721,28 @@
     "status": "published",
     "formulaStatus": "verified",
     "implementation": "factory",
-    "features": { "chart": false, "table": false, "pdf": false, "copy": true, "share": true, "print": true, "favorite": true, "article": false },
-    "keywords": ["comparador de preços", "preço por unidade", "preço por kg", "preço por litro", "supermercado", "economia"],
-    "related": ["consumo-agua", "preco-servico"],
+    "features": {
+      "chart": false,
+      "table": false,
+      "pdf": false,
+      "copy": true,
+      "share": true,
+      "print": true,
+      "favorite": true,
+      "article": false
+    },
+    "keywords": [
+      "comparador de preços",
+      "preço por unidade",
+      "preço por kg",
+      "preço por litro",
+      "supermercado",
+      "economia"
+    ],
+    "related": [
+      "consumo-agua",
+      "preco-servico"
+    ],
     "shortName": "Comparador por Unidade"
   },
   {
@@ -701,9 +757,27 @@
     "status": "published",
     "formulaStatus": "verified",
     "implementation": "factory",
-    "features": { "chart": false, "table": false, "pdf": false, "copy": true, "share": true, "print": true, "favorite": true, "article": false },
-    "keywords": ["custo por porção", "custo de receita", "ingredientes", "custo proporcional", "custo de alimentos"],
-    "related": ["comparador-precos", "orcamento-domestico"],
+    "features": {
+      "chart": false,
+      "table": false,
+      "pdf": false,
+      "copy": true,
+      "share": true,
+      "print": true,
+      "favorite": true,
+      "article": false
+    },
+    "keywords": [
+      "custo por porção",
+      "custo de receita",
+      "ingredientes",
+      "custo proporcional",
+      "custo de alimentos"
+    ],
+    "related": [
+      "comparador-precos",
+      "orcamento-domestico"
+    ],
     "shortName": "Custo por Porção"
   },
   {
@@ -737,5 +811,110 @@
     ],
     "related": [],
     "shortName": "Pisos e Revestimentos"
+  },
+  {
+    "id": "tinta",
+    "slug": "tinta",
+    "name": "Calculadora de Tinta",
+    "category": "Utilidades",
+    "categorySlug": "utilidades",
+    "audience": "brasil",
+    "description": "Estime a quantidade de tinta para paredes e tetos considerando área, demãos, rendimento e margem de segurança.",
+    "url": "/tools/utilidades/tinta.html",
+    "status": "published",
+    "formulaStatus": "verified",
+    "implementation": "factory",
+    "features": {
+      "chart": false,
+      "table": false,
+      "pdf": false,
+      "copy": true,
+      "share": true,
+      "print": true,
+      "favorite": true,
+      "article": false
+    },
+    "keywords": [
+      "calculadora de tinta",
+      "pintura",
+      "área a pintar",
+      "rendimento da tinta",
+      "litros de tinta"
+    ],
+    "related": [
+      "pisos-revestimentos",
+      "orcamento-pedreiro"
+    ],
+    "shortName": "Tinta"
+  },
+  {
+    "id": "orcamento-pedreiro",
+    "slug": "orcamento-pedreiro",
+    "name": "Calculadora de Orçamento de Pedreiro",
+    "category": "Utilidades",
+    "categorySlug": "utilidades",
+    "audience": "brasil",
+    "description": "Estime o custo de mão de obra de pedreiro por m² ou diária, incluindo gastos adicionais, materiais, reserva para imprevistos e descontos.",
+    "url": "/tools/utilidades/orcamento-pedreiro.html",
+    "status": "published",
+    "formulaStatus": "verified",
+    "implementation": "factory",
+    "features": {
+      "chart": false,
+      "table": false,
+      "pdf": false,
+      "copy": true,
+      "share": true,
+      "print": true,
+      "favorite": true,
+      "article": false
+    },
+    "keywords": [
+      "orçamento de pedreiro",
+      "calcular mão de obra pedreiro",
+      "preço m2 pedreiro",
+      "diária de pedreiro",
+      "orçamento reforma"
+    ],
+    "related": [
+      "pisos-revestimentos",
+      "tinta"
+    ],
+    "shortName": "Orçamento de Pedreiro"
+  },
+  {
+    "id": "projecao-faturamento-mei",
+    "slug": "projecao-faturamento-mei",
+    "name": "Calculadora de Projeção de Faturamento MEI",
+    "category": "Financeiro",
+    "categorySlug": "financas",
+    "audience": "brasil",
+    "description": "Projete o faturamento bruto anual do MEI mês a mês, acompanhe o percentual utilizado do limite anual e planeje os próximos meses.",
+    "url": "/tools/financas/projecao-faturamento-mei.html",
+    "status": "published",
+    "formulaStatus": "verified",
+    "implementation": "factory",
+    "features": {
+      "chart": false,
+      "table": true,
+      "pdf": false,
+      "copy": true,
+      "share": true,
+      "print": true,
+      "favorite": true,
+      "article": false
+    },
+    "keywords": [
+      "projeção faturamento mei",
+      "limite anual mei",
+      "calcular faturamento mei",
+      "desenquadramento mei",
+      "receita bruta mei"
+    ],
+    "related": [
+      "preco-servico",
+      "valor-hora"
+    ],
+    "shortName": "Projeção de Faturamento MEI"
   }
 ]

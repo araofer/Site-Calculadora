@@ -1,0 +1,285 @@
+---
+title: Calculadora de Orçamento de Pedreiro Online Grátis | Por m² ou Diária - Calculadora Master
+description: Estime o custo de mão de obra de pedreiro por m² ou por diária, somando gastos adicionais, materiais separados, reserva para imprevistos e descontos.
+keywords: orçamento de pedreiro, calculadora de mão de obra pedreiro, preço m2 pedreiro, valor diária pedreiro, orçamento de reforma
+canonical: https://www.calculadoramaster.com/tools/utilidades/orcamento-pedreiro.html
+layout: tool
+pageScripts: <script type="module" src="{{ROOT_PREFIX}}js/tools/orcamento-pedreiro.js"></script>
+---
+
+<h1>Calculadora de Orçamento de Pedreiro</h1>
+
+<p>Monte uma estimativa transparente de orçamento para serviços de alvenaria, acabamento ou pequenas reformas, escolhendo entre cobrança por metro quadrado (m²) ou por diária e separando mão de obra, custos adicionais, materiais, reserva para imprevistos e descontos.</p>
+
+<div class="card tool-calculator-card">
+  <h2 class="tool-form-title">Parâmetros do Orçamento</h2>
+
+  <form id="formOrcamentoPedreiro" novalidate>
+    <div class="form-group">
+      <label for="modoCalculoPedreiro">Tipo de cálculo da mão de obra:</label>
+      <p id="ajudaModoCalculoPedreiro">Escolha se o serviço será orçado pelo preço por metro quadrado (m²) ou por quantidade de diárias.</p>
+      <select id="modoCalculoPedreiro" name="modoCalculoPedreiro" aria-describedby="ajudaModoCalculoPedreiro">
+        <option value="m2">Preço por metro quadrado (m²)</option>
+        <option value="diaria">Preço por diária</option>
+      </select>
+    </div>
+
+    <div id="camposModoM2">
+      <div class="form-group">
+        <label for="areaServico">Área do serviço (m²):</label>
+        <p id="ajudaAreaServico">Metragem total do serviço a ser executado pelo profissional.</p>
+        <input
+          type="text"
+          id="areaServico"
+          name="areaServico"
+          inputmode="decimal"
+          placeholder="Ex: 45"
+          autocomplete="off"
+          aria-describedby="ajudaAreaServico"
+        >
+      </div>
+
+      <div class="form-group">
+        <label for="precoPorM2">Preço da mão de obra por m² (R$):</label>
+        <p id="ajudaPrecoPorM2">Valor cobrado pelo profissional para cada metro quadrado executado.</p>
+        <input
+          type="text"
+          id="precoPorM2"
+          name="precoPorM2"
+          inputmode="decimal"
+          placeholder="Ex: 65,00"
+          autocomplete="off"
+          aria-describedby="ajudaPrecoPorM2"
+        >
+      </div>
+    </div>
+
+    <div id="camposModoDiaria" hidden>
+      <div class="form-group">
+        <label for="quantidadeDiarias">Quantidade estimada de diárias (dias):</label>
+        <p id="ajudaQuantidadeDiarias">Total de dias de trabalho previstos (aceita meios-dias, como 2,5).</p>
+        <input
+          type="text"
+          id="quantidadeDiarias"
+          name="quantidadeDiarias"
+          inputmode="decimal"
+          placeholder="Ex: 8"
+          autocomplete="off"
+          aria-describedby="ajudaQuantidadeDiarias"
+        >
+      </div>
+
+      <div class="form-group">
+        <label for="precoDiaria">Preço de cada diária (R$):</label>
+        <p id="ajudaPrecoDiaria">Valor acordado por dia de trabalho da equipe ou profissional.</p>
+        <input
+          type="text"
+          id="precoDiaria"
+          name="precoDiaria"
+          inputmode="decimal"
+          placeholder="Ex: 220,00"
+          autocomplete="off"
+          aria-describedby="ajudaPrecoDiaria"
+        >
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="custoTransporte">Transporte e deslocamento — opcional (R$):</label>
+      <p id="ajudaCustoTransporte">Gastos com frete, combustível ou deslocamento do serviço.</p>
+      <input
+        type="text"
+        id="custoTransporte"
+        name="custoTransporte"
+        inputmode="decimal"
+        placeholder="Ex: 150,00"
+        autocomplete="off"
+        aria-describedby="ajudaCustoTransporte"
+      >
+    </div>
+
+    <div class="form-group">
+      <label for="custoFerramentas">Aluguel de ferramentas e equipamentos — opcional (R$):</label>
+      <p id="ajudaCustoFerramentas">Locação de andaimes, betoneira, martelete ou equipamentos específicos.</p>
+      <input
+        type="text"
+        id="custoFerramentas"
+        name="custoFerramentas"
+        inputmode="decimal"
+        placeholder="Ex: 200,00"
+        autocomplete="off"
+        aria-describedby="ajudaCustoFerramentas"
+      >
+    </div>
+
+    <div class="form-group">
+      <label for="custoEntulho">Retirada de entulho / caçamba — opcional (R$):</label>
+      <p id="ajudaCustoEntulho">Custo estimado com caçambas estacionárias ou descarte de resíduos.</p>
+      <input
+        type="text"
+        id="custoEntulho"
+        name="custoEntulho"
+        inputmode="decimal"
+        placeholder="Ex: 300,00"
+        autocomplete="off"
+        aria-describedby="ajudaCustoEntulho"
+      >
+    </div>
+
+    <div class="form-group">
+      <label for="outrosCustosAdicionais">Outros serviços adicionais — opcional (R$):</label>
+      <p id="ajudaOutrosCustos">Demais gastos operacionais que não façam parte dos materiais.</p>
+      <input
+        type="text"
+        id="outrosCustosAdicionais"
+        name="outrosCustosAdicionais"
+        inputmode="decimal"
+        placeholder="Ex: 0,00"
+        autocomplete="off"
+        aria-describedby="ajudaOutrosCustos"
+      >
+    </div>
+
+    <div class="form-group">
+      <label for="custoMateriais">Custo estimado de materiais — opcional, separado da mão de obra (R$):</label>
+      <p id="ajudaCustoMateriais">Cimento, areia, argamassa, revestimentos e insumos comprados para a obra.</p>
+      <input
+        type="text"
+        id="custoMateriais"
+        name="custoMateriais"
+        inputmode="decimal"
+        placeholder="Ex: 1200,00"
+        autocomplete="off"
+        aria-describedby="ajudaCustoMateriais"
+      >
+    </div>
+
+    <div class="form-group">
+      <label for="reservaPercentual">Reserva para imprevistos (%):</label>
+      <p id="ajudaReservaPercentual">Aplicada sobre a soma de mão de obra, custos adicionais e materiais antes do desconto (padrão de 10%).</p>
+      <input
+        type="text"
+        id="reservaPercentual"
+        name="reservaPercentual"
+        inputmode="decimal"
+        value="10"
+        placeholder="Ex: 10"
+        autocomplete="off"
+        aria-describedby="ajudaReservaPercentual"
+      >
+    </div>
+
+    <div class="form-group">
+      <label for="descontoOrcamento">Desconto concedido — opcional (R$):</label>
+      <p id="ajudaDescontoOrcamento">Valor em reais subtraído ao final do orçamento, após o cálculo da reserva.</p>
+      <input
+        type="text"
+        id="descontoOrcamento"
+        name="descontoOrcamento"
+        inputmode="decimal"
+        placeholder="Ex: 100,00"
+        autocomplete="off"
+        aria-describedby="ajudaDescontoOrcamento"
+      >
+    </div>
+
+    <div class="tool-actions">
+      <button type="submit" id="btnCalcularOrcamentoPedreiro" class="tool-btn tool-btn-primary">Calcular orçamento</button>
+      <button type="button" id="btnLimparOrcamentoPedreiro" class="tool-btn tool-btn-secondary">Limpar campos</button>
+    </div>
+  </form>
+
+  <p id="erroOrcamentoPedreiro" role="alert" aria-live="assertive" hidden></p>
+
+  <section id="resultadoOrcamentoPedreiro" aria-live="polite" aria-atomic="true" hidden>
+    <h2 class="tool-result-title">Resumo do Orçamento Estimado</h2>
+
+    <div class="card tool-result-card">
+      <p>Modalidade selecionada: <strong id="resMetodoPedreiro">—</strong></p>
+      <p>Custo da mão de obra: <strong id="resMaoDeObraPedreiro">R$ 0,00</strong></p>
+      <p>Custos adicionais (transporte, ferramentas, entulho e outros): <strong id="resCustosAdicionaisPedreiro">R$ 0,00</strong></p>
+      <p>Custo dos materiais (separado da mão de obra): <strong id="resMateriaisPedreiro">R$ 0,00</strong></p>
+      <p>Base de cálculo antes da reserva: <strong id="resBaseReservaPedreiro">R$ 0,00</strong></p>
+      <p>Reserva para imprevistos: <strong id="resReservaPedreiro">R$ 0,00 (10%)</strong></p>
+      <p>Desconto aplicado: <strong id="resDescontoPedreiro">R$ 0,00</strong></p>
+      <p class="bill-total">Total estimado do orçamento: <strong id="resTotalPedreiro">R$ 0,00</strong></p>
+      <p id="linhaCustoMedioM2Pedreiro" hidden>Custo médio total por m²: <strong id="resCustoMedioM2Pedreiro">—</strong></p>
+    </div>
+
+    <p class="tool-result-note">
+      Nota importante: esta calculadora utiliza exclusivamente os valores informados pelo usuário para organizar uma estimativa financeira. O resultado não representa cotação oficial de mercado e não substitui visita técnica, medição presencial ou proposta formal de um profissional habilitado.
+    </p>
+
+    <div class="tool-actions result-actions">
+      <button type="button" id="btnCopiarOrcamentoPedreiro" class="tool-btn tool-btn-secondary" hidden>Copiar resumo</button>
+      <button type="button" id="btnCompartilharOrcamentoPedreiro" class="tool-btn tool-btn-secondary" hidden>Compartilhar link</button>
+      <button type="button" id="btnImprimirOrcamentoPedreiro" class="tool-btn tool-btn-secondary" hidden>Imprimir</button>
+    </div>
+  </section>
+
+  <p id="statusOrcamentoPedreiro" class="result-action-status" role="status" aria-live="polite"></p>
+</div>
+
+<section class="content mason-budget-explanatory-content">
+  <h2>Como montar um orçamento de mão de obra de pedreiro</h2>
+
+  <p>Em pequenas obras e reformas residenciais, o serviço de pedreiro costuma ser contratado por <strong>empreitada por metro quadrado (m²)</strong> — comum em assentamento de pisos, reboco e alvenaria — ou por <strong>diária</strong>, indicada para reparos pontuais, demolições e serviços variados cujo escopo exato depende da execução diária.</p>
+
+  <h3>Ordem das operações utilizada pela calculadora</h3>
+  <ol>
+    <li><strong>Custo da mão de obra:</strong> no modo por m², multiplica-se a <code>área × preço por m²</code>; no modo por diária, multiplica-se a <code>quantidade de diárias × preço da diária</code>.</li>
+    <li><strong>Custos adicionais:</strong> soma-se transporte, locação de ferramentas, retirada de entulho e outros serviços complementares.</li>
+    <li><strong>Materiais separados:</strong> o valor de materiais é contabilizado em linha própria, sem se misturar ao valor da mão de obra.</li>
+    <li><strong>Base e reserva para imprevistos:</strong> a reserva percentual (padrão de 10%) incide sobre a soma <code>mão de obra + custos adicionais + materiais</code> antes do desconto.</li>
+    <li><strong>Desconto e total estimado:</strong> subtrai-se o desconto informado do subtotal com reserva, resultando no total estimado. Quando o cálculo é feito por m² com área válida, apresenta-se também o custo médio total por m².</li>
+  </ol>
+
+  <h3>Boas práticas ao comparar orçamentos de reforma</h3>
+  <ul>
+    <li>Solicite sempre que mão de obra e materiais estejam discriminados separadamente na proposta;</li>
+    <li>Verifique se o aluguel de equipamentos (como andaimes e betoneira) e a retirada de entulho já estão incluídos ou serão pagos à parte;</li>
+    <li>Mantenha uma reserva de 10% a 15% para imprevistos estruturais comuns em reformas.</li>
+  </ul>
+
+  <section class="related-tools">
+    <h2>Ferramentas Relacionadas</h2>
+    <div class="related-tools-grid">
+      <article class="tool-card">
+        <div class="tool-card-header">
+          <span class="tool-card-category">Utilidades</span>
+        </div>
+        <h3 class="tool-card-title">Calculadora de Pisos e Revestimentos</h3>
+        <p class="tool-card-desc">Calcule a área, quantidade de peças e caixas de piso antes de orçar a mão de obra.</p>
+        <div class="tool-card-footer">
+          <a href="{{ROOT_PREFIX}}tools/utilidades/pisos-revestimentos.html" class="tool-card-btn">Acessar</a>
+        </div>
+      </article>
+
+      <article class="tool-card">
+        <div class="tool-card-header">
+          <span class="tool-card-category">Utilidades</span>
+        </div>
+        <h3 class="tool-card-title">Calculadora de Tinta</h3>
+        <p class="tool-card-desc">Estime quantos litros e galões de tinta serão necessários para a etapa de pintura.</p>
+        <div class="tool-card-footer">
+          <a href="{{ROOT_PREFIX}}tools/utilidades/tinta.html" class="tool-card-btn">Acessar</a>
+        </div>
+      </article>
+
+      <article class="tool-card">
+        <div class="tool-card-header">
+          <span class="tool-card-category">Financeiro</span>
+        </div>
+        <h3 class="tool-card-title">Calculadora de Preço de Serviço</h3>
+        <p class="tool-card-desc">Ideal para profissionais autônomos formarem o preço de serviços com margem de lucro e impostos.</p>
+        <div class="tool-card-footer">
+          <a href="{{ROOT_PREFIX}}tools/financas/preco-servico.html" class="tool-card-btn">Acessar</a>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <p class="tool-return-link">
+    <a href="{{ROOT_PREFIX}}index.html">← Voltar para a página inicial</a>
+  </p>
+</section>

@@ -1013,6 +1013,105 @@ const TOOLS_CATALOG = [
       "featured": false,
       "related": [],
       "status": "published"
+    },
+    {
+      "id": "tinta",
+      "slug": "tinta",
+      "nome": "Calculadora de Tinta",
+      "name": "Calculadora de Tinta",
+      "categoria": "Utilidades",
+      "category": "Utilidades",
+      "categorySlug": "utilidades",
+      "descricao": "Estime a quantidade de tinta para paredes e tetos considerando área, demãos, rendimento e margem de segurança.",
+      "description": "Estime a quantidade de tinta para paredes e tetos considerando área, demãos, rendimento e margem de segurança.",
+      "url": "tools/utilidades/tinta.html",
+      "termos": [
+        "calculadora de tinta",
+        "pintura",
+        "área a pintar",
+        "rendimento da tinta",
+        "litros de tinta"
+      ],
+      "keywords": [
+        "calculadora de tinta",
+        "pintura",
+        "área a pintar",
+        "rendimento da tinta",
+        "litros de tinta"
+      ],
+      "destaque": false,
+      "featured": false,
+      "related": [
+        "pisos-revestimentos",
+        "orcamento-pedreiro"
+      ],
+      "status": "published"
+    },
+    {
+      "id": "orcamento-pedreiro",
+      "slug": "orcamento-pedreiro",
+      "nome": "Calculadora de Orçamento de Pedreiro",
+      "name": "Calculadora de Orçamento de Pedreiro",
+      "categoria": "Utilidades",
+      "category": "Utilidades",
+      "categorySlug": "utilidades",
+      "descricao": "Estime o custo de mão de obra de pedreiro por m² ou diária, incluindo gastos adicionais, materiais, reserva para imprevistos e descontos.",
+      "description": "Estime o custo de mão de obra de pedreiro por m² ou diária, incluindo gastos adicionais, materiais, reserva para imprevistos e descontos.",
+      "url": "tools/utilidades/orcamento-pedreiro.html",
+      "termos": [
+        "orçamento de pedreiro",
+        "calcular mão de obra pedreiro",
+        "preço m2 pedreiro",
+        "diária de pedreiro",
+        "orçamento reforma"
+      ],
+      "keywords": [
+        "orçamento de pedreiro",
+        "calcular mão de obra pedreiro",
+        "preço m2 pedreiro",
+        "diária de pedreiro",
+        "orçamento reforma"
+      ],
+      "destaque": false,
+      "featured": false,
+      "related": [
+        "pisos-revestimentos",
+        "tinta"
+      ],
+      "status": "published"
+    },
+    {
+      "id": "projecao-faturamento-mei",
+      "slug": "projecao-faturamento-mei",
+      "nome": "Calculadora de Projeção de Faturamento MEI",
+      "name": "Calculadora de Projeção de Faturamento MEI",
+      "categoria": "Financeiro",
+      "category": "Financeiro",
+      "categorySlug": "financas",
+      "descricao": "Projete o faturamento bruto anual do MEI mês a mês, acompanhe o percentual utilizado do limite anual e planeje os próximos meses.",
+      "description": "Projete o faturamento bruto anual do MEI mês a mês, acompanhe o percentual utilizado do limite anual e planeje os próximos meses.",
+      "url": "tools/financas/projecao-faturamento-mei.html",
+      "termos": [
+        "projeção faturamento mei",
+        "limite anual mei",
+        "calcular faturamento mei",
+        "desenquadramento mei",
+        "receita bruta mei"
+      ],
+      "keywords": [
+        "projeção faturamento mei",
+        "limite anual mei",
+        "calcular faturamento mei",
+        "desenquadramento mei",
+        "receita bruta mei"
+      ],
+      "destaque": false,
+      "featured": false,
+      "related": [
+        "preco-servico",
+        "valor-hora"
+      ],
+      "status": "published"
     }
   ];
 

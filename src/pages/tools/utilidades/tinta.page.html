@@ -1,0 +1,232 @@
+---
+title: Calculadora de Tinta Online Grátis | Paredes, Teto e Galões - Calculadora Master
+description: Calcule a quantidade de tinta necessária para pintar paredes e teto em m², descontando portas e janelas, com número de demãos, margem de perda e embalagens.
+keywords: calculadora de tinta, calcular quantidade de tinta, litros de tinta por m2, quantos galões de tinta, pintura de parede e teto
+canonical: https://www.calculadoramaster.com/tools/utilidades/tinta.html
+layout: tool
+pageScripts: <script type="module" src="{{ROOT_PREFIX}}js/tools/tinta.js"></script>
+---
+
+<h1>Calculadora de Tinta</h1>
+
+<p>Estime quantos litros e embalagens de tinta serão necessários para pintar paredes e teto, descontando portas e janelas e considerando o número de demãos, o rendimento do produto e uma margem de segurança.</p>
+
+<div class="card tool-calculator-card">
+  <h2 class="tool-form-title">Dados da Pintura</h2>
+
+  <form id="formTinta" novalidate>
+    <div class="form-group">
+      <label for="areaParedes">Área total das paredes (m²):</label>
+      <p id="ajudaAreaParedes">Soma da área das paredes que receberão pintura, antes de descontar portas e janelas.</p>
+      <input
+        type="text"
+        id="areaParedes"
+        name="areaParedes"
+        inputmode="decimal"
+        placeholder="Ex: 80"
+        autocomplete="off"
+        aria-describedby="ajudaAreaParedes"
+        required
+      >
+    </div>
+
+    <div class="form-group">
+      <label for="areaTeto">Área do teto (m²):</label>
+      <p id="ajudaAreaTeto">Informe 0 ou deixe em branco caso o teto não seja pintado com a mesma tinta.</p>
+      <input
+        type="text"
+        id="areaTeto"
+        name="areaTeto"
+        inputmode="decimal"
+        placeholder="Ex: 20"
+        autocomplete="off"
+        aria-describedby="ajudaAreaTeto"
+      >
+    </div>
+
+    <div class="form-group">
+      <label for="areaAberturas">Área de portas, janelas e outras aberturas (m²):</label>
+      <p id="ajudaAreaAberturas">Valor descontado da área das paredes. Não pode ultrapassar a área das paredes.</p>
+      <input
+        type="text"
+        id="areaAberturas"
+        name="areaAberturas"
+        inputmode="decimal"
+        placeholder="Ex: 10"
+        autocomplete="off"
+        aria-describedby="ajudaAreaAberturas"
+      >
+    </div>
+
+    <div class="form-group">
+      <label for="demaos">Número de demãos (quantidade):</label>
+      <p id="ajudaDemaos">Quantidade de aplicações sobre a superfície. O padrão recomendado é de 2 a 3 demãos.</p>
+      <input
+        type="number"
+        id="demaos"
+        name="demaos"
+        inputmode="numeric"
+        min="1"
+        max="20"
+        step="1"
+        value="2"
+        aria-describedby="ajudaDemaos"
+        required
+      >
+    </div>
+
+    <div class="form-group">
+      <label for="rendimento">Rendimento da tinta por demão (m²/L):</label>
+      <p id="ajudaRendimento">Consulte na embalagem quantos m² 1 litro cobre por demão (ex.: 10 m²/L).</p>
+      <input
+        type="text"
+        id="rendimento"
+        name="rendimento"
+        inputmode="decimal"
+        placeholder="Ex: 10"
+        autocomplete="off"
+        aria-describedby="ajudaRendimento"
+        required
+      >
+    </div>
+
+    <div class="form-group">
+      <label for="margem">Margem adicional para perdas e retoques (%):</label>
+      <p id="ajudaMargem">Reserva recomendada de 10% para absorção da superfície, rolo, bandeja e futuros retoques.</p>
+      <input
+        type="text"
+        id="margem"
+        name="margem"
+        inputmode="decimal"
+        value="10"
+        placeholder="Ex: 10"
+        autocomplete="off"
+        aria-describedby="ajudaMargem"
+      >
+    </div>
+
+    <div class="form-group">
+      <label for="tamanhoEmbalagem">Tamanho da embalagem em litros (L) — opcional:</label>
+      <p id="ajudaTamanhoEmbalagem">Ex.: 0,9 L (quarto), 3,6 L (galão) ou 18 L (lata). Preencha para calcular a quantidade inteira de latas ou galões.</p>
+      <input
+        type="text"
+        id="tamanhoEmbalagem"
+        name="tamanhoEmbalagem"
+        inputmode="decimal"
+        placeholder="Ex: 3,6"
+        autocomplete="off"
+        aria-describedby="ajudaTamanhoEmbalagem"
+      >
+    </div>
+
+    <div class="tool-actions">
+      <button type="submit" id="btnCalcularTinta" class="tool-btn tool-btn-primary">Calcular tinta</button>
+      <button type="button" id="btnLimparTinta" class="tool-btn tool-btn-secondary">Limpar campos</button>
+    </div>
+  </form>
+
+  <p id="erroTinta" role="alert" aria-live="assertive" hidden></p>
+
+  <section id="resultadoTinta" aria-live="polite" aria-atomic="true" hidden>
+    <h2 class="tool-result-title">Resultado da Estimativa</h2>
+
+    <div class="card tool-result-card">
+      <p>Área bruta total (paredes + teto): <strong id="resAreaBruta">0 m²</strong></p>
+      <p>Área líquida a pintar (descontadas aberturas): <strong id="resAreaLiquida">0 m²</strong></p>
+      <p>Área equivalente considerando todas as demãos: <strong id="resAreaTotalDemaos">0 m²</strong></p>
+      <p>Consumo estimado sem margem: <strong id="resLitrosSemMargem">0,00 L</strong></p>
+      <p>Margem de segurança aplicada: <strong id="resMargemAplicada">10% (+0,00 L)</strong></p>
+      <p class="bill-total">Litros totais necessários: <strong id="resLitrosNecessarios">0,00 L</strong></p>
+
+      <div id="blocoResultadoEmbalagem" hidden>
+        <p>Quantidade de embalagens sugerida: <strong id="resQuantidadeEmbalagens">—</strong></p>
+        <p>Volume total comprado: <strong id="resVolumeComprado">—</strong></p>
+        <p>Sobra estimada para retoques: <strong id="resSobraEstimada">—</strong></p>
+      </div>
+    </div>
+
+    <p class="tool-result-note">
+      Aviso importante: o rendimento real da tinta varia conforme o fabricante, o estado e a porosidade da superfície (reboco novo, massa corrida, repintura ou textura), a diluição, a cor escolhida, a ferramenta utilizada (rolo, trincha ou pistola) e as condições climáticas durante a aplicação.
+    </p>
+
+    <div class="tool-actions result-actions">
+      <button type="button" id="btnCopiarTinta" class="tool-btn tool-btn-secondary" hidden>Copiar resultado</button>
+      <button type="button" id="btnCompartilharTinta" class="tool-btn tool-btn-secondary" hidden>Compartilhar link</button>
+      <button type="button" id="btnImprimirTinta" class="tool-btn tool-btn-secondary" hidden>Imprimir</button>
+    </div>
+  </section>
+
+  <p id="statusTinta" class="result-action-status" role="status" aria-live="polite"></p>
+</div>
+
+<section class="content paint-explanatory-content">
+  <h2>Como calcular a quantidade de tinta para paredes e teto</h2>
+
+  <p>Planejar a compra de tinta com antecedência evita paradas na obra por falta de material e reduz o desperdício com latas compradas em excesso. O cálculo técnico considera a área real de pintura, a multiplicação pelo número de demãos e a reserva para perdas naturais no rolo e na superfície.</p>
+
+  <h3>Fórmulas utilizadas pela calculadora</h3>
+  <ul>
+    <li><strong>Área bruta:</strong> <code>área das paredes + área do teto</code></li>
+    <li><strong>Área líquida:</strong> <code>área bruta - área das aberturas</code> (as aberturas são descontadas da área das paredes)</li>
+    <li><strong>Área equivalente com demãos:</strong> <code>área líquida × número de demãos</code></li>
+    <li><strong>Litros sem margem:</strong> <code>área equivalente ÷ rendimento por demão</code></li>
+    <li><strong>Litros totais necessários:</strong> <code>litros sem margem × (1 + margem percentual ÷ 100)</code></li>
+    <li><strong>Quantidade de embalagens:</strong> <code>arredondamento para cima(litros necessários ÷ tamanho da embalagem)</code></li>
+  </ul>
+
+  <h3>Exemplo prático de cálculo</h3>
+  <p>Considere uma pintura residencial com <strong>80 m² de paredes</strong>, <strong>20 m² de teto</strong>, <strong>10 m² de portas e janelas</strong>, aplicação de <strong>2 demãos</strong>, tinta com rendimento de <strong>10 m²/L por demão</strong>, margem de segurança de <strong>10%</strong> e compra em galões de <strong>3,6 L</strong>:</p>
+  <ul>
+    <li>Área bruta = 80 + 20 = <strong>100 m²</strong>;</li>
+    <li>Área líquida = 100 − 10 = <strong>90 m²</strong>;</li>
+    <li>Área equivalente (2 demãos) = 90 × 2 = <strong>180 m²</strong>;</li>
+    <li>Consumo sem margem = 180 ÷ 10 = <strong>18,00 L</strong>;</li>
+    <li>Litros necessários com 10% de margem = 18 × 1,10 = <strong>19,80 L</strong>;</li>
+    <li>Galões de 3,6 L = arredondamento para cima de (19,80 ÷ 3,6 = 5,5) = <strong>6 galões</strong> (total de <strong>21,60 L</strong> comprados e sobra estimada de <strong>1,80 L</strong>).</li>
+  </ul>
+
+  <h3>Rendimento por demão vs. rendimento acabado</h3>
+  <p>Alguns fabricantes informam na lata o <em>rendimento por demão</em> (em m²/L ou m² por embalagem) e outros destacam o <em>rendimento acabado</em> (já considerando 2 ou 3 demãos). Nesta calculadora, informe o <strong>rendimento em m² por litro por demão</strong>. Se a embalagem informar apenas que um galão de 3,6 L rende 72 m² por demão, basta dividir 72 por 3,6 para encontrar <strong>20 m²/L por demão</strong>.</p>
+
+  <section class="related-tools">
+    <h2>Ferramentas Relacionadas</h2>
+    <div class="related-tools-grid">
+      <article class="tool-card">
+        <div class="tool-card-header">
+          <span class="tool-card-category">Utilidades</span>
+        </div>
+        <h3 class="tool-card-title">Calculadora de Pisos e Revestimentos</h3>
+        <p class="tool-card-desc">Estime a quantidade de peças e caixas de piso ou revestimento com margem para recortes.</p>
+        <div class="tool-card-footer">
+          <a href="{{ROOT_PREFIX}}tools/utilidades/pisos-revestimentos.html" class="tool-card-btn">Acessar</a>
+        </div>
+      </article>
+
+      <article class="tool-card">
+        <div class="tool-card-header">
+          <span class="tool-card-category">Utilidades</span>
+        </div>
+        <h3 class="tool-card-title">Calculadora de Orçamento de Pedreiro</h3>
+        <p class="tool-card-desc">Estime os custos de mão de obra por m² ou diária, gastos adicionais e materiais da obra.</p>
+        <div class="tool-card-footer">
+          <a href="{{ROOT_PREFIX}}tools/utilidades/orcamento-pedreiro.html" class="tool-card-btn">Acessar</a>
+        </div>
+      </article>
+
+      <article class="tool-card">
+        <div class="tool-card-header">
+          <span class="tool-card-category">Financeiro</span>
+        </div>
+        <h3 class="tool-card-title">Calculadora de Orçamento Doméstico</h3>
+        <p class="tool-card-desc">Organize os gastos da reforma dentro do seu planejamento financeiro mensal.</p>
+        <div class="tool-card-footer">
+          <a href="{{ROOT_PREFIX}}tools/financas/orcamento-domestico.html" class="tool-card-btn">Acessar</a>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <p class="tool-return-link">
+    <a href="{{ROOT_PREFIX}}index.html">← Voltar para a página inicial</a>
+  </p>
+</section>
