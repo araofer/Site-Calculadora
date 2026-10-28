@@ -1,0 +1,432 @@
+---
+title: Calculadora Carnê-Leão para Autônomos Online Grátis | Simulador 2026 - Calculadora Master
+description: Calcule o Carnê-Leão mensal para autônomos e profissionais liberais em 2026 com tabela progressiva atualizada, redução até R$ 5.000 e R$ 7.350, Livro-Caixa, INSS e desconto simplificado.
+keywords: calculadora carne leao autonomo, carne leao 2026, calcular carne leao mensal, imposto de renda autonomo pessoa fisica, livro caixa carne leao, darf 0190
+canonical: https://www.calculadoramaster.com/tools/financas/carne-leao-autonomo.html
+layout: tool
+pageScripts: <script type="module" src="{{ROOT_PREFIX}}js/tools/carne-leao-autonomo.js"></script>
+---
+
+<h1>Calculadora Carnê-Leão para Autônomos</h1>
+
+<p>Estime o valor mensal do <strong>Carnê-Leão para Autônomos e Profissionais Liberais (ano-calendário 2026)</strong> sobre rendimentos recebidos de pessoas físicas ou do exterior. A simulação aplica a tabela progressiva mensal vigente em 2026, a regra oficial de redução mensal do imposto (Lei nº 15.270/2025 — isenção até R$ 5.000,00 e redução decrescente até R$ 7.350,00 de rendimentos tributáveis), o limite legal do Livro-Caixa e a comparação entre Deduções Legais e Desconto Simplificado Mensal (R$ 607,20). Esta ferramenta tem finalidade exclusivamente informativa: não substitui a escrituração oficial no Carnê-Leão Web (Portal e-CAC), não emite DARF (código 0190) e não substitui a Declaração de Ajuste Anual do IRPF nem a orientação de um contador.</p>
+
+<div class="card tool-calculator-card">
+  <h2 class="tool-form-title">Simulador Mensal do Carnê-Leão (Regras Oficiais 2026)</h2>
+
+  <form id="formCarneLeaoAutonomo" novalidate>
+    <section class="mei-autonomo-common-section" aria-labelledby="tituloCompetenciaRendimentosCarneLeao">
+      <h3 id="tituloCompetenciaRendimentosCarneLeao" class="mei-autonomo-section-heading">1. Competência e Rendimentos Recebidos no Mês (Regime de Caixa)</h3>
+      <p class="mei-autonomo-reference-note">
+        <strong>Escopo do Carnê-Leão:</strong> estão sujeitos ao recolhimento mensal obrigatório (DARF código 0190) os rendimentos recebidos de <strong>pessoas físicas</strong> ou <strong>do exterior</strong> sem retenção de imposto na fonte no Brasil. Valores pagos por <strong>pessoas jurídicas no Brasil</strong> a autônomos sofrem retenção de IRRF na própria empresa pagadora (exceto emolumentos e custas de serventuários da Justiça) e não compõem a base mensal do Carnê-Leão.
+      </p>
+
+      <div class="mei-autonomo-common-grid">
+        <div class="form-group">
+          <label for="mesReferenciaCarneLeao">Mês de recebimento dos rendimentos (competência):</label>
+          <p id="ajudaMesReferenciaCarneLeao">Mês em que os valores foram efetivamente recebidos (regime de caixa). Define também se eventual excesso de Livro-Caixa pode ser transportado para o mês seguinte.</p>
+          <select
+            id="mesReferenciaCarneLeao"
+            name="mesReferencia"
+            aria-describedby="ajudaMesReferenciaCarneLeao"
+          >
+            <option value="1" selected>Janeiro</option>
+            <option value="2">Fevereiro</option>
+            <option value="3">Março</option>
+            <option value="4">Abril</option>
+            <option value="5">Maio</option>
+            <option value="6">Junho</option>
+            <option value="7">Julho</option>
+            <option value="8">Agosto</option>
+            <option value="9">Setembro</option>
+            <option value="10">Outubro</option>
+            <option value="11">Novembro</option>
+            <option value="12">Dezembro</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="anoReferenciaCarneLeao">Ano-calendário de referência:</label>
+          <p id="ajudaAnoReferenciaCarneLeao">Esta versão aplica exclusivamente as regras oficiais do ano-calendário de 2026 (Lei nº 15.270/2025 e tabelas da Receita Federal vigentes a partir de janeiro de 2026).</p>
+          <input
+            type="number"
+            id="anoReferenciaCarneLeao"
+            name="anoReferencia"
+            inputmode="numeric"
+            min="2020"
+            max="2030"
+            step="1"
+            value="2026"
+            aria-describedby="ajudaAnoReferenciaCarneLeao"
+            required
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="rendimentosPFCarneLeao">Rendimentos recebidos de pessoas físicas no mês (R$):</label>
+          <p id="ajudaRendimentosPFCarneLeao">Total bruto recebido de clientes pessoas físicas no mês pelo trabalho sem vínculo empregatício, honorários, prestação de serviços ou aluguéis.</p>
+          <input
+            type="text"
+            id="rendimentosPFCarneLeao"
+            name="rendimentosPessoaFisica"
+            inputmode="decimal"
+            placeholder="Ex: 6000,00"
+            autocomplete="off"
+            aria-describedby="ajudaRendimentosPFCarneLeao"
+            required
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="rendimentosExteriorCarneLeao">Rendimentos recebidos do exterior no mês (R$):</label>
+          <p id="ajudaRendimentosExteriorCarneLeao">Valor já convertido para reais (R$) segundo a cotação de compra do Banco Central (PTAX) da data do recebimento. Informe 0 se não houver.</p>
+          <input
+            type="text"
+            id="rendimentosExteriorCarneLeao"
+            name="rendimentosExterior"
+            inputmode="decimal"
+            value="0"
+            placeholder="Ex: 0,00"
+            autocomplete="off"
+            aria-describedby="ajudaRendimentosExteriorCarneLeao"
+          >
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="rendimentosPJCarneLeao">Rendimentos recebidos de pessoas jurídicas no Brasil no mês (R$ — opcional, verificação de escopo):</label>
+        <p id="ajudaRendimentosPJCarneLeao">Opcional. Rendimentos pagos por empresas no Brasil têm retenção de IRRF na fonte e NÃO entram na base do Carnê-Leão mensal. Se você preencher este campo, a ferramenta separará esse valor e exibirá a explicação fiscal correspondente.</p>
+        <input
+          type="text"
+          id="rendimentosPJCarneLeao"
+          name="rendimentosPessoaJuridica"
+          inputmode="decimal"
+          value=""
+          placeholder="Opcional — Ex: 2500,00 (não sujeito ao Carnê-Leão)"
+          autocomplete="off"
+          aria-describedby="ajudaRendimentosPJCarneLeao"
+        >
+      </div>
+    </section>
+
+    <section class="mei-autonomo-common-section" aria-labelledby="tituloDeducoesCarneLeao">
+      <h3 id="tituloDeducoesCarneLeao" class="mei-autonomo-section-heading">2. Deduções Mensais Elegíveis e Prevenção de Dupla Dedução</h3>
+      <p class="mei-autonomo-reference-note">
+        <strong>Atenção contra duplicidade de deduções:</strong> (1) o <strong>Desconto Simplificado Mensal (R$ 607,20)</strong> substitui todas as deduções legais no mês e <strong>não pode ser somado</strong> a Livro-Caixa, INSS, dependentes ou pensão alimentícia; (2) deduções já abatidas no mesmo mês em rendimentos com retenção na fonte (IRRF pago por PJ) não podem ser reutilizadas no Carnê-Leão; (3) não inclua o seu próprio INSS, dependentes ou pensão dentro do total de Livro-Caixa.
+      </p>
+
+      <div class="form-group">
+        <label for="modoDeducaoCarneLeao">Critério de dedução na base de cálculo mensal:</label>
+        <p id="ajudaModoDeducaoCarneLeao">Conforme o art. 4º, § 2º da Lei nº 9.250/1995, você pode utilizar a soma das Deduções Legais comprovadas ou optar pelo Desconto Simplificado Mensal de R$ 607,20 (25% do limite da 1ª faixa da tabela).</p>
+        <p id="ajudaModoDeducaoDinamicaCarneLeao" aria-live="polite" aria-atomic="true">No modo automático, a calculadora compara a soma das suas Deduções Legais com o Desconto Simplificado Mensal de R$ 607,20 e aplica a alternativa mais benéfica (sem nunca somar as duas opções).</p>
+        <select
+          id="modoDeducaoCarneLeao"
+          name="modoDeducao"
+          aria-describedby="ajudaModoDeducaoCarneLeao"
+        >
+          <option value="automatico" selected>Mais vantajoso automaticamente (maior dedução entre Legais e Simplificado de R$ 607,20)</option>
+          <option value="legais">Somente Deduções Legais (Livro-Caixa + INSS + Dependentes + Pensão)</option>
+          <option value="simplificado">Somente Desconto Simplificado Mensal (R$ 607,20 em substituição às deduções legais)</option>
+        </select>
+      </div>
+
+      <div class="mei-autonomo-common-grid">
+        <div class="form-group">
+          <label for="despesasLivroCaixaCarneLeao">Despesas de Livro-Caixa dedutíveis pagas no mês (R$):</label>
+          <p id="ajudaDespesasLivroCaixaCarneLeao">Apenas despesas de custeio indispensáveis à atividade autônoma e comprovadas por documento fiscal (aluguel profissional, energia/internet profissional, material de consumo, salários de equipe). Limitadas à receita mensal da atividade; não inclua compra de equipamentos/bens de capital nem gastos pessoais.</p>
+          <input
+            type="text"
+            id="despesasLivroCaixaCarneLeao"
+            name="despesasLivroCaixa"
+            inputmode="decimal"
+            value="0"
+            placeholder="Ex: 850,00"
+            autocomplete="off"
+            aria-describedby="ajudaDespesasLivroCaixaCarneLeao"
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="excedenteLivroCaixaMesAnteriorCarneLeao">Excedente de Livro-Caixa do mês anterior (R$):</label>
+          <p id="ajudaExcedenteLivroCaixaMesAnteriorCarneLeao">Despesas comprovadas de Livro-Caixa não deduzidas em meses anteriores por terem superado a receita. O excedente pode ser transportado de fevereiro a dezembro dentro do mesmo ano-calendário (IN RFB nº 1.500/2014, art. 104, § 2º). Bloqueado para janeiro.</p>
+          <p id="avisoJaneiroSemExcedenteCarneLeao" class="mei-limit-alert" aria-live="polite" hidden></p>
+          <input
+            type="text"
+            id="excedenteLivroCaixaMesAnteriorCarneLeao"
+            name="excedenteLivroCaixaMesAnterior"
+            inputmode="decimal"
+            value="0"
+            placeholder="Ex: 200,00"
+            autocomplete="off"
+            aria-describedby="ajudaExcedenteLivroCaixaMesAnteriorCarneLeao"
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="contribuicaoPrevidenciariaCarneLeao">Contribuição previdenciária oficial (INSS) paga no mês (R$):</label>
+          <p id="ajudaContribuicaoPrevidenciariaCarneLeao">Valor recolhido em GPS/DARF previdenciário à Previdência Social (União, estados, DF ou municípios) no mês, desde que ainda não tenha sido deduzido em outro rendimento com retenção na fonte no mesmo mês.</p>
+          <input
+            type="text"
+            id="contribuicaoPrevidenciariaCarneLeao"
+            name="contribuicaoPrevidenciaria"
+            inputmode="decimal"
+            value="0"
+            placeholder="Ex: 324,20"
+            autocomplete="off"
+            aria-describedby="ajudaContribuicaoPrevidenciariaCarneLeao"
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="numeroDependentesCarneLeao">Quantidade de dependentes legais elegíveis (R$ 189,59 cada):</label>
+          <p id="ajudaNumeroDependentesCarneLeao">Informe somente dependentes enquadrados na legislação do IRPF que não estejam sendo deduzidos simultaneamente no cálculo de retenção na fonte (IRRF) no mesmo mês.</p>
+          <input
+            type="number"
+            id="numeroDependentesCarneLeao"
+            name="numeroDependentes"
+            inputmode="numeric"
+            min="0"
+            max="30"
+            step="1"
+            value="0"
+            aria-describedby="ajudaNumeroDependentesCarneLeao"
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="pensaoAlimenticiaCarneLeao">Pensão alimentícia dedutível paga no mês (R$):</label>
+          <p id="ajudaPensaoAlimenticiaCarneLeao">Somente valores pagos em cumprimento de decisão judicial, acordo homologado judicialmente ou escritura pública (normas do Direito de Família), ainda não deduzidos na fonte no mesmo mês.</p>
+          <input
+            type="text"
+            id="pensaoAlimenticiaCarneLeao"
+            name="pensaoAlimenticia"
+            inputmode="decimal"
+            value="0"
+            placeholder="Ex: 0,00"
+            autocomplete="off"
+            aria-describedby="ajudaPensaoAlimenticiaCarneLeao"
+          >
+        </div>
+      </div>
+    </section>
+
+    <div class="tool-actions">
+      <button type="submit" id="btnCalcularCarneLeao" class="tool-btn tool-btn-primary">Calcular Carnê-Leão</button>
+      <button type="button" id="btnLimparCarneLeao" class="tool-btn tool-btn-secondary">Limpar campos</button>
+    </div>
+  </form>
+
+  <p id="erroCarneLeaoAutonomo" role="alert" aria-live="assertive" hidden></p>
+
+  <section id="resultadoCarneLeaoAutonomo" aria-live="polite" aria-atomic="true" hidden>
+    <h2 class="tool-result-title">Resultado da Apuração Mensal do Carnê-Leão (Referência 2026)</h2>
+
+    <div class="card tool-result-card">
+      <h3 class="mei-autonomo-result-subtitle">Resumo do Imposto e Estimativa Após o Carnê-Leão</h3>
+      <p>Competência analisada: <strong id="resCompetenciaCarneLeao">Janeiro/2026</strong></p>
+      <p>Base de cálculo mensal: <strong id="resBaseCalculoMensalCarneLeao">R$ 0,00</strong></p>
+      <p>Faixa e alíquota aplicáveis: <strong id="resFaixaEAliquotaCarneLeao">—</strong></p>
+      <p>Imposto antes da redução mensal (tabela progressiva): <strong id="resImpostoAntesReducaoCarneLeao">R$ 0,00</strong></p>
+      <p>Redução legal aplicável ao período (Lei nº 15.270/2025): <strong id="resReducaoLegalAplicadaCarneLeao">R$ 0,00</strong></p>
+      <p class="bill-total">Valor estimado do Carnê-Leão devido (DARF 0190): <strong id="resValorCarneLeaoDevido">R$ 0,00</strong></p>
+      <p>Alíquota efetiva estimada (sobre rendimentos sujeitos ao Carnê-Leão): <strong id="resAliquotaEfetivaCarneLeao">0,00%</strong></p>
+      <p>Valor estimado dos rendimentos após o imposto: <strong id="resValorAposImpostoCarneLeao">R$ 0,00</strong></p>
+      <p>Saldo estimado após imposto e desembolsos dedutíveis informados: <strong id="resSaldoAposDesembolsosCarneLeao">R$ 0,00</strong></p>
+      <p id="resOrientacaoDarfCarneLeao" class="mei-limit-alert"></p>
+      <p class="tool-result-note">
+        <strong>Aviso fiscal importante:</strong> os valores acima são <strong>estimativas mensais informativas</strong> baseadas nas regras federais de 2026. Esta simulação não substitui o preenchimento mensal do Carnê-Leão Web no Portal e-CAC, não apura o ajuste anual completo do IRPF e não constitui consultoria contábil ou jurídica.
+      </p>
+    </div>
+
+    <div class="mei-autonomo-scenarios-grid">
+      <div class="card tool-result-card mei-autonomo-result-card">
+        <h3 class="mei-autonomo-result-subtitle">1. Rendimentos Informados e Escopo do Carnê-Leão</h3>
+        <p>Rendimentos recebidos de Pessoas Físicas: <strong id="resRendimentosPFCarneLeao">R$ 0,00</strong></p>
+        <p>Rendimentos recebidos do Exterior: <strong id="resRendimentosExteriorCarneLeao">R$ 0,00</strong></p>
+        <p class="bill-total">Total de rendimentos sujeitos ao Carnê-Leão: <strong id="resRendimentosSujeitosCarneLeao">R$ 0,00</strong></p>
+        <p>Total geral de rendimentos informados no formulário: <strong id="resTotalRendimentosInformados">R$ 0,00</strong></p>
+        <div id="blocoAvisoRendimentosPJCarneLeao" hidden>
+          <p id="resAvisoRendimentosPJCarneLeao" class="mei-limit-alert"></p>
+        </div>
+      </div>
+
+      <div class="card tool-result-card mei-autonomo-result-card">
+        <h3 class="mei-autonomo-result-subtitle">2. Deduções Aceitas e Comparação com Simplificado</h3>
+        <p>Dedução aceita na base de cálculo: <strong id="resDeducaoAceitaCarneLeao">R$ 0,00</strong></p>
+        <p>Soma das Deduções Legais elegíveis: <strong id="resSomaDeducoesLegaisCarneLeao">R$ 0,00</strong></p>
+        <p>Desconto Simplificado Mensal (alternativo): <strong id="resDescontoSimplificadoCarneLeao">R$ 607,20</strong></p>
+        <p>Livro-Caixa considerado: <strong id="resLivroCaixaResumoCarneLeao">R$ 0,00</strong></p>
+        <p>Limite de dedução do Livro-Caixa na atividade: <strong id="resLimiteDeducaoLivroCaixaCarneLeao">R$ 0,00</strong></p>
+        <div id="blocoExcedenteAnteriorCarneLeao" hidden>
+          <p>Excedente trazido do mês anterior: <strong id="resExcedenteAnteriorCarneLeao">R$ 0,00</strong></p>
+        </div>
+        <div id="blocoExcedenteRemanescenteCarneLeao" hidden>
+          <p>Excedente não deduzido remanescente: <strong id="resExcedenteRemanescenteCarneLeao">R$ 0,00</strong></p>
+        </div>
+        <div id="blocoAvisoLivroCaixaCarneLeao" hidden>
+          <p id="resAvisoLivroCaixaCarneLeao" class="mei-limit-alert"></p>
+        </div>
+        <p>Contribuição previdenciária (INSS): <strong id="resInssResumoCarneLeao">R$ 0,00</strong></p>
+        <p>Dependentes considerados: <strong id="resDependentesResumoCarneLeao">0 dependente(s) — R$ 0,00</strong></p>
+        <p>Pensão alimentícia dedutível: <strong id="resPensaoResumoCarneLeao">R$ 0,00</strong></p>
+        <p class="mei-autonomo-calc-basis">Comparativo entre modalidades mutuamente exclusivas: <span id="resComparacaoModalidadesCarneLeao">—</span></p>
+      </div>
+    </div>
+
+    <div class="card tool-result-card">
+      <h3 class="mei-autonomo-result-subtitle">3. Memória de Cálculo Detalhada</h3>
+      <ul id="listaMemoriaCalculoCarneLeao" class="mei-autonomo-warnings-list"></ul>
+    </div>
+
+    <div class="tool-actions result-actions">
+      <button type="button" id="btnCopiarCarneLeao" class="tool-btn tool-btn-secondary" hidden>Copiar resultado</button>
+      <button type="button" id="btnCompartilharCarneLeao" class="tool-btn tool-btn-secondary" hidden>Compartilhar link</button>
+      <button type="button" id="btnImprimirCarneLeao" class="tool-btn tool-btn-secondary" hidden>Imprimir</button>
+    </div>
+  </section>
+
+  <p id="statusCarneLeaoAutonomo" class="result-action-status" role="status" aria-live="polite"></p>
+</div>
+
+<section class="content carne-leao-explanatory-content">
+  <h2>Como funciona o cálculo mensal do Carnê-Leão em 2026</h2>
+
+  <p>O <strong>Carnê-Leão</strong> é o recolhimento mensal obrigatório do Imposto de Renda da Pessoa Física (IRPF) devido pelo contribuinte residente no Brasil que recebe rendimentos de outras <strong>pessoas físicas</strong> ou <strong>do exterior</strong> sem retenção na fonte no país (como honorários de autônomos e profissionais liberais, prestação de serviços sem vínculo empregatício, aluguéis e pensões recebidas de pessoa física). O imposto apurado em cada mês deve ser recolhido até o <strong>último dia útil do mês subsequente ao do recebimento</strong>, por meio de DARF com o código de receita <strong>0190</strong>.</p>
+
+  <h3>Tabela progressiva mensal do IRPF — Ano-calendário 2026</h3>
+  <p>A partir de janeiro de 2026, a apuração mensal combina a tabela progressiva tradicional com a regra de redução mensal instituída pelo art. 3º-A da Lei nº 9.250/1995 (incluído pela Lei nº 15.270, de 26 de novembro de 2025):</p>
+
+  <div class="mei-projection-table-wrapper">
+    <table class="mei-projection-table">
+      <thead>
+        <tr>
+          <th scope="col">Faixa</th>
+          <th scope="col">Base de Cálculo Mensal (R$)</th>
+          <th scope="col">Alíquota</th>
+          <th scope="col">Parcela a Deduzir do IR (R$)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1ª faixa</td>
+          <td>Até R$ 2.428,80</td>
+          <td>0,00% (Isento)</td>
+          <td>R$ 0,00</td>
+        </tr>
+        <tr>
+          <td>2ª faixa</td>
+          <td>De R$ 2.428,81 até R$ 2.826,65</td>
+          <td>7,50%</td>
+          <td>R$ 182,16</td>
+        </tr>
+        <tr>
+          <td>3ª faixa</td>
+          <td>De R$ 2.826,66 até R$ 3.751,05</td>
+          <td>15,00%</td>
+          <td>R$ 394,16</td>
+        </tr>
+        <tr>
+          <td>4ª faixa</td>
+          <td>De R$ 3.751,06 até R$ 4.664,68</td>
+          <td>22,50%</td>
+          <td>R$ 675,49</td>
+        </tr>
+        <tr>
+          <td>5ª faixa</td>
+          <td>Acima de R$ 4.664,68</td>
+          <td>27,50%</td>
+          <td>R$ 908,73</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Regra de redução mensal do imposto a partir de janeiro de 2026 (Lei nº 15.270/2025)</h3>
+  <p>Após calcular o imposto bruto pela tabela progressiva acima, aplica-se a redução mensal prevista no art. 3º-A da Lei nº 9.250/1995 (limitada ao valor do imposto apurado na tabela):</p>
+  <ul>
+    <li><strong>Rendimentos tributáveis sujeitos à incidência mensal até R$ 5.000,00:</strong> redução de até <strong>R$ 312,89</strong> (de modo que o imposto mensal devido seja zero para quem recebe até R$ 5.000,00).</li>
+    <li><strong>Rendimentos tributáveis de R$ 5.000,01 até R$ 7.350,00:</strong> redução decrescente linear calculada pela fórmula oficial <code>Redução = R$ 978,62 − (0,133145 × Rendimentos Tributáveis Mensais)</code>, limitada ao imposto apurado.</li>
+    <li><strong>Rendimentos tributáveis a partir de R$ 7.350,01:</strong> não há redução adicional, mantendo-se integralmente o imposto calculado pela tabela progressiva mensal.</li>
+  </ul>
+
+  <h3>Regras e limites das deduções mensais</h3>
+  <ul>
+    <li><strong>Livro-Caixa (trabalho não assalariado):</strong> permite deduzir despesas de custeio necessárias à percepção da receita e à manutenção da fonte produtora (aluguel de sala/consultório, água, energia, internet profissional, materiais de consumo e salários de colaboradores com encargos). <strong>Limite legal e escopo:</strong> a dedução de Livro-Caixa é limitada à receita mensal total da atividade não assalariada (soma das receitas de pessoas físicas, do exterior e de pessoas jurídicas sem vínculo empregatício, conforme IN RFB nº 1.500/2014, art. 104, § 1º). As receitas de PJ expandem o limite de despesas dedutíveis da atividade, mas não compõem a base tributável do Carnê-Leão (pois estão sujeitas a retenção na fonte pela PJ). <strong>Transporte de excedente:</strong> o excesso de despesas não deduzidas em um mês pode ser transportado e somado às despesas dos meses seguintes de fevereiro a dezembro do mesmo ano-calendário. O excedente não deduzido que restar em dezembro não pode ser transferido para o ano-calendário seguinte (§ 2º).</li>
+    <li><strong>Contribuição Previdenciária Oficial (INSS):</strong> valor efetivamente recolhido no mês à Previdência Social oficial, desde que não tenha sido utilizado para abater a base de cálculo de retenção na fonte (IRRF) no mesmo mês.</li>
+    <li><strong>Dependentes:</strong> dedução mensal de <strong>R$ 189,59 por dependente</strong> legalmente qualificado, desde que o mesmo dependente não esteja sendo deduzido concomitantemente na fonte em outro rendimento do mês.</li>
+    <li><strong>Pensão Alimentícia:</strong> valor pago no mês em cumprimento de decisão judicial, acordo homologado judicialmente ou escritura pública, vedada a dupla dedução no mesmo mês.</li>
+    <li><strong>Desconto Simplificado Mensal (R$ 607,20):</strong> alternativa facultativa equivalente a 25% do limite máximo da faixa de alíquota zero (25% de R$ 2.428,80 = R$ 607,20), prevista no art. 4º, § 2º da Lei nº 9.250/1995. Substitui todas as deduções legais na apuração mensal, não podendo ser somado a elas.</li>
+  </ul>
+
+  <h3>Fontes oficiais consultadas (Referência 2026)</h3>
+  <p>As regras e parâmetros desta calculadora foram verificados nas seguintes publicações oficiais da Receita Federal do Brasil e da Presidência da República (consulta realizada em 2026-10-21):</p>
+  <ul class="mei-autonomo-official-links">
+    <li>
+      <a href="https://www.gov.br/receitafederal/pt-br/assuntos/meu-imposto-de-renda/pagamento/carne-leao" target="_blank" rel="noopener noreferrer">
+        Recolhimento mensal obrigatório (Carnê-Leão) — Portal da Receita Federal (gov.br)
+      </a>
+    </li>
+    <li>
+      <a href="https://www.gov.br/receitafederal/pt-br/assuntos/meu-imposto-de-renda/tabelas/2026" target="_blank" rel="noopener noreferrer">
+        Tabelas de incidência mensal do IRPF e redução mensal de 2026 — Receita Federal (gov.br)
+      </a>
+    </li>
+    <li>
+      <a href="https://www.planalto.gov.br/ccivil_03/_ato2023-2026/2025/lei/l15270.htm" target="_blank" rel="noopener noreferrer">
+        Lei nº 15.270, de 26 de novembro de 2025 (Redução mensal do IRPF a partir de janeiro de 2026) — Planalto
+      </a>
+    </li>
+    <li>
+      <a href="https://www.planalto.gov.br/ccivil_03/leis/L9250.htm" target="_blank" rel="noopener noreferrer">
+        Lei nº 9.250, de 26 de dezembro de 1995 (arts. 3º-A, 4º e 8º — base de cálculo, deduções e desconto simplificado) — Planalto
+      </a>
+    </li>
+    <li>
+      <a href="http://normas.receita.fazenda.gov.br/sijut2consulta/link.action?idAto=57670" target="_blank" rel="noopener noreferrer">
+        Instrução Normativa RFB nº 1.500, de 29 de outubro de 2014 (arts. 52 a 56 e art. 104 — Carnê-Leão e Livro-Caixa) — Normas RFB
+      </a>
+    </li>
+  </ul>
+
+  <section class="related-tools">
+    <h2>Ferramentas Relacionadas</h2>
+    <div class="related-tools-grid">
+      <article class="tool-card">
+        <div class="tool-card-header">
+          <span class="tool-card-category">Financeiro</span>
+        </div>
+        <h3 class="tool-card-title">Calculadora MEI ou Autônomo</h3>
+        <p class="tool-card-desc">Compare cenários financeiros entre atuar como MEI ou Autônomo pessoa física com faturamento, despesas e encargos.</p>
+        <div class="tool-card-footer">
+          <a href="{{ROOT_PREFIX}}tools/financas/mei-ou-autonomo.html" class="tool-card-btn">Acessar</a>
+        </div>
+      </article>
+
+      <article class="tool-card">
+        <div class="tool-card-header">
+          <span class="tool-card-category">Financeiro</span>
+        </div>
+        <h3 class="tool-card-title">Calculadora de Projeção de Faturamento MEI</h3>
+        <p class="tool-card-desc">Projete o faturamento bruto anual do MEI mês a mês e acompanhe o percentual utilizado do limite anual.</p>
+        <div class="tool-card-footer">
+          <a href="{{ROOT_PREFIX}}tools/financas/projecao-faturamento-mei.html" class="tool-card-btn">Acessar</a>
+        </div>
+      </article>
+
+      <article class="tool-card">
+        <div class="tool-card-header">
+          <span class="tool-card-category">Financeiro</span>
+        </div>
+        <h3 class="tool-card-title">Calculadora de Preço de Serviço</h3>
+        <p class="tool-card-desc">Defina quanto cobrar por um serviço considerando materiais, mão de obra, despesas e margem.</p>
+        <div class="tool-card-footer">
+          <a href="{{ROOT_PREFIX}}tools/financas/preco-servico.html" class="tool-card-btn">Acessar</a>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <p class="tool-return-link">
+    <a href="{{ROOT_PREFIX}}index.html">← Voltar para a página inicial</a>
+  </p>
+</section>

@@ -1,0 +1,244 @@
+---
+title: Simulador de DAS do MEI | Calculadora de Guia Mensal Oficial
+description: Calcule o valor oficial da guia DAS-MEI mensal e anual com a discriminação exata de INSS, ICMS e ISS para Comércio, Serviços e MEI Caminhoneiro.
+keywords: simulador das mei, calcular das mei, valor das mei 2026, guia das mei, inss mei, icms mei, iss mei, mei caminhoneiro, tabela das mei
+canonical: https://www.calculadoramaster.com/tools/financas/simulador-das-mei.html
+layout: tool
+pageScripts: <script type="module" src="{{ROOT_PREFIX}}js/tools/simulador-das-mei.js"></script>
+---
+
+<h1>Simulador de DAS do MEI</h1>
+
+<p>O Documento de Arrecadação do Simples Nacional do Microempreendedor Individual (DAS-MEI) é a guia única mensal por meio da qual o microempreendedor recolhe a contribuição para a Previdência Social (INSS) e os tributos incidentes sobre sua atividade econômica (ICMS estadual e ISS municipal). Utilize este simulador para verificar a composição exata da sua guia mensal, o impacto do salário mínimo vigente e a estimativa do encargo tributário para 12 meses de operação regular.</p>
+
+<div class="card tool-calculator-card">
+  <h2 class="tool-form-title">Parâmetros de Enquadramento do MEI</h2>
+
+  <form id="formDasMei" novalidate>
+    <!-- Ano de Referência -->
+    <div class="form-group">
+      <label for="anoReferencia">Ano de referência:</label>
+      <p id="ajudaAnoReferencia" class="help-text">Selecione o ano para aplicar o salário mínimo e a tabela oficial de tributos correspondente.</p>
+      <select
+        id="anoReferencia"
+        name="anoReferencia"
+        aria-describedby="ajudaAnoReferencia"
+      >
+        <option value="2026" selected>2026 — Salário Mínimo de R$ 1.621,00 (Decreto 12.797/2025)</option>
+        <option value="2025">2025 — Salário Mínimo de R$ 1.518,00 (Decreto 12.339/2024)</option>
+        <option value="2024">2024 — Salário Mínimo de R$ 1.412,00 (Decreto 11.864/2023)</option>
+      </select>
+    </div>
+
+    <!-- Atividade Econômica / Categoria -->
+    <div class="form-group">
+      <label for="atividadeEconomica">Atividade econômica e modalidade de MEI:</label>
+      <p id="ajudaAtividadeEconomica" class="help-text">Escolha a categoria principal da sua ocupação conforme o seu Certificado da Condição de Microempreendedor Individual (CCMEI).</p>
+      <select
+        id="atividadeEconomica"
+        name="atividadeEconomica"
+        aria-describedby="ajudaAtividadeEconomica"
+        required
+      >
+        <optgroup label="MEI Geral (Regra Padrão — 5% de INSS)">
+          <option value="comercio_industria" selected>Comércio ou Indústria (INSS 5% + ICMS R$ 1,00)</option>
+          <option value="servicos">Prestação de Serviços (INSS 5% + ISS R$ 5,00)</option>
+          <option value="comercio_servicos">Comércio e Serviços integrados (INSS 5% + ICMS R$ 1,00 + ISS R$ 5,00)</option>
+        </optgroup>
+        <optgroup label="MEI Caminhoneiro (LC nº 188/2021 — 12% de INSS)">
+          <option value="caminhoneiro_cargas">Transporte Intermunicipal ou Interestadual de Cargas (INSS 12% + ICMS R$ 1,00)</option>
+          <option value="caminhoneiro_municipal">Transporte Municipal de Cargas (INSS 12% + ISS R$ 5,00)</option>
+          <option value="caminhoneiro_misto">Transporte Misto de Cargas (INSS 12% + ICMS R$ 1,00 + ISS R$ 5,00)</option>
+        </optgroup>
+      </select>
+    </div>
+
+    <!-- Meses de Projeção -->
+    <div class="form-group">
+      <label for="mesesProjecao">Período para projeção anual:</label>
+      <p id="ajudaMesesProjecao" class="help-text">Projete o compromisso financeiro para o ano completo ou para os meses restantes do exercício.</p>
+      <select
+        id="mesesProjecao"
+        name="mesesProjecao"
+        aria-describedby="ajudaMesesProjecao"
+      >
+        <option value="12" selected>12 meses (Ano fiscal completo)</option>
+        <option value="11">11 meses</option>
+        <option value="10">10 meses</option>
+        <option value="9">9 meses</option>
+        <option value="6">6 meses (Semestre)</option>
+        <option value="3">3 meses (Trimestre)</option>
+        <option value="1">1 mês (Apenas competência única)</option>
+      </select>
+    </div>
+
+    <!-- Mensagem de Erro -->
+    <div id="painelErros" class="alert-box error" hidden aria-live="assertive"></div>
+
+    <!-- Botões de Ação do Formulário -->
+    <div class="form-actions">
+      <button type="submit" id="btnCalcular" class="btn btn-primary">Calcular Guia DAS</button>
+      <button type="button" id="btnLimpar" class="btn btn-secondary">Limpar</button>
+    </div>
+  </form>
+</div>
+
+<!-- Área de Resultados -->
+<section id="resultadoSecao" class="card tool-result-card" aria-live="polite">
+  <h2 class="tool-result-title">Detalhamento da Guia Mensal do DAS</h2>
+
+  <!-- Destaque: Valor Mensal -->
+  <div class="result-highlight">
+    <span class="highlight-label">Valor Mensal do DAS:</span>
+    <span id="resultadoTotalMensal" class="highlight-value">R$ 0,00</span>
+    <span class="highlight-subtext">Valor fixo mensal devido independentemente de ter emitido notas fiscais no mês</span>
+  </div>
+
+  <!-- Tabela de Composição da Guia -->
+  <div class="result-breakdown-card">
+    <h3 class="breakdown-subtitle">Discriminação dos Componentes</h3>
+    <div class="result-breakdown-row">
+      <span class="breakdown-label">Previdência Social (INSS do Empreendedor):</span>
+      <span id="resultadoInss" class="breakdown-value">R$ 0,00 (5%)</span>
+    </div>
+    <div class="result-breakdown-row">
+      <span class="breakdown-label">Imposto Estadual (ICMS):</span>
+      <span id="resultadoIcms" class="breakdown-value">R$ 0,00</span>
+    </div>
+    <div class="result-breakdown-row">
+      <span class="breakdown-label">Imposto Municipal (ISS):</span>
+      <span id="resultadoIss" class="breakdown-value">R$ 0,00</span>
+    </div>
+    <div class="result-breakdown-row highlight-row">
+      <span id="rotuloTotalAnual" class="breakdown-label">Total estimado para 12 meses:</span>
+      <span id="resultadoTotalAnual" class="breakdown-value highlight-number">R$ 0,00</span>
+    </div>
+  </div>
+
+  <!-- Memória de Cálculo Transparente -->
+  <div class="memory-calculation-card">
+    <h3 class="breakdown-subtitle">Memória de Cálculo e Bases Legais</h3>
+    <ul id="listaMemoriaCalculo" class="memory-list"></ul>
+  </div>
+
+  <!-- Painel de Avisos e Orientações Oficiais -->
+  <div class="notices-card">
+    <h3 class="breakdown-subtitle">Orientações de Pagamento e Limitações</h3>
+    <div id="painelAvisos"></div>
+  </div>
+
+  <!-- Ações: Copiar, Compartilhar, Imprimir e Favoritar -->
+  <div id="toolActionsContainer" class="tool-actions"></div>
+</section>
+
+<!-- Conteúdo Editorial e SEO Informativo -->
+<section class="tool-educational-content">
+  <h2>O que é o DAS do MEI?</h2>
+  <p>O <strong>Documento de Arrecadação do Simples Nacional (DAS)</strong> é o instrumento tributário simplificado instituído pela Lei Complementar nº 123/2006 para unificar os tributos obrigatórios devidos pelo Microempreendedor Individual. Ao contrário de empresas enquadradas no Simples Nacional convencional ou no Lucro Presumido, que recolhem tributos proporcionais ao faturamento efetivo, o MEI recolhe um <em>valor fixo mensal</em>, independentemente de ter ou não faturado na competência.</p>
+
+  <h2>Como é Composto o Valor do DAS em 2026?</h2>
+  <p>O valor mensal do DAS do MEI é composto por até três elementos legais rigidamente fixados em lei:</p>
+  <ul>
+    <li><strong>INSS (Previdência Social):</strong> Corresponde a exatamente 5% do Salário Mínimo Nacional vigente no ano (art. 18-A, § 3º, I, "a" da LC 123/2006). Em 2026, com o salário mínimo fixado em R$ 1.621,00 pelo Decreto nº 12.797/2025, a contribuição previdenciária equivale a R$ 81,05 mensais. Esse recolhimento assegura a cobertura de aposentadoria por idade, auxílio-doença, salário-maternidade e pensão por morte para os dependentes.</li>
+    <li><strong>ICMS (Imposto sobre Circulação de Mercadorias e Serviços):</strong> Valor simbólico e invariável de <strong>R$ 1,00</strong> ao mês, devido exclusivamente por quem exerce atividades de comércio ou indústria (art. 18-A, § 3º, I, "b" da LC 123/2006).</li>
+    <li><strong>ISS (Imposto sobre Serviços de Qualquer Natureza):</strong> Valor simbólico e invariável de <strong>R$ 5,00</strong> ao mês, devido aos cofres municipais por prestadores de serviços (art. 18-A, § 3º, I, "c" da LC 123/2006).</li>
+  </ul>
+
+  <h2>Tabela Resumo dos Valores Mensais do DAS para 2026</h2>
+  <div class="mei-projection-table-wrapper">
+    <table class="mei-projection-table">
+      <thead>
+        <tr>
+          <th scope="col">Modalidade / Atividade</th>
+          <th scope="col">INSS</th>
+          <th scope="col">ICMS</th>
+          <th scope="col">ISS</th>
+          <th scope="col">Total Mensal</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Comércio ou Indústria</td>
+          <td>R$ 81,05</td>
+          <td>R$ 1,00</td>
+          <td>Isento</td>
+          <td><strong>R$ 82,05</strong></td>
+        </tr>
+        <tr>
+          <td>Prestação de Serviços</td>
+          <td>R$ 81,05</td>
+          <td>Isento</td>
+          <td>R$ 5,00</td>
+          <td><strong>R$ 86,05</strong></td>
+        </tr>
+        <tr>
+          <td>Comércio e Serviços integrados</td>
+          <td>R$ 81,05</td>
+          <td>R$ 1,00</td>
+          <td>R$ 5,00</td>
+          <td><strong>R$ 87,05</strong></td>
+        </tr>
+        <tr>
+          <td>MEI Caminhoneiro (Cargas Intermunicipais)</td>
+          <td>R$ 194,52</td>
+          <td>R$ 1,00</td>
+          <td>Isento</td>
+          <td><strong>R$ 195,52</strong></td>
+        </tr>
+        <tr>
+          <td>MEI Caminhoneiro (Municipal)</td>
+          <td>R$ 194,52</td>
+          <td>Isento</td>
+          <td>R$ 5,00</td>
+          <td><strong>R$ 199,52</strong></td>
+        </tr>
+        <tr>
+          <td>MEI Caminhoneiro (Misto)</td>
+          <td>R$ 194,52</td>
+          <td>R$ 1,00</td>
+          <td>R$ 5,00</td>
+          <td><strong>R$ 200,52</strong></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>Particularidades do MEI Caminhoneiro (LC nº 188/2021)</h2>
+  <p>A Lei Complementar nº 188/2021 criou uma categoria especial e diferenciada para os <strong>Transportadores Autônomos de Cargas</strong>. Para compensar o teto diferenciado de faturamento anual (R$ 251.600,00, contra os R$ 81.000,00 do MEI geral), a legislação fixou a alíquota de contribuição previdenciária do MEI Caminhoneiro em <strong>12% sobre o Salário Mínimo</strong> (art. 18-F da LC 123/2006), em vez dos 5% convencionais.</p>
+  <p>Dessa forma, com o salário mínimo de R$ 1.621,00 em 2026, a cota de INSS do MEI Caminhoneiro atinge R$ 194,52 por mês. Somando-se o ICMS de R$ 1,00 para transporte interestadual ou o ISS de R$ 5,00 para transportes municipais, o valor da guia varia entre R$ 195,52 e R$ 200,52 ao mês.</p>
+
+  <h2>Vencimento, Multas e Regularização de Débitos</h2>
+  <p>A guia mensal do DAS vence impreterivelmente no <strong>dia 20 de cada mês</strong>. Quando o dia 20 coincide com um sábado, domingo ou feriado nacional, o vencimento é automaticamente prorrogado para o primeiro dia útil subsequente sem qualquer penalidade.</p>
+  <p>Caso o pagamento ocorra após o vencimento, incidem os seguintes acréscimos moratórios previstos na legislação tributária:</p>
+  <ul>
+    <li><strong>Multa de mora:</strong> 0,33% por dia de atraso, contados a partir do primeiro dia útil seguinte ao vencimento, com teto máximo de 20%;</li>
+    <li><strong>Juros de mora:</strong> Calculados com base na taxa SELIC acumulada mensalmente a partir do mês seguinte ao do vencimento, mais 1% relativo ao mês em que o pagamento for liquidado.</li>
+  </ul>
+  <p>Mantenha suas guias rigorosamente em dia para não perder a cobertura previdenciária e evitar o cancelamento do CNPJ pela Receita Federal.</p>
+
+  <h2>Perguntas Frequentes sobre o DAS do MEI</h2>
+  <div class="faq-item">
+    <h3>Se eu não faturar nada no mês, preciso pagar o DAS?</h3>
+    <p>Sim. O recolhimento do DAS é obrigatório durante todo o período em que o CNPJ do MEI estiver ativo, mesmo que não haja qualquer faturamento, emissão de nota fiscal ou prestação de serviços no mês.</p>
+  </div>
+  <div class="faq-item">
+    <h3>Como emitir a guia oficial para pagamento?</h3>
+    <p>A guia oficial pode ser gerada gratuitamente através do <em>Programa Gerador do DAS para o MEI (PGMEI)</em> no Portal do Empreendedor do Governo Federal ou pelo aplicativo oficial "MEI" da Receita Federal. O pagamento pode ser feito via Pix (QR Code), débito automático ou código de barras bancário.</p>
+  </div>
+  <div class="faq-item">
+    <h3>O MEI que contrata funcionário paga valor diferente no DAS?</h3>
+    <p>Não. O valor do DAS do próprio titular permanece inalterado. No entanto, o MEI que contrata um empregado arcará adicionalmente com 3% de encargo patronal previdenciário sobre o salário do colaborador e 8% de FGTS, declarados e recolhidos separadamente pelo sistema do FGTS Digital / eSocial.</p>
+  </div>
+
+  <h2>Fontes Oficiais e Legislação Vigente</h2>
+  <ul>
+    <li><a href="https://www.gov.br/empresas-e-negocios/pt-br/empreendedor" target="_blank" rel="noopener noreferrer">Portal do Empreendedor — Governo Federal do Brasil</a></li>
+    <li><a href="https://www8.receita.fazenda.gov.br/SIMPLESNACIONAL/noticias/NoticiaCompleta.aspx?id=c3b2044c-ff97-432a-b33c-ecf2a3df6dc3" target="_blank" rel="noopener noreferrer">Receita Federal do Brasil — Notícia Oficial dos Valores do DAS-MEI 2026</a></li>
+    <li><a href="https://www.planalto.gov.br/ccivil_03/leis/lcp/lcp123.htm" target="_blank" rel="noopener noreferrer">Lei Complementar nº 123/2006 (Estatuto Nacional da Microempresa e EPP)</a></li>
+    <li><a href="https://www.planalto.gov.br/ccivil_03/leis/lcp/lcp188.htm" target="_blank" rel="noopener noreferrer">Lei Complementar nº 188/2021 (Regime Especial do MEI Caminhoneiro)</a></li>
+    <li><a href="https://www.planalto.gov.br/ccivil_03/leis/l8212cons.htm" target="_blank" rel="noopener noreferrer">Lei nº 8.212/1991 (Organização da Seguridade Social)</a></li>
+    <li>Decreto Federal nº 12.797, de 23 de dezembro de 2025 (Fixação do Salário Mínimo de R$ 1.621,00 para 2026)</li>
+    <li>Decreto Federal nº 12.339, de 30 de dezembro de 2024 (Fixação do Salário Mínimo de R$ 1.518,00 para 2025)</li>
+    <li>Decreto Federal nº 11.864, de 27 de dezembro de 2023 (Fixação do Salário Mínimo de R$ 1.412,00 para 2024)</li>
+  </ul>
+</section>

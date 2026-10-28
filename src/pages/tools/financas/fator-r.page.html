@@ -1,0 +1,369 @@
+---
+title: Calculadora Fator R Simples Nacional Online Grátis - Calculadora Master
+description: Calcule o Fator R do Simples Nacional a partir da folha de salários (FS12) e receita bruta (RBT12r) para enquadramento no Anexo III ou V em 2026 e 2027.
+keywords: calculadora fator r, fator r simples nacional, calcular fator r, anexo 3 ou 5 simples nacional, fs12 rbt12 fator r, fator r inicio de atividade 2026 2027
+canonical: https://www.calculadoramaster.com/tools/financas/fator-r.html
+layout: tool
+pageScripts: <script type="module" src="{{ROOT_PREFIX}}js/tools/fator-r.js"></script>
+---
+
+<h1>Calculadora Fator R Simples Nacional</h1>
+
+<p>Descubra se a sua empresa de serviços optante pelo <strong>Simples Nacional</strong> será tributada pelas alíquotas reduzidas do <strong>Anexo III</strong> (a partir de 6,00%) ou pelas alíquotas do <strong>Anexo V</strong> (a partir de 15,50%). A ferramenta calcula a relação oficial entre a <strong>Folha de Salários com encargos (FS12)</strong> e a <strong>Receita Bruta Total (RBT12r)</strong> nos 12 meses anteriores, em conformidade estrita com a Lei Complementar nº 123/2006, a Resolução CGSN nº 140/2018 (art. 26), a Solução de Consulta Cosit nº 17/2021 (regime de caixa da folha) e as regras da Resolução CGSN nº 190/2026 para os períodos a partir de 2027. Esta simulação é de caráter orientativo e não substitui a apuração no PGDAS-D.</p>
+
+<div class="card tool-calculator-card">
+  <h2 class="tool-form-title">Simulador do Fator R (Anos-Calendário 2026 e 2027)</h2>
+
+  <form id="formFatorR" novalidate>
+    <section class="mei-autonomo-common-section" aria-labelledby="tituloPeriodoFR">
+      <h3 id="tituloPeriodoFR" class="mei-autonomo-section-heading">1. Período de Apuração e Situação da Empresa</h3>
+      <p class="mei-autonomo-reference-note">
+        <strong>Regra de corte:</strong> Se a folha de pagamento representar <strong>28,00% ou mais</strong> do faturamento acumulado, as atividades de serviços sujeitas ao Fator R tributam pelo <strong>Anexo III</strong>. Se inferior a 28,00%, tributam pelo <strong>Anexo V</strong>.
+      </p>
+
+      <div class="form-group">
+        <label for="anoReferenciaFR">Ano de competência da apuração:</label>
+        <p id="ajudaAnoReferenciaFR">Selecione o ano da apuração. Para 2026 aplicam-se as regras vigentes da Resolução CGSN nº 140/2018. Para períodos a partir de 2027 aplicam-se as inovações da Resolução CGSN nº 190/2026.</p>
+        <select
+          id="anoReferenciaFR"
+          name="anoReferencia"
+          aria-describedby="ajudaAnoReferenciaFR"
+        >
+          <option value="2026" selected>Ano-Calendário 2026 (Resolução CGSN nº 140/2018)</option>
+          <option value="2027">Ano-Calendário 2027 (Resolução CGSN nº 190/2026 — Transição da Reforma Tributária)</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="modoApuracaoFR">Tempo de funcionamento da empresa:</label>
+        <p id="ajudaModoApuracaoFR">Empresas com mais de 12 meses utilizam os 12 meses anteriores. Empresas em início de atividade possuem proporcionalização ou presunção legal nos primeiros meses.</p>
+        <select
+          id="modoApuracaoFR"
+          name="modoApuracao"
+          aria-describedby="ajudaModoApuracaoFR"
+        >
+          <option value="regra_geral" selected>Empresa em atividade regular (mais de 12 meses em 2026 / mais de 13 meses em 2027)</option>
+          <option value="inicio_mes_1">Início de atividade — 1º mês de funcionamento</option>
+          <option value="inicio_mes_2">Início de atividade — 2º mês de funcionamento</option>
+          <option value="inicio_meses_3_12">Início de atividade — 3º ao 12º mês (2026) / 3º ao 13º mês (2027)</option>
+        </select>
+      </div>
+    </section>
+
+    <div id="grupoRegraGeralFR">
+      <section class="mei-autonomo-common-section" aria-labelledby="tituloFolhaFR">
+        <h3 id="tituloFolhaFR" class="mei-autonomo-section-heading">2. Folha de Salários e Encargos nos 12 Meses Anteriores (FS12)</h3>
+        <p class="mei-autonomo-reference-note">
+          <strong>Atenção ao regime de caixa:</strong> Conforme a Solução de Consulta Cosit nº 17/2021, a FS12 deve computar estritamente os valores <strong>efetivamente pagos</strong> nos 12 meses anteriores, mesmo que a empresa apure seus tributos pelo regime de competência.
+        </p>
+
+        <div class="form-group">
+          <label for="modoEntradaFolhaFR">Forma de informar os valores de folha:</label>
+          <select id="modoEntradaFolhaFR" name="modoEntradaFolha">
+            <option value="consolidada" selected>Total consolidado da folha (FS12 total)</option>
+            <option value="detalhada">Preenchimento detalhado por componentes individuais</option>
+          </select>
+        </div>
+
+        <div id="grupoFolhaConsolidadaFR" class="form-group">
+          <label for="folhaConsolidadaFR">Folha total de salários com encargos nos 12 meses anteriores (R$):</label>
+          <p id="ajudaFolhaConsolidadaFR">Soma de salários, pró-labore, 13º salário, contribuição previdenciária patronal (CPP) e FGTS efetivamente pagos nos 12 meses anteriores ao período de apuração.</p>
+          <input
+            type="text"
+            id="folhaConsolidadaFR"
+            name="folhaConsolidada"
+            inputmode="decimal"
+            placeholder="Ex: 84000,00"
+            value="84000,00"
+            autocomplete="off"
+            aria-describedby="ajudaFolhaConsolidadaFR"
+          >
+        </div>
+
+        <div id="grupoFolhaDetalhadaFR" class="form-group" hidden>
+          <p class="mei-autonomo-reference-note">
+            Preencha cada componente pago nos últimos 12 meses para evitar duplas contagens e omissões:
+          </p>
+
+          <div class="form-group">
+            <label for="salariosFR">Salários e remunerações pagas a empregados e pessoas físicas (R$):</label>
+            <input type="text" id="salariosFR" name="salarios" inputmode="decimal" placeholder="0,00" value="0,00">
+          </div>
+
+          <div class="form-group">
+            <label for="proLaboreFR">Pró-labore efetivamente pago a sócios e titulares (R$):</label>
+            <input type="text" id="proLaboreFR" name="proLabore" inputmode="decimal" placeholder="0,00" value="0,00">
+          </div>
+
+          <div class="form-group">
+            <label for="decimoTerceiroFR">13º Salário pago na competência pertinente à incidência (R$):</label>
+            <input type="text" id="decimoTerceiroFR" name="decimoTerceiro" inputmode="decimal" placeholder="0,00" value="0,00">
+          </div>
+
+          <div class="form-group">
+            <label for="cppPatronalFR">Contribuição Previdenciária Patronal — CPP efetivamente recolhida (R$):</label>
+            <p id="ajudaCppPatronalFR">Inclui a CPP patronal recolhida dentro da guia do Simples Nacional ou via DCTFWeb/DARF.</p>
+            <input type="text" id="cppPatronalFR" name="cppPatronal" inputmode="decimal" placeholder="0,00" value="0,00" aria-describedby="ajudaCppPatronalFR">
+          </div>
+
+          <div class="form-group">
+            <label for="fgtsFR">FGTS efetivamente recolhido no período (R$):</label>
+            <input type="text" id="fgtsFR" name="fgts" inputmode="decimal" placeholder="0,00" value="0,00">
+          </div>
+        </div>
+
+        <div class="mei-limit-alert">
+          <p class="tool-result-note">
+            <strong>O que NÃO entra na folha:</strong> Não inclua aluguéis pagos pela empresa, distribuição de lucros aos sócios, bolsas pagas a estagiários e valores pagos a Microempreendedores Individuais (MEI).
+          </p>
+        </div>
+      </section>
+
+      <section class="mei-autonomo-common-section" aria-labelledby="tituloReceitaFR">
+        <h3 id="tituloReceitaFR" class="mei-autonomo-section-heading">3. Receita Bruta Total nos 12 Meses Anteriores (RBT12r)</h3>
+        <p class="mei-autonomo-reference-note">
+          A receita bruta deve englobar conjuntamente o faturamento obtido no <strong>mercado interno</strong> e as receitas decorrentes de <strong>exportações</strong>, respeitando o critério de competência da janela móvel de 12 meses anteriores.
+        </p>
+
+        <div class="form-group">
+          <label for="modoEntradaReceitaFR">Forma de informar o faturamento acumulado:</label>
+          <select id="modoEntradaReceitaFR" name="modoEntradaReceita">
+            <option value="consolidada" selected>Receita bruta total consolidada (RBT12r total)</option>
+            <option value="detalhada">Segregação entre mercado interno e exportações</option>
+          </select>
+        </div>
+
+        <div id="grupoReceitaConsolidadaFR" class="form-group">
+          <label for="receitaConsolidadaFR">Receita bruta total dos 12 meses anteriores — RBT12r (R$):</label>
+          <p id="ajudaReceitaConsolidadaFR">Faturamento bruto total auferido nos 12 meses anteriores ao período de apuração (não inclui a receita do próprio mês atual).</p>
+          <input
+            type="text"
+            id="receitaConsolidadaFR"
+            name="receitaConsolidada"
+            inputmode="decimal"
+            placeholder="Ex: 300000,00"
+            value="300000,00"
+            autocomplete="off"
+            aria-describedby="ajudaReceitaConsolidadaFR"
+          >
+        </div>
+
+        <div id="grupoReceitaDetalhadaFR" class="form-group" hidden>
+          <div class="form-group">
+            <label for="mercadoInternoFR">Faturamento acumulado no Mercado Interno (R$):</label>
+            <input type="text" id="mercadoInternoFR" name="mercadoInterno" inputmode="decimal" placeholder="0,00" value="0,00">
+          </div>
+
+          <div class="form-group">
+            <label for="exportacoesFR">Receitas auferidas com Exportações de mercadorias ou serviços (R$):</label>
+            <input type="text" id="exportacoesFR" name="exportacoes" inputmode="decimal" placeholder="0,00" value="0,00">
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <div id="grupoInicioAtividadeFR" hidden>
+      <section class="mei-autonomo-common-section" aria-labelledby="tituloInicioFR">
+        <h3 id="tituloInicioFR" class="mei-autonomo-section-heading">2. Dados para Empresa em Início de Atividade</h3>
+
+        <div id="avisoRegra2027Inicio" class="mei-limit-alert" hidden>
+          <p class="tool-result-note">
+            <strong>Inovação da Resolução CGSN nº 190/2026 (Ano 2027):</strong> Para os dois primeiros meses de início de atividade a partir de 1º de janeiro de 2027, o Fator R é <strong>presumido por lei em 28,00%</strong>, garantindo o enquadramento no <strong>Anexo III</strong> sem necessidade de comprovação retroativa de folha de pagamento.
+          </p>
+        </div>
+
+        <div id="grupoMesesInicioFR" class="form-group" hidden>
+          <label for="mesesInicioFR">Mês de funcionamento ou meses decorridos (3 a 12 em 2026 / 3 a 13 em 2027):</label>
+          <p id="ajudaMesesInicioFR">Informe o mês de atividade ou meses anteriores para apuração proporcionalizada conforme a legislação.</p>
+          <input
+            type="number"
+            id="mesesInicioFR"
+            name="mesesInicio"
+            min="2"
+            max="13"
+            placeholder="Ex: 3"
+            value="3"
+            autocomplete="off"
+            aria-describedby="ajudaMesesInicioFR"
+          >
+        </div>
+
+        <div id="grupoInicioMes1FR">
+          <div class="form-group">
+            <label for="folhaMesAtualFR">Folha de salários e encargos paga no próprio 1º mês (R$):</label>
+            <p id="ajudaFolhaMesAtualFR">Valores de pró-labore, salários e encargos efetivamente pagos na primeira competência.</p>
+            <input type="text" id="folhaMesAtualFR" name="folhaMesAtual" inputmode="decimal" placeholder="Ex: 7000,00" value="7000,00" autocomplete="off" aria-describedby="ajudaFolhaMesAtualFR">
+          </div>
+
+          <div class="form-group">
+            <label for="receitaMesAtualFR">Receita bruta faturada no próprio 1º mês (R$):</label>
+            <p id="ajudaReceitaMesAtualFR">Faturamento bruto de serviços ou vendas auferido no primeiro mês de operação.</p>
+            <input type="text" id="receitaMesAtualFR" name="receitaMesAtual" inputmode="decimal" placeholder="Ex: 25000,00" value="25000,00" autocomplete="off" aria-describedby="ajudaReceitaMesAtualFR">
+          </div>
+        </div>
+
+        <div id="grupoInicioMesesAnterioresFR" hidden>
+          <div class="form-group">
+            <label for="folhaAcumuladaAnteriorFR">Folha de salários acumulada nos meses anteriores (R$):</label>
+            <p id="ajudaFolhaAcumuladaAnteriorFR">Soma da folha de pagamento e pró-labore pagos desde a abertura até o mês anterior.</p>
+            <input type="text" id="folhaAcumuladaAnteriorFR" name="folhaAcumuladaAnterior" inputmode="decimal" placeholder="Ex: 28000,00" value="28000,00" autocomplete="off" aria-describedby="ajudaFolhaAcumuladaAnteriorFR">
+          </div>
+
+          <div class="form-group">
+            <label for="receitaAcumuladaAnteriorFR">Receita bruta acumulada nos meses anteriores (R$):</label>
+            <p id="ajudaReceitaAcumuladaAnteriorFR">Soma do faturamento obtido desde o mês de início de atividade até o mês anterior.</p>
+            <input type="text" id="receitaAcumuladaAnteriorFR" name="receitaAcumuladaAnterior" inputmode="decimal" placeholder="Ex: 100000,00" value="100000,00" autocomplete="off" aria-describedby="ajudaReceitaAcumuladaAnteriorFR">
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <div class="tool-actions">
+      <button type="submit" id="btnCalcularFR" class="tool-btn tool-btn-primary">Calcular Fator R</button>
+      <button type="button" id="btnLimparFR" class="tool-btn tool-btn-secondary">Limpar campos</button>
+    </div>
+  </form>
+
+  <p id="erroFatorR" role="alert" aria-live="assertive" hidden></p>
+
+  <section id="resultadoFatorR" aria-live="polite" aria-atomic="true" hidden>
+    <h2 class="tool-result-title">Resultado do Enquadramento pelo Fator R</h2>
+
+    <div class="card tool-result-card">
+      <h3 class="mei-autonomo-result-subtitle">Índice e Anexo Tributário Resultante</h3>
+
+      <div class="mei-highlight-box">
+        <p>Fator R Apurado:</p>
+        <p class="bill-total" id="resFatorRPercentualFR">0,00%</p>
+        <span id="resBadgeAnexoFR" class="tool-badge">—</span>
+      </div>
+
+      <p id="resMensagemResumoFR" class="mei-autonomo-calc-basis">—</p>
+
+      <p>Anexo oficial indicado: <strong id="resAnexoEnquadradoFR">—</strong></p>
+      <p>Folha considerada (FS12, regime de caixa): <strong id="resFsConsideradaFR">R$ 0,00</strong></p>
+      <p>Receita bruta considerada (RBT12r total): <strong id="resRbtConsideradaFR">R$ 0,00</strong></p>
+      <p>Regra normativa aplicada: <strong id="resRegraAplicadaFR">—</strong></p>
+    </div>
+
+    <div class="card tool-result-card">
+      <h3 class="mei-autonomo-result-subtitle">Memória de Cálculo Detalhada</h3>
+      <ul id="listaMemoriaCalculoFR" class="mei-autonomo-warnings-list"></ul>
+    </div>
+
+    <div class="card tool-result-card">
+      <h3 class="mei-autonomo-result-subtitle">Avisos e Dispositivos Fiscais</h3>
+      <ul id="listaAvisosFR" class="mei-autonomo-warnings-list"></ul>
+    </div>
+
+    <div class="tool-actions result-actions">
+      <button type="button" id="btnCopiarFR" class="tool-btn tool-btn-secondary" hidden>Copiar resultado</button>
+      <button type="button" id="btnCompartilharFR" class="tool-btn tool-btn-secondary" hidden>Compartilhar link</button>
+      <button type="button" id="btnImprimirFR" class="tool-btn tool-btn-secondary" hidden>Imprimir</button>
+    </div>
+  </section>
+
+  <p id="statusFatorR" class="result-action-status" role="status" aria-live="polite"></p>
+</div>
+
+<section class="content mei-autonomo-explanatory-content">
+  <h2>Tudo sobre o Fator R do Simples Nacional</h2>
+
+  <p>O <strong>Fator R</strong> é um mecanismo fiscal criado pela Lei Complementar nº 123/2006 (com redação dada pela Lei Complementar nº 155/2016) para incentivar a geração e manutenção de empregos formais e a remuneração legal dos sócios por meio do pró-labore. Ele estabelece que empresas que prestam serviços intelectuais, técnicos, científicos ou artísticos possam pagar menos tributos se investirem parcela relevante de sua receita na folha de pagamento.</p>
+
+  <h3>1. A fórmula legal e o limite de 28%</h3>
+  <p>O cálculo básico do Fator R divide o total de gastos com a folha de salários dos últimos 12 meses pela receita bruta total acumulada dos últimos 12 meses:</p>
+  <p class="mei-autonomo-reference-note">
+    <strong>Fator R</strong> = Folha de Salários nos 12 meses anteriores (FS12) ÷ Receita Bruta Total nos 12 meses anteriores (RBT12r)
+  </p>
+  <p>O resultado dessa divisão define o anexo de tributação:</p>
+  <ul>
+    <li><strong>Fator R igual ou superior a 0,28 (28,00%):</strong> a empresa é tributada pelo <strong>Anexo III</strong>, cuja alíquota inicial é de apenas <strong>6,00%</strong> na 1ª faixa.</li>
+    <li><strong>Fator R inferior a 0,28 (28,00%):</strong> a empresa é tributada pelo <strong>Anexo V</strong>, cuja alíquota inicial é de <strong>15,50%</strong> na 1ª faixa.</li>
+  </ul>
+
+  <h3>2. Quais atividades estão sujeitas ao Fator R?</h3>
+  <p>O Fator R <strong>não se aplica a todas as empresas</strong> do Simples Nacional. Comércios (Anexo I), indústrias (Anexo II) e diversas prestações de serviços convencionais (como reparos, limpeza, manutenção e vigilância) tributam diretamente por seus anexos originários, sem variação de alíquota pela folha.</p>
+  <p>A sistemática incide especificamente sobre as atividades de serviços previstas no <strong>art. 18, § 5º-J da Lei Complementar nº 123/2006</strong>, tais como:</p>
+  <ul>
+    <li>Desenvolvimento e licenciamento de programas de computador (software) e suporte de tecnologia da informação;</li>
+    <li>Arquitetura, urbanismo, engenharia civil, elétrica, mecânica e demais especialidades técnicas;</li>
+    <li>Medicina, odontologia, psicologia, fisioterapia, fonoaudiologia, enfermagem e clínicas de saúde;</li>
+    <li>Perícias, leilões, avaliações técnicas e auditorias contábeis;</li>
+    <li>Agências de publicidade, propaganda, pesquisa de mercado e design;</li>
+    <li>Jornalismo, produção de conteúdo e relações públicas;</li>
+    <li>Laboratórios de análises clínicas ou de pesquisa científica.</li>
+  </ul>
+
+  <h3>3. O que integra a Folha de Salários (FS12) e o Regime de Caixa</h3>
+  <p>A folha de salários para fins do Fator R não se resume ao salário base dos empregados. De acordo com a regulamentação do Comitê Gestor do Simples Nacional (Resolução CGSN nº 140/2018, art. 26) e a <strong>Solução de Consulta Cosit nº 17/2021</strong>, integram o cálculo:</p>
+  <ul>
+    <li><strong>Salários e remunerações de pessoas físicas:</strong> pagamentos feitos a trabalhadores empregados com carteira assinada (CLT) e autônomos prestadores de serviço com recolhimento previdenciário;</li>
+    <li><strong>Pró-labore:</strong> remuneração mensal formal paga aos sócios e administradores que trabalham na empresa;</li>
+    <li><strong>13º Salário:</strong> pago na competência de incidência previdenciária;</li>
+    <li><strong>Contribuição Previdenciária Patronal (CPP):</strong> encargos patronais previdenciários efetivamente recolhidos;</li>
+    <li><strong>FGTS:</strong> valores de Fundo de Garantia do Tempo de Serviço recolhidos no período.</li>
+  </ul>
+  <p class="mei-autonomo-reference-note">
+    <strong>Regime de Caixa Obrigatório:</strong> De acordo com a Solução de Consulta Cosit nº 17/2021, a apuração da FS12 segue obrigatoriamente o regime de caixa (montantes efetivamente desembolsados nos 12 meses anteriores), independentemente de a empresa ter optado pelo regime de competência para a tributação mensal de seu faturamento no PGDAS-D.
+  </p>
+  <p><strong>Despesas expressamente proibidas de serem computadas na FS12:</strong></p>
+  <ul>
+    <li>Distribuição de lucros ou dividendos aos sócios e titulares;</li>
+    <li>Aluguéis de imóveis, máquinas ou equipamentos;</li>
+    <li>Bolsas ou valores pagos a estagiários (conforme Lei nº 11.788/2008);</li>
+    <li>Pagamentos efetuados a fornecedores ou serviços tomados de Microempreendedor Individual (MEI).</li>
+  </ul>
+
+  <h3>4. Receita Bruta Total (RBT12r)</h3>
+  <p>A RBT12r representa a receita bruta acumulada nos 12 meses anteriores ao período de apuração, considerando a totalidade dos estabelecimentos da empresa (matriz e filiais). Conforme o art. 18, § 5º-M da LC nº 123/2006, devem ser somadas conjuntamente:</p>
+  <ul>
+    <li>Receitas auferidas no <strong>mercado interno</strong>;</li>
+    <li>Receitas decorrentes de <strong>exportações</strong> de mercadorias ou serviços para o exterior.</li>
+  </ul>
+  <p>A janela dos 12 meses anteriores encerra-se antes da competência mensal que está sendo apurada, não se confundindo com o faturamento do próprio mês.</p>
+
+  <h3>5. Casos de Folha e Receita Zero (Resolução CGSN nº 140/2018, art. 26)</h3>
+  <p>O art. 26 da Resolução CGSN nº 140/2018 estabelece regras estritas para situações em que a receita bruta ou a folha de salários resultam em zero:</p>
+  <ul>
+    <li><strong>Períodos posteriores ao mês de início de atividade (art. 26, § 7º, incisos I a IV):</strong>
+      <ul>
+        <li><strong>FS12 = 0 e RBT12r = 0:</strong> Fator R fixado legalmente em <strong>1,00% (0,01)</strong>, enquadrando no <strong>Anexo V</strong> (art. 26, § 7º, inciso I).</li>
+        <li><strong>FS12 &gt; 0 e RBT12r = 0:</strong> Fator R fixado legalmente em <strong>28,00% (0,28)</strong>, enquadrando no <strong>Anexo III</strong> (art. 26, § 7º, inciso II).</li>
+        <li><strong>FS12 = 0 e RBT12r &gt; 0:</strong> Fator R fixado legalmente em <strong>1,00% (0,01)</strong>, enquadrando no <strong>Anexo V</strong> (art. 26, § 7º, inciso IV).</li>
+        <li><strong>FS12 &gt; 0 e RBT12r &gt; 0:</strong> Fator R apurado pela divisão direta entre a FS12 e a RBT12r (art. 26, § 7º, inciso III).</li>
+      </ul>
+    </li>
+    <li><strong>Próprio mês de início de atividade (art. 26, § 6º):</strong>
+      <ul>
+        <li><strong>FSPA &gt; 0 e RPAr = 0:</strong> Fator R fixado em <strong>28,00%</strong>, enquadrando no <strong>Anexo III</strong> (art. 26, § 6º, inciso I).</li>
+        <li><strong>FSPA = 0 e RPAr &gt; 0:</strong> Fator R fixado em <strong>1,00%</strong>, enquadrando no <strong>Anexo V</strong> (art. 26, § 6º, inciso II).</li>
+        <li><strong>FSPA &gt; 0 e RPAr &gt; 0:</strong> apuração pela razão direta entre FSPA e RPAr (art. 26, § 6º, inciso III).</li>
+        <li><strong>FSPA = 0 e RPAr = 0:</strong> a legislação não fixa percentual fictício nem enquadramento automático nessa hipótese. O resultado é mantido como indeterminado, recomendando-se conferência no PGDAS-D ou com profissional contábil.</li>
+      </ul>
+    </li>
+  </ul>
+
+  <h3>6. Transição de 2026 para 2027 (Resolução CGSN nº 190/2026)</h3>
+  <p>A Resolução CGSN nº 190/2026 promoveu alterações estruturais no art. 26 da Resolução CGSN nº 140/2018 para harmonização com a Reforma Tributária do Consumo, com efeitos a partir de <strong>1º de janeiro de 2027</strong>:</p>
+  <ul>
+    <li><strong>Competências de 2026:</strong> Mantém-se inalterada a janela dos 12 meses anteriores ao período de apuração (sem defasagem). Para empresas em início de atividade, a anualização pela média aplica-se do 2º ao 12º mês, passando à regra regular a partir do 13º mês.</li>
+    <li><strong>Competências a partir de 2027:</strong>
+      <ul>
+        <li><strong>Nova janela temporal:</strong> A FS12 e a RBT12r passam a ser calculadas com base nos <strong>12 meses antecedentes ao mês anterior ao período de apuração</strong> (defasagem de um mês, art. 26, § 7º).</li>
+        <li><strong>Primeiro e segundo mês de atividade:</strong> O Fator R é <strong>presumido por lei em 28,00% (0,28)</strong>, garantindo o enquadramento no <strong>Anexo III</strong> sem necessidade de comprovação prévia de folha (art. 26, § 6º).</li>
+        <li><strong>3º ao 13º mês de atividade e períodos posteriores ao segundo mês (art. 26, § 7º):</strong> Adota-se a anualização pela média dos meses antecedentes ao mês anterior ao período de apuração multiplicada por 12 (ex: no 3º mês considera-se apenas o 1º mês anualizado; no 13º mês consideram-se os meses 1 a 11 anualizados).</li>
+        <li><strong>A partir do 14º mês (mais de 13 meses):</strong> A empresa passa a dispor dos 12 meses antecedentes ao mês anterior e é enquadrada pela regra geral regular de 2027 (art. 26, § 7º).</li>
+      </ul>
+    </li>
+  </ul>
+
+  <h3>7. Fontes Oficiais e Legislação de Consulta</h3>
+  <ul>
+    <li><a href="https://www.planalto.gov.br/ccivil_03/leis/lcp/lcp123.htm" target="_blank" rel="noopener noreferrer">Lei Complementar nº 123/2006</a> — Estatuto Nacional da Microempresa e da Empresa de Pequeno Porte.</li>
+    <li><a href="https://normas.receita.fazenda.gov.br/sijut2consulta/normas.receisulta/link.action?idAto=92278&amp;visao=compilado" target="_blank" rel="noopener noreferrer">Resolução CGSN nº 140/2018 (Texto Compilado Oficial)</a> — Regulamento do Simples Nacional (art. 26).</li>
+    <li><a href="https://normas.receita.fazenda.gov.br/sijut2consulta/link.action?idAto=116177" target="_blank" rel="noopener noreferrer">Solução de Consulta Cosit nº 17/2021</a> — Vinculação da folha de salários do Fator R ao regime de caixa.</li>
+    <li><a href="https://normas.receita.fazenda.gov.br/sijut2consulta/link.action?idAto=142980" target="_blank" rel="noopener noreferrer">Resolução CGSN nº 190/2026</a> — Alterações para a Reforma Tributária com efeitos a partir de 2027.</li>
+    <li><a href="https://www8.receita.fazenda.gov.br/SimplesNacional/Arquivos/manual/PerguntaoSN.pdf" target="_blank" rel="noopener noreferrer">Perguntas e Respostas do Simples Nacional</a> — Manual Oficial da Receita Federal do Brasil.</li>
+  </ul>
+</section>

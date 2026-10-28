@@ -10,7 +10,12 @@ const pages = [
   'src/pages/tools/utilidades/pisos-revestimentos.page.html',
   'src/pages/tools/utilidades/tinta.page.html',
   'src/pages/tools/utilidades/orcamento-pedreiro.page.html',
-  'src/pages/tools/financas/projecao-faturamento-mei.page.html'
+  'src/pages/tools/financas/projecao-faturamento-mei.page.html',
+  'src/pages/tools/financas/mei-ou-autonomo.page.html',
+  'src/pages/tools/financas/carne-leao-autonomo.page.html',
+  'src/pages/tools/financas/inss-contribuinte-individual.page.html',
+  'src/pages/tools/financas/simples-nacional.page.html',
+  'src/pages/tools/financas/fator-r.page.html'
 ].map((path) => ({ path, html: readFileSync(new URL(path, root), 'utf8') }));
 
 test('calculadoras seguem estrutura comum de campos e resultados acessíveis', () => {

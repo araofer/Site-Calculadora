@@ -1,0 +1,330 @@
+---
+title: Calculadora MEI ou Autônomo? Online Grátis | Simulador 2026 - Calculadora Master
+description: Compare cenários financeiros entre MEI e Autônomo pessoa física com estimativas mensais e anuais de faturamento, despesas, DAS-MEI 2026, INSS (11% ou 20%) e IRPF/Carnê-Leão.
+keywords: mei ou autonomo, calculadora mei ou autonomo, comparar mei e autonomo, das mei 2026, inss autonomo 11 ou 20, simulador mei vs autonomo
+canonical: https://www.calculadoramaster.com/tools/financas/mei-ou-autonomo.html
+layout: tool
+pageScripts: <script type="module" src="{{ROOT_PREFIX}}js/tools/mei-ou-autonomo.js"></script>
+---
+
+<h1>Calculadora MEI ou Autônomo</h1>
+
+<p>Está em dúvida entre atuar como <strong>MEI ou Autônomo?</strong> Compare dois cenários financeiros lado a lado a partir de faturamento bruto, despesas operacionais e contribuições informadas, com estimativas mensais e para a quantidade de meses de atividade no ano. Esta ferramenta é exclusivamente uma simuladora financeira: não emite guias, não executa procedimentos oficiais, não determina definitivamente o enquadramento jurídico e não substitui orientação contábil.</p>
+
+<div class="card tool-calculator-card">
+  <h2 class="tool-form-title">Simulação Comparativa: MEI Convencional vs. Autônomo (Pessoa Física)</h2>
+
+  <form id="formMeiOuAutonomo" novalidate>
+    <section class="mei-autonomo-common-section" aria-labelledby="tituloDadosComunsMeiAutonomo">
+      <h3 id="tituloDadosComunsMeiAutonomo" class="mei-autonomo-section-heading">1. Dados Comuns da Atividade</h3>
+
+      <div class="mei-autonomo-common-grid">
+        <div class="form-group">
+          <label for="faturamentoMensalMeiAutonomo">Faturamento bruto mensal esperado (R$):</label>
+          <p id="ajudaFaturamentoMensalMeiAutonomo">Receita bruta mensal esperada antes de descontar despesas ou tributos (informe 0 se ainda não houver receita no período).</p>
+          <input
+            type="text"
+            id="faturamentoMensalMeiAutonomo"
+            name="faturamentoMensal"
+            inputmode="decimal"
+            placeholder="Ex: 5000,00"
+            autocomplete="off"
+            aria-describedby="ajudaFaturamentoMensalMeiAutonomo"
+            required
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="despesasMensaisMeiAutonomo">Despesas operacionais mensais estimadas (R$):</label>
+          <p id="ajudaDespesasMensaisMeiAutonomo">Custos mensais para manter a atividade (insumos, internet, transporte, ferramentas). Informe 0 caso não possua despesas.</p>
+          <input
+            type="text"
+            id="despesasMensaisMeiAutonomo"
+            name="despesasMensais"
+            inputmode="decimal"
+            placeholder="Ex: 800,00"
+            autocomplete="off"
+            aria-describedby="ajudaDespesasMensaisMeiAutonomo"
+            required
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="mesesAtividadeMeiAutonomo">Quantidade de meses de atividade no ano-calendário (1 a 12):</label>
+          <p id="ajudaMesesAtividadeMeiAutonomo">Use 12 para o ano completo ou de 1 a 11 para início de atividade proporcional no ano de abertura.</p>
+          <input
+            type="number"
+            id="mesesAtividadeMeiAutonomo"
+            name="mesesAtividade"
+            inputmode="numeric"
+            min="1"
+            max="12"
+            step="1"
+            value="12"
+            aria-describedby="ajudaMesesAtividadeMeiAutonomo"
+            required
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="tipoAtividadeMeiAutonomo">Tipo de atividade:</label>
+          <p id="ajudaTipoAtividadeMeiAutonomo">Define a sugestão inicial do DAS-MEI de referência para 2026 (comércio/indústria, serviços ou ambos).</p>
+          <select
+            id="tipoAtividadeMeiAutonomo"
+            name="tipoAtividade"
+            aria-describedby="ajudaTipoAtividadeMeiAutonomo"
+          >
+            <option value="comercio_industria">Comércio ou Indústria (DAS 2026: R$ 82,05)</option>
+            <option value="servicos" selected>Prestação de Serviços (DAS 2026: R$ 86,05)</option>
+            <option value="comercio_servicos">Comércio e Serviços (DAS 2026: R$ 87,05)</option>
+          </select>
+        </div>
+      </div>
+    </section>
+
+    <div class="mei-autonomo-scenarios-grid">
+      <section class="mei-autonomo-scenario-box" aria-labelledby="tituloCenarioMeiForm">
+        <h3 id="tituloCenarioMeiForm" class="mei-autonomo-section-heading">2. Cenário A — MEI (Convencional)</h3>
+        <p class="mei-autonomo-reference-note">
+          <strong>Parâmetros de referência 2026 (MEI convencional):</strong> salário-base de R$ 1.621,00; DAS mensal de R$ 82,05 (comércio/indústria), R$ 86,05 (serviços) ou R$ 87,05 (comércio e serviços); limite anual geral de R$ 81.000,00 (ou R$ 6.750,00 por mês ativo no ano de abertura). Não aplica automaticamente as regras especiais do MEI Caminhoneiro.
+        </p>
+
+        <div class="form-group">
+          <label for="dasMensalMei">Valor mensal do DAS-MEI — referência 2026 (R$):</label>
+          <p id="ajudaDasMensalMei">Valor sugerido conforme a referência oficial de 2026 para o tipo de atividade selecionado. Você pode alterar este valor caso sua situação seja diferente.</p>
+          <input
+            type="text"
+            id="dasMensalMei"
+            name="dasMensal"
+            inputmode="decimal"
+            value="86,05"
+            placeholder="Ex: 86,05"
+            autocomplete="off"
+            aria-describedby="ajudaDasMensalMei"
+            required
+          >
+        </div>
+      </section>
+
+      <section class="mei-autonomo-scenario-box" aria-labelledby="tituloCenarioAutonomoForm">
+        <h3 id="tituloCenarioAutonomoForm" class="mei-autonomo-section-heading">3. Cenário B — Autônomo Pessoa Física</h3>
+        <p class="mei-autonomo-reference-note">
+          <strong>Parâmetros de referência 2026 (INSS):</strong> salário mínimo de R$ 1.621,00 e teto previdenciário de R$ 8.475,55. Plano simplificado (11%): R$ 178,31/mês sobre o salário mínimo. Plano normal (20%): contribuição entre R$ 324,20 e R$ 1.695,11/mês sobre a base válida.
+        </p>
+
+        <div class="form-group">
+          <label for="planoInssAutonomo">Opção de estimativa previdenciária (INSS):</label>
+          <p id="ajudaPlanoInssAutonomo">As regras de contribuição dependem da situação previdenciária, da forma de prestação do serviço e das demais fontes de remuneração. Uma alíquota não se aplica automaticamente a todas as situações.</p>
+          <select
+            id="planoInssAutonomo"
+            name="planoAutonomo"
+            aria-describedby="ajudaPlanoInssAutonomo"
+          >
+            <option value="simplificado_11" selected>Plano simplificado — 11% sobre o salário mínimo (R$ 178,31/mês em 2026)</option>
+            <option value="normal_20">Plano normal — 20% sobre a base de contribuição (R$ 324,20 a R$ 1.695,11/mês em 2026)</option>
+          </select>
+        </div>
+
+        <div class="form-group" id="grupoBaseContribuicaoAutonomo">
+          <label for="baseContribuicaoAutonomo">Base de contribuição mensal para o plano de 20% (R$):</label>
+          <p id="descricaoBaseContribuicaoAutonomo">Base mensal considerada no plano normal de 20%, respeitando o piso de R$ 1.621,00 e o teto previdenciário de R$ 8.475,55 em 2026.</p>
+          <p id="ajudaBaseContribuicaoAutonomo" aria-live="polite" aria-atomic="true">No plano simplificado de 11%, o valor personalizado deste campo não é utilizado no cálculo. Ele será mantido se você selecionar o plano normal de 20%.</p>
+          <input
+            type="text"
+            id="baseContribuicaoAutonomo"
+            name="baseContribuicao"
+            inputmode="decimal"
+            value="1621,00"
+            placeholder="Ex: 3500,00"
+            autocomplete="off"
+            disabled
+            aria-describedby="descricaoBaseContribuicaoAutonomo"
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="irpfCarneLeaoMensalAutonomo">Estimativa mensal de IRPF / Carnê-Leão calculada separadamente (R$ — opcional):</label>
+          <p id="ajudaIrpfCarneLeaoMensalAutonomo">Opcional. Esta ferramenta não calcula o IRPF/Carnê-Leão automaticamente. Se deixar em branco, o imposto não será tratado como zero e o saldo do autônomo será exibido apenas antes do IRPF/Carnê-Leão.</p>
+          <input
+            type="text"
+            id="irpfCarneLeaoMensalAutonomo"
+            name="irpfMensal"
+            inputmode="decimal"
+            value=""
+            placeholder="Opcional — Ex: 250,00"
+            autocomplete="off"
+            aria-describedby="ajudaIrpfCarneLeaoMensalAutonomo"
+          >
+        </div>
+      </section>
+    </div>
+
+    <div class="tool-actions">
+      <button type="submit" id="btnCompararMeiAutonomo" class="tool-btn tool-btn-primary">Comparar cenários</button>
+      <button type="button" id="btnLimparMeiAutonomo" class="tool-btn tool-btn-secondary">Limpar campos</button>
+    </div>
+  </form>
+
+  <p id="erroMeiOuAutonomo" role="alert" aria-live="assertive" hidden></p>
+
+  <section id="resultadoMeiAutonomo" aria-live="polite" aria-atomic="true" hidden>
+    <h2 class="tool-result-title">Resultado da Comparação de Cenários (Referência 2026)</h2>
+
+    <div class="card tool-result-card">
+      <h3 class="mei-autonomo-result-subtitle">Visão Geral do Período e Diferença entre Cenários</h3>
+      <p>Período analisado: <strong id="resPeriodoMesesMeiAutonomo">12 meses</strong></p>
+      <p>Faturamento bruto mensal informado: <strong id="resFaturamentoMensalComum">R$ 0,00</strong></p>
+      <p>Faturamento bruto projetado no período: <strong id="resFaturamentoPeriodoComum">R$ 0,00</strong></p>
+      <p>Despesas operacionais mensais: <strong id="resDespesasMensaisComum">R$ 0,00</strong></p>
+      <p>Despesas operacionais projetadas no período: <strong id="resDespesasPeriodoComum">R$ 0,00</strong></p>
+      <p class="bill-total">Diferença entre os saldos no período: <strong id="resDiferencaSaldosPeriodo">R$ 0,00</strong></p>
+      <p>Diferença mensal entre os saldos: <strong id="resDiferencaSaldosMensal">R$ 0,00</strong></p>
+      <p>Base da comparação de saldos: <strong id="resBaseComparacaoSaldos">—</strong></p>
+      <p>Indicador do limite de faturamento MEI: <strong id="resIndicadorLimiteMei" class="budget-status-positive">—</strong></p>
+      <p id="resAvisoLimiteMeiAutonomo" class="mei-limit-alert"></p>
+      <p id="resNotaNeutralidadeComparacao" class="tool-result-note">
+        Importante: esta calculadora realiza apenas a comparação matemática dos fluxos informados e <strong>não recomenda automaticamente nenhum regime como “o melhor”</strong>. O cenário mais adequado depende de elegibilidade legal, ocupação permitida, emissão de notas, cobertura previdenciária, despesas dedutíveis, tributação aplicável (ISS, ICMS, IRPF) e orientação contábil individual.
+      </p>
+    </div>
+
+    <div class="mei-autonomo-scenarios-grid">
+      <div class="card tool-result-card mei-autonomo-result-card">
+        <h3 class="mei-autonomo-result-subtitle">Cenário A — MEI (Convencional)</h3>
+        <p>Tipo de atividade selecionado: <strong id="resTipoAtividadeMei">—</strong></p>
+        <p>Faturamento mensal / no período: <strong id="resFaturamentoMeiResumo">R$ 0,00 / R$ 0,00</strong></p>
+        <p>Despesas operacionais (mensal / período): <strong id="resDespesasMeiResumo">R$ 0,00 / R$ 0,00</strong></p>
+        <p>Contribuição DAS-MEI mensal (ref. 2026): <strong id="resDasMensalMei">R$ 0,00</strong></p>
+        <p>DAS-MEI projetado no período: <strong id="resDasPeriodoMei">R$ 0,00</strong></p>
+        <p>Percentual do DAS sobre o faturamento: <strong id="resPercentualContribuicaoMei">—</strong></p>
+        <p>Limite de referência aplicável ao período: <strong id="resLimiteAplicavelMei">R$ 81.000,00</strong></p>
+        <p>Comparação com o limite do MEI: <strong id="resComparacaoLimiteMei">—</strong></p>
+        <p>Saldo mensal estimado (após despesas e DAS): <strong id="resSaldoMensalMei">R$ 0,00</strong></p>
+        <p class="bill-total">Saldo estimado no período (Cenário A — MEI): <strong id="resSaldoPeriodoMei">R$ 0,00</strong></p>
+        <p class="mei-autonomo-calc-basis">Base de cálculo do saldo MEI: <span id="resBaseCalculoSaldoMei">Faturamento projetado menos despesas operacionais projetadas e DAS-MEI projetado no período.</span></p>
+      </div>
+
+      <div class="card tool-result-card mei-autonomo-result-card">
+        <h3 class="mei-autonomo-result-subtitle">Cenário B — Autônomo (Pessoa Física)</h3>
+        <p>Plano previdenciário selecionado: <strong id="resPlanoAutonomo">—</strong></p>
+        <p>Base de contribuição INSS considerada (ref. 2026): <strong id="resBaseInssAutonomo">—</strong></p>
+        <p>Faturamento mensal / no período: <strong id="resFaturamentoAutonomoResumo">R$ 0,00 / R$ 0,00</strong></p>
+        <p>Despesas operacionais (mensal / período): <strong id="resDespesasAutonomoResumo">R$ 0,00 / R$ 0,00</strong></p>
+        <p>Contribuição INSS mensal estimada: <strong id="resInssMensalAutonomo">R$ 0,00</strong></p>
+        <p>INSS projetado no período: <strong id="resInssPeriodoAutonomo">R$ 0,00</strong></p>
+        <p>Percentual do INSS sobre o faturamento: <strong id="resPercentualInssAutonomo">—</strong></p>
+        <p>Saldo mensal antes do IRPF/Carnê-Leão: <strong id="resSaldoAntesIrpfMensalAutonomo">R$ 0,00</strong></p>
+        <p class="bill-total">Saldo no período antes do IRPF/Carnê-Leão: <strong id="resSaldoAntesIrpfPeriodoAutonomo">R$ 0,00</strong></p>
+        <p>Estimativa de IRPF/Carnê-Leão informada: <strong id="resIrpfInformadoAutonomo">—</strong></p>
+        <div id="blocoSaldoAposIrpfAutonomo" hidden>
+          <p>Encargos totais no período (INSS + IRPF estimado): <strong id="resEncargosTotaisAutonomo">R$ 0,00</strong></p>
+          <p>Percentual de INSS + IRPF estimado sobre o faturamento: <strong id="resPercentualTotalEncargosAutonomo">—</strong></p>
+          <p>Saldo mensal após estimativa de IRPF/Carnê-Leão: <strong id="resSaldoAposIrpfMensalAutonomo">R$ 0,00</strong></p>
+          <p class="bill-total">Saldo no período após estimativa de IRPF/Carnê-Leão: <strong id="resSaldoAposIrpfPeriodoAutonomo">R$ 0,00</strong></p>
+        </div>
+        <p class="mei-autonomo-calc-basis">Base de cálculo do saldo Autônomo: <span id="resBaseCalculoSaldoAutonomo">—</span></p>
+      </div>
+    </div>
+
+    <div class="card tool-result-card" id="avisosEnquadramentoMeiAutonomo">
+      <h3 class="mei-autonomo-result-subtitle">Avisos de Enquadramento, Elegibilidade e Regras Previdenciárias</h3>
+      <ul class="mei-autonomo-warnings-list">
+        <li><strong>Requisitos do MEI e ocupações permitidas:</strong> estar dentro do limite de faturamento de referência não significa que a pessoa está automaticamente apta a ser MEI. É obrigatório confirmar se a atividade consta na lista oficial de ocupações permitidas, não ser sócio/administrador/titular de outra empresa, respeitar o limite de até 1 empregado e observar as demais exigências legais.</li>
+        <li><strong>Regras de contribuição do autônomo (INSS):</strong> a aplicabilidade do plano simplificado de 11% ou do plano normal de 20% depende da situação previdenciária individual, de para quem o serviço é prestado (pessoa física ou pessoa jurídica), de outras fontes de remuneração no mês e dos benefícios previdenciários pretendidos (como aposentadoria por tempo de contribuição ou expedição de Certidão de Tempo de Contribuição).</li>
+        <li><strong>Tributos municipais e federais:</strong> a simulação do autônomo não calcula automaticamente IRPF/Carnê-Leão nem ISS municipal (que pode ser cobrado por prefeituras em alíquotas próprias ou valores fixos). Quando o campo opcional de IRPF/Carnê-Leão fica em branco, o saldo exibido é estritamente <em>antes do IRPF/Carnê-Leão</em>, não devendo ser interpretado como líquido após todos os tributos.</li>
+      </ul>
+    </div>
+
+    <div class="tool-actions result-actions">
+      <button type="button" id="btnCopiarMeiAutonomo" class="tool-btn tool-btn-secondary" hidden>Copiar comparação</button>
+      <button type="button" id="btnCompartilharMeiAutonomo" class="tool-btn tool-btn-secondary" hidden>Compartilhar link</button>
+      <button type="button" id="btnImprimirMeiAutonomo" class="tool-btn tool-btn-secondary" hidden>Imprimir</button>
+    </div>
+  </section>
+
+  <p id="statusMeiAutonomo" class="result-action-status" role="status" aria-live="polite"></p>
+</div>
+
+<section class="content mei-autonomo-explanatory-content">
+  <h2>Como funciona a comparação financeira entre MEI e Autônomo</h2>
+
+  <p>A <strong>Calculadora MEI ou Autônomo?</strong> organiza em duas áreas comparáveis as receitas brutas, as despesas operacionais e as contribuições mensais e anuais (ou proporcionais aos meses de atividade no ano-calendário), permitindo visualizar o impacto financeiro de cada regime com transparência sobre as bases de cálculo utilizadas.</p>
+
+  <h3>Fórmulas e parâmetros oficiais de referência para 2026</h3>
+  <ul>
+    <li><strong>Faturamento e despesas projetadas no período:</strong> multiplicam o valor mensal informado pela quantidade de meses de atividade no ano-calendário (de 1 a 12 meses).</li>
+    <li><strong>Cenário A — MEI convencional (referência 2026):</strong> considera o salário mínimo de referência de <strong>R$ 1.621,00</strong> (INSS de 5% = R$ 81,05), resultando nos valores mensais de referência do DAS-MEI de <strong>R$ 82,05</strong> para comércio/indústria (+ R$ 1,00 de ICMS), <strong>R$ 86,05</strong> para serviços (+ R$ 5,00 de ISS) e <strong>R$ 87,05</strong> para comércio e serviços (+ R$ 1,00 de ICMS e + R$ 5,00 de ISS). O limite anual geral de referência é de <strong>R$ 81.000,00</strong>, ou <strong>R$ 6.750,00 por mês de atividade</strong> no ano de abertura.</li>
+    <li><strong>Cenário B — Autônomo pessoa física (referência 2026):</strong> permite simular o <em>Plano simplificado de 11%</em> sobre o salário mínimo (<strong>R$ 178,31 mensais</strong> sobre R$ 1.621,00) ou o <em>Plano normal de 20%</em> sobre a base de contribuição informada, respeitando o piso de <strong>R$ 1.621,00</strong> (contribuição mínima de <strong>R$ 324,20</strong>) e o teto previdenciário de <strong>R$ 8.475,55</strong> (contribuição máxima de <strong>R$ 1.695,11</strong>).</li>
+    <li><strong>Campo opcional de IRPF / Carnê-Leão:</strong> o usuário pode informar uma estimativa mensal de IRPF/Carnê-Leão calculada separadamente para visualizar o saldo após essa estimativa. Quando o campo permanece vazio, o imposto não é assumido como zero e o resultado é identificado como saldo antes do IRPF/Carnê-Leão.</li>
+  </ul>
+
+  <h3>Fontes oficiais para confirmação e consulta</h3>
+  <p>Os valores apresentados são estimativas baseadas nos parâmetros de referência de 2026 e nas hipóteses informadas pelo usuário. A legislação, os tetos previdenciários e os valores oficiais podem sofrer alterações e devem ser sempre confirmados diretamente nos canais oficiais:</p>
+  <ul class="mei-autonomo-official-links">
+    <li>
+      <a href="https://www.gov.br/empresas-e-negocios/pt-br/empreendedor/perguntas-frequentes" target="_blank" rel="noopener noreferrer">
+        Perguntas frequentes oficiais sobre o MEI — Portal do Empreendedor (gov.br)
+      </a>
+    </li>
+    <li>
+      <a href="https://www.gov.br/empresas-e-negocios/pt-br/empreendedor/quero-ser-mei/quais-as-ocupacoes-que-podem-ser-mei" target="_blank" rel="noopener noreferrer">
+        Lista oficial de ocupações permitidas no MEI — Portal do Empreendedor (gov.br)
+      </a>
+    </li>
+    <li>
+      <a href="https://www8.receita.fazenda.gov.br/SIMPLESNACIONAL/noticias/NoticiaCompleta.aspx?id=c3b2044c-ff97-432a-b33c-ecf2a3df6dc3" target="_blank" rel="noopener noreferrer">
+        Valores oficiais do DAS-MEI para 2026 — Portal do Simples Nacional / Receita Federal
+      </a>
+    </li>
+    <li>
+      <a href="https://www.gov.br/inss/pt-br/direitos-e-deveres/inscricao-e-contribuicao/tabela-de-contribuicao-mensal" target="_blank" rel="noopener noreferrer">
+        Tabela oficial de contribuição previdenciária mensal — INSS (gov.br)
+      </a>
+    </li>
+  </ul>
+
+  <p class="tool-result-note">
+    <strong>Aviso importante:</strong> não confunda esta simulação comparativa financeira com a formalização de MEI, a emissão oficial de guias (DAS ou GPS/DARF) ou a apuração contábil e fiscal de tributos. Consulte sempre um profissional de contabilidade antes de tomar decisões de enquadramento tributário ou previdenciário.
+  </p>
+
+  <section class="related-tools">
+    <h2>Ferramentas Relacionadas</h2>
+    <div class="related-tools-grid">
+      <article class="tool-card">
+        <div class="tool-card-header">
+          <span class="tool-card-category">Financeiro</span>
+        </div>
+        <h3 class="tool-card-title">Calculadora de Projeção de Faturamento MEI</h3>
+        <p class="tool-card-desc">Projete o faturamento bruto anual do MEI mês a mês e acompanhe o percentual utilizado do limite anual.</p>
+        <div class="tool-card-footer">
+          <a href="{{ROOT_PREFIX}}tools/financas/projecao-faturamento-mei.html" class="tool-card-btn">Acessar</a>
+        </div>
+      </article>
+
+      <article class="tool-card">
+        <div class="tool-card-header">
+          <span class="tool-card-category">Financeiro</span>
+        </div>
+        <h3 class="tool-card-title">Calculadora de Preço de Serviço</h3>
+        <p class="tool-card-desc">Defina quanto cobrar por um serviço considerando materiais, mão de obra, despesas e margem.</p>
+        <div class="tool-card-footer">
+          <a href="{{ROOT_PREFIX}}tools/financas/preco-servico.html" class="tool-card-btn">Acessar</a>
+        </div>
+      </article>
+
+      <article class="tool-card">
+        <div class="tool-card-header">
+          <span class="tool-card-category">Financeiro</span>
+        </div>
+        <h3 class="tool-card-title">Calculadora de Valor da Hora</h3>
+        <p class="tool-card-desc">Descubra quanto cobrar por hora de trabalho considerando renda desejada, custos e horas faturáveis.</p>
+        <div class="tool-card-footer">
+          <a href="{{ROOT_PREFIX}}tools/financas/valor-hora.html" class="tool-card-btn">Acessar</a>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <p class="tool-return-link">
+    <a href="{{ROOT_PREFIX}}index.html">← Voltar para a página inicial</a>
+  </p>
+</section>

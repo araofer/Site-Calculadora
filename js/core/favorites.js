@@ -39,7 +39,19 @@ export const VALID_TOOL_IDS = new Set([
   'pisos-revestimentos',
   'tinta',
   'orcamento-pedreiro',
-  'projecao-faturamento-mei'
+  'projecao-faturamento-mei',
+  'mei-ou-autonomo',
+  'carne-leao-autonomo',
+  'inss-contribuinte-individual',
+  'simples-nacional',
+  'fator-r',
+  'pro-labore',
+  'divisao-aluguel',
+  'meta-comprar-bem',
+  'comprar-ou-alugar-imovel',
+  'reserva-emergencia',
+  'simulador-das-mei',
+  'fluxo-de-caixa-empresarial'
 ]);
 
 let memoryFavorites = null;

@@ -360,8 +360,8 @@ test('14. isolamento entre IDs diferentes ao favoritar e desfavoritar', () => {
   }
 });
 
-test('15. exatamente 30 IDs reconhecidos no catálogo oficial', () => {
-  assert.equal(VALID_TOOL_IDS.size, 30, 'Catálogo deve conter exatamente 30 IDs de ferramentas');
+test('15. exatamente 42 IDs reconhecidos no catálogo oficial', () => {
+  assert.equal(VALID_TOOL_IDS.size, 42, 'Catálogo deve conter exatamente 42 IDs de ferramentas');
   const expected = [
     'horas-extras',
     'financiamento-carro',
@@ -392,7 +392,19 @@ test('15. exatamente 30 IDs reconhecidos no catálogo oficial', () => {
     'custo-por-porcao',
     'tinta',
     'orcamento-pedreiro',
-    'projecao-faturamento-mei'
+    'projecao-faturamento-mei',
+    'mei-ou-autonomo',
+    'carne-leao-autonomo',
+    'inss-contribuinte-individual',
+    'simples-nacional',
+    'fator-r',
+    'pro-labore',
+    'divisao-aluguel',
+    'meta-comprar-bem',
+    'comprar-ou-alugar-imovel',
+    'reserva-emergencia',
+    'simulador-das-mei',
+    'fluxo-de-caixa-empresarial'
   ];
   for (const id of expected) {
     assert.ok(VALID_TOOL_IDS.has(id), `ID "${id}" deve estar presente no conjunto de IDs válidos`);
@@ -773,8 +785,8 @@ test('pisos-revestimentos pode ser adicionado e removido dos favoritos', () => {
   }
 });
 
-test('tinta, orcamento-pedreiro e projecao-faturamento-mei podem ser adicionados e removidos dos favoritos', () => {
-  for (const toolId of ['tinta', 'orcamento-pedreiro', 'projecao-faturamento-mei']) {
+test('tinta, orcamento-pedreiro, projecao-faturamento-mei, mei-ou-autonomo, carne-leao-autonomo, inss-contribuinte-individual, simples-nacional, fator-r, pro-labore e divisao-aluguel podem ser adicionados e removidos dos favoritos', () => {
+  for (const toolId of ['tinta', 'orcamento-pedreiro', 'projecao-faturamento-mei', 'mei-ou-autonomo', 'carne-leao-autonomo', 'inss-contribuinte-individual', 'simples-nacional', 'fator-r', 'pro-labore', 'divisao-aluguel']) {
     const estavaFavorito = isFavorite(toolId);
 
     assert.equal(addFavorite(toolId), true);

@@ -1,0 +1,493 @@
+---
+title: Calculadora Comprar ou Alugar Imóvel Online — Simulação Financeira | Calculadora Master
+description: Compare financeiramente comprar ou alugar um imóvel. Simule financiamento Price ou SAC versus aluguel e investimento da diferença patrimonial com premissas reais.
+keywords: comprar ou alugar imovel, simulador comprar ou alugar, comparador compra vs aluguel, financiamento vs aluguel e investimento, vale a pena comprar ou alugar
+canonical: https://www.calculadoramaster.com/tools/financas/comprar-ou-alugar-imovel.html
+layout: tool
+pageScripts: <script type="module" src="{{ROOT_PREFIX}}js/tools/comprar-ou-alugar-imovel.js"></script>
+---
+
+<h1>Calculadora Comprar ou Alugar Imóvel</h1>
+
+<p>Descubra se vale mais a pena financeiramente comprar uma casa ou apartamento (financiado ou à vista) ou morar de aluguel e investir a diferença de capital. Esta simulação compara o <strong>patrimônio líquido final acumulado</strong> em cada alternativa ao longo do tempo, considerando amortização (SAC ou Price), juros, custos de aquisição (ITBI e cartório), despesas de propriedade, reajustes do aluguel, valorização do imóvel e rendimento dos investimentos.</p>
+
+<div class="card tool-calculator-card">
+  <h2 class="tool-form-title">Dados da Simulação Imobiliária</h2>
+
+  <form id="formComprarOuAlugar" novalidate>
+    <!-- Seção 1: Imóvel e Compra -->
+    <fieldset class="mei-fieldset">
+      <legend class="mei-fieldset-legend">1. Imóvel e Custos de Compra</legend>
+
+      <div class="form-group">
+        <label for="precoImovel">Preço estimado do imóvel (R$):</label>
+        <p id="ajudaPrecoImovel">Valor de mercado atual de compra do imóvel desejado.</p>
+        <input
+          type="text"
+          id="precoImovel"
+          name="precoImovel"
+          inputmode="decimal"
+          value="500.000,00"
+          placeholder="Ex: 500.000,00"
+          autocomplete="off"
+          aria-describedby="ajudaPrecoImovel"
+          required
+        >
+      </div>
+
+      <div class="mei-form-row">
+        <div class="form-group">
+          <label for="valorEntrada">Entrada em dinheiro (R$):</label>
+          <p id="ajudaValorEntrada">Valor pago inicialmente com recursos próprios (FGTS ou poupança). Para compra à vista, informe 100%.</p>
+          <input
+            type="text"
+            id="valorEntrada"
+            name="valorEntrada"
+            inputmode="decimal"
+            value="100.000,00"
+            placeholder="Ex: 100.000,00"
+            autocomplete="off"
+            aria-describedby="ajudaValorEntrada"
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="percEntrada">Entrada (% do preço):</label>
+          <p id="ajudaPercEntrada">Percentual equivalente da entrada (atualizado automaticamente).</p>
+          <input
+            type="text"
+            id="percEntrada"
+            name="percEntrada"
+            inputmode="decimal"
+            value="20,0"
+            placeholder="Ex: 20,0"
+            autocomplete="off"
+            aria-describedby="ajudaPercEntrada"
+          >
+        </div>
+      </div>
+
+      <div class="mei-form-row">
+        <div class="form-group">
+          <label for="custosAquisicaoPerc">Custos de aquisição (% do preço):</label>
+          <p id="ajudaCustosAquisicao">Despesas com ITBI municipal, escritura pública e registro de imóveis (típico de 3% a 5%).</p>
+          <input
+            type="text"
+            id="custosAquisicaoPerc"
+            name="custosAquisicaoPerc"
+            inputmode="decimal"
+            value="4,0"
+            placeholder="Ex: 4,0"
+            autocomplete="off"
+            aria-describedby="ajudaCustosAquisicao"
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="custoVendaPerc">Custo de venda futuro (% do valor final):</label>
+          <p id="ajudaCustoVenda">Comissão de corretagem imobiliária e taxas pagas na eventual liquidação futura do imóvel (típico de 5% a 6%).</p>
+          <input
+            type="text"
+            id="custoVendaPerc"
+            name="custoVendaPerc"
+            inputmode="decimal"
+            value="5,0"
+            placeholder="Ex: 5,0"
+            autocomplete="off"
+            aria-describedby="ajudaCustoVenda"
+          >
+        </div>
+      </div>
+    </fieldset>
+
+    <!-- Seção 2: Financiamento -->
+    <fieldset class="mei-fieldset">
+      <legend class="mei-fieldset-legend">2. Condições do Financiamento</legend>
+
+      <div class="mei-form-row">
+        <div class="form-group">
+          <label for="prazoFinanciamentoAnos">Prazo do financiamento (anos):</label>
+          <p id="ajudaPrazoFin">Tempo total contratado para pagamento do saldo devedor (ex: 30 anos = 360 meses).</p>
+          <input
+            type="number"
+            id="prazoFinanciamentoAnos"
+            name="prazoFinanciamentoAnos"
+            inputmode="numeric"
+            min="1"
+            max="40"
+            step="1"
+            value="30"
+            placeholder="Ex: 30"
+            autocomplete="off"
+            aria-describedby="ajudaPrazoFin"
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="taxaJurosAnual">Taxa efetiva de juros anual (% a.a.):</label>
+          <p id="ajudaTaxaJuros">Custo efetivo do financiamento bancário (ex: 9,5% a.a.). Para compra à vista ou sem juros, informe 0.</p>
+          <input
+            type="text"
+            id="taxaJurosAnual"
+            name="taxaJurosAnual"
+            inputmode="decimal"
+            value="9,5"
+            placeholder="Ex: 9,5"
+            autocomplete="off"
+            aria-describedby="ajudaTaxaJuros"
+          >
+        </div>
+      </div>
+
+      <div class="mei-form-row">
+        <div class="form-group">
+          <label for="sistemaAmortizacao">Sistema de amortização:</label>
+          <p id="ajudaSistemaAmortizacao">SAC possui parcelas decrescentes; Tabela Price mantém parcelas nominais constantes.</p>
+          <select
+            id="sistemaAmortizacao"
+            name="sistemaAmortizacao"
+            aria-describedby="ajudaSistemaAmortizacao"
+          >
+            <option value="sac" selected>SAC (Amortização Constante — Parcelas Decrescentes)</option>
+            <option value="price">Tabela Price (Sistema Francês — Parcelas Fixas)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="custoMensalFinanciamento">Seguros e tarifas mensais do financiamento (R$):</label>
+          <p id="ajudaCustoMensalFin">Seguros obrigatórios (MIP e DFI) e taxas de administração bancária cobradas mensalmente na prestação.</p>
+          <input
+            type="text"
+            id="custoMensalFinanciamento"
+            name="custoMensalFinanciamento"
+            inputmode="decimal"
+            value="50,00"
+            placeholder="Ex: 50,00"
+            autocomplete="off"
+            aria-describedby="ajudaCustoMensalFin"
+          >
+        </div>
+      </div>
+    </fieldset>
+
+    <!-- Seção 3: Aluguel -->
+    <fieldset class="mei-fieldset">
+      <legend class="mei-fieldset-legend">3. Condições do Aluguel</legend>
+
+      <div class="mei-form-row">
+        <div class="form-group">
+          <label for="aluguelMensal">Aluguel mensal inicial (R$):</label>
+          <p id="ajudaAluguelMensal">Valor do aluguel de um imóvel similar no mercado para locação imediata.</p>
+          <input
+            type="text"
+            id="aluguelMensal"
+            name="aluguelMensal"
+            inputmode="decimal"
+            value="2.500,00"
+            placeholder="Ex: 2.500,00"
+            autocomplete="off"
+            aria-describedby="ajudaAluguelMensal"
+            required
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="reajusteAluguelAnual">Reajuste anual estimado do aluguel (% a.a.):</label>
+          <p id="ajudaReajusteAluguel">Expectativa de reajuste contratual a cada 12 meses (baseado em índices como IPCA ou IGP-M).</p>
+          <input
+            type="text"
+            id="reajusteAluguelAnual"
+            name="reajusteAluguelAnual"
+            inputmode="decimal"
+            value="5,0"
+            placeholder="Ex: 5,0"
+            autocomplete="off"
+            aria-describedby="ajudaReajusteAluguel"
+          >
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="despesasInquilino">Despesas mensais exclusivas do inquilino (R$):</label>
+        <p id="ajudaDespesasInquilino">Custos adicionais pagos apenas pelo inquilino (ex: seguro fiança ou garantia locatícia). Deixe 0 se não houver.</p>
+        <input
+          type="text"
+          id="despesasInquilino"
+          name="despesasInquilino"
+          inputmode="decimal"
+          value="0,00"
+          placeholder="Ex: 0,00"
+          autocomplete="off"
+          aria-describedby="ajudaDespesasInquilino"
+        >
+      </div>
+    </fieldset>
+
+    <!-- Seção 4: Custos de Propriedade -->
+    <fieldset class="mei-fieldset">
+      <legend class="mei-fieldset-legend">4. Custos Recorrentes do Proprietário</legend>
+
+      <div class="mei-form-row">
+        <div class="form-group">
+          <label for="despesasProprietario">Despesas mensais do proprietário (R$):</label>
+          <p id="ajudaDespesasProp">Soma mensal de condomínio, IPTU e reserva para reparos periódicos e conservação do imóvel.</p>
+          <input
+            type="text"
+            id="despesasProprietario"
+            name="despesasProprietario"
+            inputmode="decimal"
+            value="800,00"
+            placeholder="Ex: 800,00"
+            autocomplete="off"
+            aria-describedby="ajudaDespesasProp"
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="reajusteDespesasAnual">Reajuste anual dessas despesas (% a.a.):</label>
+          <p id="ajudaReajusteDesp">Estimativa de inflação anual sobre condomínio, IPTU e custos de manutenção predial.</p>
+          <input
+            type="text"
+            id="reajusteDespesasAnual"
+            name="reajusteDespesasAnual"
+            inputmode="decimal"
+            value="5,0"
+            placeholder="Ex: 5,0"
+            autocomplete="off"
+            aria-describedby="ajudaReajusteDesp"
+          >
+        </div>
+      </div>
+    </fieldset>
+
+    <!-- Seção 5: Premissas da Comparação -->
+    <fieldset class="mei-fieldset">
+      <legend class="mei-fieldset-legend">5. Premissas de Longo Prazo</legend>
+
+      <div class="mei-form-row">
+        <div class="form-group">
+          <label for="periodoAnos">Período de comparação (em anos):</label>
+          <p id="ajudaPeriodoAnos">Horizonte de tempo desejado para avaliar o patrimônio acumulado em cada cenário.</p>
+          <input
+            type="number"
+            id="periodoAnos"
+            name="periodoAnos"
+            inputmode="numeric"
+            min="1"
+            max="50"
+            step="1"
+            value="10"
+            placeholder="Ex: 10"
+            autocomplete="off"
+            aria-describedby="ajudaPeriodoAnos"
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="valorizacaoImovelAnual">Valorização anual do imóvel (% a.a.):</label>
+          <p id="ajudaValorizacao">Expectativa média anual de valorização do preço de mercado do imóvel no período.</p>
+          <input
+            type="text"
+            id="valorizacaoImovelAnual"
+            name="valorizacaoImovelAnual"
+            inputmode="decimal"
+            value="5,0"
+            placeholder="Ex: 5,0"
+            autocomplete="off"
+            aria-describedby="ajudaValorizacao"
+          >
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="rentabilidadeInvestimentosAnual">Rentabilidade líquida dos investimentos (% a.a.):</label>
+        <p id="ajudaRentabilidade">Taxa anual de rendimento líquido da carteira onde o dinheiro da entrada e das diferenças mensais será investido (ex: Tesouro Direto, CDB, Fundos).</p>
+        <input
+          type="text"
+          id="rentabilidadeInvestimentosAnual"
+          name="rentabilidadeInvestimentosAnual"
+          inputmode="decimal"
+          value="10,0"
+          placeholder="Ex: 10,0"
+          autocomplete="off"
+          aria-describedby="ajudaRentabilidade"
+        >
+      </div>
+    </fieldset>
+
+    <!-- Botões de Ação -->
+    <div class="tool-actions">
+      <button type="submit" id="btnCalcularComprarAlugar" class="tool-btn tool-btn-primary">Comparar Cenários</button>
+      <button type="button" id="btnLimparComprarAlugar" class="tool-btn tool-btn-secondary">Limpar campos</button>
+    </div>
+  </form>
+
+  <p id="erroComprarOuAlugar" role="alert" aria-live="assertive" hidden></p>
+
+  <!-- Seção de Resultados -->
+  <section id="resultadoComprarOuAlugar" aria-live="polite" aria-atomic="true" hidden>
+    <h2 class="tool-result-title">Resultado Comparativo da Simulação</h2>
+
+    <div class="card tool-result-card">
+      <h3 class="mei-autonomo-result-subtitle">1. Comparativo de Patrimônio Líquido</h3>
+
+      <div class="mei-highlight-box">
+        <p>Opção Mais Vantajosa sob estas Premissas:</p>
+        <p class="bill-total" id="resTituloVencedor">Calculando...</p>
+        <span class="tool-badge" id="resBadgeOpcao">Vencedor</span>
+        <p class="tool-note">Vantagem patrimonial estimada: <strong id="resDiferenca">R$ 0,00</strong></p>
+      </div>
+
+      <div class="mei-autonomo-common-grid">
+        <div class="mei-highlight-box">
+          <p>Patrimônio Líquido Final — Comprador:</p>
+          <p class="bill-total" id="resPlCompradorDestaque">R$ 0,00</p>
+          <span class="tool-badge">Imóvel Líquido + Investimentos</span>
+        </div>
+
+        <div class="mei-highlight-box">
+          <p>Patrimônio Líquido Final — Locatário:</p>
+          <p class="bill-total" id="resPlLocatarioDestaque">R$ 0,00</p>
+          <span class="tool-badge">Carteira de Investimentos</span>
+        </div>
+      </div>
+
+      <!-- Detalhamento das Contas -->
+      <h3 class="mei-autonomo-result-subtitle">2. Detalhamento dos Componentes Patrimoniais</h3>
+      <div class="tool-result-grid">
+        <div class="tool-result-item">
+          <span class="result-label">Valor Projetado do Imóvel:</span>
+          <span class="result-value" id="resValorImovelFinal">R$ 0,00</span>
+        </div>
+
+        <div class="tool-result-item">
+          <span class="result-label">Custo Estimado de Venda Futura:</span>
+          <span class="result-value" id="resCustoVenda">R$ 0,00</span>
+        </div>
+
+        <div class="tool-result-item">
+          <span class="result-label">Saldo Devedor Restante:</span>
+          <span class="result-value" id="resSaldoDevedor">R$ 0,00</span>
+        </div>
+
+        <div class="tool-result-item">
+          <span class="result-label">Patrimônio Imobiliário Líquido:</span>
+          <span class="result-value" id="resPatrimonioImobiliario">R$ 0,00</span>
+        </div>
+
+        <div class="tool-result-item">
+          <span class="result-label">Investimentos Acumulados (Comprador):</span>
+          <span class="result-value" id="resInvestimentosComprador">R$ 0,00</span>
+        </div>
+
+        <div class="tool-result-item">
+          <span class="result-label">Desembolso Inicial (Entrada + Custos):</span>
+          <span class="result-value" id="resDesembolsoInicial">R$ 0,00</span>
+        </div>
+
+        <div class="tool-result-item">
+          <span class="result-label">Investimentos Acumulados (Locatário):</span>
+          <span class="result-value" id="resInvestimentosLocatario">R$ 0,00</span>
+        </div>
+
+        <div class="tool-result-item">
+          <span class="result-label">Primeira Prestação do Financiamento:</span>
+          <span class="result-value" id="resPrimeiraPrestacao">R$ 0,00</span>
+        </div>
+
+        <div class="tool-result-item">
+          <span class="result-label">Total Pago em Juros do Financiamento:</span>
+          <span class="result-value" id="resTotalJuros">R$ 0,00</span>
+        </div>
+
+        <div class="tool-result-item">
+          <span class="result-label">Total Pago em Aluguéis no Período:</span>
+          <span class="result-value" id="resTotalAluguel">R$ 0,00</span>
+        </div>
+      </div>
+
+      <!-- Tabela Anual -->
+      <div id="wrapperCronogramaComprarAlugar" hidden>
+        <h3 class="mei-autonomo-result-subtitle">3. Evolução Patrimonial Ano a Ano</h3>
+        <div class="mei-projection-table-wrapper">
+          <table class="mei-projection-table" id="tabelaCronogramaComprarAlugar">
+            <thead>
+              <tr>
+                <th scope="col">Período</th>
+                <th scope="col">PL Comprador</th>
+                <th scope="col">PL Locatário</th>
+                <th scope="col">Valor Imóvel</th>
+                <th scope="col">Dívida Restante</th>
+                <th scope="col">Invest. Locatário</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Preenchido via JavaScript -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Memória de Cálculo e Premissas -->
+      <h3 class="mei-autonomo-result-subtitle">4. Premissas Consideradas no Cálculo</h3>
+      <ul class="tool-calc-memory" id="memoriaCalculoComprarAlugar">
+        <!-- Preenchido via JavaScript -->
+      </ul>
+
+      <div id="avisosComprarAlugar"></div>
+
+      <!-- Ações do Resultado -->
+      <div class="tool-actions">
+        <button type="button" class="tool-btn tool-btn-secondary" data-action="copy">Copiar Resultado</button>
+        <button type="button" class="tool-btn tool-btn-secondary" data-action="share">Compartilhar</button>
+        <button type="button" class="tool-btn tool-btn-secondary" data-action="print">Imprimir / Salvar PDF</button>
+      </div>
+      <p id="statusAcoesComprarAlugar" class="tool-note" role="status" aria-live="polite"></p>
+    </div>
+  </section>
+</div>
+
+<!-- Conteúdo Informativo e Educacional Complementar -->
+<section class="tool-explanation-section">
+  <h2>Como Funciona a Comparação Entre Comprar e Alugar um Imóvel?</h2>
+
+  <p>A decisão entre comprar um imóvel ou continuar pagando aluguel é frequentemente tratada de forma simplista: compara-se apenas o valor da prestação do financiamento com o valor do aluguel mensal. No entanto, do ponto de vista do <strong>planejamento patrimonial</strong>, essa comparação direta é incompleta e matematicamente falha por dois motivos principais:</p>
+
+  <ol>
+    <li><strong>Custo de Oportunidade do Capital Inicial:</strong> Quem compra um imóvel imobiliza uma quantia expressiva na entrada e nos custos de transferência (ITBI, escritura e certidões). Quem opta pelo aluguel pode aplicar esse mesmo dinheiro no primeiro dia em investimentos de renda fixa ou multimercado, recebendo rendimentos compostos desde o início.</li>
+    <li><strong>Equiparação do Fluxo Mensal de Caixa:</strong> Em muitos casos, a prestação do financiamento nos primeiros anos é mais alta do que o aluguel de um imóvel equivalente. Se você escolhe alugar, a economia de caixa mensal deve ser rigorosamente poupada e investida. Da mesma forma, se após alguns anos o aluguel superar o custo habitacional do proprietário (ou após a quitação do financiamento), o comprador passa a ter a folga de caixa mensal para investir.</li>
+  </ol>
+
+  <h2>Metodologia de Cálculo e Fórmulas Adotadas</h2>
+
+  <p>A simulação utiliza o padrão de equivalência de fluxos de caixa em regime de capitalização composta:</p>
+
+  <ul>
+    <li><strong>Taxa Efetiva Mensal:</strong> A conversão de qualquer taxa anual informada ($r_{aa}$) para taxa mensal equivalente ($i$) segue rigorosamente a fórmula exponencial brasileira:
+      <code>i = (1 + r_{aa})^{1/12} - 1</code>
+    </li>
+    <li><strong>Sistemas de Amortização:</strong>
+      <ul>
+        <li><strong>SAC (Sistema de Amortização Constante):</strong> A amortização mensal é constante ($A = \text{Principal} / n$). Os juros decrescem a cada mês à medida que a dívida é reduzida, resultando em parcelas iniciais mais elevadas que diminuem progressivamente.</li>
+        <li><strong>Tabela Price:</strong> As prestações são fixas ao longo do prazo, calculadas pela fórmula padrão da anuidade contínua:
+          <code>PMT = P \times \frac{i \times (1 + i)^n}{(1 + i)^n - 1}</code>
+        </li>
+      </ul>
+    </li>
+    <li><strong>Patrimônio Líquido do Comprador:</strong> Corresponde ao valor de mercado do imóvel projetado pela taxa de valorização, descontado da comissão estimada de corretagem em uma eventual venda futura e do saldo devedor restante da dívida bancária, somado aos investimentos acumulados pelo comprador nos meses em que alugar foi mais caro que comprar.</li>
+    <li><strong>Patrimônio Líquido do Locatário:</strong> Corresponde ao saldo da carteira de investimentos que recebeu o aporte inicial do capital da compra e todos os aportes mensais decorrentes da economia de aluguel frente à prestação.</li>
+  </ul>
+
+  <h2>Perguntas Frequentes (FAQ)</h2>
+
+  <dl class="faq-list">
+    <dt>Por que a calculadora inclui custos de aquisição e venda?</dt>
+    <dd>Na compra de um imóvel, as despesas de cartório, escritura e o ITBI (Imposto de Transmissão de Bens Imóveis) costumam consumir de 3% a 5% do valor total do bem. Na venda, a comissão padrão dos corretores e imobiliárias costuma ser de 5% a 6%. Ignorar esses custos superestima o patrimônio do comprador e distorce a comparação real.</dd>
+
+    <dt>O que acontece se eu fizer uma compra à vista?</dt>
+    <dd>Basta informar a entrada com valor igual a 100% do preço do imóvel. Nesse caso, o comprador não paga juros nem parcelas bancárias, arcando apenas com as despesas do proprietário. O locatário, em contrapartida, começa com todo o valor do imóvel aplicado rendendo juros compostos em seus investimentos.</dd>
+
+    <dt>A valorização do imóvel é garantida?</dt>
+    <dd>Não. O mercado imobiliário pode passar por períodos de alta expressiva, estabilidade ou até mesmo desvalorização real frente à inflação, a depender da localização, conservação do bairro e ciclo macroeconômico. Trata-se de uma premissa para simulação, nunca de garantia de retorno financeiro.</dd>
+  </dl>
+</section>

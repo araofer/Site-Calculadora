@@ -1,0 +1,257 @@
+---
+title: Calculadora de Meta para Comprar um Bem Online Grátis | Calculadora Master
+description: Planeje a compra de um carro, casa, eletrônico ou viagem. Calcule quanto poupar por mês ou em quanto tempo alcançará sua meta financeira com ou sem rendimentos.
+keywords: meta para comprar um bem, planejar compra bem, quanto poupar por mes, calculadora meta financeira, tempo para juntar dinheiro, simulador poupanca compra
+canonical: https://www.calculadoramaster.com/tools/financas/meta-comprar-bem.html
+layout: tool
+pageScripts: <script type="module" src="{{ROOT_PREFIX}}js/tools/meta-comprar-bem.js"></script>
+---
+
+<h1>Calculadora de Meta para Comprar um Bem</h1>
+
+<p>Planeje a aquisição de um bem desejado — como um automóvel, uma moto, uma entrada de imóvel, um eletrônico ou uma viagem — com base em metas financeiras claras. A ferramenta permite simular dois cenários complementares: descobrir <strong>quanto você precisa guardar por mês</strong> para realizar a compra em um prazo determinado ou calcular <strong>em quanto tempo atingirá o objetivo</strong> de acordo com a sua capacidade atual de poupança mensal, considerando aportes com ou sem rentabilidade de investimentos.</p>
+
+<div class="card tool-calculator-card">
+  <h2 class="tool-form-title">Planejamento da Meta de Compra</h2>
+
+  <form id="formMetaComprarBem" novalidate>
+    <!-- Modo de Cálculo -->
+    <div class="form-group">
+      <label for="modoCalculoMetaBem">O que você deseja calcular?</label>
+      <p id="ajudaModoCalculoMetaBem">Escolha se deseja descobrir o aporte mensal necessário para um prazo fixo ou o tempo estimado para atingir a meta com seu aporte atual.</p>
+      <select
+        id="modoCalculoMetaBem"
+        name="modoCalculo"
+        aria-describedby="ajudaModoCalculoMetaBem"
+      >
+        <option value="aporte_necessario" selected>Quanto preciso guardar por mês? (Tenho um prazo em mente)</option>
+        <option value="prazo_necessario">Em quanto tempo atingirei a meta? (Tenho um valor mensal para guardar)</option>
+      </select>
+    </div>
+
+    <!-- Preço do Bem -->
+    <div class="form-group">
+      <label for="precoBemMeta">Preço estimado do bem ou meta desejada (R$):</label>
+      <p id="ajudaPrecoBemMeta">Informe o valor total de compra do bem à vista ou o montante de entrada que você deseja acumular.</p>
+      <input
+        type="text"
+        id="precoBemMeta"
+        name="precoBem"
+        inputmode="decimal"
+        placeholder="Ex: 45.000,00"
+        autocomplete="off"
+        aria-describedby="ajudaPrecoBemMeta"
+        required
+      >
+    </div>
+
+    <!-- Valor Já Economizado -->
+    <div class="form-group">
+      <label for="valorEconomizadoMeta">Dinheiro que você já possui para essa meta (R$):</label>
+      <p id="ajudaValorEconomizadoMeta">Informe o capital inicial já acumulado em conta ou aplicação financeira para essa finalidade. Se estiver começando do zero, informe 0.</p>
+      <input
+        type="text"
+        id="valorEconomizadoMeta"
+        name="valorEconomizado"
+        inputmode="decimal"
+        value="0"
+        placeholder="0,00"
+        autocomplete="off"
+        aria-describedby="ajudaValorEconomizadoMeta"
+      >
+    </div>
+
+    <!-- Campo Condicional: Prazo (Modo A) -->
+    <div class="form-group" id="grupoPrazoMetaBem">
+      <label for="prazoMesesMeta">Prazo desejado para realizar a compra (em meses):</label>
+      <p id="ajudaPrazoMesesMeta">Indique em quantos meses você planeja concluir a meta (mínimo de 1 mês e máximo de 600 meses).</p>
+      <input
+        type="number"
+        id="prazoMesesMeta"
+        name="prazoMeses"
+        inputmode="numeric"
+        min="1"
+        max="600"
+        step="1"
+        value="24"
+        placeholder="Ex: 24"
+        autocomplete="off"
+        aria-describedby="ajudaPrazoMesesMeta"
+      >
+    </div>
+
+    <!-- Campo Condicional: Aporte Mensal (Modo B) -->
+    <div class="form-group" id="grupoAporteMetaBem" hidden>
+      <label for="aporteMensalMeta">Valor que você consegue guardar por mês (R$):</label>
+      <p id="ajudaAporteMensalMeta">Informe a quantia mensal regular que você pretende destinar para essa meta financeira.</p>
+      <input
+        type="text"
+        id="aporteMensalMeta"
+        name="aporteMensal"
+        inputmode="decimal"
+        placeholder="Ex: 1.500,00"
+        autocomplete="off"
+        aria-describedby="ajudaAporteMensalMeta"
+      >
+    </div>
+
+    <!-- Rentabilidade Anual Opcional -->
+    <div class="form-group">
+      <label for="rentabilidadeAnualMeta">Rentabilidade anual líquida estimada (% a.a. — opcional):</label>
+      <p id="ajudaRentabilidadeAnualMeta">Taxa efetiva anual estimada para a aplicação onde o dinheiro ficará rendendo (ex: CDB, Tesouro Selic, LCI). Deixe 0 para cálculo nominal puro sem rendimentos.</p>
+      <input
+        type="text"
+        id="rentabilidadeAnualMeta"
+        name="rentabilidadeAnual"
+        inputmode="decimal"
+        value="0"
+        placeholder="0"
+        autocomplete="off"
+        aria-describedby="ajudaRentabilidadeAnualMeta"
+      >
+    </div>
+
+    <!-- Ações do Formulário -->
+    <div class="tool-actions">
+      <button type="submit" id="btnCalcularMetaBem" class="tool-btn tool-btn-primary">Calcular Planejamento</button>
+      <button type="button" id="btnLimparMetaBem" class="tool-btn tool-btn-secondary">Limpar campos</button>
+    </div>
+  </form>
+
+  <p id="erroMetaComprarBem" role="alert" aria-live="assertive" hidden></p>
+
+  <!-- Seção de Resultados -->
+  <section id="resultadoMetaComprarBem" aria-live="polite" aria-atomic="true" hidden>
+    <h2 class="tool-result-title">Demonstrativo da Meta Financeira</h2>
+
+    <div class="card tool-result-card">
+      <h3 class="mei-autonomo-result-subtitle">1. Projeção Principal da Meta</h3>
+      <div class="mei-autonomo-common-grid">
+        <div class="mei-highlight-box">
+          <p id="resLabelDestaqueMeta">Aporte Mensal Necessário:</p>
+          <p class="bill-total" id="resValorDestaqueMeta">R$ 0,00</p>
+          <span class="tool-badge" id="resBadgeDestaqueMeta">Por Mês</span>
+        </div>
+
+        <div class="mei-highlight-box">
+          <p id="resLabelSubDestaqueMeta">Montante Final Projetado:</p>
+          <p class="bill-total" id="resValorSubDestaqueMeta">R$ 0,00</p>
+          <span class="tool-badge" id="resBadgeSubDestaqueMeta">Meta Atingida</span>
+        </div>
+      </div>
+
+      <!-- Grade de Métricas Detalhadas -->
+      <div class="tool-result-grid">
+        <div class="tool-result-item">
+          <span class="result-label">Preço da Meta (Bem):</span>
+          <span class="result-value" id="resPrecoBemMeta">R$ 0,00</span>
+        </div>
+
+        <div class="tool-result-item">
+          <span class="result-label">Capital Já Economizado:</span>
+          <span class="result-value" id="resValorEconomizadoMeta">R$ 0,00</span>
+        </div>
+
+        <div class="tool-result-item">
+          <span class="result-label">Falta Acumular (Nominal):</span>
+          <span class="result-value" id="resFaltaAcumularMeta">R$ 0,00</span>
+        </div>
+
+        <div class="tool-result-item">
+          <span class="result-label">Total de Aportes Próprios:</span>
+          <span class="result-value" id="resTotalAportesMeta">R$ 0,00</span>
+        </div>
+
+        <div class="tool-result-item">
+          <span class="result-label">Rendimento Estimado no Período:</span>
+          <span class="result-value" id="resRendimentoEstimadoMeta">R$ 0,00</span>
+        </div>
+
+        <div class="tool-result-item">
+          <span class="result-label">Montante Final Acumulado:</span>
+          <span class="result-value" id="resMontanteFinalMeta">R$ 0,00</span>
+        </div>
+
+        <div class="tool-result-item">
+          <span class="result-label">Rentabilidade Aplicada:</span>
+          <span class="result-value" id="resRentabilidadeAplicadaMeta">0%</span>
+        </div>
+      </div>
+
+      <div id="avisosMetaComprarBem"></div>
+
+      <!-- Cronograma Resumido -->
+      <div id="wrapperCronogramaMetaBem" hidden>
+        <h3 class="mei-autonomo-result-subtitle">2. Evolução Patrimonial da Meta</h3>
+        <div class="mei-projection-table-wrapper">
+          <table class="mei-projection-table" id="tabelaCronogramaMetaBem">
+            <thead>
+              <tr>
+                <th scope="col">Período</th>
+                <th scope="col">Saldo Inicial</th>
+                <th scope="col">Rendimento</th>
+                <th scope="col">Aporte do Mês</th>
+                <th scope="col">Saldo Final</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Preenchido via JavaScript -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Memória de Cálculo Detalhada -->
+      <div class="mei-audit-details">
+        <h4>Memória de Cálculo e Premissas Adotadas</h4>
+        <ul id="memoriaCalculoMetaBem" class="mei-audit-list"></ul>
+      </div>
+
+      <!-- Ações de Compartilhamento, Cópia e Impressão -->
+      <div class="tool-actions result-actions">
+        <button type="button" id="btnCopiarMetaBem" class="tool-btn tool-btn-secondary">Copiar Resumo</button>
+        <button type="button" id="btnCompartilharMetaBem" class="tool-btn tool-btn-secondary">Compartilhar</button>
+        <button type="button" id="btnImprimirMetaBem" class="tool-btn tool-btn-secondary">Imprimir</button>
+      </div>
+      <p id="statusAcoesMetaBem" class="tool-action-status" aria-live="polite"></p>
+    </div>
+  </section>
+</div>
+
+<!-- Conteúdo Informativo e SEO -->
+<section class="tool-explanation-section meta-comprar-bem-explanatory-content" aria-labelledby="tituloExplicacaoMetaBem">
+  <h2 id="tituloExplicacaoMetaBem">Como Planejar a Compra de um Bem à Vista</h2>
+  <p>Comprar um bem de valor expressivo — como um veículo, uma reforma residencial, um novo computador de trabalho ou uma viagem de férias — exige disciplina financeira e uma estratégia bem definida entre o tempo disponível e a capacidade de poupança mensal da família.</p>
+
+  <h3>1. Vantagens de Poupar para Comprar à Vista</h3>
+  <p>Juntar o dinheiro com antecedência em vez de recorrer a empréstimos bancários ou financiamentos traz vantagens econômicas decisivas:</p>
+  <ul>
+    <li><strong>Economia com Juros e Encargos:</strong> Em um financiamento de veículo ou crédito pessoal, o consumidor frequentemente paga de 30% a mais de 100% sobre o preço original do bem em juros compostos, IOF e taxas bancárias embutidas no CET (Custo Efetivo Total).</li>
+    <li><strong>Poder de Negociação:</strong> Quem possui o dinheiro integral em mãos tem poder para negociar descontos substanciais à vista, abatimentos no valor de tabela ou isenção de despesas acessórias de transferência e frete.</li>
+    <li><strong>Rendimentos a seu Favor:</strong> Ao investir os aportes mensais em aplicações de renda fixa de liquidez diária (como títulos pós-fixados do Tesouro Selic, CDBs com garantia do FGC ou fundos DI), os juros compostos trabalham multiplicando seu patrimônio em vez de remunerar a instituição financeira.</li>
+  </ul>
+
+  <h3>2. Diferença entre Modo de Aporte Fixo e Modo de Prazo Fixo</h3>
+  <p>A calculadora opera em duas modalidades distintas para se adequar ao momento do seu planejamento:</p>
+  <ul>
+    <li><strong>Quanto guardar por mês (Prazo fixo):</strong> Ideal quando a compra tem uma data limite inegociável (por exemplo, comprar um carro até o nascimento do filho ou juntar a quantia para uma viagem já agendada para daqui a 18 meses). O cálculo apura exatamente quanto poupar a cada 30 dias para alcançar o montante no prazo pretendido.</li>
+    <li><strong>Em quanto tempo atingirei a meta (Aporte fixo):</strong> Indicado quando você já definiu no seu orçamento doméstico o valor máximo que consegue poupar confortavelmente todo mês (por exemplo, R$ 800,00). O simulador projeta a quantidade de meses necessários e estima a data de conquista do objetivo.</li>
+  </ul>
+
+  <h3>3. Metodologia de Cálculo e Equivalência de Taxas</h3>
+  <p>A ferramenta adota metodologia matemática estrita para garantir exatidão e transparência:</p>
+  <ul>
+    <li><strong>Taxa Mensal Equivalente:</strong> A rentabilidade anual informada $r$ é convertida para taxa mensal efetiva $i$ pela fórmula de capitalização composta: $i = (1 + r)^{1/12} - 1$. Isso evita o erro comum de dividir a taxa anual por 12 (taxa nominal proporcional), garantindo paridade com a dinâmica real dos investimentos.</li>
+    <li><strong>Incidência dos Rendimentos:</strong> Os rendimentos do mês incidem sobre o saldo acumulado no início do período, e os novos aportes são considerados ao final de cada mês.</li>
+    <li><strong>Limite de Simulação:</strong> Para proteger a navegação e evitar projeções irrealistas, o simulador limita o horizonte temporal a 600 meses (50 anos). Caso a meta não seja viável dentro desse período, a interface orienta o aumento do aporte mensal.</li>
+    <li><strong>Valores Nominais Atuais:</strong> O cálculo utiliza o preço informado como meta fixa em moeda corrente. Não inclui correções automáticas de inflação (IPCA) nem variações de mercado do bem ao longo dos meses.</li>
+  </ul>
+
+  <h3>4. Boas Práticas para Alcançar Metas Financeiras</h3>
+  <p>Para acelerar a realização do seu objetivo:</p>
+  <ul>
+    <li>Separe o dinheiro da meta em uma conta ou aplicação diferente da conta corrente usada para despesas diárias, evitando resgates por impulso.</li>
+    <li>Automatize a transferência do aporte para o mesmo dia do recebimento do seu salário ou pró-labore ("pague-se primeiro").</li>
+    <li>Utilize eventuais rendas extras — como 13º salário, bonificações, férias ou restituição do Imposto de Renda — para realizar aportes adicionais e reduzir sensivelmente o tempo de espera.</li>
+  </ul>
+</section>

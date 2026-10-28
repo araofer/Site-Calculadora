@@ -1112,6 +1112,464 @@ const TOOLS_CATALOG = [
         "valor-hora"
       ],
       "status": "published"
+    },
+    {
+      "id": "mei-ou-autonomo",
+      "slug": "mei-ou-autonomo",
+      "nome": "Calculadora MEI ou Autônomo",
+      "name": "Calculadora MEI ou Autônomo",
+      "categoria": "Financeiro",
+      "category": "Financeiro",
+      "categorySlug": "financas",
+      "descricao": "Compare cenários financeiros entre MEI e Autônomo pessoa física a partir de faturamento, despesas operacionais, DAS-MEI e contribuição ao INSS.",
+      "description": "Compare cenários financeiros entre MEI e Autônomo pessoa física a partir de faturamento, despesas operacionais, DAS-MEI e contribuição ao INSS.",
+      "url": "tools/financas/mei-ou-autonomo.html",
+      "termos": [
+        "mei ou autonomo",
+        "calculadora mei ou autonomo",
+        "comparar mei e autonomo",
+        "das mei 2026",
+        "inss autonomo 11 ou 20",
+        "simulador mei vs autonomo"
+      ],
+      "keywords": [
+        "mei ou autonomo",
+        "calculadora mei ou autonomo",
+        "comparar mei e autonomo",
+        "das mei 2026",
+        "inss autonomo 11 ou 20",
+        "simulador mei vs autonomo"
+      ],
+      "destaque": false,
+      "featured": false,
+      "related": [
+        "projecao-faturamento-mei",
+        "preco-servico",
+        "valor-hora"
+      ],
+      "status": "published"
+    },
+    {
+      "id": "carne-leao-autonomo",
+      "slug": "carne-leao-autonomo",
+      "nome": "Calculadora Carnê-Leão para Autônomos",
+      "name": "Calculadora Carnê-Leão para Autônomos",
+      "categoria": "Financeiro",
+      "category": "Financeiro",
+      "categorySlug": "financas",
+      "descricao": "Estime o Carnê-Leão mensal para autônomos e profissionais liberais em 2026 com tabela progressiva, redução mensal até R$ 5.000 e R$ 7.350, Livro-Caixa, INSS e desconto simplificado.",
+      "description": "Estime o Carnê-Leão mensal para autônomos e profissionais liberais em 2026 com tabela progressiva, redução mensal até R$ 5.000 e R$ 7.350, Livro-Caixa, INSS e desconto simplificado.",
+      "url": "tools/financas/carne-leao-autonomo.html",
+      "termos": [
+        "calculadora carne leao autonomo",
+        "carne leao 2026",
+        "calcular carne leao mensal",
+        "imposto de renda autonomo pessoa fisica",
+        "livro caixa carne leao",
+        "darf 0190"
+      ],
+      "keywords": [
+        "calculadora carne leao autonomo",
+        "carne leao 2026",
+        "calcular carne leao mensal",
+        "imposto de renda autonomo pessoa fisica",
+        "livro caixa carne leao",
+        "darf 0190"
+      ],
+      "destaque": false,
+      "featured": false,
+      "related": [
+        "mei-ou-autonomo",
+        "projecao-faturamento-mei",
+        "preco-servico"
+      ],
+      "status": "published"
+    },
+    {
+      "id": "inss-contribuinte-individual",
+      "slug": "inss-contribuinte-individual",
+      "nome": "Calculadora INSS do Contribuinte Individual",
+      "name": "Calculadora INSS do Contribuinte Individual",
+      "categoria": "Financeiro",
+      "category": "Financeiro",
+      "categorySlug": "financas",
+      "descricao": "Calcule a contribuição do INSS para autônomos e contribuintes individuais em 2026: Plano Normal (20%), Plano Simplificado (11%), retenção por PJ e limites oficiais.",
+      "description": "Calcule a contribuição do INSS para autônomos e contribuintes individuais em 2026: Plano Normal (20%), Plano Simplificado (11%), retenção por PJ e limites oficiais.",
+      "url": "tools/financas/inss-contribuinte-individual.html",
+      "termos": [
+        "calculadora inss contribuinte individual",
+        "inss autonomo 2026",
+        "plano simplificado inss 11",
+        "plano normal inss 20",
+        "gps 1007",
+        "gps 1163",
+        "retencao inss pessoa juridica"
+      ],
+      "keywords": [
+        "calculadora inss contribuinte individual",
+        "inss autonomo 2026",
+        "plano simplificado inss 11",
+        "plano normal inss 20",
+        "gps 1007",
+        "gps 1163",
+        "retencao inss pessoa juridica"
+      ],
+      "destaque": false,
+      "featured": false,
+      "related": [
+        "mei-ou-autonomo",
+        "carne-leao-autonomo",
+        "preco-servico"
+      ],
+      "status": "published"
+    },
+    {
+      "id": "simples-nacional",
+      "slug": "simples-nacional",
+      "nome": "Calculadora Simples Nacional",
+      "name": "Calculadora Simples Nacional",
+      "categoria": "Financeiro",
+      "category": "Financeiro",
+      "categorySlug": "financas",
+      "descricao": "Calcule a alíquota efetiva e o valor estimado do DAS do Simples Nacional em 2026 com base na RBT12, Anexos I a V, Fator R e início de atividade.",
+      "description": "Calcule a alíquota efetiva e o valor estimado do DAS do Simples Nacional em 2026 com base na RBT12, Anexos I a V, Fator R e início de atividade.",
+      "url": "tools/financas/simples-nacional.html",
+      "termos": [
+        "calculadora simples nacional 2026",
+        "aliquota efetiva simples nacional",
+        "tabela simples nacional 2026",
+        "calcular das simples nacional",
+        "anexo 1 2 3 4 5 simples",
+        "fator r simples nacional"
+      ],
+      "keywords": [
+        "calculadora simples nacional 2026",
+        "aliquota efetiva simples nacional",
+        "tabela simples nacional 2026",
+        "calcular das simples nacional",
+        "anexo 1 2 3 4 5 simples",
+        "fator r simples nacional"
+      ],
+      "destaque": false,
+      "featured": false,
+      "related": [
+        "mei-ou-autonomo",
+        "projecao-faturamento-mei",
+        "carne-leao-autonomo",
+        "inss-contribuinte-individual"
+      ],
+      "status": "published"
+    },
+    {
+      "id": "fator-r",
+      "slug": "fator-r",
+      "nome": "Calculadora Fator R Simples Nacional",
+      "name": "Calculadora Fator R Simples Nacional",
+      "categoria": "Financeiro",
+      "category": "Financeiro",
+      "categorySlug": "financas",
+      "descricao": "Calcule o Fator R do Simples Nacional a partir da folha de salários (FS12) e receita bruta (RBT12r) para enquadramento no Anexo III ou V em 2026 e 2027.",
+      "description": "Calcule o Fator R do Simples Nacional a partir da folha de salários (FS12) e receita bruta (RBT12r) para enquadramento no Anexo III ou V em 2026 e 2027.",
+      "url": "tools/financas/fator-r.html",
+      "termos": [
+        "calculadora fator r",
+        "fator r simples nacional",
+        "calcular fator r",
+        "anexo 3 ou 5 simples nacional",
+        "fs12 rbt12 fator r",
+        "fator r inicio de atividade 2026 2027"
+      ],
+      "keywords": [
+        "calculadora fator r",
+        "fator r simples nacional",
+        "calcular fator r",
+        "anexo 3 ou 5 simples nacional",
+        "fs12 rbt12 fator r",
+        "fator r inicio de atividade 2026 2027"
+      ],
+      "destaque": false,
+      "featured": false,
+      "related": [
+        "simples-nacional",
+        "mei-ou-autonomo",
+        "projecao-faturamento-mei",
+        "carne-leao-autonomo"
+      ],
+      "status": "published"
+    },
+    {
+      "id": "pro-labore",
+      "slug": "pro-labore",
+      "nome": "Calculadora de Pró-labore",
+      "name": "Calculadora de Pró-labore",
+      "categoria": "Financeiro",
+      "category": "Financeiro",
+      "categorySlug": "financas",
+      "descricao": "Calcule o pró-labore líquido, desconto de INSS (11%), IRRF 2026 com desconto simplificado, redução da Lei nº 15.270/2025 e encargos patronais da empresa.",
+      "description": "Calcule o pró-labore líquido, desconto de INSS (11%), IRRF 2026 com desconto simplificado, redução da Lei nº 15.270/2025 e encargos patronais da empresa.",
+      "url": "tools/financas/pro-labore.html",
+      "termos": [
+        "calculadora pro-labore",
+        "calculo pro labore 2026",
+        "inss pro labore socio",
+        "irrf pro labore 2026",
+        "lei 15270 reducao irrf",
+        "encargo patronal pro labore simples nacional"
+      ],
+      "keywords": [
+        "calculadora pro-labore",
+        "calculo pro labore 2026",
+        "inss pro labore socio",
+        "irrf pro labore 2026",
+        "lei 15270 reducao irrf",
+        "encargo patronal pro labore simples nacional"
+      ],
+      "destaque": false,
+      "featured": false,
+      "related": [
+        "fator-r",
+        "simples-nacional",
+        "carne-leao-autonomo",
+        "inss-contribuinte-individual"
+      ],
+      "status": "published"
+    },
+    {
+      "id": "divisao-aluguel",
+      "slug": "divisao-aluguel",
+      "nome": "Calculadora de Divisão de Aluguel e Despesas",
+      "name": "Calculadora de Divisão de Aluguel e Despesas",
+      "categoria": "Financeiro",
+      "category": "Financeiro",
+      "categorySlug": "financas",
+      "descricao": "Divida aluguel, condomínio, contas de consumo e despesas da casa de forma igualitária ou proporcional, com controle de quem pagou e sugestão de acertos.",
+      "description": "Divida aluguel, condomínio, contas de consumo e despesas da casa de forma igualitária ou proporcional, com controle de quem pagou e sugestão de acertos.",
+      "url": "tools/financas/divisao-aluguel.html",
+      "termos": [
+        "divisão de aluguel",
+        "dividir aluguel",
+        "rateio de despesas",
+        "dividir contas republica",
+        "divisão de despesas",
+        "contas da casa",
+        "quem deve a quem aluguel"
+      ],
+      "keywords": [
+        "divisão de aluguel",
+        "dividir aluguel",
+        "rateio de despesas",
+        "dividir contas republica",
+        "divisão de despesas",
+        "contas da casa",
+        "quem deve a quem aluguel"
+      ],
+      "destaque": false,
+      "featured": false,
+      "related": [
+        "orcamento-domestico",
+        "dividir-conta",
+        "conta-luz"
+      ],
+      "status": "published"
+    },
+    {
+      "id": "meta-comprar-bem",
+      "slug": "meta-comprar-bem",
+      "nome": "Calculadora de Meta para Comprar um Bem",
+      "name": "Calculadora de Meta para Comprar um Bem",
+      "categoria": "Financeiro",
+      "category": "Financeiro",
+      "categorySlug": "financas",
+      "descricao": "Planeje a compra de um bem calculando quanto poupar por mês ou o tempo necessário para atingir sua meta financeira com ou sem rentabilidade.",
+      "description": "Planeje a compra de um bem calculando quanto poupar por mês ou o tempo necessário para atingir sua meta financeira com ou sem rentabilidade.",
+      "url": "tools/financas/meta-comprar-bem.html",
+      "termos": [
+        "meta para comprar um bem",
+        "planejar compra de bem",
+        "quanto guardar por mes",
+        "juntar dinheiro para comprar",
+        "poupar para comprar bem",
+        "meta financeira de compra",
+        "tempo para juntar dinheiro"
+      ],
+      "keywords": [
+        "meta para comprar um bem",
+        "planejar compra de bem",
+        "quanto guardar por mes",
+        "juntar dinheiro para comprar",
+        "poupar para comprar bem",
+        "meta financeira de compra",
+        "tempo para juntar dinheiro"
+      ],
+      "destaque": false,
+      "featured": false,
+      "related": [
+        "orcamento-domestico",
+        "juros",
+        "amortizacao",
+        "valor-hora"
+      ],
+      "status": "published"
+    },
+    {
+      "id": "comprar-ou-alugar-imovel",
+      "slug": "comprar-ou-alugar-imovel",
+      "nome": "Calculadora Comprar ou Alugar Imóvel",
+      "name": "Calculadora Comprar ou Alugar Imóvel",
+      "categoria": "Financeiro",
+      "category": "Financeiro",
+      "categorySlug": "financas",
+      "descricao": "Compare financeiramente comprar ou alugar um imóvel. Simule financiamento Price ou SAC versus aluguel e investimento da diferença patrimonial.",
+      "description": "Compare financeiramente comprar ou alugar um imóvel. Simule financiamento Price ou SAC versus aluguel e investimento da diferença patrimonial.",
+      "url": "tools/financas/comprar-ou-alugar-imovel.html",
+      "termos": [
+        "comprar ou alugar imovel",
+        "simulador comprar ou alugar",
+        "comparador compra vs aluguel",
+        "financiamento vs aluguel e investimento",
+        "vale a pena comprar ou alugar",
+        "comprar imovel ou investir",
+        "aluguel ou financiamento"
+      ],
+      "keywords": [
+        "comprar ou alugar imovel",
+        "simulador comprar ou alugar",
+        "comparador compra vs aluguel",
+        "financiamento vs aluguel e investimento",
+        "vale a pena comprar ou alugar",
+        "comprar imovel ou investir",
+        "aluguel ou financiamento"
+      ],
+      "destaque": false,
+      "featured": false,
+      "related": [
+        "financiamento-imovel",
+        "amortizacao",
+        "divisao-aluguel",
+        "meta-comprar-bem"
+      ],
+      "status": "published"
+    },
+    {
+      "id": "reserva-emergencia",
+      "slug": "reserva-emergencia",
+      "nome": "Calculadora de Reserva de Emergência",
+      "name": "Calculadora de Reserva de Emergência",
+      "categoria": "Financeiro",
+      "category": "Financeiro",
+      "categorySlug": "financas",
+      "descricao": "Calcule quanto você precisa ter na sua reserva de emergência com base nas suas despesas essenciais, meses de cobertura e simule o tempo para atingir a meta.",
+      "description": "Calcule quanto você precisa ter na sua reserva de emergência com base nas suas despesas essenciais, meses de cobertura e simule o tempo para atingir a meta.",
+      "url": "tools/financas/reserva-emergencia.html",
+      "termos": [
+        "reserva de emergencia",
+        "calculadora de reserva de emergencia",
+        "como calcular reserva de emergencia",
+        "meta de reserva de emergencia",
+        "quantos meses de reserva",
+        "colchao financeiro",
+        "reserva financeira de emergencia"
+      ],
+      "keywords": [
+        "reserva de emergencia",
+        "calculadora de reserva de emergencia",
+        "como calcular reserva de emergencia",
+        "meta de reserva de emergencia",
+        "quantos meses de reserva",
+        "colchao financeiro",
+        "reserva financeira de emergencia"
+      ],
+      "destaque": false,
+      "featured": false,
+      "related": [
+        "orcamento-domestico",
+        "meta-comprar-bem",
+        "juros",
+        "valor-hora"
+      ],
+      "status": "published"
+    },
+    {
+      "id": "simulador-das-mei",
+      "slug": "simulador-das-mei",
+      "nome": "Simulador de DAS do MEI",
+      "name": "Simulador de DAS do MEI",
+      "categoria": "Financeiro",
+      "category": "Financeiro",
+      "categorySlug": "financas",
+      "descricao": "Calcule o valor da guia DAS-MEI mensal e anual com a divisão exata de INSS, ICMS e ISS para Comércio, Serviços e MEI Caminhoneiro.",
+      "description": "Calcule o valor da guia DAS-MEI mensal e anual com a divisão exata de INSS, ICMS e ISS para Comércio, Serviços e MEI Caminhoneiro.",
+      "url": "tools/financas/simulador-das-mei.html",
+      "termos": [
+        "simulador das mei",
+        "calcular das mei",
+        "valor das mei 2026",
+        "guia das mei",
+        "inss mei",
+        "icms mei",
+        "iss mei",
+        "mei caminhoneiro",
+        "tabela das mei"
+      ],
+      "keywords": [
+        "simulador das mei",
+        "calcular das mei",
+        "valor das mei 2026",
+        "guia das mei",
+        "inss mei",
+        "icms mei",
+        "iss mei",
+        "mei caminhoneiro",
+        "tabela das mei"
+      ],
+      "destaque": false,
+      "featured": false,
+      "related": [
+        "mei-ou-autonomo",
+        "projecao-faturamento-mei",
+        "inss-contribuinte-individual",
+        "preco-servico"
+      ],
+      "status": "published"
+    },
+    {
+      "id": "fluxo-de-caixa-empresarial",
+      "slug": "fluxo-de-caixa-empresarial",
+      "nome": "Calculadora de Fluxo de Caixa Empresarial",
+      "name": "Calculadora de Fluxo de Caixa Empresarial",
+      "categoria": "Financeiro",
+      "category": "Financeiro",
+      "categorySlug": "financas",
+      "descricao": "Planeje e controle o fluxo de caixa da sua empresa: registre saldo inicial, contas a pagar e a receber, compare previsto vs. realizado e antecipe períodos de saldo negativo.",
+      "description": "Planeje e controle o fluxo de caixa da sua empresa: registre saldo inicial, contas a pagar e a receber, compare previsto vs. realizado e antecipe períodos de saldo negativo.",
+      "url": "tools/financas/fluxo-de-caixa-empresarial.html",
+      "termos": [
+        "fluxo de caixa",
+        "fluxo de caixa empresarial",
+        "controle financeiro mei",
+        "contas a pagar e receber",
+        "simulador fluxo de caixa",
+        "saldo projetado",
+        "gestao financeira pequena empresa"
+      ],
+      "keywords": [
+        "fluxo de caixa",
+        "fluxo de caixa empresarial",
+        "controle financeiro mei",
+        "contas a pagar e receber",
+        "simulador fluxo de caixa",
+        "saldo projetado",
+        "gestao financeira pequena empresa"
+      ],
+      "destaque": false,
+      "featured": false,
+      "related": [
+        "orcamento-domestico",
+        "projecao-faturamento-mei",
+        "preco-servico",
+        "lucro"
+      ],
+      "status": "published"
     }
   ];
 

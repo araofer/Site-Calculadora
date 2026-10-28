@@ -1,0 +1,255 @@
+---
+title: Calculadora de Reserva de Emergência Online Grátis | Calculadora Master
+description: Calcule quanto você precisa ter na sua reserva de emergência. Descubra sua cobertura atual em meses, compare cenários (3 a 12 meses) e simule aportes.
+keywords: reserva de emergencia, calculadora reserva de emergencia, quanto guardar reserva emergencia, colchao financeiro, simulador reserva financeira, meses de despesas
+canonical: https://www.calculadoramaster.com/tools/financas/reserva-emergencia.html
+layout: tool
+pageScripts: <script type="module" src="{{ROOT_PREFIX}}js/tools/reserva-emergencia.js"></script>
+---
+
+<h1>Calculadora de Reserva de Emergência</h1>
+
+<p>A reserva de emergência é o alicerce fundamental da sua segurança financeira. Ela garante que você e sua família consigam honrar todas as despesas essenciais durante momentos imprevistos — como perda de emprego, problemas de saúde, despesas com reparos urgentes ou oscilações de faturamento. Esta ferramenta calcula a sua meta personalizada em reais, avalia a cobertura que seu saldo atual já proporciona e projeta o tempo necessário para formar ou completar o seu colchão financeiro.</p>
+
+<div class="card tool-calculator-card">
+  <h2 class="tool-form-title">Planejamento da Sua Reserva de Emergência</h2>
+
+  <form id="formReservaEmergencia" novalidate>
+    <!-- Despesas Essenciais Mensais -->
+    <div class="form-group">
+      <label for="despesasEssenciais">Despesas essenciais mensais (R$):</label>
+      <p id="ajudaDespesasEssenciais" class="help-text">Informe o custo mensal indispensável para a sua sobrevivência (moradia, alimentação básica, contas de consumo, saúde e transporte essencial).</p>
+      <input
+        type="text"
+        id="despesasEssenciais"
+        name="despesasEssenciais"
+        inputmode="decimal"
+        placeholder="Ex: 3.500,00"
+        autocomplete="off"
+        aria-describedby="ajudaDespesasEssenciais"
+        required
+      >
+    </div>
+
+    <!-- Meses de Cobertura Desejados -->
+    <div class="form-group">
+      <label for="mesesDesejados">Meses de cobertura desejados:</label>
+      <p id="ajudaMesesDesejados" class="help-text">Selecione o horizonte de tranquilidade conforme a estabilidade da sua renda familiar.</p>
+      <select
+        id="mesesDesejados"
+        name="mesesDesejados"
+        aria-describedby="ajudaMesesDesejados"
+      >
+        <option value="3">3 meses — Servidor público / Alta estabilidade empregatícia</option>
+        <option value="6" selected>6 meses — Trabalhador CLT / Estabilidade moderada (Recomendado)</option>
+        <option value="9">9 meses — Família de renda única / CLT com comissões</option>
+        <option value="12">12 meses — Autônomo, MEI, Freelancer ou PJ</option>
+        <option value="18">18 meses — Alta volatilidade de mercado ou renda variável</option>
+        <option value="24">24 meses — Transição de carreira ou independência conservadora</option>
+      </select>
+    </div>
+
+    <!-- Dinheiro Já Acumulado -->
+    <div class="form-group">
+      <label for="reservaAtual">Dinheiro que você já possui para emergências (R$):</label>
+      <p id="ajudaReservaAtual" class="help-text">Informe o saldo já aplicado em investimentos de liquidez diária (Tesouro Selic, CDB diário, etc.). Se estiver começando do zero, informe 0.</p>
+      <input
+        type="text"
+        id="reservaAtual"
+        name="reservaAtual"
+        inputmode="decimal"
+        value="0,00"
+        placeholder="0,00"
+        autocomplete="off"
+        aria-describedby="ajudaReservaAtual"
+      >
+    </div>
+
+    <!-- Aporte Mensal Pretendido -->
+    <div class="form-group">
+      <label for="aporteMensal">Quanto você consegue guardar por mês (R$ — opcional):</label>
+      <p id="ajudaAporteMensal" class="help-text">Informe o valor que você planeja poupar mensalmente para estimar o tempo necessário até atingir a meta.</p>
+      <input
+        type="text"
+        id="aporteMensal"
+        name="aporteMensal"
+        inputmode="decimal"
+        placeholder="Ex: 500,00"
+        autocomplete="off"
+        aria-describedby="ajudaAporteMensal"
+      >
+    </div>
+
+    <!-- Rentabilidade Anual Opcional -->
+    <div class="form-group">
+      <label for="rentabilidadeAnual">Rentabilidade anual líquida estimada (% a.a. — opcional):</label>
+      <p id="ajudaRentabilidadeAnual" class="help-text">Taxa líquida estimada para investimentos conservadores de liquidez imediata (ex: 10% a.a.). A meta nominal da reserva não depende dessa taxa.</p>
+      <input
+        type="text"
+        id="rentabilidadeAnual"
+        name="rentabilidadeAnual"
+        inputmode="decimal"
+        placeholder="Ex: 10,0"
+        autocomplete="off"
+        aria-describedby="ajudaRentabilidadeAnual"
+      >
+    </div>
+
+    <p id="erroReservaEmergencia" class="tool-error-message" role="alert" aria-live="assertive" hidden></p>
+
+    <div class="tool-actions-primary">
+      <button type="submit" id="btnCalcularReserva" class="btn btn-primary">Calcular Reserva</button>
+      <button type="button" id="btnLimparReserva" class="btn btn-secondary">Limpar</button>
+    </div>
+  </form>
+</div>
+
+<!-- Seção de Resultados -->
+<section id="resultadoReservaEmergencia" class="tool-result-section" aria-live="polite" hidden>
+  <div class="card tool-result-card">
+    <div class="result-header">
+      <h2 class="tool-result-title">Diagnóstico da Sua Reserva de Emergência</h2>
+      <span id="resBadgeStatus" class="status-badge">Meta em cálculo</span>
+    </div>
+
+    <!-- Grid de Destaques Principais -->
+    <div class="result-grid">
+      <div class="result-highlight-item">
+        <span class="result-label">Meta Total Recomendada</span>
+        <strong id="resMetaTotal" class="result-value">R$ 0,00</strong>
+        <span id="resMesesDesejados" class="result-subtext">6 meses de despesas</span>
+      </div>
+
+      <div class="result-highlight-item">
+        <span class="result-label">Cobertura do Saldo Atual</span>
+        <strong id="resCoberturaAtual" class="result-value">0,0 meses</strong>
+        <span class="result-subtext">de sobrevivência assegurada</span>
+      </div>
+
+      <div class="result-highlight-item">
+        <span class="result-label">Progresso da Meta</span>
+        <strong id="resPercAtingido" class="result-value">0,0%</strong>
+        <span class="result-subtext">concluído até o momento</span>
+      </div>
+
+      <div class="result-highlight-item">
+        <span class="result-label">Falta para Completar</span>
+        <strong id="resFaltaValor" class="result-value">R$ 0,00</strong>
+        <span class="result-subtext">para atingir 100% da meta</span>
+      </div>
+    </div>
+
+    <!-- Barra de Progresso Visual -->
+    <div class="progress-bar-container">
+      <div class="progress-track" role="progressbar" aria-label="Progresso da Reserva de Emergência" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+        <div id="resBarraProgresso" class="progress-fill"></div>
+      </div>
+    </div>
+
+    <!-- Card de Rota de Acumulação e Prazo -->
+    <div id="resCardPrazo" class="result-detail-card" hidden>
+      <h3 class="result-detail-title">Rota de Acumulação</h3>
+      <div class="result-grid">
+        <div class="result-item">
+          <span class="result-label">Tempo estimado para a meta:</span>
+          <strong id="resTempoEstimado" class="result-value-inline">—</strong>
+        </div>
+        <div class="result-item">
+          <span class="result-label">Previsão de conclusão:</span>
+          <span id="resDataConquista" class="result-value-inline">—</span>
+        </div>
+        <div class="result-item">
+          <span class="result-label">Rendimentos acumulados estimados:</span>
+          <span id="resRendimentosEstimados" class="result-value-inline">R$ 0,00</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tabela Comparativa de Cenários de Cobertura -->
+    <div class="result-detail-card">
+      <h3 class="result-detail-title">Cenários de Cobertura por Perfil Profissional</h3>
+      <p class="help-text">Veja como sua reserva atual se comporta frente a diferentes níveis de segurança recomendados por especialistas financeiros:</p>
+      <div class="table-responsive">
+        <table id="tabelaCenariosReserva" class="tool-data-table">
+          <thead>
+            <tr>
+              <th scope="col">Horizonte e Perfil</th>
+              <th scope="col">Meta Total</th>
+              <th scope="col">Cobertura Atual</th>
+              <th scope="col">Falta Acumular</th>
+              <th scope="col">Tempo com Aporte</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Preenchido via JavaScript -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Memória de Cálculo e Avisos -->
+    <div class="result-detail-card">
+      <h3 class="result-detail-title">Memória de Cálculo</h3>
+      <ul id="memoriaCalculoReserva" class="calculation-log-list">
+        <!-- Preenchido via JavaScript -->
+      </ul>
+    </div>
+
+    <div id="avisosReservaEmergencia" class="warnings-container">
+      <!-- Preenchido via JavaScript -->
+    </div>
+
+    <!-- Ações do Resultado: Copiar, Compartilhar, Imprimir -->
+    <div class="tool-result-actions-wrapper">
+      <div id="acoesResultadoReserva" class="tool-actions-container"></div>
+      <p id="statusAcoesReserva" class="sr-only" role="status" aria-live="polite"></p>
+    </div>
+  </div>
+</section>
+
+<!-- Conteúdo Educativo e Complementar -->
+<section class="tool-content-section">
+  <h2>O que é reserva de emergência e para que serve?</h2>
+  <p>A <strong>reserva de emergência</strong> é uma quantia em dinheiro guardada exclusivamente para cobrir imprevistos e momentos de crise financeira, evitando que você precise recorrer a empréstimos com juros altos, cheque especial ou cartão de crédito. Ela funciona como um amortecedor contra choques inesperados, tais como:</p>
+  <ul>
+    <li>Desemprego involuntário ou demissão sem justa causa;</li>
+    <li>Queda brusca de faturamento para profissionais autônomos e freelancers;</li>
+    <li>Despesas médicas, odontológicas ou veterinárias de urgência;</li>
+    <li>Manutenção emergencial do veículo ou reparos estruturais na residência;</li>
+    <li>Atrasos no recebimento de pagamentos ou rescisões contratuais.</li>
+  </ul>
+
+  <h2>Como calcular a reserva de emergência ideal?</h2>
+  <p>O cálculo correto da reserva de emergência baseia-se exclusivamente nas suas <strong>despesas essenciais</strong> — e não no valor do seu salário ou nas despesas supérfluas de lazer. Para calcular, multiplique o seu custo de vida básico pelo número de meses necessário para a sua realidade:</p>
+  <p><code>Reserva de Emergência = Despesas Essenciais Mensais × Meses de Cobertura</code></p>
+  <p>Por exemplo, se o seu custo de vida essencial é de R$ 3.000,00 por mês e você almeja 6 meses de segurança, a sua meta recomendada será de <strong>R$ 18.000,00</strong>.</p>
+
+  <h2>Quantos meses de reserva você deve guardar?</h2>
+  <p>Não existe uma regra universal para todas as pessoas. A quantidade de meses depende primordialmente da previsibilidade da sua renda e da facilidade de recolocação profissional:</p>
+  <ul>
+    <li><strong>3 meses:</strong> Recomendado para servidores públicos estáveis ou famílias com múltiplas fontes fixas de renda e baixo risco de descontinuidade;</li>
+    <li><strong>6 meses:</strong> Padrão clássico para trabalhadores regidos pela CLT, que já contam com garantias adicionais como saldo de FGTS, multa rescisória e seguro-desemprego;</li>
+    <li><strong>9 a 12 meses:</strong> Essencial para profissionais liberais, autônomos, prestadores de serviço PJ, MEIs e comissionados, cuja receita oscila mensalmente e que não dispõem de rede de proteção trabalhista.</li>
+  </ul>
+
+  <h2>Onde investir o dinheiro da reserva de emergência?</h2>
+  <p>A prioridade da reserva de emergência é <strong>segurança e liquidez diária imediata</strong>, e nunca a rentabilidade máxima. O dinheiro deve estar disponível para resgate a qualquer momento, sem risco de perder o valor investido. As melhores opções do mercado brasileiro são:</p>
+  <ol>
+    <li><strong>Tesouro Selic:</strong> Título público federal com liquidez em D+1 útil, considerado a aplicação mais segura da economia brasileira;</li>
+    <li><strong>CDBs de Liquidez Diária:</strong> Emitidos por bancos sólidos que paguem ao menos 100% do CDI, protegidos pelo Fundo Garantidor de Créditos (FGC) até o limite legal;</li>
+    <li><strong>Contas Remuneradas:</strong> Contas digitais com rendimento automático e cobertura do FGC ou lastreadas em títulos públicos federais.</li>
+  </ol>
+  <p>Evite guardar sua reserva em ações, fundos imobiliários, criptomoedas ou fundos com prazo de carência ou resgate longo (D+30 ou D+60), pois o patrimônio pode desvalorizar exatamente no momento em que você mais precisar do dinheiro.</p>
+
+  <h2>Perguntas frequentes sobre reserva de emergência</h2>
+  <div class="faq-accordion">
+    <h3>Devo investir minha reserva na poupança?</h3>
+    <p>A caderneta de poupança possui liquidez, mas rende consideravelmente menos do que o Tesouro Selic ou CDBs a 100% do CDI, além de pagar rendimentos apenas no dia do aniversário da aplicação. Por isso, aplicações atreladas ao CDI ou à taxa Selic com liquidez diária são mais eficientes sem abrir mão da segurança.</p>
+
+    <h3>Tenho dívidas. Devo montar a reserva ou quitar as dívidas primeiro?</h3>
+    <p>Se você possui dívidas com juros altos (como cartão de crédito ou cheque especial), o foco principal deve ser a quitação dessas dívidas. No entanto, é prudente montar uma pequena mini-reserva inicial (equivalente a 1 mês de despesas essenciais) para evitar contrair novos empréstimos caso ocorra um imprevisto durante o pagamento das dívidas.</p>
+
+    <h3>Quando posso mexer na reserva de emergência?</h3>
+    <p>Apenas em situações imprevisíveis e de real necessidade que ameacem o seu sustento ou a sua integridade física. Viagens, compras de oportunidade, roupas ou promoções não são emergências e devem ser planejadas com ferramentas de metas financeiras específicas.</p>
+  </div>
+</section>

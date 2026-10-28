@@ -1,0 +1,254 @@
+---
+title: Calculadora de Fluxo de Caixa Empresarial | Controle Financeiro MEI e PME
+description: Controle o fluxo de caixa da sua empresa: registre saldo inicial, receitas, despesas, contas a pagar e a receber, compare previsto vs. realizado e evite saldo negativo.
+keywords: fluxo de caixa, fluxo de caixa empresarial, controle financeiro mei, contas a pagar e receber, simulador fluxo de caixa, saldo projetado, gestao financeira pequena empresa
+canonical: https://www.calculadoramaster.com/tools/financas/fluxo-de-caixa-empresarial.html
+layout: tool
+pageScripts: <script type="module" src="{{ROOT_PREFIX}}js/tools/fluxo-de-caixa-empresarial.js"></script>
+---
+
+<h1>Calculadora de Fluxo de Caixa Empresarial</h1>
+
+<p>O fluxo de caixa é o instrumento financeiro mais indispensável para a sustentabilidade de MEIs, autônomos e pequenas empresas. Ele permite acompanhar todas as entradas e saídas de dinheiro ao longo do tempo, comparar movimentações já concretizadas com previsões de contas a pagar e a receber e identificar com antecedência períodos em que o caixa poderá ficar negativo. Utilize este simulador para projetar a liquidez do seu negócio e tomar decisões seguras de compras, contratações e prazos.</p>
+
+<!-- Card 1: Saldo Inicial e Inclusão de Lançamentos -->
+<div class="card tool-calculator-card">
+  <h2 class="tool-form-title">1. Saldo Inicial em Caixa</h2>
+  <form id="formSaldoInicial" novalidate>
+    <div class="form-group">
+      <label for="saldoInicial">Saldo inicial disponível (R$):</label>
+      <p id="ajudaSaldoInicial" class="help-text">Informe a quantia total disponível na abertura do período (soma de contas bancárias da empresa, aplicações de liquidez imediata e dinheiro em caixa físico).</p>
+      <input
+        type="text"
+        id="saldoInicial"
+        name="saldoInicial"
+        inputmode="decimal"
+        placeholder="Ex: 2.500,00"
+        value="2.500,00"
+        autocomplete="off"
+        aria-describedby="ajudaSaldoInicial"
+        required
+      >
+    </div>
+  </form>
+
+  <h2 class="tool-form-title">2. Registrar Novo Lançamento Financeiro</h2>
+  <form id="formLancamento" novalidate>
+    <div class="form-group">
+      <label for="descricaoLancamento">Descrição do lançamento:</label>
+      <p id="ajudaDescricao" class="help-text">Identifique a origem ou destino do recurso (ex: Faturamento Cliente A, Compra Fornecedor X, DAS-MEI, Aluguel).</p>
+      <input
+        type="text"
+        id="descricaoLancamento"
+        name="descricaoLancamento"
+        placeholder="Ex: Venda de Mercadoria / Boleto Fornecedor"
+        autocomplete="off"
+        aria-describedby="ajudaDescricao"
+        required
+      >
+    </div>
+
+    <div class="form-group">
+      <label for="tipoLancamento">Tipo de movimentação:</label>
+      <select id="tipoLancamento" name="tipoLancamento">
+        <option value="receita" selected>Entrada (Receita / Contas a Receber)</option>
+        <option value="despesa">Saída (Despesa / Contas a Pagar)</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="categoriaLancamento">Categoria gerencial:</label>
+      <select id="categoriaLancamento" name="categoriaLancamento"></select>
+    </div>
+
+    <div class="form-group">
+      <label for="valorLancamento">Valor do lançamento (R$):</label>
+      <input
+        type="text"
+        id="valorLancamento"
+        name="valorLancamento"
+        inputmode="decimal"
+        placeholder="Ex: 1.200,00"
+        autocomplete="off"
+        required
+      >
+    </div>
+
+    <div class="form-group">
+      <label for="dataLancamento">Data do vencimento ou liquidação:</label>
+      <input
+        type="date"
+        id="dataLancamento"
+        name="dataLancamento"
+        value="2026-11-15"
+        required
+      >
+    </div>
+
+    <div class="form-group">
+      <label for="statusLancamento">Situação do lançamento:</label>
+      <select id="statusLancamento" name="statusLancamento">
+        <option value="realizado" selected>Realizado (Dinheiro já recebido ou já pago)</option>
+        <option value="previsto">Previsto (Conta a receber ou conta a pagar futura)</option>
+      </select>
+    </div>
+
+    <!-- Mensagens de Erro -->
+    <div id="painelErros" class="alert-box error" hidden aria-live="assertive"></div>
+
+    <div class="form-actions">
+      <button type="submit" id="btnAdicionarLancamento" class="btn btn-primary">Adicionar Lançamento</button>
+      <button type="button" id="btnCarregarExemplo" class="btn btn-secondary">Carregar Exemplo Didático</button>
+      <button type="button" id="btnLimparTudo" class="btn btn-secondary">Limpar Tudo</button>
+    </div>
+  </form>
+</div>
+
+<!-- Card 2: Extrato Cronológico de Lançamentos -->
+<div class="card tool-calculator-card">
+  <h2 class="tool-form-title">Lançamentos Cadastrados no Período</h2>
+  <div class="mei-projection-table-wrapper">
+    <table class="mei-projection-table" id="tabelaLancamentos">
+      <thead>
+        <tr>
+          <th scope="col">Data</th>
+          <th scope="col">Descrição e Categoria</th>
+          <th scope="col">Tipo</th>
+          <th scope="col">Valor</th>
+          <th scope="col">Situação</th>
+          <th scope="col">Ação</th>
+        </tr>
+      </thead>
+      <tbody id="tabelaLancamentosCorpo"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Área de Resultados Analíticos -->
+<section id="resultadoSecao" class="card tool-result-card" aria-live="polite">
+  <h2 class="tool-result-title">Painel Analítico de Fluxo de Caixa</h2>
+
+  <!-- Alerta de Saldo Negativo -->
+  <div id="painelAlertaNegativo" class="alert-box warning" hidden role="alert"></div>
+
+  <!-- Destaques Principais: Realizado vs Projetado -->
+  <div class="result-highlight">
+    <span class="highlight-label">Saldo Realizado Atual (Disponibilidade Efetiva):</span>
+    <span id="resultadoSaldoRealizado" class="highlight-value">R$ 0,00</span>
+    <span class="highlight-subtext">Calculado exclusivamente com base no saldo inicial e nas entradas e saídas já efetivadas.</span>
+  </div>
+
+  <div class="result-highlight">
+    <span class="highlight-label">Saldo Projetado Final (Com Previsões Futuras):</span>
+    <span id="resultadoSaldoProjetado" class="highlight-value">R$ 0,00</span>
+    <span class="highlight-subtext">Considera o saldo atual mais todas as contas a receber menos todas as contas a pagar previstas.</span>
+  </div>
+
+  <!-- Detalhamento de Entradas e Saídas -->
+  <div class="result-breakdown-card">
+    <h3 class="breakdown-subtitle">Discriminação por Situação Financeira</h3>
+    <div class="result-breakdown-row">
+      <span class="breakdown-label">(+) Entradas Efetivamente Recebidas:</span>
+      <span id="resultadoEntradasRealizadas" class="breakdown-value text-success">R$ 0,00</span>
+    </div>
+    <div class="result-breakdown-row">
+      <span class="breakdown-label">(-) Saídas Efetivamente Pagas:</span>
+      <span id="resultadoSaidasRealizadas" class="breakdown-value text-danger">R$ 0,00</span>
+    </div>
+    <div class="result-breakdown-row">
+      <span class="breakdown-label">(+) Contas a Receber Previstas:</span>
+      <span id="resultadoEntradasPrevistas" class="breakdown-value text-success">R$ 0,00</span>
+    </div>
+    <div class="result-breakdown-row">
+      <span class="breakdown-label">(-) Contas a Pagar Previstas:</span>
+      <span id="resultadoSaidasPrevistas" class="breakdown-value text-danger">R$ 0,00</span>
+    </div>
+    <div class="result-breakdown-row highlight-row">
+      <span class="breakdown-label">(=) Variação Líquida de Caixa do Período:</span>
+      <span id="resultadoVariacaoLiquidaCaixa" class="breakdown-value highlight-number">R$ 0,00</span>
+    </div>
+  </div>
+
+  <!-- Tabela Resumo Mensal Consolidada -->
+  <div class="result-breakdown-card">
+    <h3 class="breakdown-subtitle">Resumo Consolidado por Mês</h3>
+    <div class="mei-projection-table-wrapper">
+      <table class="mei-projection-table">
+        <thead>
+          <tr>
+            <th scope="col">Mês/Ano</th>
+            <th scope="col">Total Entradas</th>
+            <th scope="col">Total Saídas</th>
+            <th scope="col">Resultado do Mês</th>
+            <th scope="col">Saldo Fim do Mês</th>
+          </tr>
+        </thead>
+        <tbody id="tabelaResumoMensalCorpo"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Memória de Cálculo Transparente -->
+  <div class="memory-calculation-card">
+    <h3 class="breakdown-subtitle">Memória de Cálculo e Conciliação</h3>
+    <ul id="listaMemoriaCalculo" class="memory-list"></ul>
+  </div>
+
+  <!-- Orientações de Gestão -->
+  <div class="notices-card">
+    <h3 class="breakdown-subtitle">Orientações de Gestão Financeira</h3>
+    <div id="painelAvisos"></div>
+  </div>
+
+  <!-- Ações: Copiar, Compartilhar, Imprimir e Favoritar -->
+  <div id="toolActionsContainer" class="tool-actions"></div>
+</section>
+
+<!-- Conteúdo Editorial e SEO Informativo -->
+<section class="tool-educational-content">
+  <h2>O que é o Fluxo de Caixa Empresarial?</h2>
+  <p>O <strong>fluxo de caixa</strong> é a ferramenta essencial de gestão financeira que registra e projeta todas as movimentações monetárias da empresa em ordem estritamente cronológica. Ele difere dos relatórios estáticos de faturamento porque acompanha o <em>dia exato</em> em que o dinheiro realmente entra e sai da conta bancária da empresa.</p>
+
+  <h2>A Diferença Fundamental Entre Lucro e Caixa</h2>
+  <p>Um dos maiores motivos de encerramento precoce de pequenos negócios é a confusão entre <strong>lucro contábil</strong> e <strong>saldo de caixa</strong>:</p>
+  <ul>
+    <li><strong>Lucro (Regime de Competência):</strong> É a diferença entre o que você faturou e os custos e despesas incorridos naquele período. Se a sua empresa vendeu R$ 30.000,00 em mercadorias com custo de R$ 18.000,00, ela teve R$ 12.000,00 de lucro contábil na competência.</li>
+    <li><strong>Caixa (Regime de Caixa):</strong> Mede o dinheiro físico disponível agora. Se essas vendas de R$ 30.000,00 foram parceladas em 3 vezes (R$ 10.000,00 por mês), mas os fornecedores e tributos de R$ 18.000,00 vencem à vista em 15 dias, a empresa terá lucro no papel, mas enfrentará um <strong>déficit de caixa imediato de R$ 8.000,00</strong>, precisando recorrer a capital de giro ou empréstimos com juros.</li>
+  </ul>
+
+  <h2>Contas a Pagar e a Receber: Previsto vs. Realizado</h2>
+  <p>Para uma gestão profissional, o fluxo de caixa deve separar categoricamente dois momentos:</p>
+  <ul>
+    <li><strong>Movimentações Realizadas:</strong> Vendas recebidas no Pix, boletos já compensados, salários pagos e contas já liquidadas. Esse grupo forma o seu saldo financeiro atual e disponível.</li>
+    <li><strong>Movimentações Previstas:</strong> Contas a receber de clientes com vencimento futuro e compromissos agendados com fornecedores, aluguel e tributos. Ao somar essas previsões ao saldo atual, a empresa obtém o <strong>saldo projetado</strong>.</li>
+  </ul>
+
+  <h2>Como Identificar e Tratar Períodos com Saldo Projetado Negativo</h2>
+  <p>Quando a calculadora aponta que o saldo projetado ficará negativo em uma data futura (caixa descoberto), o empreendedor ganha tempo para agir preventivamente antes que a conta entre no cheque especial ou boletos vençam sem fundos:</p>
+  <ol>
+    <li><strong>Negocie prazos com fornecedores:</strong> Postergar uma fatura em 10 dias pode sincronizar a saída com o recebimento de uma duplicata de cliente.</li>
+    <li><strong>Ofereça desconto para antecipação de clientes:</strong> Proponha 2% a 5% de desconto para pagamentos à vista via Pix em vez de vendas a prazo.</li>
+    <li><strong>Corte despesas não essenciais imediatamente:</strong> Reduza gastos variáveis e assinaturas supérfluas durante o mês de aperto.</li>
+    <li><strong>Mantenha um capital de giro de segurança:</strong> Pequenas empresas devem buscar uma reserva mínima de 1 a 3 meses de custos operacionais fixos.</li>
+  </ol>
+
+  <h2>Privacidade e Limitações de Armazenamento Local</h2>
+  <p>Esta ferramenta opera <strong>100% no seu navegador (Client-Side)</strong>. Nenhuma informação de faturamento, dados de clientes ou transações bancárias da sua empresa é enviada, armazenada ou monitorada por servidores externos. Por esse motivo, ao fechar a janela ou limpar os dados de navegação, a sessão é reiniciada. Utilize o botão <em>"Copiar Resumo"</em> ou <em>"Imprimir / Salvar em PDF"</em> para arquivar o seu relatório mensal de controle.</p>
+
+  <h2>Perguntas Frequentes (FAQ)</h2>
+  <div class="faq-item">
+    <h3>Com que frequência devo atualizar o fluxo de caixa?</h3>
+    <p>Recomenda-se a atualização diária ou, no máximo, semanal. Conciliar os lançamentos com o extrato bancário evita esquecimentos de pequenas tarifas, taxas de cartão e encargos que somados distorcem o saldo real.</p>
+  </div>
+  <div class="faq-item">
+    <h3>O MEI é obrigado por lei a ter fluxo de caixa?</h3>
+    <p>A legislação do MEI não exige escrituração contábil complexa em livros formais (Diário e Razão). No entanto, o controle de entradas e saídas é imprescindível para preencher a Declaração Anual do Simples Nacional (DASN-SIMEI) e comprovar rendimentos isentos perante a Receita Federal.</p>
+  </div>
+
+  <h2>Fontes Oficiais e Materiais de Apoio</h2>
+  <ul>
+    <li><a href="https://sebrae.com.br/sites/PortalSebrae/artigos/como-fazer-o-fluxo-de-caixa-da-sua-empresa" target="_blank" rel="noopener noreferrer">Sebrae — Como Fazer o Fluxo de Caixa da Sua Empresa</a></li>
+    <li><a href="https://www.gov.br/empresas-e-negocios/pt-br/empreendedor/gestao/financas/fluxo-de-caixa" target="_blank" rel="noopener noreferrer">Portal do Empreendedor — Gestão Financeira e Fluxo de Caixa</a></li>
+    <li><a href="https://www.gov.br/empresas-e-negocios/pt-br/empreendedor" target="_blank" rel="noopener noreferrer">Portal do Empreendedor — Governo Federal do Brasil</a></li>
+  </ul>
+</section>

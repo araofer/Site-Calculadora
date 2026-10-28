@@ -1,0 +1,319 @@
+---
+title: Calculadora de Pró-labore Online Grátis | Simulador 2026 - Calculadora Master
+description: Calcule o pró-labore líquido, desconto de INSS (11%), tabela de IRRF 2026 com desconto simplificado, redução da Lei nº 15.270/2025 e encargos patronais da empresa.
+keywords: calculadora pro-labore, calculo pro labore 2026, inss pro labore socio, irrf pro labore 2026, lei 15270 reducao irrf, encargo patronal pro labore simples nacional
+canonical: https://www.calculadoramaster.com/tools/financas/pro-labore.html
+layout: tool
+pageScripts: <script type="module" src="{{ROOT_PREFIX}}js/tools/pro-labore.js"></script>
+---
+
+<h1>Calculadora de Pró-labore</h1>
+
+<p>Estime os descontos previdenciários e fiscais sobre a remuneração de sócios e administradores (<strong>pró-labore</strong>) para a competência de <strong>2026</strong>. A ferramenta calcula o <strong>INSS do Contribuinte Individual</strong> (alíquota de 11% limitada ao teto do RGPS), o <strong>IRRF Progressivo Mensal</strong> com comparação automática entre Deduções Legais e o Desconto Simplificado (R$ 607,20), a <strong>Redução Mensal do Imposto</strong> instituída pela <strong>Lei nº 15.270/2025</strong> e os <strong>Encargos Previdenciários Patronais (CPP)</strong> segundo o regime tributário da empresa (Simples Nacional Anexos I, II, III, IV ou V, Lucro Presumido/Real e tratamento especial do MEI). Esta simulação tem finalidade exclusivamente orientativa e não substitui a folha de pagamento oficial gerada pelo eSocial ou DCTFWeb.</p>
+
+<div class="card tool-calculator-card">
+  <h2 class="tool-form-title">Simulador de Pró-labore (Regras Oficiais de 2026)</h2>
+
+  <form id="formProLabore" novalidate>
+    <section class="mei-autonomo-common-section" aria-labelledby="tituloValoresPL">
+      <h3 id="tituloValoresPL" class="mei-autonomo-section-heading">1. Remuneração e Competência de Apuração</h3>
+      <p class="mei-autonomo-reference-note">
+        Informe o valor bruto acordado para o pró-labore mensal. Para 2026, o salário mínimo oficial é de R$ 1.621,00 e o teto do salário de contribuição é de R$ 8.475,55.
+      </p>
+
+      <div class="mei-autonomo-common-grid">
+        <div class="form-group">
+          <label for="proLaboreBruto">Valor bruto mensal do pró-labore (R$):</label>
+          <p id="ajudaProLaboreBruto">Valor bruto fixado no contrato social ou decisão dos sócios antes de qualquer retenção.</p>
+          <input
+            type="text"
+            id="proLaboreBruto"
+            name="proLaboreBruto"
+            inputmode="decimal"
+            placeholder="Ex: 5000,00"
+            value="5000,00"
+            autocomplete="off"
+            required
+            aria-describedby="ajudaProLaboreBruto"
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="anoReferenciaPL">Ano da competência de apuração:</label>
+          <p id="ajudaAnoReferenciaPL">A ferramenta utiliza os parâmetros oficiais e homologados para a competência de 2026.</p>
+          <select
+            id="anoReferenciaPL"
+            name="anoReferencia"
+            aria-describedby="ajudaAnoReferenciaPL"
+          >
+            <option value="2026" selected>Ano-Calendário 2026 (Tabelas Oficiais da RFB e INSS)</option>
+          </select>
+        </div>
+      </div>
+    </section>
+
+    <section class="mei-autonomo-common-section" aria-labelledby="tituloRegimePL">
+      <h3 id="tituloRegimePL" class="mei-autonomo-section-heading">2. Regime Tributário da Empresa (Encargos Patronais)</h3>
+      <p class="mei-autonomo-reference-note">
+        O enquadramento fiscal da pessoa jurídica determina se haverá Contribuição Previdenciária Patronal (CPP de 20%) avulsa sobre o pró-labore ou se o encargo já está abrangido pela guia mensal do DAS.
+      </p>
+
+      <div class="form-group">
+        <label for="regimeTributarioPL">Selecione o regime da pessoa jurídica:</label>
+        <p id="ajudaRegimeTributarioPL">Escolha o regime para avaliar separadamente os custos patronais da empresa.</p>
+        <select
+          id="regimeTributarioPL"
+          name="regimeTributario"
+          aria-describedby="ajudaRegimeTributarioPL"
+        >
+          <option value="simples_anexo_1_2_3_5" selected>Simples Nacional — Anexos I, II, III ou V (CPP patronal inclusa no DAS)</option>
+          <option value="simples_anexo_4">Simples Nacional — Anexo IV (CPP patronal de 20% recolhida à parte)</option>
+          <option value="fora_simples">Empresa fora do Simples Nacional — Sem CPRB (Lucro Presumido ou Real — CPP de 20%)</option>
+          <option value="fora_simples_cprb">Empresa fora do Simples Nacional — Optante pela CPRB em 2026 (CPP de 10% sobre pró-labore)</option>
+          <option value="concomitante">Simples Nacional — Atividades Concomitantes (Anexo IV + outros anexos)</option>
+          <option value="mei">Microempreendedor Individual (MEI — recolhimento previdenciário único via DAS-MEI)</option>
+          <option value="nao_informado">Não sei informar / Outro regime (não estimar encargo patronal)</option>
+        </select>
+      </div>
+    </section>
+
+    <section class="mei-autonomo-common-section" aria-labelledby="tituloDeducoesPL">
+      <h3 id="tituloDeducoesPL" class="mei-autonomo-section-heading">3. Deduções do Imposto de Renda (IRRF)</h3>
+      <p class="mei-autonomo-reference-note">
+        O sistema compara automaticamente as <strong>Deduções Legais</strong> informadas com o <strong>Desconto Simplificado Mensal (R$ 607,20)</strong> e adota a base mais favorável ao sócio.
+      </p>
+
+      <div class="mei-autonomo-common-grid">
+        <div class="form-group">
+          <label for="dependentesPL">Número de dependentes para o IRRF:</label>
+          <p id="ajudaDependentesPL">Dedução legal de R$ 189,59 por dependente em 2026.</p>
+          <input
+            type="number"
+            id="dependentesPL"
+            name="dependentes"
+            inputmode="numeric"
+            min="0"
+            max="20"
+            step="1"
+            value="0"
+            placeholder="0"
+            aria-describedby="ajudaDependentesPL"
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="pensaoAlimenticiaPL">Pensão alimentícia judicial mensal (R$):</label>
+          <p id="ajudaPensaoAlimenticiaPL">Valor pago conforme decisão judicial ou escritura pública homologada.</p>
+          <input
+            type="text"
+            id="pensaoAlimenticiaPL"
+            name="pensaoAlimenticia"
+            inputmode="decimal"
+            placeholder="0,00"
+            value="0,00"
+            autocomplete="off"
+            aria-describedby="ajudaPensaoAlimenticiaPL"
+          >
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="outrasDeducoesPL">Outras deduções legais autorizadas (R$):</label>
+        <p id="ajudaOutrasDeducoesPL">Previdência complementar pública ou outras parcelas dedutíveis da fonte pagadora, se aplicável.</p>
+        <input
+          type="text"
+          id="outrasDeducoesPL"
+          name="outrasDeducoes"
+          inputmode="decimal"
+          placeholder="0,00"
+          value="0,00"
+          autocomplete="off"
+          aria-describedby="ajudaOutrasDeducoesPL"
+        >
+      </div>
+    </section>
+
+    <section class="mei-autonomo-common-section" aria-labelledby="tituloOutrasRemuneracoesPL">
+      <h3 id="tituloOutrasRemuneracoesPL" class="mei-autonomo-section-heading">4. Outras Remunerações e Contribuições Previdenciárias na Competência</h3>
+      <p class="mei-autonomo-reference-note">
+        Se o sócio já recebeu remuneração sujeita a INSS em outro vínculo (CLT, outra empresa ou autônomo) no mesmo mês, informe os valores para evitar dupla retenção além do teto previdenciário (R$ 8.475,55).
+      </p>
+
+      <div class="mei-autonomo-common-grid">
+        <div class="form-group">
+          <label for="outrasRemuneracoesPL">Outras remunerações com incidência de INSS (R$):</label>
+          <p id="ajudaOutrasRemuneracoesPL">Soma das bases de cálculo de outros empregos ou pró-labores do mesmo mês.</p>
+          <input
+            type="text"
+            id="outrasRemuneracoesPL"
+            name="outrasRemuneracoes"
+            inputmode="decimal"
+            placeholder="0,00"
+            value="0,00"
+            autocomplete="off"
+            aria-describedby="ajudaOutrasRemuneracoesPL"
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="inssOutrasFontesPL">Contribuição de INSS já retida em outras fontes (R$):</label>
+          <p id="ajudaInssOutrasFontesPL">Valor do INSS efetivamente descontado por outras empresas na mesma competência.</p>
+          <input
+            type="text"
+            id="inssOutrasFontesPL"
+            name="inssOutrasFontes"
+            inputmode="decimal"
+            placeholder="0,00"
+            value="0,00"
+            autocomplete="off"
+            aria-describedby="ajudaInssOutrasFontesPL"
+          >
+        </div>
+      </div>
+    </section>
+
+    <div class="tool-actions">
+      <button type="submit" id="btnCalcularPL" class="tool-btn tool-btn-primary">Calcular Pró-labore</button>
+      <button type="button" id="btnLimparPL" class="tool-btn tool-btn-secondary">Limpar campos</button>
+    </div>
+  </form>
+
+  <p id="erroProLabore" role="alert" aria-live="assertive" hidden></p>
+
+  <section id="resultadoProLabore" aria-live="polite" aria-atomic="true" hidden>
+    <h2 class="tool-result-title">Demonstrativo do Pró-labore e Encargos</h2>
+
+    <div class="card tool-result-card">
+      <h3 class="mei-autonomo-result-subtitle">1. Valor Líquido Recebido pelo Sócio</h3>
+      <div class="mei-highlight-box">
+        <p>Pró-labore Líquido Estimado:</p>
+        <p class="bill-total" id="resProLaboreLiquido">R$ 0,00</p>
+        <span class="tool-badge">Líquido do Sócio</span>
+      </div>
+
+      <h3 class="mei-autonomo-result-subtitle">2. Custo Total Estimado para a Empresa</h3>
+      <div class="mei-highlight-box">
+        <p>Custo Total da Empresa (Pró-labore + Encargos Patronais):</p>
+        <p class="bill-total" id="resCustoTotalEmpresa">R$ 0,00</p>
+        <span class="tool-badge">Custo Pessoa Jurídica</span>
+      </div>
+      <p id="resExplicacaoPatronal" class="tool-result-note"></p>
+
+      <div class="tool-result-grid">
+        <div class="tool-result-item">
+          <span class="result-label">Pró-labore Bruto:</span>
+          <span class="result-value" id="resProLaboreBruto">R$ 0,00</span>
+        </div>
+
+        <div class="tool-result-item">
+          <span class="result-label">INSS do Sócio (11% retido):</span>
+          <span class="result-value" id="resInssSocio">R$ 0,00</span>
+        </div>
+
+        <div class="tool-result-item">
+          <span class="result-label">Base de Cálculo do IRRF:</span>
+          <span class="result-value" id="resBaseIrrf">R$ 0,00</span>
+        </div>
+
+        <div class="tool-result-item">
+          <span class="result-label">Dedução Aplicada no IRRF:</span>
+          <span class="result-value" id="resMetodoDeducao">—</span>
+        </div>
+
+        <div class="tool-result-item">
+          <span class="result-label">IRRF pela Tabela Progressiva:</span>
+          <span class="result-value" id="resIrrfAntesReducao">R$ 0,00</span>
+        </div>
+
+        <div class="tool-result-item">
+          <span class="result-label">Redução da Lei nº 15.270/2025:</span>
+          <span class="result-value" id="resReducaoLei15270">R$ 0,00</span>
+        </div>
+
+        <div class="tool-result-item">
+          <span class="result-label">IRRF Final Retido na Fonte:</span>
+          <span class="result-value" id="resIrrfFinal">R$ 0,00</span>
+        </div>
+
+        <div class="tool-result-item">
+          <span class="result-label">CPP Patronal da Empresa:</span>
+          <span class="result-value" id="resCppPatronal">R$ 0,00</span>
+        </div>
+      </div>
+
+      <div class="mei-summary-callout">
+        <p id="resumoMensagemPL"></p>
+      </div>
+
+      <div id="avisosLegaisPL"></div>
+
+      <div class="mei-audit-details">
+        <h4>Memória de Cálculo Detalhada</h4>
+        <ul id="memoriaCalculoPL" class="mei-audit-list"></ul>
+      </div>
+
+      <div class="tool-actions result-actions">
+        <button type="button" id="btnCopiarPL" class="tool-btn tool-btn-secondary">Copiar Resumo</button>
+        <button type="button" id="btnCompartilharPL" class="tool-btn tool-btn-secondary">Compartilhar</button>
+        <button type="button" id="btnImprimirPL" class="tool-btn tool-btn-secondary">Imprimir</button>
+      </div>
+      <p id="statusAcoesPL" class="tool-action-status" aria-live="polite"></p>
+    </div>
+  </section>
+</div>
+
+<section class="tool-explanation-section" aria-labelledby="tituloExplicacaoPL">
+  <h2 id="tituloExplicacaoPL">Como Funciona o Cálculo do Pró-labore em 2026</h2>
+  <p>O <strong>pró-labore</strong> é a remuneração mensal destinada aos sócios e administradores que desempenham funções de gestão na sociedade empresarial. Do ponto de vista tributário e previdenciário, o sócio enquadra-se como <strong>Contribuinte Individual</strong> da Previdência Social. Por essa razão, as regras de retenção na fonte e encargos patronais possuem disciplina jurídica específica, não se confundindo com as regras aplicáveis a trabalhadores com vínculo empregatício celetista.</p>
+
+  <h3>1. INSS do Contribuinte Individual (Retenção de 11% pela Empresa)</h3>
+  <p>A obrigação da pessoa jurídica tomadora de arrecadar e recolher a contribuição do segurado contribuinte individual a seu serviço decorre expressamente do <strong>art. 4º, caput da Lei nº 10.666/2003</strong> c/c o <strong>art. 30, inciso I, alínea "b" da Lei nº 8.212/1991</strong>. A fundamentação jurídica da alíquota efetiva de <strong>11% sobre o pró-labore</strong> assenta-se na conjugação dos <strong>arts. 21, caput e 30, § 4º da Lei nº 8.212/1991</strong> com o <strong>art. 37, inciso II e § 1º da Instrução Normativa RFB nº 2.110/2022</strong>, que permite ao contribuinte individual que presta serviços a empresas deduzir 45% da contribuição patronal devida pela tomadora (20%), dedução esta limitada a 9% do salário de contribuição (resultando em 20% - 9% = 11% de retenção):</p>
+  <ul>
+    <li><strong>Distinção do Plano Simplificado do INSS:</strong> A retenção de 11% sobre o pró-labore <em>não se confunde</em> com o Plano Simplificado de Previdência (Lei nº 8.212/1991, art. 21, § 2º, inciso I), que também prevê alíquota de 11% na tabela do INSS. O Plano Simplificado é uma opção pessoal e facultativa voltada exclusivamente ao contribuinte individual que recolhe por conta própria (código GPS 1163), incidindo estritamente sobre 1 salário mínimo e sem direito à aposentadoria por tempo de contribuição. A retenção sobre o pró-labore, por sua vez, é um dever instrumental obrigatório da empresa, incide sobre o valor integral do pró-labore até o teto do RGPS e confere cobertura previdenciária ordinária.</li>
+    <li><strong>Limite Máximo (Teto do RGPS):</strong> Em 2026, o salário de contribuição máximo é de <strong>R$ 8.475,55</strong>. Consequentemente, o desconto previdenciário mensal do sócio está limitado a <strong>R$ 932,31</strong> nesta competência. Valores de pró-labore que excedam esse montante não sofrem desconto de INSS sobre a parcela excedente.</li>
+    <li><strong>Múltiplos Vínculos ou Remunerações:</strong> Se o sócio possuir outros vínculos (como contrato de trabalho CLT ou outro pró-labore em sociedade distinta) onde já houve incidência previdenciária, a soma das bases de contribuição na competência não pode ultrapassar o teto legal, devendo o contribuinte informar os valores retidos para evitar bitributação.</li>
+    <li><strong>Pró-labore Inferior ao Salário Mínimo:</strong> Se o pró-labore fixado for menor que o salário mínimo vigente (<strong>R$ 1.621,00</strong> em 2026), a retenção de 11% incide sobre o valor real pago. Contudo, por força do art. 195, § 14 da Constituição Federal e art. 29 da Emenda Constitucional nº 103/2019, o mês somente será computado para tempo de contribuição e carência se o sócio recolher a complementação voluntária da contribuição.</li>
+  </ul>
+
+  <h3>2. Tabela Progressiva do IRRF e as Reduções da Lei nº 15.270/2025</h3>
+  <p>O Imposto de Renda Retido na Fonte (IRRF) sobre o pró-labore é apurado mensalmente sob o regime de caixa, segundo a tabela progressiva oficial da Receita Federal do Brasil para 2026:</p>
+  <ul>
+    <li><strong>Até R$ 2.428,80:</strong> Alíquota de 0% (isento).</li>
+    <li><strong>De R$ 2.428,81 até R$ 2.826,65:</strong> Alíquota de 7,5% (dedução de R$ 182,16).</li>
+    <li><strong>De R$ 2.826,66 até R$ 3.751,05:</strong> Alíquota de 15,0% (dedução de R$ 394,16).</li>
+    <li><strong>De R$ 3.751,06 até R$ 4.664,68:</strong> Alíquota de 22,5% (dedução de R$ 675,49).</li>
+    <li><strong>Acima de R$ 4.664,68:</strong> Alíquota de 27,5% (dedução de R$ 908,73).</li>
+  </ul>
+  <p>Na apuração da base de cálculo, a legislação autoriza optar pelo método mais vantajoso entre as <strong>Deduções Legais</strong> (INSS descontado, R$ 189,59 por dependente e pensão alimentícia judicial) e o <strong>Desconto Simplificado Mensal (R$ 607,20)</strong>.</p>
+  <p>Após apurar o imposto pela tabela progressiva, aplica-se a <strong>Redução Mensal da Lei nº 15.270/2025</strong> sobre o valor bruto do rendimento tributável:</p>
+  <ul>
+    <li><strong>Rendimentos mensais até R$ 5.000,00:</strong> Redução integral do imposto devido, resultando em <strong>IRRF Final de R$ 0,00</strong>.</li>
+    <li><strong>Rendimentos mensais de R$ 5.000,01 a R$ 7.350,00:</strong> Aplica-se a fórmula legal de transição <code>Redução = 978,62 - (0,133145 × Rendimento Bruto)</code>, limitada ao montante do imposto calculado.</li>
+    <li><strong>Rendimentos mensais superiores a R$ 7.350,00:</strong> Não há redução, recolhendo-se o imposto progressivo integral.</li>
+  </ul>
+
+  <h3>3. Encargos Previdenciários Patronais da Empresa e CPRB em 2026</h3>
+  <p>É fundamental distinguir a retenção do sócio do encargo suportado pela pessoa jurídica contratante conforme seu regime tributário e opção pela desoneração:</p>
+  <ul>
+    <li><strong>Simples Nacional (Anexos I, II, III e V):</strong> A Contribuição Previdenciária Patronal (CPP) está legalmente unificada e incluída no Documento de Arrecadação do Simples Nacional (DAS), conforme o art. 13, inciso VI da Lei Complementar nº 123/2006. Portanto, a empresa optante enquadrada nesses anexos não recolhe CPP patronal avulsa sobre o pró-labore.</li>
+    <li><strong>Simples Nacional (Anexo IV):</strong> As atividades do Anexo IV (construção de imóveis, vigilância e serviços advocatícios) não têm a CPP abrangida pelo DAS (art. 18, § 5º-C da LC nº 123/2006). A empresa recolhe separadamente a contribuição patronal ordinária de <strong>20% sobre o pró-labore</strong> em DARF Previdenciário.</li>
+    <li><strong>Empresas fora do Simples — Regime Comum (Sem CPRB):</strong> Para empresas no Lucro Presumido ou Real que não optaram ou não se enquadram na desoneração da folha, incide a contribuição previdenciária patronal ordinária de <strong>20%</strong> sobre as remunerações pagas a contribuintes individuais (Lei nº 8.212/1991, art. 22, III). Sobre o pró-labore não há incidência de contribuições a terceiros (Sistema S) nem RAT/FAP.</li>
+    <li><strong>Empresas fora do Simples — Optantes pela CPRB em 2026:</strong> Para os setores abrangidos e que optaram pelo regime de transição da <strong>Lei nº 14.973/2024 (art. 9º-A)</strong>, a CPP patronal devida em 2026 é de <strong>50% das alíquotas do art. 22 da Lei nº 8.212/1991</strong>, resultando em <strong>10% sobre o pró-labore</strong> (50% de 20%). A parcela da contribuição calculada sobre a receita bruta (CPRB) <em>não está calculada nesta ferramenta</em>, pois depende do faturamento da empresa e de sua alíquota setorial, não sendo possível determinar o custo fiscal total da PJ nessa modalidade. <strong>Incerteza Jurídica na Retenção do Sócio:</strong> O art. 30, § 4º da Lei nº 8.212/1991 e o art. 37, II e § 1º da IN RFB nº 2.110/2022 preveem dedução de 45% da contribuição patronal devida/recolhida pela empresa tomadora. Como inexiste orientação oficial conclusiva da Receita Federal ou do eSocial sobre o pró-labore de sócio sob o regime de transição da Lei nº 14.973/2024, a alíquota de 11% é mantida nesta ferramenta unicamente como <strong>hipótese operacional e orientativa</strong>, sem arbitrar nova alíquota. Em virtude do reflexo direto da dedução previdenciária na base de cálculo do IRRF, <strong>todo o conjunto de resultados do sócio (INSS retido, base do IRRF, IRRF calculado e valor líquido) possui caráter estritamente estimativo e não definitivo</strong> neste cenário, devendo ser confirmado pela assessoria contábil da empresa.</li>
+    <li><strong>Microempreendedor Individual (MEI):</strong> Conforme a Solução de Consulta Cosit nº 251/2024, a legislação do MEI não prevê a figura do pró-labore formal com retenção de 11% e encargo patronal de 20%. O titular do MEI contribui compulsoriamente via DAS-MEI (5% do salário mínimo, art. 18-A da LC nº 123/2006) e os valores recebidos decorrem do lucro ou faturamento da atividade individual.</li>
+    <li><strong>Regime Não Informado:</strong> Se o regime tributário da pessoa jurídica não for especificado, a calculadora não apresenta estimativa patronal conclusiva, emitindo aviso de limitação técnica para evitar custos incorretos.</li>
+  </ul>
+
+  <h3>4. Fontes Oficiais e Legislação de Consulta</h3>
+  <ul>
+    <li><a href="https://www.gov.br/receitafederal/pt-br/assuntos/meu-imposto-de-renda/tabelas/2026" target="_blank" rel="noopener noreferrer">Tabela de Tributação Mensal do IRPF 2026</a> — Receita Federal do Brasil.</li>
+    <li><a href="https://www.planalto.gov.br/ccivil_03/_ato2023-2026/2025/lei/l15270.htm" target="_blank" rel="noopener noreferrer">Lei nº 15.270/2025</a> — Altera a legislação tributária e institui a redução do imposto de renda mensal.</li>
+    <li><a href="https://www.gov.br/inss/pt-br/direitos-e-deveres/inscricao-e-contribuicao/tabela-de-contribuicao-mensal" target="_blank" rel="noopener noreferrer">Tabela de Contribuição Mensal do INSS</a> — Instituto Nacional do Seguro Social.</li>
+    <li><a href="https://www.planalto.gov.br/ccivil_03/leis/2003/l10.666compilado.htm" target="_blank" rel="noopener noreferrer">Lei nº 10.666/2003</a> — Art. 4º, caput: Obrigação da empresa de arrecadar e recolher a contribuição do contribuinte individual a seu serviço.</li>
+    <li><a href="https://www.planalto.gov.br/ccivil_03/leis/l8212cons.htm" target="_blank" rel="noopener noreferrer">Lei nº 8.212/1991</a> — Arts. 21, 22, III, 30, I, "b" e 30, § 4º: Alíquota do contribuinte individual, dedução de 45% e contribuição patronal.</li>
+    <li><a href="https://normas.receita.fazenda.gov.br/sijut2consulta/link.action?idAto=126687" target="_blank" rel="noopener noreferrer">Instrução Normativa RFB nº 2.110/2022</a> — Art. 37, II e § 1º (retenção do contribuinte individual) e art. 76 (atividades concomitantes).</li>
+    <li><a href="https://www.planalto.gov.br/ccivil_03/_ato2023-2026/2024/lei/l14973.htm" target="_blank" rel="noopener noreferrer">Lei nº 14.973/2024</a> — Art. 9º-A: Regime de transição da CPRB e reoneração gradual da folha de pagamento.</li>
+    <li><a href="https://www.gov.br/receitafederal/pt-br/assuntos/orientacao-tributaria/tributos/contribuicoes-previdenciarias-pj" target="_blank" rel="noopener noreferrer">Contribuições Previdenciárias de Pessoas Jurídicas</a> — Instrução Normativa RFB nº 2.110/2022 e Lei nº 8.212/1991.</li>
+    <li><a href="https://www.planalto.gov.br/ccivil_03/leis/lcp/lcp123.htm" target="_blank" rel="noopener noreferrer">Lei Complementar nº 123/2006</a> — Estatuto Nacional da Microempresa e da Empresa de Pequeno Porte (arts. 13 e 18).</li>
+    <li><a href="https://normas.receita.fazenda.gov.br/sijut2consulta/anexoOutros.action?idArquivoBinario=75571" target="_blank" rel="noopener noreferrer">Solução de Consulta Cosit nº 251/2024</a> — Tratamento previdenciário e tributário aplicável ao MEI.</li>
+  </ul>
+</section>

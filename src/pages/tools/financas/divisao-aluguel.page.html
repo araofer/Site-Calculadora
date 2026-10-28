@@ -1,0 +1,211 @@
+---
+title: Calculadora de Divisão de Aluguel e Despesas Online | Calculadora Master
+description: Divida aluguel, condomínio, contas de consumo e despesas da casa de forma igualitária ou proporcional, com controle de quem pagou e sugestão de acertos.
+keywords: divisao de aluguel, dividir aluguel, rateio de despesas republica, divisao de contas casal, quem deve a quem aluguel
+canonical: https://www.calculadoramaster.com/tools/financas/divisao-aluguel.html
+layout: tool
+pageScripts: <script type="module" src="{{ROOT_PREFIX}}js/tools/divisao-aluguel.js"></script>
+---
+
+<h1>Calculadora de Divisão de Aluguel e Despesas</h1>
+
+<p>Divida o <strong>aluguel</strong>, o condomínio, as contas de consumo (energia, água, gás, internet) e todas as despesas compartilhadas do imóvel entre moradores, colegas de república ou casais. Escolha entre a <strong>divisão igualitária</strong> (partes rigorosamente iguais) ou a <strong>divisão proporcional</strong> (percentuais personalizados por morador). Ao indicar quem pagou cada despesa, a ferramenta calcula a <strong>cota de cada um</strong>, o <strong>saldo devedor ou credor</strong> e sugere um plano prático de transferências financeiras ("quem deve pagar a quem e quanto"), baseado em uma estratégia gulosa que liquida todas as pendências em no máximo $(N - 1)$ transferências entre os participantes com saldo em aberto.</p>
+
+<div class="card tool-calculator-card">
+  <h2 class="tool-form-title">Divisão de Aluguel e Despesas da Casa</h2>
+
+  <form id="formDivisaoAluguel" novalidate>
+    <!-- Seção 1: Modo de Divisão -->
+    <section class="mei-autonomo-common-section" aria-labelledby="tituloModoDivisao">
+      <h3 id="tituloModoDivisao" class="mei-autonomo-section-heading">1. Critério de Divisão das Despesas</h3>
+      <p class="mei-autonomo-reference-note">
+        Defina como os custos totais serão rateados entre os moradores cadastrados.
+      </p>
+
+      <div class="form-group">
+        <label for="modoDivisaoAluguel">Modo de rateio:</label>
+        <p id="ajudaModoDivisaoAluguel">Escolha divisão igualitária para cotas idênticas ou personalizada para definir percentuais distintos.</p>
+        <select
+          id="modoDivisaoAluguel"
+          name="modoDivisao"
+          aria-describedby="ajudaModoDivisaoAluguel"
+        >
+          <option value="igualitaria" selected>Divisão Igualitária (todos pagam a mesma cota)</option>
+          <option value="personalizada">Divisão Proporcional Personalizada (percentuais por morador)</option>
+        </select>
+      </div>
+
+      <p id="alertaPercentualAluguel" class="mei-limit-alert" role="status" aria-live="polite" hidden style="margin-top: 10px;"></p>
+    </section>
+
+    <!-- Seção 2: Moradores -->
+    <section class="mei-autonomo-common-section" aria-labelledby="tituloMoradoresAluguel">
+      <h3 id="tituloMoradoresAluguel" class="mei-autonomo-section-heading">2. Moradores e Participantes</h3>
+      <p class="mei-autonomo-reference-note">
+        Cadastre os nomes dos moradores (mínimo de 2 participantes). No modo proporcional, informe a porcentagem de responsabilidade de cada um.
+      </p>
+
+      <div id="listaMoradoresAluguel" class="dynamic-items-container" aria-live="polite">
+        <!-- Linhas dinâmicas de moradores criadas via JavaScript -->
+      </div>
+
+      <div class="tool-actions-secondary" style="margin-top: 12px;">
+        <button type="button" id="adicionarMoradorAluguel" class="tool-btn tool-btn-outline">
+          + Adicionar Morador
+        </button>
+      </div>
+    </section>
+
+    <!-- Seção 3: Despesas -->
+    <section class="mei-autonomo-common-section" aria-labelledby="tituloDespesasAluguel">
+      <h3 id="tituloDespesasAluguel" class="mei-autonomo-section-heading">3. Despesas Compartilhadas e Pagadores</h3>
+      <p class="mei-autonomo-reference-note">
+        Informe os valores de cada conta do mês e selecione quem realizou o pagamento adiantado da fatura.
+      </p>
+
+      <div id="listaDespesasAluguel" class="dynamic-items-container" aria-live="polite">
+        <!-- Linhas dinâmicas de despesas criadas via JavaScript -->
+      </div>
+
+      <div class="tool-actions-secondary" style="margin-top: 12px;">
+        <button type="button" id="adicionarDespesaAluguel" class="tool-btn tool-btn-outline">
+          + Adicionar Outra Despesa
+        </button>
+      </div>
+    </section>
+
+    <!-- Ações do Formulário -->
+    <div class="tool-actions">
+      <button type="submit" id="btnCalcularAluguel" class="tool-btn tool-btn-primary">Calcular Divisão e Acertos</button>
+      <button type="button" id="btnLimparAluguel" class="tool-btn tool-btn-secondary">Limpar campos</button>
+    </div>
+  </form>
+
+  <p id="erroDivisaoAluguel" role="alert" aria-live="assertive" hidden></p>
+
+  <!-- Seção de Resultados -->
+  <section id="resultadoDivisaoAluguel" aria-live="polite" aria-atomic="true" hidden>
+    <h2 class="tool-result-title">Demonstrativo de Rateio e Balanço Financeiro</h2>
+
+    <div class="card tool-result-card">
+      <h3 class="mei-autonomo-result-subtitle">1. Resumo Geral das Despesas da Casa</h3>
+      <div class="mei-autonomo-common-grid">
+        <div class="mei-highlight-box">
+          <p>Total de Despesas do Mês:</p>
+          <p class="bill-total" id="resTotalDespesasAluguel">R$ 0,00</p>
+          <span class="tool-badge">Soma das Faturas</span>
+        </div>
+
+        <div class="mei-highlight-box">
+          <p>Cota Média por Morador:</p>
+          <p class="bill-total" id="resCotaMediaAluguel">R$ 0,00</p>
+          <span class="tool-badge" id="badgeCotaMediaAluguel">Cota Referência</span>
+        </div>
+      </div>
+
+      <div class="tool-result-grid" style="margin-top: 16px;">
+        <div class="tool-result-item">
+          <span class="result-label">Quantidade de Moradores:</span>
+          <span class="result-value" id="resQtdMoradoresAluguel">0</span>
+        </div>
+
+        <div class="tool-result-item">
+          <span class="result-label">Quantidade de Despesas:</span>
+          <span class="result-value" id="resQtdDespesasAluguel">0</span>
+        </div>
+
+        <div class="tool-result-item">
+          <span class="result-label">Modo de Divisão Aplicado:</span>
+          <span class="result-value" id="resModoDivisaoAluguel">—</span>
+        </div>
+
+        <div class="tool-result-item">
+          <span class="result-label">Situação de Liquidação:</span>
+          <span class="result-value" id="resStatusQuitacaoAluguel">—</span>
+        </div>
+      </div>
+
+      <!-- Resumo Individual e Balanço de Saldos -->
+      <h3 class="mei-autonomo-result-subtitle" style="margin-top: 24px;">2. Balanço Individual por Morador</h3>
+      <div class="mei-projection-table-wrapper">
+        <table class="mei-projection-table" id="tabelaSaldosMoradoresAluguel">
+          <thead>
+            <tr>
+              <th scope="col">Morador</th>
+              <th scope="col">Proporção</th>
+              <th scope="col">Cota Devida</th>
+              <th scope="col">Valor Pago</th>
+              <th scope="col">Saldo Final</th>
+              <th scope="col">Situação</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Preenchido via JavaScript -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Sugestão de Acertos Financeiros -->
+      <h3 class="mei-autonomo-result-subtitle" style="margin-top: 24px;">3. Quem Deve Pagar a Quem e Quanto (Acertos Recomendados)</h3>
+      <p class="tool-result-note">
+        O plano de liquidação utiliza uma estratégia gulosa para zerar as pendências de todos, garantindo a extinção dos saldos em no máximo $N-1$ transferências diretas:
+      </p>
+
+      <ul id="listaTransferenciasAluguel" class="tool-result-list" style="margin-top: 8px; list-style-type: none; padding-left: 0;">
+        <!-- Preenchido via JavaScript -->
+      </ul>
+
+      <div class="mei-summary-callout" style="margin-top: 16px;">
+        <p id="resumoMensagemAluguel"></p>
+      </div>
+
+      <div id="avisosAluguel"></div>
+
+      <!-- Memória de Cálculo Detalhada -->
+      <div class="mei-audit-details" style="margin-top: 20px;">
+        <h4>Memória de Cálculo e Auditoria de Centavos</h4>
+        <ul id="memoriaCalculoAluguel" class="mei-audit-list"></ul>
+      </div>
+
+      <!-- Ações de Compartilhamento, Cópia e Impressão -->
+      <div class="tool-actions result-actions">
+        <button type="button" id="btnCopiarAluguel" class="tool-btn tool-btn-secondary">Copiar Resumo</button>
+        <button type="button" id="btnCompartilharAluguel" class="tool-btn tool-btn-secondary">Compartilhar</button>
+        <button type="button" id="btnImprimirAluguel" class="tool-btn tool-btn-secondary">Imprimir</button>
+      </div>
+      <p id="statusAcoesAluguel" class="tool-action-status" aria-live="polite"></p>
+    </div>
+  </section>
+</div>
+
+<!-- Conteúdo Informativo e SEO -->
+<section class="tool-explanation-section divisao-aluguel-explanatory-content" aria-labelledby="tituloExplicacaoAluguel">
+  <h2 id="tituloExplicacaoAluguel">Como Funciona a Divisão de Aluguel e Despesas</h2>
+  <p>Morar com colegas de quarto, amigos de faculdade ou com o parceiro exige transparência e organização financeira para manter a convivência saudável. A divisão de custos compartilhados envolve não apenas o aluguel mensal, mas despesas variáveis de utilidades (água, luz, gás, internet) e taxas condominiais.</p>
+
+  <h3>1. Divisão Igualitária vs. Divisão Proporcional</h3>
+  <p>Existem dois modelos consagrados para rateio de contas domésticas:</p>
+  <ul>
+    <li><strong>Divisão Igualitária:</strong> Cada morador arca com exatamente a mesma fração das despesas ($1/N$). É o modelo mais comum para repúblicas estudantis e co-livings onde os cômodos e acessos são semelhantes. Centavos residuais decorrentes de dízimas são distribuídos de forma determinística aos primeiros participantes, assegurando que a soma das cotas coincida exatamente com o total dos boletos.</li>
+    <li><strong>Divisão Proporcional:</strong> As cotas são distribuídas com base em percentuais customizados acordados entre as partes. É ideal quando os moradores ocupam quartos de tamanhos diferentes (por exemplo, suíte com vaga de garagem vs. quarto individual simples) ou quando um casal divide despesas na proporção de suas rendas mensais líquidas.</li>
+  </ul>
+
+  <h3>2. Conciliação de Pagamentos: Quem Pagou vs. Cota Devida</h3>
+  <p>Em vez de exigir que todos transfiram dinheiro para cada fatura individual de energia, condomínio ou compras, os moradores podem pagar contas diferentes diretamente. Ao final do período, a ferramenta realiza a conciliação:</p>
+  <ul>
+    <li><strong>Cota Devida:</strong> O valor monetário que o morador deve assumir pelo conjunto das despesas.</li>
+    <li><strong>Valor Efetivamente Pago:</strong> O somatório dos boletos ou contas que aquele morador quitou do próprio bolso.</li>
+    <li><strong>Saldo Final:</strong> É a diferença $(\text{Pago} - \text{Cota Devida})$. Se positivo, o morador é <em>Credor</em> (tem dinheiro a receber); se negativo, é <em>Devedor</em> (tem valor a repassar); se zero, está com as contas liquidadas.</li>
+  </ul>
+
+  <h3>3. Estratégia Gulosa de Liquidação de Saldos (Até N - 1 Transferências)</h3>
+  <p>Para simplificar os acertos entre as pessoas, a ferramenta adota uma estratégia gulosa determinística de liquidação: a cada etapa, o participante com maior saldo devedor transfere para o participante com maior crédito o valor suficiente para quitar uma das partes (o menor entre a dívida e o crédito). Esse método zera integralmente todas as obrigações sem duplicar pagamentos e garante que a liquidação seja concluída em no máximo $(N - 1)$ transferências para $N$ participantes com saldo em aberto. Como se trata de uma estratégia gulosa e determinística, ela prioriza rapidez e simplicidade sem exigir algoritmos combinatórios exponenciais (NP-difícil), não assegurando o mínimo global de transações em todos os cenários possíveis de particionamento exato de valores.</p>
+
+  <h3>4. Boas Práticas para Convivência em República ou Casal</h3>
+  <p>Para evitar atritos e surpresas financeiras no fim do mês:</p>
+  <ul>
+    <li>Centralize os comprovantes de pagamento em um grupo de mensagens ou pasta compartilhada em nuvem.</li>
+    <li>Combine previamente a data de corte mensal das despesas (por exemplo, todo dia 5 do mês).</li>
+    <li>Estabeleça critérios claros para compras de uso comum (produtos de limpeza, temperos, papel higiênico) antes da realização dos gastos.</li>
+  </ul>
+</section>

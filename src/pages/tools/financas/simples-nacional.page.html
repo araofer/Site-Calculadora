@@ -1,0 +1,403 @@
+---
+title: Calculadora Simples Nacional 2026 Online Grátis - Calculadora Master
+description: Calcule a alíquota efetiva e o valor estimado do DAS do Simples Nacional em 2026 com base na RBT12, Anexos I a V, Fator R e início de atividade.
+keywords: calculadora simples nacional 2026, aliquota efetiva simples nacional, tabela simples nacional 2026, calcular das simples nacional, anexo 1 2 3 4 5 simples, fator r simples nacional
+canonical: https://www.calculadoramaster.com/tools/financas/simples-nacional.html
+layout: tool
+pageScripts: <script type="module" src="{{ROOT_PREFIX}}js/tools/simples-nacional.js"></script>
+---
+
+<h1>Calculadora Simples Nacional (2026)</h1>
+
+<p>Simule a <strong>alíquota efetiva</strong> e o valor estimado do <strong>Documento de Arrecadação do Simples Nacional (DAS)</strong> para a competência do ano-calendário de 2026. A ferramenta aplica a metodologia oficial da Lei Complementar nº 123/2006 (atualizada pela LC nº 155/2016) e da Resolução CGSN nº 140/2018 para os <strong>Anexos I (Comércio), II (Indústria), III (Serviços), IV (Serviços sem CPP no DAS) e V (Serviços)</strong>, contemplando o enquadramento pelo <strong>Fator R</strong>, regras de início de atividade e segregação de receitas. Esta simulação é de caráter orientativo e não substitui o Programa Gerador do Documento de Arrecadação do Simples Nacional – Declaratório (PGDAS-D).</p>
+
+<div class="card tool-calculator-card">
+  <h2 class="tool-form-title">Simulador de Alíquota Efetiva e DAS (Ano-Calendário 2026)</h2>
+
+  <form id="formSimplesNacional" novalidate>
+    <section class="mei-autonomo-common-section" aria-labelledby="tituloApuracaoSN">
+      <h3 id="tituloApuracaoSN" class="mei-autonomo-section-heading">1. Modalidade e Faturamento da Empresa</h3>
+      <p class="mei-autonomo-reference-note">
+        <strong>Parâmetros oficiais de 2026:</strong> Teto máximo do Simples Nacional de <strong>R$ 4.800.000,00</strong> e Sublimite Estadual para ICMS e ISS de <strong>R$ 3.600.000,00</strong>.
+      </p>
+
+      <div class="form-group">
+        <label for="modoApuracaoSN">Tempo de funcionamento da empresa:</label>
+        <p id="ajudaModoApuracaoSN">Selecione se a empresa já possui mais de 12 meses de atividade regular ou se está em fase inicial de abertura (com proporcionalização da receita).</p>
+        <select
+          id="modoApuracaoSN"
+          name="modoApuracao"
+          aria-describedby="ajudaModoApuracaoSN"
+        >
+          <option value="regra_geral" selected>Empresa em atividade regular (com 13 meses ou mais — RBT12 consolidado)</option>
+          <option value="inicio_mes_1">Início de atividade — 1º mês (Receita do próprio mês multiplicada por 12)</option>
+          <option value="inicio_meses_2_12">Início de atividade — 2º ao 12º mês (Média das receitas anteriores × 12)</option>
+        </select>
+      </div>
+
+      <div id="grupoRbt12SN" class="form-group">
+        <label for="rbt12SN">Receita Bruta Acumulada nos 12 meses anteriores — RBT12 (R$):</label>
+        <p id="ajudaRbt12SN">Soma do faturamento bruto obtido por todos os estabelecimentos da empresa nos 12 meses anteriores ao período de apuração (não inclui a receita do mês atual).</p>
+        <input
+          type="text"
+          id="rbt12SN"
+          name="rbt12"
+          inputmode="decimal"
+          placeholder="Ex: 300000,00"
+          value="300000,00"
+          autocomplete="off"
+          aria-describedby="ajudaRbt12SN"
+        >
+
+        <label for="rbaSN">Receita Bruta Acumulada de janeiro até o mês anterior — RBA no mercado interno (opcional, R$):</label>
+        <p id="ajudaRbaSN">Soma do faturamento obtido de janeiro até o mês anterior no ano corrente no mercado interno (não inclui exportações). A ferramenta soma automaticamente a receita do mês simulado para verificar com exatidão o momento em que os efeitos do sublimite de R$ 3,6 milhões se iniciam (arts. 9º, 12 e 24 da Resolução CGSN nº 140/2018). Se deixada em branco, a orientação sobre sublimite será exibida de forma condicional.</p>
+        <input
+          type="text"
+          id="rbaSN"
+          name="rba"
+          inputmode="decimal"
+          placeholder="Ex: Opcional — deixe em branco ou informe o valor"
+          value=""
+          autocomplete="off"
+          aria-describedby="ajudaRbaSN"
+        >
+      </div>
+
+      <div id="grupoInicioMesesSN" class="form-group" hidden>
+        <label for="mesesInicioSN">Quantidade de meses decorridos desde a abertura (1 a 11):</label>
+        <p id="ajudaMesesInicioSN">Informe o número de meses de atividade anteriores a este período de apuração.</p>
+        <input
+          type="number"
+          id="mesesInicioSN"
+          name="mesesInicio"
+          min="1"
+          max="11"
+          placeholder="Ex: 5"
+          value="5"
+          autocomplete="off"
+          aria-describedby="ajudaMesesInicioSN"
+        >
+
+        <label for="receitaAnteriorInicioSN">Receita bruta total acumulada nesses meses anteriores (R$):</label>
+        <p id="ajudaReceitaAnteriorInicioSN">Soma do faturamento obtido desde o mês de início de atividade até o mês anterior.</p>
+        <input
+          type="text"
+          id="receitaAnteriorInicioSN"
+          name="receitaAnteriorInicio"
+          inputmode="decimal"
+          placeholder="Ex: 125000,00"
+          value="125000,00"
+          autocomplete="off"
+          aria-describedby="ajudaReceitaAnteriorInicioSN"
+        >
+      </div>
+
+      <div class="form-group">
+        <label for="tipoOperacaoSN">Estrutura de faturamento no mês:</label>
+        <p id="ajudaTipoOperacaoSN">Escolha se o faturamento do mês concentra-se em uma única atividade/anexo ou se há receitas segregadas em múltiplos anexos.</p>
+        <select
+          id="tipoOperacaoSN"
+          name="tipoOperacao"
+          aria-describedby="ajudaTipoOperacaoSN"
+        >
+          <option value="unica" selected>Atividade única (Faturamento concentrado em um único anexo)</option>
+          <option value="segregada">Receitas segregadas (Faturamento distribuído em mais de um anexo)</option>
+        </select>
+      </div>
+    </section>
+
+    <section class="mei-autonomo-common-section" aria-labelledby="tituloAtividadeSN">
+      <h3 id="tituloAtividadeSN" class="mei-autonomo-section-heading">2. Anexo Tributário e Receita do Mês</h3>
+
+      <div id="grupoAnexoUnicoSN" class="form-group">
+        <label for="anexoSN">Anexo aplicável à atividade:</label>
+        <p id="ajudaAnexoSN">Selecione o anexo correspondente ao seu CNAE. Para serviços que podem variar de alíquota conforme o gasto com folha, escolha a opção "Fator R".</p>
+        <select
+          id="anexoSN"
+          name="anexo"
+          aria-describedby="ajudaAnexoSN"
+        >
+          <option value="anexo_1">Anexo I — Comércio (Lojas, e-commerce, revenda de mercadorias)</option>
+          <option value="anexo_2">Anexo II — Indústria (Fábricas, transformação e confecção)</option>
+          <option value="anexo_3" selected>Anexo III — Serviços em Geral (Instalação, manutenção, reparos, locação de bens e Fator R ≥ 28%)</option>
+          <option value="anexo_4">Anexo IV — Serviços (Advocacia, vigilância, limpeza, construção de imóveis — CPP por fora)</option>
+          <option value="anexo_5">Anexo V — Serviços (Tecnologia, engenharia, publicidade, perícias quando Fator R < 28%)</option>
+          <option value="fator_r">Serviços sujeitos ao Fator R (Cálculo automático entre Anexo III e Anexo V)</option>
+        </select>
+      </div>
+
+      <div id="grupoFatorRSN" class="form-group" hidden>
+        <label for="folha12SN">Folha de salários acumulada dos últimos 12 meses (R$):</label>
+        <p id="ajudaFolha12SN">Inclui remunerações pagas a empregados, pró-labore de sócios, 13º salário, encargos previdenciários e FGTS recolhidos nos 12 meses anteriores. Se o resultado (Folha ÷ RBT12) for igual ou superior a 28,00%, a empresa tributa pelo Anexo III; se inferior, tributa pelo Anexo V.</p>
+        <input
+          type="text"
+          id="folha12SN"
+          name="folha12"
+          inputmode="decimal"
+          placeholder="Ex: 90000,00"
+          value="90000,00"
+          autocomplete="off"
+          aria-describedby="ajudaFolha12SN"
+        >
+      </div>
+
+      <div id="grupoReceitaMesUnicaSN" class="form-group">
+        <label for="receitaMesSN">Receita bruta faturada no mês atual (R$):</label>
+        <p id="ajudaReceitaMesSN">Valor total dos serviços prestados ou mercadorias vendidas no mês de apuração.</p>
+        <input
+          type="text"
+          id="receitaMesSN"
+          name="receitaMes"
+          inputmode="decimal"
+          placeholder="Ex: 25000,00"
+          value="25000,00"
+          autocomplete="off"
+          aria-describedby="ajudaReceitaMesSN"
+        >
+      </div>
+
+      <div id="grupoSegregadasSN" class="form-group" hidden>
+        <p class="mei-autonomo-reference-note">
+          <strong>Segregação de receitas:</strong> Informe a receita mensal correspondente a cada atividade. A mesma RBT12 global da empresa será aplicada para calcular a alíquota efetiva de cada anexo, somando-se ao final o DAS total.
+        </p>
+
+        <div class="form-group">
+          <label for="recAnexo1SN">Receita do mês — Anexo I (Comércio):</label>
+          <input type="text" id="recAnexo1SN" name="recAnexo1" inputmode="decimal" placeholder="0,00" value="0,00">
+        </div>
+
+        <div class="form-group">
+          <label for="recAnexo2SN">Receita do mês — Anexo II (Indústria):</label>
+          <input type="text" id="recAnexo2SN" name="recAnexo2" inputmode="decimal" placeholder="0,00" value="0,00">
+        </div>
+
+        <div class="form-group">
+          <label for="recAnexo3SN">Receita do mês — Anexo III (Serviços gerais):</label>
+          <input type="text" id="recAnexo3SN" name="recAnexo3" inputmode="decimal" placeholder="0,00" value="0,00">
+        </div>
+
+        <div class="form-group">
+          <label for="recAnexo4SN">Receita do mês — Anexo IV (Serviços sem CPP no DAS):</label>
+          <input type="text" id="recAnexo4SN" name="recAnexo4" inputmode="decimal" placeholder="0,00" value="0,00">
+        </div>
+
+        <div class="form-group">
+          <label for="recAnexo5SN">Receita do mês — Anexo V (Serviços intelectuais):</label>
+          <input type="text" id="recAnexo5SN" name="recAnexo5" inputmode="decimal" placeholder="0,00" value="0,00">
+        </div>
+      </div>
+    </section>
+
+    <div class="tool-actions">
+      <button type="submit" id="btnCalcularSN" class="tool-btn tool-btn-primary">Calcular Simples Nacional</button>
+      <button type="button" id="btnLimparSN" class="tool-btn tool-btn-secondary">Limpar campos</button>
+    </div>
+  </form>
+
+  <p id="erroSimplesNacional" role="alert" aria-live="assertive" hidden></p>
+
+  <section id="resultadoSimplesNacional" aria-live="polite" aria-atomic="true" hidden>
+    <h2 class="tool-result-title">Resultado da Estimativa do Simples Nacional (2026)</h2>
+
+    <div class="card tool-result-card">
+      <h3 class="mei-autonomo-result-subtitle">Resumo da Guia Única (DAS) e Alíquotas</h3>
+      <p>Anexo considerado: <strong id="resAnexoSN">—</strong></p>
+      <p>Faixa de faturamento oficial: <strong id="resFaixaSN">—</strong></p>
+      <p>Receita bruta acumulada (RBT12): <strong id="resRbt12SN">R$ 0,00</strong></p>
+      <p>Receita faturada no mês: <strong id="resReceitaMesSN">R$ 0,00</strong></p>
+      <p>Alíquota nominal da faixa: <strong id="resAliquotaNominalSN">0,00%</strong></p>
+      <p>Parcela a deduzir da fórmula: <strong id="resParcelaDeduzirSN">R$ 0,00</strong></p>
+      <p>Alíquota efetiva apurada: <strong id="resAliquotaEfetivaSN">0,00%</strong></p>
+      <p class="bill-total">Valor estimado do DAS mensal: <strong id="resValorDasSN">R$ 0,00</strong></p>
+
+      <div id="blocoAlertaLimiteSN" hidden>
+        <div id="resAlertaLimiteSN" class="mei-limit-alert"></div>
+      </div>
+
+      <p class="tool-result-note">
+        <strong>Aviso tributário importante:</strong> os valores calculados são <strong>estimativas orientativas</strong> baseadas nas tabelas da LC nº 123/2006 e Resolução CGSN nº 140/2018. O cálculo não contempla eventuais deduções de Substituição Tributária (ICMS-ST), PIS/COFINS monofásico, retenções na fonte de ISS/ICMS nem benefícios fiscais estaduais/municipais. A apuração definitiva deve ser realizada no portal do PGDAS-D.
+      </p>
+    </div>
+
+    <div id="cardFatorRResultadoSN" class="card tool-result-card" hidden>
+      <h3 class="mei-autonomo-result-subtitle">Apuração Detalhada do Fator R</h3>
+      <p>Relação apurada (Folha 12m ÷ RBT12): <strong id="resFatorRPercentualSN">0,00%</strong></p>
+      <p>Enquadramento tributário resultante: <strong id="resFatorREnquadramentoSN">—</strong></p>
+      <p class="mei-autonomo-calc-basis">Critério legal: quando a folha de pagamento com encargos e pró-labore representar 28,00% ou mais da receita bruta acumulada, a empresa é tributada pelo Anexo III; se inferior a 28,00%, tributa-se pelo Anexo V.</p>
+    </div>
+
+    <div class="card tool-result-card">
+      <h3 class="mei-autonomo-result-subtitle">Memória de Cálculo Passo a Passo</h3>
+      <ul id="listaMemoriaCalculoSN" class="mei-autonomo-warnings-list"></ul>
+    </div>
+
+    <div class="tool-actions result-actions">
+      <button type="button" id="btnCopiarSN" class="tool-btn tool-btn-secondary" hidden>Copiar resultado</button>
+      <button type="button" id="btnCompartilharSN" class="tool-btn tool-btn-secondary" hidden>Compartilhar link</button>
+      <button type="button" id="btnImprimirSN" class="tool-btn tool-btn-secondary" hidden>Imprimir</button>
+    </div>
+  </section>
+
+  <p id="statusSimplesNacional" class="result-action-status" role="status" aria-live="polite"></p>
+</div>
+
+<section class="content mei-autonomo-explanatory-content">
+  <h2>Como funciona o cálculo do Simples Nacional em 2026</h2>
+
+  <p>O <strong>Simples Nacional</strong> é um regime tributário simplificado e unificado instituído pela Lei Complementar nº 123/2006, voltado para microempresas (ME) e empresas de pequeno porte (EPP) com faturamento anual de até R$ 4,8 milhões. No modelo de apuração em vigor, a alíquota a pagar sobre a receita mensal não é fixa: ela varia progressivamente por meio do cálculo da <strong>alíquota efetiva</strong>.</p>
+
+  <h3>1. A fórmula oficial da alíquota efetiva</h3>
+  <p>A alíquota efetiva é calculada a partir da Receita Bruta Acumulada nos 12 meses anteriores ao período de apuração (RBT12), aplicando-se a alíquota nominal e a parcela a deduzir previstas para a respectiva faixa:</p>
+  <p class="mei-autonomo-reference-note">
+    <strong>Alíquota Efetiva</strong> = ((RBT12 × Alíquota Nominal) − Parcela a Deduzir) ÷ RBT12
+  </p>
+  <p>Com a alíquota efetiva apurada, o valor do Documento de Arrecadação do Simples Nacional (DAS) do mês é obtido pela multiplicação simples:</p>
+  <p class="mei-autonomo-reference-note">
+    <strong>Valor do DAS Mensal</strong> = Receita Bruta do Mês Elegível × Alíquota Efetiva
+  </p>
+
+  <h3>2. Tabelas dos Anexos do Simples Nacional (LC nº 123/2006)</h3>
+  <div class="mei-projection-table-wrapper">
+    <table class="mei-projection-table">
+      <thead>
+        <tr>
+          <th scope="col">Faixa</th>
+          <th scope="col">Receita Bruta Acumulada em 12 Meses (RBT12)</th>
+          <th scope="col">Anexo I (Comércio)</th>
+          <th scope="col">Anexo II (Indústria)</th>
+          <th scope="col">Anexo III (Serviços)</th>
+          <th scope="col">Anexo IV (Serviços*)</th>
+          <th scope="col">Anexo V (Serviços)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1ª Faixa</td>
+          <td>Até R$ 180.000,00</td>
+          <td>4,00% (Ded: R$ 0,00)</td>
+          <td>4,50% (Ded: R$ 0,00)</td>
+          <td>6,00% (Ded: R$ 0,00)</td>
+          <td>4,50% (Ded: R$ 0,00)</td>
+          <td>15,50% (Ded: R$ 0,00)</td>
+        </tr>
+        <tr>
+          <td>2ª Faixa</td>
+          <td>De R$ 180.000,01 a R$ 360.000,00</td>
+          <td>7,30% (Ded: R$ 5.940,00)</td>
+          <td>7,80% (Ded: R$ 5.940,00)</td>
+          <td>11,20% (Ded: R$ 9.360,00)</td>
+          <td>9,00% (Ded: R$ 8.100,00)</td>
+          <td>18,00% (Ded: R$ 4.500,00)</td>
+        </tr>
+        <tr>
+          <td>3ª Faixa</td>
+          <td>De R$ 360.000,01 a R$ 720.000,00</td>
+          <td>9,50% (Ded: R$ 13.860,00)</td>
+          <td>10,00% (Ded: R$ 13.860,00)</td>
+          <td>13,50% (Ded: R$ 17.640,00)</td>
+          <td>10,20% (Ded: R$ 12.420,00)</td>
+          <td>19,50% (Ded: R$ 9.900,00)</td>
+        </tr>
+        <tr>
+          <td>4ª Faixa</td>
+          <td>De R$ 720.000,01 a R$ 1.800.000,00</td>
+          <td>10,70% (Ded: R$ 22.500,00)</td>
+          <td>11,20% (Ded: R$ 22.500,00)</td>
+          <td>16,00% (Ded: R$ 35.640,00)</td>
+          <td>14,00% (Ded: R$ 39.780,00)</td>
+          <td>20,50% (Ded: R$ 17.100,00)</td>
+        </tr>
+        <tr>
+          <td>5ª Faixa</td>
+          <td>De R$ 1.800.000,01 a R$ 3.600.000,00</td>
+          <td>14,30% (Ded: R$ 87.300,00)</td>
+          <td>14,70% (Ded: R$ 85.500,00)</td>
+          <td>21,00% (Ded: R$ 125.640,00)</td>
+          <td>22,00% (Ded: R$ 183.780,00)</td>
+          <td>23,00% (Ded: R$ 62.100,00)</td>
+        </tr>
+        <tr>
+          <td>6ª Faixa</td>
+          <td>De R$ 3.600.000,01 a R$ 4.800.000,00</td>
+          <td>19,00% (Ded: R$ 378.000,00)</td>
+          <td>30,00% (Ded: R$ 720.000,00)</td>
+          <td>33,00% (Ded: R$ 648.000,00)</td>
+          <td>33,00% (Ded: R$ 828.000,00)</td>
+          <td>30,50% (Ded: R$ 540.000,00)</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>3. Fator R: quando migrar entre Anexo III e Anexo V</h3>
+  <p>Determinadas atividades de prestação de serviços (como desenvolvimento de software, consultoria, engenharia, medicina, odontologia e perícias) estão sujeitas à regra do <strong>Fator R</strong> (art. 18, §§ 5º-J e 5º-M da LC nº 123/2006). A fórmula compara os gastos com folha de salários e a receita acumulada:</p>
+  <ul>
+    <li><strong>Fator R = Folha de Salários dos 12 meses anteriores ÷ RBT12</strong></li>
+    <li><strong>Fator R ≥ 28,00%:</strong> a empresa tributa pelo <strong>Anexo III</strong>, com alíquotas iniciais mais vantajosas de 6,00%.</li>
+    <li><strong>Fator R &lt; 28,00%:</strong> a empresa tributa pelo <strong>Anexo V</strong>, com alíquota inicial de 15,50%.</li>
+  </ul>
+  <p>Conforme a Resolução CGSN nº 140/2018 (art. 26, § 1º), a folha de salários é calculada sob o <strong>regime de caixa</strong> (montantes efetivamente <strong>pagos</strong> nos 12 meses anteriores ao período de apuração, e não por competência). Ela inclui remunerações pagas a empregados, pró-labore de sócios, 13º salário, férias, encargos previdenciários patronais e recolhimentos ao FGTS.</p>
+
+  <h3>4. Particularidade crucial do Anexo IV e ressalva sobre a CPRB</h3>
+  <p>Ao contrário dos demais anexos, a guia do DAS do <strong>Anexo IV NÃO inclui a Contribuição Previdenciária Patronal (CPP)</strong> (art. 18, § 5º-C da LC nº 123/2006). Na sistemática geral do RGPS, as empresas enquadradas no Anexo IV devem apurar e recolher a contribuição patronal previdenciária sobre a folha de pagamento (CPP de 20% prevista no art. 22, I da Lei nº 8.212/1991 mais o RAT/FAP previsto no art. 22, II da Lei nº 8.212/1991) diretamente via DCTFWeb/DARF Previdenciário.</p>
+  <p><strong>Ressalva explícita sobre a CPRB (Desoneração da Folha):</strong> a indicação de contribuição patronal convencional sobre a folha (20% + RAT/FAP) descreve a regra geral e <strong>não se aplica às empresas sujeitas à CPRB (Contribuição Previdenciária sobre a Receita Bruta)</strong>, disciplinada pela Lei nº 12.546/2011. Determinadas atividades econômicas do Anexo IV — notadamente no setor de construção civil e obras de engenharia — possuem sistemática própria que substitui ou modifica a tributação sobre a folha. A CPRB <strong>não é calculada por esta ferramenta</strong>, e o enquadramento concreto deve ser obrigatoriamente confirmado com profissional contábil habilitado.</p>
+  <p><strong>Isenção de contribuições a terceiros:</strong> por força expressa do <strong>art. 13, § 3º da LC nº 123/2006</strong>, as microempresas e empresas de pequeno porte optantes pelo Simples Nacional ficam <strong>isentas</strong> das contribuições instituídas pela União destinadas a outras entidades e fundos (como Sistema S — SESI, SENAI, SESC, SENAC, SEBRAE —, Salário-Educação e INCRA). Portanto, essas contribuições a terceiros não são devidas pelas optantes no Anexo IV.</p>
+
+  <h3>5. Sublimite Estadual de R$ 3,6 milhões, mercado interno e receitas de exportação</h3>
+  <p>O sublimite para recolhimento unificado de ICMS (operações com mercadorias) e ISS (serviços) no Simples Nacional é fixado em <strong>R$ 3.600.000,00</strong> em todo o território nacional. É indispensável compreender o alcance desta apuração:</p>
+  <ul>
+    <li><strong>Abrangência exclusiva do mercado interno:</strong> a verificação do sublimite de R$ 3,6 milhões e do teto de R$ 4,8 milhões realizada por esta ferramenta considera <strong>exclusivamente a receita bruta auferida no mercado interno</strong>.</li>
+    <li><strong>Exportações não contempladas:</strong> a legislação (art. 13-A da LC nº 123/2006 e art. 9º, § 4º da Resolução CGSN nº 140/2018) estabelece um sublimite e um limite adicionais de igual valor especificamente para receitas decorrentes da exportação de mercadorias ou serviços para o exterior. Esse tratamento segregado de exportações <strong>não é contemplado nem calculado por este simulador</strong>.</li>
+    <li><strong>RBT12 versus RBA:</strong> a RBT12 (últimos 12 meses) serve exclusivamente para determinar a faixa da tabela e a <strong>alíquota efetiva</strong> mensal (art. 21). Já a RBA (Receita Bruta Acumulada no ano-calendário) determina o momento exato em que se iniciam os efeitos da ultrapassagem do sublimite (arts. 9º, 12 e 24).</li>
+  </ul>
+  <p>Conforme os <strong>arts. 9º e 12 da Resolução CGSN nº 140/2018</strong>, o momento de início dos efeitos do sublimite depende da magnitude do excesso e do mês da ocorrência:</p>
+  <ul>
+    <li><strong>RBA no mercado interno até R$ 3.600.000,00:</strong> o ICMS e o ISS continuam integralmente incluídos no DAS no mês em curso, mesmo que a RBT12 esteja na 6ª faixa em virtude de faturamentos de meses anteriores.</li>
+    <li><strong>Excesso de até 20% (RBA entre R$ 3.600.000,01 e R$ 4.320.000,00):</strong> o ICMS e o ISS permanecem <strong>dentro do Simples Nacional durante todo o ano-calendário em curso</strong>; o impedimento de recolher no DAS produz efeitos apenas a partir de <strong>1º de janeiro do ano-calendário subsequente</strong> (art. 9º, § 1º).</li>
+    <li><strong>Excesso superior a 20% ocorrido no próprio mês (RBA anterior &le; R$ 4,32M e RBA atual &gt; R$ 4,32M):</strong> no mês em que o limite é ultrapassado, o ICMS e o ISS <strong>ainda são recolhidos dentro do Simples Nacional (no DAS)</strong>; o impedimento passa a produzir efeitos a partir do <strong>mês subsequente ao da ocorrência</strong> (art. 9º, § 2º e art. 12, § 1º, I).</li>
+    <li><strong>Excesso superior a 20% ocorrido em mês anterior (RBA anterior &gt; R$ 4,32M):</strong> o impedimento já está em vigor, devendo o ICMS e o ISS serem recolhidos fora do DAS diretamente ao Estado ou Município.</li>
+  </ul>
+
+  <h3>6. Limitações e casos especiais não contemplados no MVP</h3>
+  <p>Para assegurar a máxima confiabilidade dos cálculos, esta ferramenta adota as tabelas integrais e as fórmulas gerais do Simples Nacional. Entretanto, não contempla automaticamente:</p>
+  <ul>
+    <li>Empresas sujeitas à CPRB (desoneração da folha de pagamento da Lei nº 12.546/2011 no Anexo IV);</li>
+    <li>Receitas de exportação para o exterior e apuração do sublimite adicional de exportações (art. 13-A da LC nº 123/2006);</li>
+    <li>Segregação por Substituição Tributária de ICMS (ICMS-ST) ou tributação monofásica de PIS/COFINS (que deduzem a fração desses tributos da alíquota do DAS);</li>
+    <li>Retenções de ISS na fonte efetuadas pelos tomadores de serviços;</li>
+    <li>Regimes de valores fixos municipais ou estaduais de ISS/ICMS para MEI ou microempresas locais;</li>
+    <li>Casos especiais de início de atividade com fracionamento de dias de abertura;</li>
+    <li>Regras da transição tributária de IBS/CBS introduzidas pela EC nº 132/2023, cuja produção de efeitos para o Simples Nacional ocorrerá a partir de 2027.</li>
+  </ul>
+
+  <div class="mei-autonomo-official-sources">
+    <h3 class="mei-autonomo-official-title">Fontes Oficiais e Base Normativa (Consulta realizada em 22/10/2026)</h3>
+    <ul class="mei-autonomo-sources-list">
+      <li>
+        <a href="https://www.planalto.gov.br/ccivil_03/leis/lcp/lcp123.htm" target="_blank" rel="noopener noreferrer">
+          Lei Complementar nº 123, de 14 de dezembro de 2006 (Estatuto Nacional da Microempresa e da Empresa de Pequeno Porte) — Planalto
+        </a>
+      </li>
+      <li>
+        <a href="https://normas.receita.fazenda.gov.br/sijut2consulta/link.action?idAto=92278" target="_blank" rel="noopener noreferrer">
+          Resolução CGSN nº 140, de 22 de maio de 2018 (Consolidada com todas as alterações vigentes) — Receita Federal
+        </a>
+      </li>
+      <li>
+        <a href="https://www8.receita.fazenda.gov.br/SimplesNacional/Arquivos/manual/MANUAL_PGDAS-D_2018_V4.pdf" target="_blank" rel="noopener noreferrer">
+          Manual do PGDAS-D e Defis 2018 (Versão Oficial Vigente) — Comitê Gestor do Simples Nacional
+        </a>
+      </li>
+      <li>
+        <a href="https://www8.receita.fazenda.gov.br/SimplesNacional/Arquivos/manual/PerguntaoSN.pdf" target="_blank" rel="noopener noreferrer">
+          Perguntas e Respostas do Simples Nacional — Portal Oficial da Receita Federal
+        </a>
+      </li>
+      <li>
+        <a href="https://www.gov.br/receitafederal/pt-br/assuntos/orientacao-tributaria/cobrancas-e-intimacoes/contribuicao-previdenciaria-anexo-iv-do-simples-nacional" target="_blank" rel="noopener noreferrer">
+          Contribuição Previdenciária Patronal no Anexo IV do Simples Nacional — Orientações Oficiais da Receita Federal
+        </a>
+      </li>
+    </ul>
+  </div>
+</section>

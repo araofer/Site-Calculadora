@@ -1,0 +1,292 @@
+---
+title: Calculadora INSS Contribuinte Individual 2026 Online Grátis - Calculadora Master
+description: Calcule a contribuição do INSS para autônomos e contribuintes individuais em 2026 com Plano Normal (20%), Plano Simplificado (11%), retenção por PJ e limites oficiais.
+keywords: calculadora inss contribuinte individual, inss autonomo 2026, plano simplificado inss 11, plano normal inss 20, gps 1007, gps 1163, retencao inss pessoa juridica
+canonical: https://www.calculadoramaster.com/tools/financas/inss-contribuinte-individual.html
+layout: tool
+pageScripts: <script type="module" src="{{ROOT_PREFIX}}js/tools/inss-contribuinte-individual.js"></script>
+---
+
+<h1>Calculadora INSS do Contribuinte Individual</h1>
+
+<p>Simule a contribuição previdenciária mensal devida por <strong>autônomos, profissionais liberais e prestadores de serviços (ano-calendário 2026)</strong> ao Regime Geral de Previdência Social (RGPS). A ferramenta aplica as regras oficiais vigentes: <strong>Plano Normal (20%)</strong> sobre salário de contribuição entre o piso e o teto, <strong>Plano Simplificado (11%)</strong> exclusivamente sobre o salário mínimo de R$ 1.621,00 para quem trabalha por conta própria sem atender pessoas jurídicas, e a regra geral de <strong>retenção de 11%</strong> feita por empresas tomadoras de serviços (Lei nº 10.666/2003, ressalvada a opção de recolhimento direto para Transportador Autônomo de Cargas prevista na Lei nº 15.485/2026). Esta simulação tem caráter exclusivamente informativo: não substitui o portal Meu INSS, o Sistema de Acréscimos Legais (SAL) da Receita Federal nem a orientação de um contador ou advogado previdenciarista.</p>
+
+<div class="card tool-calculator-card">
+  <h2 class="tool-form-title">Simulador de Contribuição Previdenciária (Competência 2026)</h2>
+
+  <form id="formInssContribuinteIndividual" novalidate>
+    <section class="mei-autonomo-common-section" aria-labelledby="tituloModalidadeContribuicaoCI">
+      <h3 id="tituloModalidadeContribuicaoCI" class="mei-autonomo-section-heading">1. Modalidade e Perfil de Atuação</h3>
+      <p class="mei-autonomo-reference-note">
+        <strong>Parâmetros oficiais de 2026:</strong> Salário Mínimo de <strong>R$ 1.621,00</strong> e Teto do RGPS de <strong>R$ 8.475,55</strong>. Selecione a modalidade de trabalho para habilitar os campos e as regras previdenciárias correspondentes.
+      </p>
+
+      <div class="form-group">
+        <label for="modalidadeInssCI">Modalidade de contribuição previdenciária:</label>
+        <p id="ajudaModalidadeInssCI">Escolha a regra aplicável à sua atuação: Plano Normal (20% por conta própria), Plano Simplificado (11% no salário mínimo por conta própria) ou Prestação de serviços a Pessoa Jurídica (Regra geral: retenção na fonte de 11%).</p>
+        <select
+          id="modalidadeInssCI"
+          name="modalidade"
+          aria-describedby="ajudaModalidadeInssCI"
+        >
+          <option value="plano_normal" selected>Autônomo por conta própria — Plano Normal (20% sobre salário de contribuição)</option>
+          <option value="plano_simplificado">Autônomo elegível — Plano Simplificado (11% exclusivamente sobre o salário mínimo)</option>
+          <option value="prestador_pj">Prestador de serviços a Pessoa Jurídica (Regra geral: retenção de 11% pela empresa contratante)</option>
+        </select>
+      </div>
+
+      <div id="grupoSalarioContribuicaoCI" class="form-group">
+        <label for="salarioContribuicaoCI">Salário de contribuição mensal desejado (R$):</label>
+        <p id="ajudaSalarioContribuicaoCI">Valor sobre o qual você deseja recolher no Plano Normal. Mínimo legal de R$ 1.621,00 (salário mínimo) e teto de R$ 8.475,55. Valores abaixo do piso serão ajustados para o mínimo para assegurar a contagem previdenciária.</p>
+        <input
+          type="text"
+          id="salarioContribuicaoCI"
+          name="salarioContribuicao"
+          inputmode="decimal"
+          placeholder="Ex: 3000,00"
+          value="1621,00"
+          autocomplete="off"
+          aria-describedby="ajudaSalarioContribuicaoCI"
+          required
+        >
+      </div>
+
+      <div id="blocoInfoPlanoSimplificadoCI" class="form-group" hidden>
+        <p class="mei-autonomo-reference-note">
+          <strong>Base fixa no salário mínimo:</strong> No Plano Simplificado (11%), a base de cálculo é <strong>invariável e fixada em R$ 1.621,00</strong> (1 salário mínimo oficial de 2026), gerando contribuição mensal de <strong>R$ 178,31</strong> via GPS código 1163. Não é permitida base personalizada neste plano.
+        </p>
+      </div>
+
+      <div id="grupoRemuneracaoPJCI" class="form-group" hidden>
+        <label for="remuneracaoPJCI">Remuneração bruta recebida de Pessoa Jurídica no mês (R$):</label>
+        <p id="ajudaRemuneracaoPJCI">Valor bruto total do serviço prestado à empresa tomadora (conforme RPA ou nota). Na regra geral (art. 4º da Lei nº 10.666/2003), a empresa desconta 11% e recolhe ao INSS via DCTFWeb/DARF, respeitado o teto de R$ 8.475,55. Ressalva: não se aplica ao Transportador Autônomo de Cargas (TAC) com opção válida de recolhimento direto (Lei nº 15.485/2026).</p>
+        <input
+          type="text"
+          id="remuneracaoPJCI"
+          name="remuneracaoPJ"
+          inputmode="decimal"
+          placeholder="Ex: 4500,00"
+          autocomplete="off"
+          aria-describedby="ajudaRemuneracaoPJCI"
+        >
+      </div>
+    </section>
+
+    <div class="tool-actions">
+      <button type="submit" id="btnCalcularInssCI" class="tool-btn tool-btn-primary">Calcular Contribuição</button>
+      <button type="button" id="btnLimparInssCI" class="tool-btn tool-btn-secondary">Limpar campos</button>
+    </div>
+  </form>
+
+  <p id="erroInssContribuinteIndividual" role="alert" aria-live="assertive" hidden></p>
+
+  <section id="resultadoInssContribuinteIndividual" aria-live="polite" aria-atomic="true" hidden>
+    <h2 class="tool-result-title">Resultado da Estimativa de Contribuição Previdenciária (2026)</h2>
+
+    <div class="card tool-result-card">
+      <h3 class="mei-autonomo-result-subtitle">Resumo da Contribuição e Guia de Recolhimento</h3>
+      <p>Modalidade analisada: <strong id="resModalidadeCI">—</strong></p>
+      <p>Base de cálculo considerada: <strong id="resBaseCalculoCI">R$ 0,00</strong></p>
+      <p>Alíquota aplicável: <strong id="resAliquotaCI">0,00%</strong></p>
+      <p class="bill-total">Valor estimado da contribuição mensal: <strong id="resValorContribuicaoCI">R$ 0,00</strong></p>
+      <p>Forma de recolhimento: <strong id="resFormaRecolhimentoCI">—</strong></p>
+      <p>Código de pagamento (GPS): <strong id="resCodigoGPSCI">—</strong></p>
+      <p>Prazo de vencimento oficial: <strong id="resVencimentoCI">—</strong></p>
+
+      <div id="blocoAlertaLimiteCI" hidden>
+        <p id="resAlertaLimiteCI" class="mei-limit-alert"></p>
+      </div>
+
+      <p class="tool-result-note">
+        <strong>Aviso previdenciário importante:</strong> os valores calculados são <strong>estimativas baseadas nas tabelas oficiais do RGPS de 2026</strong>. Esta simulação não substitui a emissão da guia pelo Meu INSS ou SAL, nem o comprovante de retenção emitido pela empresa contratante (RPA/eSocial).
+      </p>
+    </div>
+
+    <div class="mei-autonomo-scenarios-grid">
+      <div class="card tool-result-card mei-autonomo-result-card">
+        <h3 class="mei-autonomo-result-subtitle">Condição de Elegibilidade e Quem Recolhe</h3>
+        <p><strong>Elegibilidade:</strong> <span id="resElegibilidadeCI">—</span></p>
+        <p class="mei-autonomo-calc-basis"><strong>Atenção à alíquota de 5%:</strong> a alíquota reduzida de 5% é exclusiva do Microempreendedor Individual (DAS-MEI) e do Segurado Facultativo de Baixa Renda (CadÚnico, código 1929), não se aplicando como opção genérica ao contribuinte individual.</p>
+      </div>
+
+      <div class="card tool-result-card mei-autonomo-result-card">
+        <h3 class="mei-autonomo-result-subtitle">Direitos Previdenciários e Limitações</h3>
+        <p><strong>Benefícios e aposentadoria:</strong> <span id="resDireitosCI">—</span></p>
+        <p><strong>Restrições normativas:</strong> <span id="resRestricoesCI">—</span></p>
+      </div>
+    </div>
+
+    <div class="card tool-result-card">
+      <h3 class="mei-autonomo-result-subtitle">Memória de Cálculo Detalhada</h3>
+      <ul id="listaMemoriaCalculoCI" class="mei-autonomo-warnings-list"></ul>
+    </div>
+
+    <div class="tool-actions result-actions">
+      <button type="button" id="btnCopiarInssCI" class="tool-btn tool-btn-secondary" hidden>Copiar resultado</button>
+      <button type="button" id="btnCompartilharInssCI" class="tool-btn tool-btn-secondary" hidden>Compartilhar link</button>
+      <button type="button" id="btnImprimirInssCI" class="tool-btn tool-btn-secondary" hidden>Imprimir</button>
+    </div>
+  </section>
+
+  <p id="statusInssContribuinteIndividual" class="result-action-status" role="status" aria-live="polite"></p>
+</div>
+
+<section class="content mei-autonomo-explanatory-content">
+  <h2>Como funciona a contribuição do INSS para Contribuinte Individual em 2026</h2>
+
+  <p>O <strong>Contribuinte Individual</strong> é a categoria previdenciária que engloba os profissionais autônomos que trabalham por conta própria (sem relação de emprego), os profissionais liberais, os prestadores de serviços eventuais a pessoas físicas ou jurídicas e os sócios/empresários que retiram pró-labore. O enquadramento previdenciário e a alíquota variam conforme a forma de prestação de serviço e o tipo de plano escolhido.</p>
+
+  <h3>Tabela de parâmetros oficiais do RGPS — Ano-calendário 2026</h3>
+  <div class="mei-projection-table-wrapper">
+    <table class="mei-projection-table">
+      <thead>
+        <tr>
+          <th scope="col">Parâmetro Oficial</th>
+          <th scope="col">Valor Vigente (2026)</th>
+          <th scope="col">Fundamento Normativo</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Salário Mínimo (Piso do RGPS)</td>
+          <td>R$ 1.621,00</td>
+          <td>Lei Orçamentária e Portaria Interministerial MPS/MF</td>
+        </tr>
+        <tr>
+          <td>Teto Máximo do RGPS</td>
+          <td>R$ 8.475,55</td>
+          <td>Portaria Interministerial MPS/MF (Tabela Anual do INSS)</td>
+        </tr>
+        <tr>
+          <td>Alíquota do Plano Normal</td>
+          <td>20,00%</td>
+          <td>Lei nº 8.212/1991, art. 21, caput</td>
+        </tr>
+        <tr>
+          <td>Alíquota do Plano Simplificado</td>
+          <td>11,00%</td>
+          <td>Lei nº 8.212/1991, art. 21, § 2º, I</td>
+        </tr>
+        <tr>
+          <td>Alíquota de Retenção de PJ</td>
+          <td>11,00%</td>
+          <td>Lei nº 10.666/2003, art. 4º; IN RFB nº 2.110/2022</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Comparativo entre as modalidades de contribuição</h3>
+  <ul>
+    <li>
+      <strong>Plano Normal (20% sobre o salário de contribuição):</strong>
+      destinado a qualquer autônomo que deseja recolher sobre valores entre o piso (R$ 1.621,00) e o teto (R$ 8.475,55).
+      Garante acesso a todas as modalidades de aposentadoria (incluindo as regras de transição por Tempo de Contribuição da EC nº 103/2019),
+      contagem recíproca em regime próprio de servidor público (RPPS) e benefícios com valor proporcional à média contributiva, podendo superar o salário mínimo.
+      Recolhimento próprio via Guia da Previdência Social (GPS), código <strong>1007</strong> (vencimento no dia 15 do mês seguinte).
+    </li>
+    <li>
+      <strong>Plano Simplificado (11% exclusivamente sobre o salário mínimo):</strong>
+      opção restrita ao autônomo que trabalha estritamente por conta própria para pessoas físicas e <em>não</em> presta serviços a empresas (PJ) nem a equiparadas.
+      A contribuição simplificada é fixada obrigatoriamente em 11% do salário mínimo vigente (R$ 1.621,00 em 2026), resultando no recolhimento mensal de <strong>R$ 178,31</strong>.
+      <em>Condições e restrições:</em> o plano não contempla aposentadoria por tempo de contribuição nem expedição de Certidão de Tempo de Contribuição (CTC) para contagem recíproca em RPPS, salvo mediante complementação de 9% sobre o salário mínimo com juros e acréscimos legais moratórios (art. 21, § 3º da Lei nº 8.212/1991). O direito aos benefícios e a renda mensal dependem do cumprimento das regras de cada modalidade previdenciária e do histórico contributivo do segurado.
+      Recolhimento próprio via GPS, código <strong>1163</strong>.
+    </li>
+    <li>
+      <strong>Prestador de serviços a Pessoa Jurídica (Regra geral: retenção de 11% na fonte):</strong>
+      como regra geral da prestação de serviços a empresas (PJ) ou equiparadas (art. 4º da Lei nº 10.666/2003), a responsabilidade pelo desconto e recolhimento previdenciário cabe à tomadora contratante.
+      A contratante desconta 11% da remuneração bruta do profissional (respeitado o teto de R$ 8.475,55) e repassa ao INSS por meio da DCTFWeb / DARF Previdenciário, não emitindo o autônomo guia GPS. Caso a remuneração total no mês seja inferior ao salário mínimo (R$ 1.621,00), o segurado deve complementar o recolhimento (via DARF 1872) para que o período seja reconhecido para tempo e carência (EC nº 103/2019, art. 29).
+      <em>Ressalva do Transportador Autônomo de Cargas (TAC):</em> a Lei nº 15.485/2026 acrescentou o art. 4º-A à Lei nº 10.666/2003, prevendo que o TAC regular no RNTRC pode optar pelo recolhimento direto de sua contribuição previdenciária após validação e comunicação à tomadora. Esta ferramenta abrange apenas a regra geral de retenção e não calcula esse regime especial; caso se enquadre nessa hipótese, consulte os procedimentos e regulamentações oficiais da ANTT, da Receita Federal e do INSS.
+    </li>
+  </ul>
+
+  <h3>Por que a alíquota de 5% não é uma opção genérica?</h3>
+  <p>A alíquota de 5% é estritamente reservada pela Constituição Federal e pela Lei nº 8.212/1991 a duas situações especiais de inclusão previdenciária:</p>
+  <ul>
+    <li>O <strong>Microempreendedor Individual (MEI)</strong>, recolhido no Documento de Arrecadação do Simples Nacional (DAS-MEI);</li>
+    <li>O <strong>Segurado Facultativo de Baixa Renda</strong>, que não possui renda própria, dedica-se exclusivamente ao trabalho doméstico no âmbito de sua residência e pertence a família inscrita no Cadastro Único (CadÚnico) com renda mensal de até 2 salários mínimos (código GPS 1929).</li>
+  </ul>
+  <p>Portanto, contribuintes individuais autônomos convencionais não podem optar livremente pela alíquota de 5%.</p>
+
+  <h3>Fontes oficiais consultadas (Referência 2026)</h3>
+  <p>As regras, alíquotas e códigos desta calculadora foram auditados com base nas seguintes publicações oficiais da Previdência Social, da Receita Federal e da Presidência da República (consulta realizada em 2026-10-22):</p>
+  <ul class="mei-autonomo-official-links">
+    <li>
+      <a href="https://www.gov.br/inss/pt-br/direitos-e-deveres/inscricao-e-contribuicao/tabela-de-contribuicao-mensal" target="_blank" rel="noopener noreferrer">
+        Tabela de Contribuição Mensal e Limites do RGPS — Portal Oficial do INSS (gov.br)
+      </a>
+    </li>
+    <li>
+      <a href="https://www.gov.br/inss/pt-br/direitos-e-deveres/inscricao-e-contribuicao/plano-simplificado" target="_blank" rel="noopener noreferrer">
+        Plano Simplificado de Previdência — Regras e Elegibilidade — INSS (gov.br)
+      </a>
+    </li>
+    <li>
+      <a href="https://www.gov.br/inss/pt-br/direitos-e-deveres/inscricao-e-contribuicao/contribuicao-dos-segurados-facultativo-e-contribuinte-individual" target="_blank" rel="noopener noreferrer">
+        Contribuição dos Segurados Facultativo e Contribuinte Individual — INSS (gov.br)
+      </a>
+    </li>
+    <li>
+      <a href="https://www.gov.br/inss/pt-br/direitos-e-deveres/inscricao-e-contribuicao/tabela-de-codigos-de-pagamento-de-contribuicao-previdenciaria" target="_blank" rel="noopener noreferrer">
+        Tabela de Códigos de Pagamento de Contribuição Previdenciária (GPS) — INSS (gov.br)
+      </a>
+    </li>
+    <li>
+      <a href="https://www.planalto.gov.br/ccivil_03/leis/l8212cons.htm" target="_blank" rel="noopener noreferrer">
+        Lei nº 8.212, de 24 de julho de 1991 (Organização da Seguridade Social e Plano de Custeio) — Planalto
+      </a>
+    </li>
+    <li>
+      <a href="https://www.planalto.gov.br/ccivil_03/leis/2003/l10.666.htm" target="_blank" rel="noopener noreferrer">
+        Lei nº 10.666, de 8 de maio de 2003 (Art. 4º — Retenção de Contribuição de Contribuinte Individual por Empresas) — Planalto
+      </a>
+    </li>
+    <li>
+      <a href="http://normas.receita.fazenda.gov.br/sijut2consulta/link.action?idAto=126484" target="_blank" rel="noopener noreferrer">
+        Instrução Normativa RFB nº 2.110, de 17 de outubro de 2022 (Normas Gerais de Tributação Previdenciária) — Normas RFB
+      </a>
+    </li>
+  </ul>
+
+  <section class="related-tools">
+    <h2>Ferramentas Relacionadas</h2>
+    <div class="related-tools-grid">
+      <article class="tool-card">
+        <div class="tool-card-header">
+          <span class="tool-card-category">Financeiro</span>
+        </div>
+        <h3 class="tool-card-title">Calculadora MEI ou Autônomo</h3>
+        <p class="tool-card-desc">Compare custos, encargos do INSS e recolhimentos tributários entre atuar como MEI ou como Autônomo pessoa física.</p>
+        <div class="tool-card-footer">
+          <a href="{{ROOT_PREFIX}}tools/financas/mei-ou-autonomo.html" class="tool-card-btn">Acessar</a>
+        </div>
+      </article>
+
+      <article class="tool-card">
+        <div class="tool-card-header">
+          <span class="tool-card-category">Financeiro</span>
+        </div>
+        <h3 class="tool-card-title">Calculadora Carnê-Leão para Autônomos</h3>
+        <p class="tool-card-desc">Estime o imposto de renda mensal (DARF 0190) para autônomos com Livro-Caixa, dedução de INSS e desconto simplificado.</p>
+        <div class="tool-card-footer">
+          <a href="{{ROOT_PREFIX}}tools/financas/carne-leao-autonomo.html" class="tool-card-btn">Acessar</a>
+        </div>
+      </article>
+
+      <article class="tool-card">
+        <div class="tool-card-header">
+          <span class="tool-card-category">Financeiro</span>
+        </div>
+        <h3 class="tool-card-title">Calculadora de Preço de Serviço</h3>
+        <p class="tool-card-desc">Defina o preço ideal para serviços considerando mão de obra, tributos, custos fixos e margem de lucro.</p>
+        <div class="tool-card-footer">
+          <a href="{{ROOT_PREFIX}}tools/financas/preco-servico.html" class="tool-card-btn">Acessar</a>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <p class="tool-return-link">
+    <a href="{{ROOT_PREFIX}}index.html">← Voltar para a página inicial</a>
+  </p>
+</section>
