@@ -1,0 +1,219 @@
+---
+title: Calculadora de Macronutrientes Online Grátis | Calculadora Master
+description: Calcule seus macronutrientes (carboidratos, proteínas e gorduras) em gramas e g/kg para emagrecer, secar ou ganhar massa muscular. Baseada nos Fatores Atwater.
+keywords: calculadora de macronutrientes, calcular macros, divisao de macros, dieta flexivel, gramas de proteina por dia, gramas de carboidrato, macros para hipertrofia, macros para emagrecer
+canonical: https://www.calculadoramaster.com/tools/saude/calculadora-macronutrientes.html
+layout: tool
+pageScripts: <script type="module" src="{{ROOT_PREFIX}}js/tools/calculadora-macronutrientes.js"></script>
+---
+
+<h1>Calculadora de Macronutrientes</h1>
+
+<p>Os <strong>macronutrientes</strong> — carboidratos, proteínas e gorduras (lipídios) — são as classes fundamentais de nutrientes que fornecem toda a energia metabólica e os blocos construtores para o funcionamento do organismo. Enquanto o balanço calórico determina se você ganha ou perde peso na balança, a <strong>distribuição correta dos macronutrientes</strong> define a qualidade dessa transformação: se você queima gordura poupando massa muscular, ou se ganha músculos minimizando o acúmulo de gordura. Esta calculadora aplica os Fatores Energéticos Atwater consagrados pela nutrição clínica (4 kcal/g para proteínas e carboidratos; 9 kcal/g para gorduras) e divide suas metas por refeições.</p>
+
+<div class="card tool-calculator-card">
+  <h2 class="tool-form-title">Defina Sua Meta Calórica e Estratégia</h2>
+
+  <form id="formMacronutrientes" novalidate>
+    <!-- Calorias Diárias Alvo -->
+    <div class="form-group">
+      <label for="caloriasMacro">Calorias diárias totais (kcal/dia):</label>
+      <p id="ajudaCaloriasMacro" class="help-text">Informe a quantidade total de calorias que você planeja ingerir por dia. Se ainda não sabe, use nossa <a href="{{ROOT_PREFIX}}tools/saude/gasto-calorico-diario.html">Calculadora de Gasto Calórico Diário</a>.</p>
+      <input
+        type="text"
+        id="caloriasMacro"
+        name="calorias"
+        inputmode="decimal"
+        placeholder="Ex: 2.000"
+        autocomplete="off"
+        aria-describedby="ajudaCaloriasMacro"
+        required
+      >
+    </div>
+
+    <!-- Peso Corporal (Opcional) -->
+    <div class="form-group">
+      <label for="pesoMacro">Seu peso corporal atual (kg — opcional):</label>
+      <p id="ajudaPesoMacro" class="help-text">Permite calcular as gramas de cada macronutriente por quilo de peso corporal (g/kg), essencial para monitorar o aporte proteico.</p>
+      <input
+        type="text"
+        id="pesoMacro"
+        name="peso"
+        inputmode="decimal"
+        placeholder="Ex: 75,0"
+        autocomplete="off"
+        aria-describedby="ajudaPesoMacro"
+      >
+    </div>
+
+    <!-- Estratégia / Opções Ilustrativas de Macronutrientes -->
+    <div class="form-group">
+      <label for="protocoloMacro">Distribuição ilustrativa de macronutrientes:</label>
+      <p id="ajudaProtocoloMacro" class="help-text">Selecione uma opção ilustrativa de distribuição energética para adultos sadios ou escolha &quot;Personalizada&quot; para definir seus próprios percentuais.</p>
+      <select id="protocoloMacro" name="protocolo" aria-describedby="ajudaProtocoloMacro">
+        <option value="equilibrada" selected>Distribuição Equilibrada (50% C / 20% P / 30% G — Referência AMDR Adultos)</option>
+        <option value="emagrecimento">Maior Aporte Proteico (40% C / 35% P / 25% G — Opção Ilustrativa)</option>
+        <option value="hipertrofia">Hipertrofia e Performance (55% C / 25% P / 20% G — Mais Carboidrato)</option>
+        <option value="low_carb">Low Carb Moderada (20% C / 35% P / 45% G — Opção Ilustrativa)</option>
+        <option value="cetogenica">Cetogênica / Keto (5% C / 25% P / 70% G — Opção Ilustrativa)</option>
+        <option value="personalizada">Distribuição Personalizada (definir percentuais manuais)</option>
+      </select>
+    </div>
+
+    <!-- Campos para percentuais personalizados (exibidos condicionalmente) -->
+    <div id="grupoPercentuaisPersonalizados" hidden>
+      <div class="form-group">
+        <label for="carbPct">Carboidratos (%):</label>
+        <input type="number" id="carbPct" name="carbPct" min="0" max="100" step="1" placeholder="Ex: 40">
+      </div>
+      <div class="form-group">
+        <label for="protPct">Proteínas (%):</label>
+        <input type="number" id="protPct" name="protPct" min="0" max="100" step="1" placeholder="Ex: 30">
+      </div>
+      <div class="form-group">
+        <label for="gordPct">Gorduras (%):</label>
+        <input type="number" id="gordPct" name="gordPct" min="0" max="100" step="1" placeholder="Ex: 30">
+      </div>
+    </div>
+
+    <!-- Número de Refeições -->
+    <div class="form-group">
+      <label for="refeicoesMacro">Número de refeições ao longo do dia:</label>
+      <p id="ajudaRefeicoesMacro" class="help-text">Divide o consumo diário em porções práticas para facilitar sua rotina de marmitas e pratos.</p>
+      <select id="refeicoesMacro" name="refeicoes" aria-describedby="ajudaRefeicoesMacro">
+        <option value="3">3 refeições (Café da manhã, Almoço, Jantar)</option>
+        <option value="4" selected>4 refeições (Café, Almoço, Lanche da tarde, Jantar)</option>
+        <option value="5">5 refeições (Café, Lanche manhã, Almoço, Lanche tarde, Jantar)</option>
+        <option value="6">6 refeições (Rotina frequente de fracionamento)</option>
+      </select>
+    </div>
+
+    <p id="erroMacro" class="tool-error-message" role="alert" aria-live="assertive" hidden></p>
+
+    <div class="tool-actions-primary">
+      <button type="submit" id="btnCalcularMacro" class="btn btn-primary">Calcular Macronutrientes</button>
+      <button type="button" id="btnLimparMacro" class="btn btn-secondary">Limpar</button>
+    </div>
+  </form>
+</div>
+
+<!-- Seção de Resultados -->
+<section id="resultadoMacro" class="tool-result-section" aria-live="polite" hidden>
+  <div class="card tool-result-card">
+    <div class="result-header">
+      <h2 class="tool-result-title">Sua Distribuição Diária de Macronutrientes</h2>
+      <span id="resBadgeProtocolo" class="status-badge">Equilibrada</span>
+    </div>
+
+    <!-- Grid dos Três Macronutrientes -->
+    <div class="result-grid">
+      <!-- Carboidratos -->
+      <div class="result-highlight-item">
+        <span class="result-label">Carboidratos</span>
+        <strong id="resCarbGramas" class="result-value">0 g</strong>
+        <span id="resCarbKcal" class="result-subtext">0 kcal (0%)</span>
+        <span id="resCarbKg" class="result-subtext">—</span>
+      </div>
+
+      <!-- Proteínas -->
+      <div class="result-highlight-item">
+        <span class="result-label">Proteínas</span>
+        <strong id="resProtGramas" class="result-value">0 g</strong>
+        <span id="resProtKcal" class="result-subtext">0 kcal (0%)</span>
+        <span id="resProtKg" class="result-subtext">—</span>
+      </div>
+
+      <!-- Gorduras -->
+      <div class="result-highlight-item">
+        <span class="result-label">Gorduras (Lipídios)</span>
+        <strong id="resGordGramas" class="result-value">0 g</strong>
+        <span id="resGordKcal" class="result-subtext">0 kcal (0%)</span>
+        <span id="resGordKg" class="result-subtext">—</span>
+      </div>
+
+      <!-- Fibras / Total -->
+      <div class="result-highlight-item">
+        <span class="result-label">Fibras Recomendadas</span>
+        <strong id="resFibras" class="result-value">0 g</strong>
+        <span id="resKcalTotal" class="result-subtext">Meta: 0 kcal</span>
+      </div>
+    </div>
+
+    <!-- Alertas Nutricionais -->
+    <div id="avisosMacro"></div>
+
+    <!-- Tabela de Divisão por Refeição -->
+    <div class="result-detail-card">
+      <h3 class="result-detail-title">Sugestão de Fracionamento por Refeição</h3>
+      <p class="help-text">Distribuição média uniforme dos macronutrientes para estruturar seu cardápio diário:</p>
+      <div class="table-responsive">
+        <table id="tabelaRefeicoesMacro" class="tool-data-table">
+          <thead>
+            <tr>
+              <th scope="col">Refeição</th>
+              <th scope="col">Calorias</th>
+              <th scope="col">Carboidratos</th>
+              <th scope="col">Proteínas</th>
+              <th scope="col">Gorduras</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Preenchido via JavaScript -->
+          </tbody>
+        </table>
+      </div>
+      <p class="table-subtext">Lembre-se de beber água em abundância para auxiliar no metabolismo proteico e digestivo. Calcule sua meta com nossa <a href="{{ROOT_PREFIX}}tools/saude/estimativa-hidratacao.html">Calculadora de Hidratação</a>.</p>
+    </div>
+
+    <!-- Ações do Resultado: Copiar, Compartilhar, Imprimir -->
+    <div class="tool-result-actions-wrapper">
+      <div id="acoesResultadoMacro" class="tool-actions-container"></div>
+      <p id="statusAcoesMacro" class="sr-only" role="status" aria-live="polite"></p>
+    </div>
+  </div>
+</section>
+
+<!-- Conteúdo Educativo e Complementar -->
+<section class="tool-content-section">
+  <h2>O que são Macronutrientes e para que servem?</h2>
+  <p>Os macronutrientes são as substâncias nutritivas consumidas em maior escala (gramas) responsáveis por fornecer combustível para o metabolismo celular e moléculas estruturais para os tecidos do corpo humano:</p>
+  <ul>
+    <li><strong>Carboidratos (4 kcal/g):</strong> são a principal e mais rápida fonte de energia para o cérebro, sistema nervoso central e contração muscular durante exercícios de alta intensidade. No organismo, são estocados sob a forma de <em>glicogênio</em> no fígado e nos músculos;</li>
+    <li><strong>Proteínas (4 kcal/g):</strong> constituídas por cadeias de aminoácidos, são essenciais para a síntese e reparação muscular, produção de enzimas digestivas, anticorpos imunológicos, hormônios peptídicos (como a insulina) e tecidos conectivos (colágeno e queratina);</li>
+    <li><strong>Gorduras / Lipídios (9 kcal/g):</strong> o nutriente mais denso em calorias. É fundamental para a síntese de hormônios esteroides (testosterona, estrogênio, progesterona), integridade das membranas celulares, proteção mecânica dos órgãos vitais e absorção das vitaminas lipossolúveis (A, D, E e K);</li>
+    <li><strong>Fibras Alimentares:</strong> carboidratos vegetais não digeríveis pelas enzimas humanas que regulam a motilidade intestinal, nutrem a microbiota benéfica (gerando ácidos graxos de cadeia curta) e atenuam picos glicêmicos.</li>
+  </ul>
+
+  <h2>Os Fatores Energéticos de Atwater</h2>
+  <p>Os valores de conversão adotados em todo o mundo na rotulagem nutricional e nas pesquisas de metabolismo foram estabelecidos pelos estudos de calorimetria de Wilbur O. Atwater no final do século XIX:</p>
+  <ul>
+    <li><code>1 g de Proteína = 4 kcal</code></li>
+    <li><code>1 g de Carboidrato = 4 kcal</code></li>
+    <li><code>1 g de Gordura = 9 kcal</code></li>
+  </ul>
+  <p>Isso significa que, grama por grama, as gorduras fornecem <strong>mais do que o dobro da energia</strong> fornecida pelas proteínas ou carboidratos.</p>
+
+  <h2>Como Compreender as Opções de Distribuição de Macronutrientes?</h2>
+  <p>Não existe uma proporção mágica única para todas as pessoas. As opções presentes nesta calculadora são ilustrativas e servem como referência de planejamento inicial conforme seu nível de atividade física e objetivos pessoais:</p>
+  <ul>
+    <li><strong>Distribuição Equilibrada (50% C / 20% P / 30% G):</strong> segue as <em>Acceptable Macronutrient Distribution Ranges (AMDR)</em> do Institute of Medicine (IOM) para adultos saudáveis (19 anos ou mais: 45–65% carboidratos, 10–35% proteínas e 20–35% gorduras);</li>
+    <li><strong>Maior Aporte Proteico (40% C / 35% P / 25% G):</strong> opção ilustrativa comumente explorada em fases de déficit calórico para elevar a saciedade e poupar a massa magra;</li>
+    <li><strong>Hipertrofia e Performance (55% C / 25% P / 20% G):</strong> prioriza os carboidratos para sustentar sessões de treino intenso e acelerar a recuperação muscular;</li>
+    <li><strong>Low Carb e Cetogênica Ilustrativa:</strong> opções com restrição de carboidratos que exigem atenção médica e nutricional, não sendo recomendadas indiscriminadamente.</li>
+  </ul>
+
+  <h2>Avisos de Saúde e Limitações Clínicas</h2>
+  <p><strong>Atenção para condições clínicas:</strong> Pessoas com diagnóstico ou histórico de doença renal crônica (IRC) ou disfunções hepáticas devem obrigatoriamente consultar seu médico nefrologista e nutricionista antes de alterar o consumo proteico. Dietas restritivas não são indicadas para crianças e adolescentes sem prescrição pediátrica. Além disso, <strong>não reduza o consumo de gorduras abaixo de 15% a 20% das calorias totais</strong> sem acompanhamento profissional, pois lipídios são vitais para a síntese hormonal e absorção de vitaminas. Esta ferramenta tem caráter estritamente educativo e não substitui a prescrição individualizada de um nutricionista.</p>
+
+  <h2>Perguntas Frequentes (FAQ)</h2>
+  <div class="faq-accordion">
+    <h3>Quantos gramas de proteína devo consumir por quilo de peso?</h3>
+    <p>Para pessoas sedentárias, o mínimo recomendado pela OMS é de <strong>0,8 g/kg</strong> de peso ao dia para evitar carências. Já para praticantes de musculação e esportistas, a Sociedade Internacional de Nutrição Esportiva (ISSN) recomenda entre <strong>1,4 e 2,2 g/kg/dia</strong> para otimizar o ganho e a preservação de massa muscular.</p>
+
+    <h3>Comer carboidrato à noite engorda mais?</h3>
+    <p>Não. Do ponto de vista metabólico, o balanço calórico total do dia é o fator determinante para engordar ou emagrecer. O carboidrato consumido à noite é metabolizado e armazenado como glicogênio da mesma forma que em qualquer outro horário, desde que inserido na sua meta calórica diária.</p>
+
+    <h3>Como pesar os alimentos: crus ou cozidos?</h3>
+    <p>Na quase totalidade das tabelas nutricionais (como a TACO ou USDA), as carnes, peixes, arroz e feijão têm seus macronutrientes tabelados em estado <strong>cru</strong>. Ao cozinhar, o arroz absorve água e ganha peso, enquanto a carne perde água e encolhe. Para maior precisão, pese sempre os alimentos crus ou utilize tabelas específicas para alimentos preparados.</p>
+  </div>
+</section>

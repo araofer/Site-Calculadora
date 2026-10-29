@@ -360,8 +360,8 @@ test('14. isolamento entre IDs diferentes ao favoritar e desfavoritar', () => {
   }
 });
 
-test('15. exatamente 42 IDs reconhecidos no catálogo oficial', () => {
-  assert.equal(VALID_TOOL_IDS.size, 42, 'Catálogo deve conter exatamente 42 IDs de ferramentas');
+test('15. exatamente 48 IDs reconhecidos no catálogo oficial', () => {
+  assert.equal(VALID_TOOL_IDS.size, 48, 'Catálogo deve conter exatamente 48 IDs de ferramentas');
   const expected = [
     'horas-extras',
     'financiamento-carro',
@@ -404,7 +404,13 @@ test('15. exatamente 42 IDs reconhecidos no catálogo oficial', () => {
     'comprar-ou-alugar-imovel',
     'reserva-emergencia',
     'simulador-das-mei',
-    'fluxo-de-caixa-empresarial'
+    'fluxo-de-caixa-empresarial',
+    'metabolismo-basal',
+    'gasto-calorico-diario',
+    'calculadora-macronutrientes',
+    'estimativa-hidratacao',
+    'ritmo-corrida-zonas-frequencia-cardiaca',
+    'idade-gestacional-data-parto'
   ];
   for (const id of expected) {
     assert.ok(VALID_TOOL_IDS.has(id), `ID "${id}" deve estar presente no conjunto de IDs válidos`);

@@ -15,7 +15,13 @@ const pages = [
   'src/pages/tools/financas/carne-leao-autonomo.page.html',
   'src/pages/tools/financas/inss-contribuinte-individual.page.html',
   'src/pages/tools/financas/simples-nacional.page.html',
-  'src/pages/tools/financas/fator-r.page.html'
+  'src/pages/tools/financas/fator-r.page.html',
+  'src/pages/tools/saude/metabolismo-basal.page.html',
+  'src/pages/tools/saude/gasto-calorico-diario.page.html',
+  'src/pages/tools/saude/calculadora-macronutrientes.page.html',
+  'src/pages/tools/saude/estimativa-hidratacao.page.html',
+  'src/pages/tools/saude/ritmo-corrida-zonas-frequencia-cardiaca.page.html',
+  'src/pages/tools/saude/idade-gestacional-data-parto.page.html'
 ].map((path) => ({ path, html: readFileSync(new URL(path, root), 'utf8') }));
 
 test('calculadoras seguem estrutura comum de campos e resultados acessíveis', () => {

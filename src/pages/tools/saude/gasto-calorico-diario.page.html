@@ -1,0 +1,258 @@
+---
+title: Calculadora de Gasto Calórico Diário (GET / TDEE) | Calculadora Master
+description: Calcule seu Gasto Calórico Total Diário (GET / TDEE) online grátis. Descubra quantas calorias queima por dia e saiba a meta calórica ideal para emagrecer, manter o peso ou ganhar massa.
+keywords: gasto calorico diario, calculadora get, tdee calculator, gasto energetico total, quantas calorias queimo por dia, calorias para emagrecer, calorias para hipertrofia, deficit calorico
+canonical: https://www.calculadoramaster.com/tools/saude/gasto-calorico-diario.html
+layout: tool
+pageScripts: <script type="module" src="{{ROOT_PREFIX}}js/tools/gasto-calorico-diario.js"></script>
+---
+
+<h1>Calculadora de Gasto Calórico Diário (GET / TDEE)</h1>
+
+<p>O <strong>Gasto Energético Total (GET)</strong> — internacionalmente conhecido como <em>Total Daily Energy Expenditure (TDEE)</em> — é a soma de todas as calorias que o seu organismo gasta ao longo de 24 horas, somando o metabolismo basal em repouso com as calorias consumidas no trabalho, nas tarefas domésticas, na digestão dos alimentos e nas atividades físicas. Esta calculadora aplica os multiplicadores de nível de atividade física (PAL) com base na equação de Mifflin-St Jeor, projetando estimativas orientativas para auxiliar no planejamento de manutenção, perda ou ganho de peso.</p>
+
+<div class="card tool-calculator-card">
+  <h2 class="tool-form-title">Planeje Seu Gasto e Meta Calórica</h2>
+
+  <form id="formGastoCalorico" novalidate>
+    <!-- Modo de Entrada -->
+    <div class="form-group">
+      <label>Como deseja calcular sua base energética?</label>
+      <div class="radio-group-vertical">
+        <label class="radio-label">
+          <input type="radio" name="modoEntrada" id="modoCalc" value="calculada" checked>
+          Calcular minha Taxa Metabólica Basal (TMB) a partir do meu corpo
+        </label>
+        <label class="radio-label">
+          <input type="radio" name="modoEntrada" id="modoDireto" value="direta">
+          Já conheço minha TMB (informar valor diretamente)
+        </label>
+      </div>
+    </div>
+
+    <!-- Campos para cálculo de TMB -->
+    <div id="grupoCamposCalculados">
+      <div class="form-group">
+        <label for="sexoGet">Sexo biológico:</label>
+        <p id="ajudaSexoGet" class="help-text">Utilizado para calcular a taxa metabólica basal pela equação padrão Mifflin-St Jeor.</p>
+        <select id="sexoGet" name="sexo" aria-describedby="ajudaSexoGet">
+          <option value="" disabled selected>Selecione seu sexo biológico</option>
+          <option value="m">Masculino</option>
+          <option value="f">Feminino</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="idadeGet">Idade (anos):</label>
+        <p id="ajudaIdadeGet" class="help-text">Informe sua idade em anos completos (18 a 120 anos. As equações são validadas para a população adulta).</p>
+        <input
+          type="number"
+          id="idadeGet"
+          name="idade"
+          min="18"
+          max="120"
+          step="1"
+          placeholder="Ex: 30"
+          autocomplete="off"
+          aria-describedby="ajudaIdadeGet"
+        >
+      </div>
+
+      <div class="form-group">
+        <label for="pesoGet">Peso corporal (kg):</label>
+        <p id="ajudaPesoGet" class="help-text">Informe seu peso corporal atual (ex: 75,5).</p>
+        <input
+          type="text"
+          id="pesoGet"
+          name="peso"
+          inputmode="decimal"
+          placeholder="Ex: 75,5"
+          autocomplete="off"
+          aria-describedby="ajudaPesoGet"
+        >
+      </div>
+
+      <div class="form-group">
+        <label for="alturaGet">Altura (cm):</label>
+        <p id="ajudaAlturaGet" class="help-text">Informe sua altura em centímetros (ex: 175) ou metros (ex: 1,75).</p>
+        <input
+          type="text"
+          id="alturaGet"
+          name="altura"
+          inputmode="decimal"
+          placeholder="Ex: 175"
+          autocomplete="off"
+          aria-describedby="ajudaAlturaGet"
+        >
+      </div>
+    </div>
+
+    <!-- Campo para TMB direta -->
+    <div id="grupoCampoDireto" hidden>
+      <div class="form-group">
+        <label for="tmbInformada">Sua Taxa Metabólica Basal (kcal/dia):</label>
+        <p id="ajudaTmbInformada" class="help-text">Se você realizou bioimpedância, calorimetria ou usou nossa <a href="{{ROOT_PREFIX}}tools/saude/metabolismo-basal.html">Calculadora de Metabolismo Basal</a>, digite o valor aqui.</p>
+        <input
+          type="number"
+          id="tmbInformada"
+          name="tmbInformada"
+          min="500"
+          max="5000"
+          step="1"
+          placeholder="Ex: 1750"
+          autocomplete="off"
+          aria-describedby="ajudaTmbInformada"
+        >
+      </div>
+    </div>
+
+    <!-- Nível de Atividade Física -->
+    <div class="form-group">
+      <label for="nivelAtividade">Nível de atividade física diária (PAL):</label>
+      <p id="ajudaAtividade" class="help-text">Selecione a opção que melhor descreve sua rotina geral de exercícios e trabalho.</p>
+      <select id="nivelAtividade" name="atividade" aria-describedby="ajudaAtividade" required>
+        <option value="" disabled selected>Selecione seu nível de atividade</option>
+        <option value="sedentario">Sedentário (1.2x) — Trabalho sentado e pouco ou nenhum exercício</option>
+        <option value="leve">Levemente ativo (1.375x) — Exercício leve ou caminhadas 1 a 3 dias/semana</option>
+        <option value="moderado">Moderadamente ativo (1.55x) — Exercício moderado 3 a 5 dias/semana</option>
+        <option value="intenso">Muito ativo (1.725x) — Exercício intenso ou esportes 6 a 7 dias/semana</option>
+        <option value="extremo">Extremamente ativo (1.9x) — Trabalho braçal pesado ou treino atlético diário</option>
+      </select>
+    </div>
+
+    <!-- Objetivo Nutricional -->
+    <div class="form-group">
+      <label for="objetivoCalorico">Seu objetivo principal com o peso:</label>
+      <p id="ajudaObjetivo" class="help-text">Escolha se deseja manter o peso estável, emagrecer com déficit ou ganhar peso com superávit calórico.</p>
+      <select id="objetivoCalorico" name="objetivo" aria-describedby="ajudaObjetivo">
+        <option value="manutencao" selected>Manter o peso atual (Consumo = GET)</option>
+        <option value="perda_moderada">Emagrecimento moderado (-20% — Recomendado)</option>
+        <option value="perda_leve">Emagrecimento suave (-10% — Transição gradual)</option>
+        <option value="perda_agressiva">Emagrecimento agressivo (-25% — Déficit elevado)</option>
+        <option value="ganho_leve">Ganho limpo de massa muscular (+10% — Hipertrofia controlada)</option>
+        <option value="ganho_hipertrofia">Ganho acelerado de peso (+15% — Superávit acentuado)</option>
+      </select>
+    </div>
+
+    <p id="erroGet" class="tool-error-message" role="alert" aria-live="assertive" hidden></p>
+
+    <div class="tool-actions-primary">
+      <button type="submit" id="btnCalcularGet" class="btn btn-primary">Calcular Gasto e Meta Calórica</button>
+      <button type="button" id="btnLimparGet" class="btn btn-secondary">Limpar</button>
+    </div>
+  </form>
+</div>
+
+<!-- Seção de Resultados -->
+<section id="resultadoGet" class="tool-result-section" aria-live="polite" hidden>
+  <div class="card tool-result-card">
+    <div class="result-header">
+      <h2 class="tool-result-title">Estimativa do Seu Gasto Calórico Diário</h2>
+      <span id="resBadgeObjetivo" class="status-badge">Manutenção</span>
+    </div>
+
+    <!-- Grid de Destaques Principais -->
+    <div class="result-grid">
+      <div class="result-highlight-item">
+        <span class="result-label">Gasto Calórico Total (GET)</span>
+        <strong id="resGetPrincipal" class="result-value">0 kcal</strong>
+        <span class="result-subtext">calorias gastas por dia para manter o peso</span>
+      </div>
+
+      <div class="result-highlight-item">
+        <span class="result-label">Meta Calórica Diária</span>
+        <strong id="resMetaPrincipal" class="result-value">0 kcal</strong>
+        <span class="result-subtext">consumo alvo para atingir seu objetivo</span>
+      </div>
+
+      <div class="result-highlight-item">
+        <span class="result-label">Saldo Calórico Planejado</span>
+        <strong id="resSaldoCalorico" class="result-value">0 kcal</strong>
+        <span class="result-subtext">diferença diária frente à manutenção</span>
+      </div>
+
+      <div class="result-highlight-item">
+        <span class="result-label">Taxa Metabólica Basal (TMB)</span>
+        <strong id="resTmbRef" class="result-value">0 kcal</strong>
+        <span class="result-subtext">consumo mínimo vital em repouso</span>
+      </div>
+    </div>
+
+    <!-- Avisos e Alertas de Limites Clínicos -->
+    <div id="avisosGet"></div>
+
+    <!-- Tabela Comparativa de Todos os Objetivos -->
+    <div class="result-detail-card">
+      <h3 class="result-detail-title">Cenários de Metas Calóricas e Variação de Peso</h3>
+      <p class="help-text">Veja como diferentes ajustes calóricos diários repercutem na sua taxa de ingestão e na projeção de variação corporal:</p>
+      <div class="table-responsive">
+        <table id="tabelaCenariosGet" class="tool-data-table">
+          <thead>
+            <tr>
+              <th scope="col">Estratégia e Objetivo</th>
+              <th scope="col">Meta Diária</th>
+              <th scope="col">Balanço Diário</th>
+              <th scope="col">Variação Semanal Est.</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Preenchido via JavaScript -->
+          </tbody>
+        </table>
+      </div>
+      <p class="table-subtext">Pronto para distribuir essas calorias em proteínas, carboidratos e gorduras? Acesse a nossa <a href="{{ROOT_PREFIX}}tools/saude/calculadora-macronutrientes.html">Calculadora de Macronutrientes</a>.</p>
+    </div>
+
+    <!-- Ações do Resultado: Copiar, Compartilhar, Imprimir -->
+    <div class="tool-result-actions-wrapper">
+      <div id="acoesResultadoGet" class="tool-actions-container"></div>
+      <p id="statusAcoesGet" class="sr-only" role="status" aria-live="polite"></p>
+    </div>
+  </div>
+</section>
+
+<!-- Conteúdo Educativo e Complementar -->
+<section class="tool-content-section">
+  <h2>Como Funciona o Gasto Energético Total (GET / TDEE)?</h2>
+  <p>O <strong>Gasto Energético Total (GET)</strong> expressa a quantidade real de energia despendida pelo organismo humano ao longo de um dia completo de vida. Ele é composto por quatro parcelas metabólicas distintas:</p>
+  <ol>
+    <li><strong>Taxa Metabólica Basal (TMB — 60% a 75%):</strong> o custo calórico de manter os órgãos vitais funcionando em repouso;</li>
+    <li><strong>Efeito Térmico dos Alimentos (ETA — ~10%):</strong> o calor gerado pela mastigação, digestão, transporte e metabolização dos nutrientes ingeridos;</li>
+    <li><strong>Termogênese da Atividade Espontânea (NEAT — 15% a 30%):</strong> calorias gastas em movimentos inconscientes ou cotidianos não ligados ao treino (caminhar até o ponto de ônibus, gesticular, limpar a casa, permanecer de pé);</li>
+    <li><strong>Exercício Físico Programado (EAT — 5% a 15%):</strong> o gasto de treinos estruturados como musculação, natação, futebol ou corrida.</li>
+  </ol>
+
+  <h2>Fatores de Atividade Física (Nível de Atividade Física - PAL)</h2>
+  <p>O conceito de Nível de Atividade Física (<em>Physical Activity Level - PAL</em>) expressa o gasto energético total como múltiplo da taxa metabólica basal. Na prática desportiva e clínica, utilizam-se multiplicadores empíricos consagrados para aproximar o gasto calórico diário a partir da TMB:</p>
+  <p><code>GET = TMB × Fator de Atividade (PAL)</code></p>
+  <ul>
+    <li><strong>Sedentário (1.200):</strong> rotina de escritório com pouco esforço locomotor;</li>
+    <li><strong>Levemente ativo (1.375):</strong> trabalho leve com caminhadas ocasionais ou treino aeróbico suave 1 a 3 vezes por semana;</li>
+    <li><strong>Moderadamente ativo (1.550):</strong> treinos consistentes de 3 a 5 dias por semana ou rotina ocupacional moderadamente dinâmica;</li>
+    <li><strong>Muito ativo (1.725):</strong> rotina de treinos intensos de 6 a 7 dias por semana ou atividades com sobrecarga física;</li>
+    <li><strong>Extremamente ativo (1.900):</strong> treinamento atlético de alto rendimento ou trabalhos de grande exigência braçal diária.</li>
+  </ul>
+
+  <h2>Como Planejar Déficit e Superávit Calórico com Segurança</h2>
+  <p>O equilíbrio do balanço energético determina a evolução da composição corporal:</p>
+  <ul>
+    <li><strong>Para Perder Gordura (Déficit Calórico):</strong> Consumir menos calorias do que o GET. Um déficit moderado de <strong>15% a 20% (cerca de 300 a 500 kcal/dia)</strong> é a faixa ideal comprovada para queimar gordura enquanto protege a massa magra corporal contra o catabolismo;</li>
+    <li><strong>Para Manter o Peso (Equilíbrio Isocalórico):</strong> Consumir exatamente o valor do seu GET, estabilizando as reservas energéticas;</li>
+    <li><strong>Para Ganho Muscular (Superávit Calórico):</strong> Consumir de <strong>10% a 15% acima do GET (cerca de 200 a 400 kcal/dia)</strong> associado ao treinamento resistido de força (musculação), fornecendo o substrato anabólico necessário para a síntese de novo tecido muscular sem acúmulo excessivo de gordura.</li>
+  </ul>
+
+  <h2>A Regra de Wishnofsky e Limitações da Projeção de Peso</h2>
+  <p>A estimativa de que <em>7.700 kcal de déficit equivalem a 1 kg de gordura corporal</em> (Regra clássica de Wishnofsky, 1958) é uma aproximação pedagógica útil para traçar horizontes iniciais. No entanto, o metabolismo humano é dinâmico e autorregulatório: à medida que você perde peso, sua TMB diminui naturalmente (menos massa a manter) e o corpo economiza energia no NEAT. Por essa razão, a perda de peso real raramente ocorre em linha reta permanente, exigindo ajustes graduais na dieta a cada novo patamar alcançado.</p>
+
+  <h2>Perguntas Frequentes (FAQ)</h2>
+  <div class="faq-accordion">
+    <h3>Qual a diferença entre a Calculadora de TMB e a de Gasto Calórico Diário?</h3>
+    <p>A TMB indica apenas o que seu corpo consome dormindo, em repouso absoluto. A Calculadora de Gasto Calórico Diário (GET) leva em conta toda a sua movimentação real do dia a dia (trabalho, caminhadas e treinos), mostrando exatamente quantas calorias você deve comer para emagrecer, engordar ou manter seu peso.</p>
+
+    <h3>Existe um limite mínimo diário de calorias recomendado?</h3>
+    <p>Na literatura nutricional, orienta-se habitualmente que dietas autônomas e sem acompanhamento clínico especializado evitem valores inferiores a <strong>1.200 kcal/dia para mulheres</strong> e <strong>1.500 kcal/dia para homens</strong>, como medida preventiva para reduzir riscos de carências em micronutrientes (vitaminas e minerais) e desaceleração metabólica acentuada. No entanto, essas marcas são parâmetros de prudência clínica, não limites biológicos universais fixos: as necessidades reais variam amplamente conforme estatura, peso, idade, nível de atividade física e histórico de saúde.</p>
+
+    <h3>Como saber se escolhi o nível de atividade correto?</h3>
+    <p>Se você tem dúvidas entre dois níveis (por exemplo, entre Leve e Moderado), é recomendável selecionar o nível mais conservador (Leve) caso o seu objetivo seja emagrecer, ou o nível superior caso queira hipertrofia muscular. Monitore seu peso na balança semanalmente e ajuste conforme a resposta real do seu organismo.</p>
+  </div>
+</section>

@@ -51,7 +51,13 @@ export const VALID_TOOL_IDS = new Set([
   'comprar-ou-alugar-imovel',
   'reserva-emergencia',
   'simulador-das-mei',
-  'fluxo-de-caixa-empresarial'
+  'fluxo-de-caixa-empresarial',
+  'metabolismo-basal',
+  'gasto-calorico-diario',
+  'calculadora-macronutrientes',
+  'estimativa-hidratacao',
+  'ritmo-corrida-zonas-frequencia-cardiaca',
+  'idade-gestacional-data-parto'
 ]);
 
 let memoryFavorites = null;

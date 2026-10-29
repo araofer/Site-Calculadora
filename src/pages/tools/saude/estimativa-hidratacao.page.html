@@ -1,0 +1,251 @@
+---
+title: Calculadora de Hidratação Diária | Quanto Beber de Água por Dia
+description: Calcule quanta água você deve beber por dia em litros e copos com base no seu peso, idade, exercícios e clima, diferenciando água total e líquidos diretos.
+keywords: calculadora de hidratacao, quanto beber de agua por dia, consumo de agua diario, quantos litros de agua beber, calcular agua por peso, hidratacao no exercicio, tabela de agua por dia
+canonical: https://www.calculadoramaster.com/tools/saude/estimativa-hidratacao.html
+layout: tool
+pageScripts: <script type="module" src="{{ROOT_PREFIX}}js/tools/estimativa-hidratacao.js"></script>
+---
+
+<h1>Calculadora de Estimativa de Hidratação Diária</h1>
+
+<p>A água é o nutriente mais abundante no corpo humano, representando entre 50% e 70% da massa corporal de um adulto saudável. Uma hidratação adequada é vital para a regulação da temperatura corpórea (termorregulação), transporte de nutrientes, filtração renal e lubrificação articular. Esta ferramenta estima sua meta diária de consumo hídrico combinando heurísticas clínicas consolidadas de nutrição (30 a 35 ml/kg) com referências da <strong>Autoridade Europeia para a Segurança dos Alimentos (EFSA)</strong>, da <strong>Organização Mundial da Saúde (OMS)</strong> e do <strong>Colégio Americano de Medicina do Esporte (ACSM)</strong>, distinguindo a água total dos líquidos a ingerir como bebida.</p>
+
+<div class="card tool-calculator-card">
+  <h2 class="tool-form-title">Calcule Sua Meta Hídrica Diária</h2>
+
+  <form id="formHidratacao" novalidate>
+    <!-- Peso Corporal -->
+    <div class="form-group">
+      <label for="pesoHidratacao">Seu peso corporal (kg):</label>
+      <p id="ajudaPesoHidratacao" class="help-text">O peso corporal serve de base para a estimativa da necessidade basal (35 ml/kg para adultos; 30 ml/kg para idosos como regra prática clínica).</p>
+      <input
+        type="text"
+        id="pesoHidratacao"
+        name="peso"
+        inputmode="decimal"
+        placeholder="Ex: 70,0"
+        autocomplete="off"
+        aria-describedby="ajudaPesoHidratacao"
+        required
+      >
+    </div>
+
+    <!-- Idade -->
+    <div class="form-group">
+      <label for="idadeHidratacao">Sua idade (anos):</label>
+      <p id="ajudaIdadeHidratacao" class="help-text">A proporção de água corporal e a taxa de filtração renal mudam com o envelhecimento fisiológico.</p>
+      <input
+        type="number"
+        id="idadeHidratacao"
+        name="idade"
+        min="10"
+        max="120"
+        step="1"
+        placeholder="Ex: 30"
+        autocomplete="off"
+        aria-describedby="ajudaIdadeHidratacao"
+      >
+    </div>
+
+    <!-- Exercício Físico -->
+    <div class="form-group">
+      <label for="intensidadeExercicio">Prática de exercício físico no dia:</label>
+      <p id="ajudaExercicio" class="help-text">A taxa de transpiração durante o treino exige reposição hídrica proporcional para evitar queda de rendimento e fadiga precoce.</p>
+      <select id="intensidadeExercicio" name="intensidadeExercicio" aria-describedby="ajudaExercicio">
+        <option value="nenhum" selected>Nenhum exercício (Dia de descanso)</option>
+        <option value="leve">Exercício Leve — Caminhada, alongamento, ioga (+400 ml/hora)</option>
+        <option value="moderado">Exercício Moderado — Musculação, corrida leve, natação (+600 ml/hora)</option>
+        <option value="intenso">Exercício Intenso — Crossfit, futebol, ciclismo rápido, corrida (+800 ml/hora)</option>
+      </select>
+    </div>
+
+    <!-- Minutos de Exercício (Exibido condicionalmente) -->
+    <div class="form-group" id="grupoMinutosExercicio" hidden>
+      <label for="minutosExercicio">Duração diária do treino (minutos):</label>
+      <p id="ajudaMinutos" class="help-text">Informe o tempo total de esforço físico no dia (ex: 45 ou 60 minutos).</p>
+      <input
+        type="number"
+        id="minutosExercicio"
+        name="minutosExercicio"
+        min="1"
+        max="360"
+        step="5"
+        placeholder="Ex: 60"
+        autocomplete="off"
+        aria-describedby="ajudaMinutos"
+      >
+    </div>
+
+    <!-- Clima Habitual -->
+    <div class="form-group">
+      <label for="climaHidratacao">Temperatura e clima do ambiente (informativo):</label>
+      <p id="ajudaClima" class="help-text">Calor, umidade e esforço elevam as perdas de água de forma individual e dinâmica, sem acréscimo fixo universal.</p>
+      <select id="climaHidratacao" name="clima" aria-describedby="ajudaClima">
+        <option value="ameno" selected>Ameno / Climatizado (perdas basais habituais)</option>
+        <option value="quente">Quente / Exposição ao Sol (demanda hídrica aumentada)</option>
+        <option value="muito_quente">Muito Quente ou Úmido (demanda hídrica acentuada)</option>
+      </select>
+    </div>
+
+    <!-- Condição Especial (Gestante/Lactante) -->
+    <div class="form-group">
+      <label for="condicaoHidratacao">Condição fisiológica especial:</label>
+      <p id="ajudaCondicao" class="help-text">Gestantes demandam expansão do volume plasmático e formação de líquido amniótico; lactantes necessitam de água para a síntese do leite materno.</p>
+      <select id="condicaoHidratacao" name="condicaoEspecial" aria-describedby="ajudaCondicao">
+        <option value="nenhuma" selected>Nenhuma das opções abaixo</option>
+        <option value="gestante">Gestante (+300 ml/dia adicionais)</option>
+        <option value="lactante">Lactante em fase de amamentação (+700 ml/dia adicionais)</option>
+      </select>
+    </div>
+
+    <p id="erroHidratacao" class="tool-error-message" role="alert" aria-live="assertive" hidden></p>
+
+    <div class="tool-actions-primary">
+      <button type="submit" id="btnCalcularHidratacao" class="btn btn-primary">Calcular Meta de Hidratação</button>
+      <button type="button" id="btnLimparHidratacao" class="btn btn-secondary">Limpar</button>
+    </div>
+  </form>
+</div>
+
+<!-- Seção de Resultados -->
+<section id="resultadoHidratacao" class="tool-result-section" aria-live="polite" hidden>
+  <div class="card tool-result-card">
+    <div class="result-header">
+      <h2 class="tool-result-title">Sua Recomendação Diária de Hidratação</h2>
+      <span class="status-badge">Meta Individual</span>
+    </div>
+
+    <!-- Grid de Destaques Principais -->
+    <div class="result-grid">
+      <div class="result-highlight-item">
+        <span class="result-label">Volume Total Diário</span>
+        <strong id="resLitrosTotal" class="result-value">0 L</strong>
+        <span id="resMlTotal" class="result-subtext">0 ml / dia</span>
+      </div>
+
+      <div class="result-highlight-item">
+        <span class="result-label">Copos de Água (250 ml)</span>
+        <strong id="resCopos250" class="result-value">~0 copos</strong>
+        <span class="result-subtext">copos médios distribuídos no dia</span>
+      </div>
+
+      <div class="result-highlight-item">
+        <span class="result-label">Garrafas Padrão (500 ml)</span>
+        <strong id="resGarrafas500" class="result-value">~0 garrafas</strong>
+        <span class="result-subtext">garrafinhas do tipo squeeze</span>
+      </div>
+    </div>
+
+    <!-- Composição do Volume Hídrico -->
+    <div class="result-detail-card">
+      <h3 class="result-detail-title">Composição do Seu Volume Hídrico</h3>
+      <div class="result-grid">
+        <div class="result-item">
+          <span class="result-label">Necessidade Basal (Repouso):</span>
+          <strong id="resBasalMl" class="result-value-inline">0 ml</strong>
+        </div>
+        <div class="result-item">
+          <span class="result-label">Adicional por Exercício:</span>
+          <strong id="resExercicioMl" class="result-value-inline">+0 ml</strong>
+        </div>
+        <div class="result-item">
+          <span class="result-label">Adicional por Condição Especial (Gestação / Lactação):</span>
+          <strong id="resClimaMl" class="result-value-inline">+0 ml</strong>
+        </div>
+      </div>
+    </div>
+
+    <!-- Avisos e Limitações Médicas -->
+    <div id="avisosHidratacao"></div>
+
+    <!-- Cronograma Sugerido de Ingestão -->
+    <div class="result-detail-card">
+      <h3 class="result-detail-title">Cronograma Sugerido de Ingestão ao Longo do Dia</h3>
+      <p class="help-text">Evite beber grandes volumes de uma só vez. Distribuir a ingestão em porções regulares melhora a absorção celular e reduz a ida constante ao banheiro:</p>
+      <div class="table-responsive">
+        <table id="tabelaCronogramaHidratacao" class="tool-data-table">
+          <thead>
+            <tr>
+              <th scope="col">Período do Dia</th>
+              <th scope="col">Volume Sugerido</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Preenchido via JavaScript -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Guia da Cor da Urina (Escala de Armstrong) -->
+    <div class="result-detail-card">
+      <h3 class="result-detail-title">Como Avaliar Sua Hidratação: Escala de Armstrong</h3>
+      <p class="help-text">A cor da sua primeira urina após descartar o excesso matinal é o melhor indicador prático e diário do seu estado hídrico:</p>
+      <ul class="calculation-log-list">
+        <li><strong>Tons 1 a 3 (Amarelo palha claro transparente):</strong> Hidratação ideal. Continue mantendo seu consumo regular de água.</li>
+        <li><strong>Tons 4 a 5 (Amarelo escuro ou dourado):</strong> Desidratação leve a moderada. Beba de 1 a 2 copos de água imediatamente.</li>
+        <li><strong>Tons 6 a 8 (Âmbar escuro ou cor de chá):</strong> Desidratação severa. Beba água com frequência e consulte um médico se persistir.</li>
+      </ul>
+    </div>
+
+    <!-- Ações do Resultado: Copiar, Compartilhar, Imprimir -->
+    <div class="tool-result-actions-wrapper">
+      <div id="acoesResultadoHidratacao" class="tool-actions-container"></div>
+      <p id="statusAcoesHidratacao" class="sr-only" role="status" aria-live="polite"></p>
+    </div>
+  </div>
+</section>
+
+<!-- Conteúdo Educativo e Complementar -->
+<section class="tool-content-section">
+  <h2>Por que a Hidratação é Tão Importante?</h2>
+  <p>A água é indispensável para praticamente todos os processos vitais do organismo humano. Mesmo uma <strong>desidratação leve de apenas 1% a 2% do peso corporal</strong> já é suficiente para provocar efeitos mensuráveis negativos, tais como:</p>
+  <ul>
+    <li>Queda no rendimento físico, perda de força muscular e câimbras precoces;</li>
+    <li>Dores de cabeça tensionais e sensação constante de fadiga;</li>
+    <li>Redução do foco atencional, tempo de reação e memória de curto prazo;</li>
+    <li>Constipação intestinal (fezes ressecadas) e sobrecarga no trato urinário;</li>
+    <li>Maior propensão à formação de cálculos renais (pedras nos rins).</li>
+  </ul>
+
+  <h2>Como a Meta Hídrica é Calculada?</h2>
+  <p>O mito popular de que <em>&quot;todo ser humano deve beber exatamente 2 litros de água por dia&quot;</em> ignora as diferenças de peso, idade e nível de atividade entre os indivíduos. A estimativa considera:</p>
+
+  <h3>1. Volume Basal e Distinção entre Água Total e Bebidas</h3>
+  <p>Na prática da dietética e da nutrição clínica, utilizam-se habitualmente as estimativas práticas de <strong>35 ml por quilo de peso corporal</strong> para adultos jovens e adolescentes saudáveis, e de <strong>30 ml/kg</strong> para pessoas idosas (65 anos ou mais, considerando a menor proporção de água corporal livre e a redução fisiológica da taxa de filtração renal). É indispensável registrar que esses parâmetros baseados no peso são <em>estimativas práticas e orientativas de consultório</em>, e <strong>não recomendações oficiais universais</strong> de órgãos como a EFSA ou a OMS.</p>
+  <p>Por sua vez, a <em>Autoridade Europeia para a Segurança dos Alimentos (EFSA, 2010)</em> estabelece valores populacionais de referência para a <strong>Ingestão Total de Água (alimentos sólidos + bebidas)</strong> estratificados por faixa etária:</p>
+  <ul>
+    <li><strong>Crianças e adolescentes de 9 a 13 anos:</strong> a EFSA estipula como referência populacional de água total <strong>2,1 L/dia para meninos</strong> e <strong>1,9 L/dia para meninas</strong>;</li>
+    <li><strong>Adolescentes a partir de 14 anos e adultos:</strong> a referência é de <strong>2,5 L/dia para homens</strong> e <strong>2,0 L/dia para mulheres</strong>.</li>
+  </ul>
+  <p>Para adolescentes entre 10 e 13 anos, a estimativa pelo peso corporal deve ser interpretada conjuntamente com essas referências absolutas da EFSA, dada a ampla variação de crescimento e superfície corporal nessa fase. Além disso, inquéritos dietéticos consolidados pela EFSA demonstram que <strong>aproximadamente 20% a 30% da ingestão total de água provém de alimentos sólidos</strong> (frutas, hortaliças, legumes e refeições úmidas), enquanto cerca de <strong>70% a 80% decorre de bebidas e água ingerida diretamente</strong>, com variação conforme o padrão alimentar individual.</p>
+
+  <h3>2. Reposição do Treino e Exercício Físico</h3>
+  <p>Conforme o posicionamento do <em>American College of Sports Medicine (ACSM, 2007)</em>, a taxa de sudorese no exercício varia amplamente entre 400 e 1.800 ml por hora de esforço. Para praticantes amadores regulares, recomenda-se a reposição de <strong>400 ml a 800 ml por hora de treino</strong> fracionada antes, durante e após a atividade física.</p>
+
+  <h3>3. Clima, Atividade Física, Gestação e Lactação</h3>
+  <p>O calor, a umidade relativa do ar e a atividade física aumentam as perdas de água de forma dinâmica e amplamente variável entre os indivíduos. Em dias quentes, ambientes abafados ou sob exposição solar direta, as perdas insensíveis por evaporação cutânea e respiração aumentam consideravelmente para dissipar calor e preservar a homeostase térmica. Por essa razão, <strong>nem a OMS, nem a EFSA nem o IOM fixam cotas numéricas universais de acréscimo diário em mililitros para o clima</strong>. A reposição deve ser dinâmica e individualizada, orientando-se pela sensação de sede, pelo ritmo de atividade e pela manutenção da urina em tom amarelo palha claro.</p>
+  <p>Por outro lado, condições fisiológicas específicas contam com acréscimos estabelecidos pela EFSA (2010) e pelo <em>Institute of Medicine (IOM, 2005)</em>: <strong>+300 ml/dia adicionais na gestação</strong> (para suportar a expansão do volume plasmático materno e o líquido amniótico) e <strong>+700 ml/dia na fase de amamentação</strong> (para atender à síntese fisiológica do leite materno).</p>
+
+  <h2>Avisos de Saúde e Limitações da Estimativa</h2>
+  <p>Esta ferramenta fornece uma estimativa populacional orientativa para pessoas saudáveis. <strong>Não é um diagnóstico médico nem uma prescrição clínica.</strong> As necessidades reais variam individualmente com:</p>
+  <ul>
+    <li>Consumo alimentar de sódio (sal) e proteínas (que demandam mais água para excreção de ureia);</li>
+    <li>Consumo de cafeína e bebidas alcoólicas (que atuam como diuréticos leves);</li>
+    <li>Uso de medicamentos anti-hipertensivos, diuréticos ou laxativos.</li>
+  </ul>
+  <p><strong>Restrição Médica Obrigatória:</strong> Pacientes diagnosticados com <em>Insuficiência Cardíaca Congestiva (ICC)</em>, <em>Insuficiência Renal Crônica (IRC)</em> em hemodiálise ou <em>Cirrose Hepática</em> com ascite têm mecanismos comprometidos de excreção de água e <strong>devem seguir rigorosamente o limite diário de líquidos estipulado por seu médico</strong> assistente, pois o consumo excessivo de líquidos pode causar edema pulmonar agudo e complicações graves.</p>
+
+  <h2>Perguntas Frequentes (FAQ)</h2>
+  <div class="faq-accordion">
+    <h3>Café, chás e sucos contam para a meta diária de água?</h3>
+    <p>Sim. Cerca de 20% a 30% da hidratação diária do ser humano provém de alimentos sólidos ricos em água (como frutas, legumes e sopas) e outras bebidas. Chás claros e água saborizada contam positivamente. No entanto, a <strong>água mineral pura deve ser a fonte primária</strong>, evitando sucos açucarados, refrigerantes e excesso de cafeína.</p>
+
+    <h3>Beber água demais faz mal? O que é hiponatremia?</h3>
+    <p>Sim. Beber quantidades extremas de água em um curto intervalo de tempo (por exemplo, mais de 4 ou 5 litros em poucas horas sem reposição eletrolítica de sódio) pode diluir perigosamente o sódio no sangue, causando uma condição médica potencialmente fatal chamada <strong>hiponatremia por intoxicação hídrica</strong>. Por isso, beba água de forma espaçada ao longo do dia, respeitando a sede e a cor da urina.</p>
+
+    <h3>Como saber se estou bebendo água suficiente sem precisar medir tudo?</h3>
+    <p>A melhor forma de monitoramento diário é a <strong>cor da sua urina</strong>: ela deve estar consistentemente em um tom amarelo claro transparente (semelhante à cor de palha ou limonada diluída). Urina escura é sinal inequívoco de necessidade de beber água, enquanto urina totalmente incolor como água pode indicar consumo excessivo desnecessário.</p>
+  </div>
+</section>

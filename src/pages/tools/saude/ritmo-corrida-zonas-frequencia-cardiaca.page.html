@@ -1,0 +1,251 @@
+---
+title: Calculadora de Ritmo de Corrida (Pace) e Zonas Cardíacas | Calculadora Master
+description: Calcule seu ritmo de corrida (pace em min/km), velocidade média em km/h e zonas de treinamento de frequência cardíaca (Tanaka e Karvonen). Projeções para 5k, 10k e maratona.
+keywords: ritmo de corrida, calculadora de pace, pace min km, zonas de frequencia cardiaca, calcular pace corrida, velocidade media corrida, zonas de treino cardio, tanaka karvonen
+canonical: https://www.calculadoramaster.com/tools/saude/ritmo-corrida-zonas-frequencia-cardiaca.html
+layout: tool
+pageScripts: <script type="module" src="{{ROOT_PREFIX}}js/tools/ritmo-corrida-zonas-frequencia-cardiaca.js"></script>
+---
+
+<h1>Calculadora de Ritmo de Corrida (Pace) e Zonas Cardíacas</h1>
+
+<p>No universo da corrida de rua, atletismo e condicionamento físico, o <strong>ritmo (popularmente chamado de <em>pace</em>)</strong> expressa quantos minutos e segundos você leva para percorrer cada quilômetro (min/km) ou milha (min/mi). Já as <strong>zonas de frequência cardíaca</strong> determinam a intensidade fisiológica e o combustível metabólico predominante em cada treino (gordura vs. carboidratos). Esta ferramenta integra os cálculos cinemáticos oficiais com as equações cardiorrespiratórias consagradas de <strong>Tanaka, Monahan &amp; Seals (2001)</strong> e o método de <strong>Karvonen</strong>, permitindo projetar seus tempos para provas de 5 km, 10 km, meia maratona e maratona completa.</p>
+
+<div class="card tool-calculator-card">
+  <h2 class="tool-form-title">Dados da Sua Corrida e Perfil Cardíaco</h2>
+
+  <form id="formRitmoCorrida" novalidate>
+    <!-- Distância Percorrida -->
+    <div class="form-group">
+      <label for="distanciaKm">Distância percorrida (km):</label>
+      <p id="ajudaDistancia" class="help-text">Informe a distância do seu treino ou prova (ex: 5 para 5k, 10 para 10k, 21,1 para meia maratona ou 42,2 para maratona).</p>
+      <input
+        type="text"
+        id="distanciaKm"
+        name="distanciaKm"
+        inputmode="decimal"
+        placeholder="Ex: 10,0"
+        autocomplete="off"
+        aria-describedby="ajudaDistancia"
+        required
+      >
+    </div>
+
+    <!-- Tempo Total (Horas, Minutos, Segundos) -->
+    <div class="form-group">
+      <label>Tempo total de duração:</label>
+      <p id="ajudaTempo" class="help-text">Informe o tempo decorrido em horas, minutos e segundos.</p>
+      <div class="form-row-three">
+        <div>
+          <label for="tempoHoras" class="sr-only">Horas</label>
+          <input
+            type="number"
+            id="tempoHoras"
+            name="tempoHoras"
+            min="0"
+            max="168"
+            step="1"
+            placeholder="0 h"
+            autocomplete="off"
+            aria-describedby="ajudaTempo"
+          >
+        </div>
+        <div>
+          <label for="tempoMinutos" class="sr-only">Minutos</label>
+          <input
+            type="number"
+            id="tempoMinutos"
+            name="tempoMinutos"
+            min="0"
+            max="59"
+            step="1"
+            placeholder="50 min"
+            autocomplete="off"
+            aria-describedby="ajudaTempo"
+            required
+          >
+        </div>
+        <div>
+          <label for="tempoSegundos" class="sr-only">Segundos</label>
+          <input
+            type="number"
+            id="tempoSegundos"
+            name="tempoSegundos"
+            min="0"
+            max="59"
+            step="1"
+            placeholder="00 s"
+            autocomplete="off"
+            aria-describedby="ajudaTempo"
+          >
+        </div>
+      </div>
+    </div>
+
+    <!-- Idade para Frequência Cardíaca (Opcional) -->
+    <div class="form-group">
+      <label for="idadeCardio">Sua idade (anos — opcional para zonas cardíacas):</label>
+      <p id="ajudaIdadeCardio" class="help-text">Utilizada para estimar sua Frequência Cardíaca Máxima (FCmáx) pela equação moderna de Tanaka et al. (208 - 0,7 × idade).</p>
+      <input
+        type="number"
+        id="idadeCardio"
+        name="idadeCardio"
+        min="10"
+        max="120"
+        step="1"
+        placeholder="Ex: 35"
+        autocomplete="off"
+        aria-describedby="ajudaIdadeCardio"
+      >
+    </div>
+
+    <!-- FC de Repouso (Opcional para Karvonen) -->
+    <div class="form-group">
+      <label for="fcRepouso">Frequência cardíaca em repouso (bpm — opcional):</label>
+      <p id="ajudaFcRepouso" class="help-text">Se você conhece sua pulsação matinal ao acordar (ex: 55 a 65 bpm), informe-a para aplicar o método de Karvonen (FC de Reserva).</p>
+      <input
+        type="number"
+        id="fcRepouso"
+        name="fcRepouso"
+        min="30"
+        max="120"
+        step="1"
+        placeholder="Ex: 60"
+        autocomplete="off"
+        aria-describedby="ajudaFcRepouso"
+      >
+    </div>
+
+    <p id="erroRitmo" class="tool-error-message" role="alert" aria-live="assertive" hidden></p>
+
+    <div class="tool-actions-primary">
+      <button type="submit" id="btnCalcularRitmo" class="btn btn-primary">Calcular Ritmo e Zonas</button>
+      <button type="button" id="btnLimparRitmo" class="btn btn-secondary">Limpar</button>
+    </div>
+  </form>
+</div>
+
+<!-- Seção de Resultados -->
+<section id="resultadoRitmo" class="tool-result-section" aria-live="polite" hidden>
+  <div class="card tool-result-card">
+    <div class="result-header">
+      <h2 class="tool-result-title">Diagnóstico Cinemático e Cardiorrespiratório</h2>
+      <span class="status-badge">Performance</span>
+    </div>
+
+    <!-- Grid de Destaques Principais -->
+    <div class="result-grid">
+      <div class="result-highlight-item">
+        <span class="result-label">Ritmo Médio (Pace)</span>
+        <strong id="resPacePrincipal" class="result-value">0:00 min/km</strong>
+        <span id="resPaceMilha" class="result-subtext">0:00 min/mi</span>
+      </div>
+
+      <div class="result-highlight-item">
+        <span class="result-label">Velocidade Média</span>
+        <strong id="resVelocidadeKmh" class="result-value">0 km/h</strong>
+        <span id="resVelocidadeMph" class="result-subtext">0 mph</span>
+      </div>
+    </div>
+
+    <!-- Tabela de Projeção para Distâncias Oficiais -->
+    <div class="result-detail-card">
+      <h3 class="result-detail-title">Projeção de Tempos em Distâncias Oficiais</h3>
+      <p class="help-text">Tempo estimado para completar provas clássicas caso consiga sustentar rigorosamente este mesmo ritmo médio:</p>
+      <div class="table-responsive">
+        <table id="tabelaProvasCorrida" class="tool-data-table">
+          <thead>
+            <tr>
+              <th scope="col">Distância e Prova</th>
+              <th scope="col">Extensão</th>
+              <th scope="col">Tempo Projetado</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Preenchido via JavaScript -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Zonas de Treinamento Cardíaco -->
+    <div class="result-detail-card">
+      <h3 class="result-detail-title">Zonas de Treinamento Cardíaco (FC)</h3>
+      <p id="resCardioInfo" class="help-text">Zonas calculadas conforme o perfil etário informado:</p>
+      <div class="table-responsive">
+        <table id="tabelaZonasCardio" class="tool-data-table">
+          <thead>
+            <tr>
+              <th scope="col">Zona e Nível</th>
+              <th scope="col">% Intensidade</th>
+              <th scope="col">Faixa Alvo (bpm)</th>
+              <th scope="col">Percepção de Esforço (Borg)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Preenchido via JavaScript -->
+          </tbody>
+        </table>
+      </div>
+      <p class="table-subtext">Importante: As zonas cardíacas são estimativas matemáticas populacionais e não substituem o teste ergoespirométrico com laudo médico.</p>
+    </div>
+
+    <!-- Ações do Resultado: Copiar, Compartilhar, Imprimir -->
+    <div class="tool-result-actions-wrapper">
+      <div id="acoesResultadoRitmo" class="tool-actions-container"></div>
+      <p id="statusAcoesRitmo" class="sr-only" role="status" aria-live="polite"></p>
+    </div>
+  </div>
+</section>
+
+<!-- Conteúdo Educativo e Complementar -->
+<section class="tool-content-section">
+  <h2>O que é o Ritmo (Pace) na Corrida?</h2>
+  <p>Na fisiologia do esporte e no dia a dia dos corredores, a velocidade média expressa em km/h é pouco intuitiva para gerenciar o esforço em tempo real. O padrão mundial adotado é o <strong>ritmo ou <em>pace</em></strong>, que indica o tempo necessário para percorrer exatamente uma unidade de distância:</p>
+  <ul>
+    <li><strong>min/km (minutos por quilômetro):</strong> padrão oficial no Brasil, Europa e na maioria dos países que adotam o sistema métrico decimal;</li>
+    <li><strong>min/mi (minutos por milha):</strong> comum nos Estados Unidos e Reino Unido (1 milha = 1,609344 km).</li>
+  </ul>
+  <p>Por exemplo: um pace de <code>5:00 min/km</code> significa que você corre cada quilômetro em exatamente 5 minutos, o que equivale a uma velocidade média de <code>12 km/h</code>. Um pace de <code>6:00 min/km</code> equivale a <code>10 km/h</code>.</p>
+
+  <h2>Como Calcular Pace, Distância e Velocidade?</h2>
+  <p>As relações matemáticas cinemáticas fundamentais são:</p>
+  <ul>
+    <li><code>Ritmo em segundos/km = Tempo total em segundos ÷ Distância em km</code></li>
+    <li><code>Velocidade em km/h = Distância em km ÷ Tempo em horas</code></li>
+    <li><code>Conversão: Velocidade (km/h) = 60 ÷ Pace em minutos decimais</code></li>
+  </ul>
+
+  <h2>Frequência Cardíaca Máxima: Tanaka vs. Fox</h2>
+  <p>Durante décadas, a fórmula empírica clássica de Fox e Haskell (1971) — <code>FCmáx = 220 - Idade</code> — foi amplamente difundida. No entanto, estudos epidemiológicos modernos demonstraram que ela subestima a FC máxima em adultos mais velhos e a superestima em jovens.</p>
+  <p>Por isso, nossa calculadora adota a <strong>Equação de Tanaka, Monahan &amp; Seals (2001)</strong>, validada em mais de 18.000 voluntários de diferentes idades:</p>
+  <p><code>FCmáx = 208 - (0,7 × Idade em anos)</code></p>
+  <p>Além disso, quando você informa sua pulsação em repouso ao acordar, a ferramenta aplica o <strong>Método de Karvonen (Frequência Cardíaca de Reserva - FCR)</strong>, que individualiza muito melhor as zonas de esforço:</p>
+  <p><code>FCR = FCmáx - FC de Repouso</code></p>
+  <p><code>FC da Zona = FC de Repouso + (FCR × % da Intensidade)</code></p>
+
+  <h2>As 5 Zonas de Treinamento Cardíaco e Seus Benefícios</h2>
+  <p>O treinamento polarizado contemporâneo divide o esforço em 5 zonas fisiológicas bem delimitadas:</p>
+  <ol>
+    <li><strong>Zona 1 (50% a 60% — Regenerativa):</strong> corrida bem leve, na qual é possível conversar tranquilamente em frases longas. Acelera a remoção de metabólitos musculares e regenera tecidos sem gerar fadiga central;</li>
+    <li><strong>Zona 2 (60% a 70% — Base Aeróbica / Queima de Gordura):</strong> a zona mais importante para corredores de fundo. Aumenta a densidade de capilares sanguíneos nos músculos e estimula a biogênese de mitocôndrias, ensinando o corpo a usar gordura como fonte de energia predominante;</li>
+    <li><strong>Zona 3 (70% a 80% — Aeróbica de Ritmo):</strong> respiração mais profunda, ritmo confortável porém firme. Desenvolve a eficiência mecânica e a capacidade cardiovascular;</li>
+    <li><strong>Zona 4 (80% a 90% — Limiar de Lactato):</strong> respiração pesada, fala limitada a palavras curtas. É a velocidade máxima que o organismo consegue sustentar antes que o ácido lático se acumule descontroladamente no sangue;</li>
+    <li><strong>Zona 5 (90% a 100% — Potência Anaeróbica):</strong> esforço máximo exaustivo (sprints curtos ou tiros de 200 a 400 metros). Melhora o VO2máx e a potência neuromuscular rápida.</li>
+  </ol>
+
+  <h2>Avisos de Saúde e Limitações</h2>
+  <p>As equações preditivas de frequência cardíaca possuem um desvio-padrão natural de aproximadamente <strong>±10 a 12 batimentos por minuto (bpm)</strong>. Medicamentos de uso contínuo (como betabloqueadores para pressão arterial, broncodilatadores ou termogênicos com cafeína) alteram expressivamente os batimentos cardíacos. <strong>Antes de iniciar treinos intensos em Zona 4 ou 5, faça um check-up cardiológico com eletrocardiograma e teste ergométrico.</strong></p>
+
+  <h2>Perguntas Frequentes (FAQ)</h2>
+  <div class="faq-accordion">
+    <h3>Por que a maior parte do treino de corrida deve ser na Zona 2?</h3>
+    <p>Grandes treinadores mundiais aplicam o método 80/20: cerca de 80% do volume semanal de corrida deve ocorrer em intensidade leve (Zona 2), e apenas 20% em ritmo moderado a intenso (Zonas 4 e 5). Correr devagar constrói o &quot;motor aeróbico&quot; e a base osteomuscular sem gerar risco de sobrecarga articular ou lesões por <em>overtraining</em>.</p>
+
+    <h3>Consigo manter o mesmo pace dos 5k na Meia Maratona?</h3>
+    <p>Raramente. À medida que a distância aumenta, o desgaste fisiológico, a depleção do glicogênio e o estresse articular exigem um ritmo naturalmente mais lento. As projeções desta calculadora mostram a manutenção estrita do pace; em provas reais mais longas, é prudente adicionar de 15 a 30 segundos por quilômetro ao pace de provas curtas.</p>
+
+    <h3>O que fazer se minha frequência cardíaca subir para a Zona 4 durante uma corrida leve?</h3>
+    <p>Em dias de calor intenso, desidratação, cansaço ou após noites mal dormidas, ocorre o fenômeno do <em>desvio cardíaco (cardiovascular drift)</em>, no qual o coração bate mais rápido para resfriar a pele. Se sua frequência subir acima da Zona 2 em um treino leve, reduza a velocidade da passada ou intercale pequenos trechos de caminhada até o pulso estabilizar.</p>
+  </div>
+</section>

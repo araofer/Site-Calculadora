@@ -278,7 +278,9 @@
       "massa corporal"
     ],
     "related": [
-      "idade"
+      "idade",
+      "metabolismo-basal",
+      "gasto-calorico-diario"
     ],
     "featured": true,
     "status": "published"
@@ -302,7 +304,8 @@
       "nascimento"
     ],
     "related": [
-      "imc"
+      "imc",
+      "idade-gestacional-data-parto"
     ],
     "featured": false,
     "status": "published"
@@ -1431,6 +1434,269 @@
     "sourceReferences": [
       "https://sebrae.com.br/sites/PortalSebrae/artigos/como-fazer-o-fluxo-de-caixa-da-sua-empresa",
       "https://www.gov.br/empresas-e-negocios/pt-br/empreendedor/gestao/financas/fluxo-de-caixa"
+    ]
+  },
+  {
+    "id": "metabolismo-basal",
+    "slug": "metabolismo-basal",
+    "name": "Calculadora de Metabolismo Basal (TMB)",
+    "category": "Saúde",
+    "categorySlug": "saude",
+    "audience": "universal",
+    "description": "Calcule sua Taxa Metabólica Basal (TMB) pelas fórmulas de Mifflin-St Jeor, Harris-Benedict e Katch-McArdle e descubra quantas calorias seu corpo gasta em repouso.",
+    "url": "/tools/saude/metabolismo-basal.html",
+    "status": "published",
+    "formulaStatus": "verified",
+    "implementation": "factory",
+    "features": {
+      "chart": false,
+      "table": true,
+      "pdf": false,
+      "copy": true,
+      "share": true,
+      "print": true,
+      "favorite": true,
+      "article": false
+    },
+    "keywords": [
+      "metabolismo basal",
+      "taxa metabolica basal",
+      "calculadora tmb",
+      "calcular tmb online",
+      "mifflin st jeor",
+      "harris benedict",
+      "katch mcardle",
+      "calorias em repouso",
+      "gasto calorico basal"
+    ],
+    "related": [
+      "gasto-calorico-diario",
+      "calculadora-macronutrientes",
+      "imc"
+    ],
+    "shortName": "Metabolismo Basal (TMB)",
+    "sourceReferences": [
+      "https://academic.oup.com/ajcn/article-abstract/51/2/241/4695104",
+      "https://pubmed.ncbi.nlm.nih.gov/6741850/",
+      "https://www.fao.org/3/y5686e/y5686e00.htm"
+    ]
+  },
+  {
+    "id": "gasto-calorico-diario",
+    "slug": "gasto-calorico-diario",
+    "name": "Calculadora de Gasto Calórico Diário (GET / TDEE)",
+    "category": "Saúde",
+    "categorySlug": "saude",
+    "audience": "universal",
+    "description": "Calcule seu Gasto Energético Total Diário (GET / TDEE) pelos multiplicadores de atividade física (PAL) e descubra a meta calórica ideal para emagrecer, manter ou ganhar peso.",
+    "url": "/tools/saude/gasto-calorico-diario.html",
+    "status": "published",
+    "formulaStatus": "verified",
+    "implementation": "factory",
+    "features": {
+      "chart": false,
+      "table": true,
+      "pdf": false,
+      "copy": true,
+      "share": true,
+      "print": true,
+      "favorite": true,
+      "article": false
+    },
+    "keywords": [
+      "gasto calorico diario",
+      "calculadora get",
+      "tdee calculator",
+      "gasto energetico total",
+      "quantas calorias queimo por dia",
+      "calorias para emagrecer",
+      "calorias para hipertrofia",
+      "deficit calorico"
+    ],
+    "related": [
+      "metabolismo-basal",
+      "calculadora-macronutrientes",
+      "estimativa-hidratacao"
+    ],
+    "shortName": "Gasto Calórico Diário",
+    "sourceReferences": [
+      "https://www.fao.org/3/y5686e/y5686e00.htm",
+      "https://academic.oup.com/ajcn/article-abstract/51/2/241/4695104",
+      "https://pubmed.ncbi.nlm.nih.gov/13594881/"
+    ]
+  },
+  {
+    "id": "calculadora-macronutrientes",
+    "slug": "calculadora-macronutrientes",
+    "name": "Calculadora de Macronutrientes",
+    "category": "Saúde",
+    "categorySlug": "saude",
+    "audience": "universal",
+    "description": "Distribua suas calorias diárias em gramas e g/kg de carboidratos, proteínas, gorduras e fibras pelos Fatores Atwater para emagrecer, secar ou ganhar massa muscular.",
+    "url": "/tools/saude/calculadora-macronutrientes.html",
+    "status": "published",
+    "formulaStatus": "verified",
+    "implementation": "factory",
+    "features": {
+      "chart": false,
+      "table": true,
+      "pdf": false,
+      "copy": true,
+      "share": true,
+      "print": true,
+      "favorite": true,
+      "article": false
+    },
+    "keywords": [
+      "calculadora de macronutrientes",
+      "calcular macros",
+      "divisao de macros",
+      "dieta flexivel",
+      "gramas de proteina por dia",
+      "gramas de carboidrato",
+      "macros para hipertrofia",
+      "macros para emagrecer"
+    ],
+    "related": [
+      "gasto-calorico-diario",
+      "metabolismo-basal",
+      "estimativa-hidratacao"
+    ],
+    "shortName": "Calculadora de Macronutrientes",
+    "sourceReferences": [
+      "https://nap.nationalacademies.org/catalog/10490/dietary-reference-intakes-for-energy-carbohydrate-fiber-fat-fatty-acids-cholesterol-protein-and-amino-acids",
+      "https://jissn.biomedcentral.com/articles/10.1186/s12970-017-0177-8"
+    ]
+  },
+  {
+    "id": "estimativa-hidratacao",
+    "slug": "estimativa-hidratacao",
+    "name": "Calculadora de Estimativa de Hidratação Diária",
+    "category": "Saúde",
+    "categorySlug": "saude",
+    "audience": "universal",
+    "description": "Calcule quanta água beber por dia em litros e copos com base no peso, idade, exercícios e clima, diferenciando água total e líquidos diretos.",
+    "url": "/tools/saude/estimativa-hidratacao.html",
+    "status": "published",
+    "formulaStatus": "verified",
+    "implementation": "factory",
+    "features": {
+      "chart": false,
+      "table": true,
+      "pdf": false,
+      "copy": true,
+      "share": true,
+      "print": true,
+      "favorite": true,
+      "article": false
+    },
+    "keywords": [
+      "calculadora de hidratacao",
+      "quanto beber de agua por dia",
+      "consumo de agua diario",
+      "quantos litros de agua beber",
+      "calcular agua por peso",
+      "hidratacao no exercicio",
+      "tabela de agua por dia"
+    ],
+    "related": [
+      "ritmo-corrida-zonas-frequencia-cardiaca",
+      "gasto-calorico-diario",
+      "calculadora-macronutrientes"
+    ],
+    "shortName": "Estimativa de Hidratação",
+    "sourceReferences": [
+      "https://www.efsa.europa.eu/en/efsajournal/pub/1459",
+      "https://pubmed.ncbi.nlm.nih.gov/17277604/",
+      "https://www.who.int/publications/i/item/9241593989"
+    ]
+  },
+  {
+    "id": "ritmo-corrida-zonas-frequencia-cardiaca",
+    "slug": "ritmo-corrida-zonas-frequencia-cardiaca",
+    "name": "Calculadora de Ritmo de Corrida e Zonas Cardíacas",
+    "category": "Saúde",
+    "categorySlug": "saude",
+    "audience": "universal",
+    "description": "Calcule seu ritmo de corrida (pace em min/km e min/mi), velocidade média em km/h e zonas de frequência cardíaca de treino (Tanaka e Karvonen) com parciais para 5k a maratona.",
+    "url": "/tools/saude/ritmo-corrida-zonas-frequencia-cardiaca.html",
+    "status": "published",
+    "formulaStatus": "verified",
+    "implementation": "factory",
+    "features": {
+      "chart": false,
+      "table": true,
+      "pdf": false,
+      "copy": true,
+      "share": true,
+      "print": true,
+      "favorite": true,
+      "article": false
+    },
+    "keywords": [
+      "ritmo de corrida",
+      "calculadora de pace",
+      "pace min km",
+      "zonas de frequencia cardiaca",
+      "calcular pace corrida",
+      "velocidade media corrida",
+      "zonas de treino cardio",
+      "tanaka karvonen"
+    ],
+    "related": [
+      "estimativa-hidratacao",
+      "gasto-calorico-diario",
+      "metabolismo-basal"
+    ],
+    "shortName": "Ritmo de Corrida e Zonas FC",
+    "sourceReferences": [
+      "https://www.jacc.org/doi/10.1016/S0735-1097(00)01054-8",
+      "https://pubmed.ncbi.nlm.nih.gov/13470504/",
+      "https://www.acsm.org/"
+    ]
+  },
+  {
+    "id": "idade-gestacional-data-parto",
+    "slug": "idade-gestacional-data-parto",
+    "name": "Calculadora de Idade Gestacional e Data do Parto (DPP)",
+    "category": "Saúde",
+    "categorySlug": "saude",
+    "audience": "universal",
+    "description": "Calcule a idade gestacional precisa em semanas e dias e a Data Provável do Parto (DPP) pela Regra de Naegele (DUM) com ajuste de ciclo ou por Ultrassom (CCN).",
+    "url": "/tools/saude/idade-gestacional-data-parto.html",
+    "status": "published",
+    "formulaStatus": "verified",
+    "implementation": "factory",
+    "features": {
+      "chart": false,
+      "table": true,
+      "pdf": false,
+      "copy": true,
+      "share": true,
+      "print": true,
+      "favorite": true,
+      "article": false
+    },
+    "keywords": [
+      "idade gestacional",
+      "calculadora gestacional",
+      "data provavel do parto",
+      "dpp calculadora",
+      "quantas semanas de gravidez",
+      "calcular idade gestacional dum",
+      "regra de naegele",
+      "semanas e dias de gestacao"
+    ],
+    "related": [
+      "idade",
+      "estimativa-hidratacao",
+      "imc"
+    ],
+    "shortName": "Idade Gestacional e DPP",
+    "sourceReferences": [
+      "https://bvsms.saude.gov.br/bvs/publicacoes/cadernos_atencao_basica_32_prenatal.pdf",
+      "https://www.febrasgo.org.br/",
+      "https://www.acog.org/clinical/clinical-guidance/committee-opinion/articles/2017/05/methods-for-estimating-the-due-date"
     ]
   }
 ]

@@ -1,0 +1,260 @@
+---
+title: Calculadora de Idade Gestacional e Data do Parto (DPP) | Calculadora Master
+description: Calcule a idade gestacional exata em semanas e dias e a Data Provável do Parto (DPP) pela Regra de Naegele (DUM) ou por Ultrassom. Diretrizes do Ministério da Saúde.
+keywords: idade gestacional, calculadora gestacional, data provavel do parto, dpp calculadora, quantas semanas de gravidez, calcular idade gestacional dum, regra de naegele, semanas e dias de gestacao
+canonical: https://www.calculadoramaster.com/tools/saude/idade-gestacional-data-parto.html
+layout: tool
+pageScripts: <script type="module" src="{{ROOT_PREFIX}}js/tools/idade-gestacional-data-parto.js"></script>
+---
+
+<h1>Calculadora de Idade Gestacional e Data Provável do Parto (DPP)</h1>
+
+<p>A determinação precisa da <strong>idade gestacional (expressa em semanas e dias)</strong> e da <strong>Data Provável do Parto (DPP)</strong> é o pilar central da assistência pré-natal obstétrica. Ela orienta a datação dos exames laboratoriais, a realização dos ultrassons morfológicos de primeiro e segundo trimestres, a administração de vacinas e o acompanhamento do crescimento fetal. Esta ferramenta aplica a clássica <strong>Regra de Naegele</strong> ajustada para a duração individual do ciclo menstrual, conforme os protocolos do <strong>Ministério da Saúde do Brasil</strong> e da <strong>FEBRASGO</strong>, permitindo também o cálculo a partir de ultrassonografia precoce.</p>
+
+<div class="card tool-calculator-card">
+  <h2 class="tool-form-title">Dados da Gestação</h2>
+
+  <form id="formIdadeGestacional" novalidate>
+    <!-- Modo de Cálculo -->
+    <div class="form-group">
+      <label>Método de cálculo disponível:</label>
+      <div class="radio-group-vertical">
+        <label class="radio-label">
+          <input type="radio" name="modoCalculo" id="modoDum" value="dum" checked>
+          Pela Data da Última Menstruação (DUM — Regra de Naegele)
+        </label>
+        <label class="radio-label">
+          <input type="radio" name="modoCalculo" id="modoUsg" value="usg">
+          Pela Ultrassonografia (USG do 1º Trimestre)
+        </label>
+      </div>
+    </div>
+
+    <!-- Campos para DUM -->
+    <div id="grupoCamposDum">
+      <div class="form-group">
+        <label for="dataDum">Data do primeiro dia da última menstruação (DUM):</label>
+        <p id="ajudaDataDum" class="help-text">Informe a data em que começou o sangramento da sua última menstruação antes da gravidez.</p>
+        <input
+          type="date"
+          id="dataDum"
+          name="dataDum"
+          autocomplete="off"
+          aria-describedby="ajudaDataDum"
+          required
+        >
+      </div>
+
+      <div class="form-group">
+        <label for="duracaoCiclo">Duração média do seu ciclo menstrual (dias):</label>
+        <p id="ajudaDuracaoCiclo" class="help-text">O padrão clássico é de 28 dias. Se o seu ciclo for mais curto ou mais longo (entre 21 e 40 dias), o cálculo ajustará a data provável da ovulação.</p>
+        <input
+          type="number"
+          id="duracaoCiclo"
+          name="duracaoCiclo"
+          min="21"
+          max="40"
+          step="1"
+          value="28"
+          placeholder="28"
+          autocomplete="off"
+          aria-describedby="ajudaDuracaoCiclo"
+        >
+      </div>
+    </div>
+
+    <!-- Campos para Ultrassom (USG) -->
+    <div id="grupoCamposUsg" hidden>
+      <div class="form-group">
+        <label for="dataExameUsg">Data em que o exame de ultrassom foi realizado:</label>
+        <p id="ajudaDataExame" class="help-text">Consulte a data indicada no cabeçalho do laudo da ultrassonografia.</p>
+        <input
+          type="date"
+          id="dataExameUsg"
+          name="dataExameUsg"
+          autocomplete="off"
+          aria-describedby="ajudaDataExame"
+        >
+      </div>
+
+      <div class="form-group">
+        <label>Idade gestacional apontada no laudo do exame:</label>
+        <p id="ajudaIdadeLaudo" class="help-text">Informe as semanas e os dias adicionais registrados pelo médico ultrassonografista (ex: 8 semanas e 3 dias).</p>
+        <div class="form-row-two">
+          <div>
+            <label for="semanasExameUsg" class="sr-only">Semanas no exame</label>
+            <input
+              type="number"
+              id="semanasExameUsg"
+              name="semanasExameUsg"
+              min="4"
+              max="42"
+              step="1"
+              placeholder="Ex: 8 semanas"
+              autocomplete="off"
+              aria-describedby="ajudaIdadeLaudo"
+            >
+          </div>
+          <div>
+            <label for="diasExameUsg" class="sr-only">Dias no exame</label>
+            <input
+              type="number"
+              id="diasExameUsg"
+              name="diasExameUsg"
+              min="0"
+              max="6"
+              step="1"
+              value="0"
+              placeholder="0 dias"
+              autocomplete="off"
+              aria-describedby="ajudaIdadeLaudo"
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p id="erroGestacao" class="tool-error-message" role="alert" aria-live="assertive" hidden></p>
+
+    <div class="tool-actions-primary">
+      <button type="submit" id="btnCalcularGestacao" class="btn btn-primary">Calcular Idade Gestacional e DPP</button>
+      <button type="button" id="btnLimparGestacao" class="btn btn-secondary">Limpar</button>
+    </div>
+  </form>
+</div>
+
+<!-- Seção de Resultados -->
+<section id="resultadoGestacao" class="tool-result-section" aria-live="polite" hidden>
+  <div class="card tool-result-card">
+    <div class="result-header">
+      <h2 class="tool-result-title">Estimativa da Idade Gestacional e DPP</h2>
+      <span class="status-badge">Gestação</span>
+    </div>
+
+    <!-- Grid de Destaques Principais -->
+    <div class="result-grid">
+      <div class="result-highlight-item">
+        <span class="result-label">Idade Gestacional Atual</span>
+        <strong id="resIdadePrincipal" class="result-value">0 semanas e 0 dias</strong>
+        <span id="resClassificacaoTermo" class="result-subtext">Classificação gestacional</span>
+      </div>
+
+      <div class="result-highlight-item">
+        <span class="result-label">Data Provável do Parto (DPP)</span>
+        <strong id="resDppPrincipal" class="result-value">--/--/----</strong>
+        <span class="result-subtext">40 semanas completas de gestação</span>
+      </div>
+
+      <div class="result-highlight-item">
+        <span class="result-label">Trimestre Atual</span>
+        <strong id="resTrimestre" class="result-value">1º Trimestre</strong>
+        <span class="result-subtext">etapa de desenvolvimento fetal</span>
+      </div>
+
+      <div class="result-highlight-item">
+        <span class="result-label">Contagem Regressiva para a DPP</span>
+        <strong id="resDiasRestantes" class="result-value">~0 dias</strong>
+        <span class="result-subtext">tempo estimado até o termo</span>
+      </div>
+    </div>
+
+    <!-- Avisos Obstétricos e Limitações -->
+    <div id="avisosGestacao"></div>
+
+    <!-- Tabela de Marcos e Linha do Tempo da Gestação -->
+    <div class="result-detail-card">
+      <h3 class="result-detail-title">Linha do Tempo e Marcos Gestacionais</h3>
+      <p class="help-text">Principais fases do desenvolvimento do bebê ao longo das 40 semanas:</p>
+      <div class="table-responsive">
+        <table class="tool-data-table">
+          <thead>
+            <tr>
+              <th scope="col">Período Gestacional</th>
+              <th scope="col">Intervalo em Semanas</th>
+              <th scope="col">Marco Fisiológico Principal</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>1º Trimestre</strong></td>
+              <td>0 a 13 semanas e 6 dias</td>
+              <td>Formação de todos os órgãos vitais (organogênese), início dos batimentos e risco de enjoos matinais.</td>
+            </tr>
+            <tr>
+              <td><strong>2º Trimestre</strong></td>
+              <td>14 a 27 semanas e 6 dias</td>
+              <td>Movimentos fetais perceptíveis, ultrassom morfológico e marco de viabilidade fetal (~24 semanas).</td>
+            </tr>
+            <tr>
+              <td><strong>3º Trimestre</strong></td>
+              <td>28 semanas até o nascimento</td>
+              <td>Ganho acelerado de peso fetal, maturação pulmonar e posicionamento cefálico para o parto.</td>
+            </tr>
+            <tr>
+              <td><strong>Termo Pleno</strong></td>
+              <td>39 semanas a 40 semanas e 6 dias</td>
+              <td>Melhor momento fisiológico para o nascimento natural espontâneo ou cesariana eletiva.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Ações do Resultado: Copiar, Compartilhar, Imprimir -->
+    <div class="tool-result-actions-wrapper">
+      <div id="acoesResultadoGestacao" class="tool-actions-container"></div>
+      <p id="statusAcoesGestacao" class="sr-only" role="status" aria-live="polite"></p>
+    </div>
+  </div>
+</section>
+
+<!-- Conteúdo Educativo e Complementar -->
+<section class="tool-content-section">
+  <h2>Como Funciona o Cálculo da Idade Gestacional?</h2>
+  <p>Na obstetrícia moderna, a gravidez não é contada em meses civis, mas sim em <strong>semanas e dias completos</strong>. Isso ocorre porque os meses do calendário possuem durações desiguais (28, 30 ou 31 dias), ao passo que a contagem semanal permite precisão cronológica rigorosa para acompanhar a embriologia fetal.</p>
+
+  <h2>A Regra de Naegele e a Data da Última Menstruação (DUM)</h2>
+  <p>Formulada pelo obstetra alemão Franz Naegele no século XIX, a regra considera que uma gestação humana dura em média <strong>280 dias (40 semanas)</strong> a partir do primeiro dia da última menstruação, assumindo uma mulher com ciclo menstrual regular de 28 dias cuja ovulação ocorre por volta do 14º dia:</p>
+  <ul>
+    <li><strong>Passo 1:</strong> Adiciona-se 7 dias ao dia de início da DUM;</li>
+    <li><strong>Passo 2:</strong> Subtrai-se 3 meses (ou soma-se 9 meses);</li>
+    <li><strong>Passo 3:</strong> Ajusta-se o ano do calendário.</li>
+  </ul>
+  <p>Por exemplo: se a DUM foi no dia <strong>10 de maio de 2026</strong>, somam-se 7 dias (17) e subtraem-se 3 meses (fevereiro), resultando na DPP de <strong>17 de fevereiro de 2027</strong>.</p>
+
+  <h2>Ajuste para Ciclos com Duração Diferente de 28 Dias</h2>
+  <p>Muitas mulheres possuem ciclos menstruais regulares que não duram exatamente 28 dias. A fase folicular (antes da ovulação) pode variar, enquanto a fase lútea (entre a ovulação e a menstruação) é relativamente constante em cerca de 14 dias em ciclos previsíveis:</p>
+  <ul>
+    <li><strong>Mulher com ciclo regular de 35 dias:</strong> a ovulação acontece habitualmente em torno do 21º dia. Logo, somam-se <strong>+7 dias adicionais</strong> à data da DPP;</li>
+    <li><strong>Mulher com ciclo regular de 24 dias:</strong> a ovulação ocorre por volta do 10º dia. Logo, subtraem-se <strong>-4 dias</strong> da DPP calculada.</li>
+  </ul>
+  <p><em>Atenção:</em> Este ajuste matemático só é aplicável quando a mulher possui ciclos regulares de duração conhecida. Em casos de ciclos francamente irregulares, imprevisíveis ou em caso de sangramentos atípicos, a DUM torna-se pouco confiável e a ultrassonografia precoce deve orientar a datação clínica.</p>
+
+  <h2>Ultrassonografia e Critérios Clínicos de Discrepância com a DUM</h2>
+  <p>Quando a gestante não tem certeza da DUM, apresenta ciclos irregulares ou quando há divergência entre a DUM e o exame de imagem, a ultrassonografia fornece a referência cronológica. As diretrizes do <em>American College of Obstetricians and Gynecologists (ACOG Committee Opinion No. 700)</em> e do Ministério da Saúde estabelecem critérios estratificados conforme o método de medição e a idade gestacional:</p>
+  <ul>
+    <li><strong>Até 8 semanas e 6 dias (1º Trimestre — CCN):</strong> discrepância superior a <strong>5 dias</strong> entre DUM e o Comprimento Cabeça-Nádega (CCN) sugere a retificação da DPP pelo ultrassom;</li>
+    <li><strong>De 9 semanas a 13 semanas e 6 dias (1º Trimestre — CCN):</strong> tolerância clínica de até <strong>7 dias</strong> antes de retificar pelo CCN;</li>
+    <li><strong>De 14 semanas a 15 semanas e 6 dias (2º Trimestre — Biometria Fetal):</strong> a partir de 14 semanas utilizam-se parâmetros biométricos (diâmetro biparietal, circunferência cefálica, circunferência abdominal e fêmur), com tolerância clínica de <strong>7 dias</strong>;</li>
+    <li><strong>De 16 semanas a 21 semanas e 6 dias (2º Trimestre — Biometria Fetal):</strong> tolerância clínica de <strong>10 dias</strong>;</li>
+    <li><strong>De 22 semanas a 27 semanas e 6 dias (2º Trimestre — Biometria Fetal):</strong> tolerância clínica de <strong>14 dias</strong>;</li>
+    <li><strong>A partir de 28 semanas (3º Trimestre — Biometria Fetal):</strong> margem de variabilidade ampliada para <strong>21 dias</strong>.</li>
+  </ul>
+  <p><strong>Alerta sobre o Terceiro Trimestre:</strong> A ACOG adverte categoricamente que <em>se uma ultrassonografia precoce confiável (realizada no 1º ou início do 2º trimestre) já estabeleceu a idade gestacional, a gravidez NÃO deve ser redatada no 3º trimestre</em>. A alteração tardia da DPP acarreta grave risco de redatação indevida, podendo mascarar distúrbios patológicos reais do crescimento fetal (como Restrição de Crescimento Intrauterino - RCIU ou macrossomia fetal) ou provocar partos prematuros iatrogênicos.</p>
+  <p><strong>Importante:</strong> Esses parâmetros são referenciais de apoio ao pré-natal e <em>não constituem decisão obstétrica ou diagnóstico automático</em> emitido pela ferramenta. A definição da datação oficial e a conduta clínica são prerrogativas exclusivas do médico obstetra assistente.</p>
+
+  <h2>Aviso Importante e Limitações Médicas</h2>
+  <p>A Data Provável do Parto (DPP) é apenas uma <strong>referência matemática central</strong>. Na realidade obstétrica, <strong>apenas cerca de 4% a 5% dos bebês nascem no dia exato da DPP</strong>. Considera-se perfeitamente normal e seguro que o trabalho de parto espontâneo ocorra em qualquer momento entre <strong>37 semanas completas e 41 semanas e 6 dias</strong> (gravidez a termo). Esta ferramenta tem caráter estritamente educativo e informativo e <strong>não substitui sob nenhuma circunstância as consultas médicas e o acompanhamento pré-natal</strong>.</p>
+
+  <h2>Perguntas Frequentes (FAQ)</h2>
+  <div class="faq-accordion">
+    <h3>Como converter semanas de gestação em meses?</h3>
+    <p>A equivalência aproximada em meses é a seguinte: 1 a 4 semanas (1º mês); 5 a 8 semanas (2º mês); 9 a 13 semanas (3º mês); 14 a 17 semanas (4º mês); 18 a 22 semanas (5º mês); 23 a 27 semanas (6º mês); 28 a 31 semanas (7º mês); 32 a 36 semanas (8º mês); 37 a 40 semanas (9º mês completo).</p>
+
+    <h3>O que significa bebê a termo, prematuro e pós-termo?</h3>
+    <p>Bebê <strong>prematuro (pré-termo)</strong> é aquele que nasce antes de completar 37 semanas. Bebê <strong>a termo</strong> nasce entre 37 e 41 semanas e 6 dias (com maturação pulmonar e cerebral completa). Já após 42 semanas completas (<strong>pós-termo</strong>), a função da placenta pode reduzir, exigindo acompanhamento intensivo ou indução do parto.</p>
+
+    <h3>O que fazer se a data da minha menstruação discordar da data do ultrassom?</h3>
+    <p>Converse sempre com seu médico obstetra. No primeiro trimestre precoce, se a diferença entre a DUM e o ultrassom for de mais de 5 a 7 dias, o profissional geralmente adotará a datação do ultrassom como a definitiva para orientar os marcos do pré-natal, visto que a biometria fetal precoce (CCN) tem margem mínima de erro.</p>
+  </div>
+</section>

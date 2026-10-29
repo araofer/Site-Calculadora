@@ -1,0 +1,246 @@
+---
+title: Calculadora de Metabolismo Basal (TMB) Online Grátis | Calculadora Master
+description: Calcule sua Taxa Metabólica Basal (TMB) online com precisão pelas equações de Mifflin-St Jeor, Harris-Benedict e Katch-McArdle. Descubra quantas calorias seu corpo gasta em repouso.
+keywords: metabolismo basal, taxa metabolica basal, calculadora tmb, calcular tmb online, mifflin st jeor, harris benedict, katch mcardle, calorias em repouso, gasto calorico basal
+canonical: https://www.calculadoramaster.com/tools/saude/metabolismo-basal.html
+layout: tool
+pageScripts: <script type="module" src="{{ROOT_PREFIX}}js/tools/metabolismo-basal.js"></script>
+---
+
+<h1>Calculadora de Taxa Metabólica Basal (TMB)</h1>
+
+<p>A <strong>Taxa Metabólica Basal (TMB)</strong> representa a quantidade mínima de energia (em calorias) que o seu corpo necessita em repouso absoluto, durante 24 horas, para manter ativas as funções vitais essenciais à vida — tais como respiração, circulação sanguínea, atividade cerebral, síntese celular e termorregulação. Esta ferramenta calcula sua TMB através das fórmulas científicas consagradas pela literatura médica internacional (Mifflin-St Jeor, Harris-Benedict e Katch-McArdle), servindo como ponto de partida seguro para qualquer planejamento nutricional e de condicionamento físico.</p>
+
+<div class="card tool-calculator-card">
+  <h2 class="tool-form-title">Dados para Cálculo da TMB</h2>
+
+  <form id="formTmb" novalidate>
+    <!-- Sexo Biológico -->
+    <div class="form-group">
+      <label for="sexo">Sexo biológico:</label>
+      <p id="ajudaSexo" class="help-text">O sexo biológico influencia diretamente a proporção média de massa muscular e taxa metabólica de repouso.</p>
+      <select id="sexo" name="sexo" aria-describedby="ajudaSexo" required>
+        <option value="" disabled selected>Selecione seu sexo biológico</option>
+        <option value="m">Masculino</option>
+        <option value="f">Feminino</option>
+      </select>
+    </div>
+
+    <!-- Idade -->
+    <div class="form-group">
+      <label for="idade">Idade (anos):</label>
+      <p id="ajudaIdade" class="help-text">Informe sua idade em anos completos (entre 18 e 120 anos. As equações preditivas desta ferramenta são validadas para adultos).</p>
+      <input
+        type="number"
+        id="idade"
+        name="idade"
+        min="18"
+        max="120"
+        step="1"
+        placeholder="Ex: 30"
+        autocomplete="off"
+        aria-describedby="ajudaIdade"
+        required
+      >
+    </div>
+
+    <!-- Peso -->
+    <div class="form-group">
+      <label for="peso">Peso corporal (kg):</label>
+      <p id="ajudaPeso" class="help-text">Informe seu peso em quilogramas (ex: 75,5).</p>
+      <input
+        type="text"
+        id="peso"
+        name="peso"
+        inputmode="decimal"
+        placeholder="Ex: 75,5"
+        autocomplete="off"
+        aria-describedby="ajudaPeso"
+        required
+      >
+    </div>
+
+    <!-- Altura -->
+    <div class="form-group">
+      <label for="altura">Altura (cm):</label>
+      <p id="ajudaAltura" class="help-text">Informe sua altura em centímetros (ex: 175) ou em metros (ex: 1,75).</p>
+      <input
+        type="text"
+        id="altura"
+        name="altura"
+        inputmode="decimal"
+        placeholder="Ex: 175"
+        autocomplete="off"
+        aria-describedby="ajudaAltura"
+        required
+      >
+    </div>
+
+    <!-- Fórmula Científica -->
+    <div class="form-group">
+      <label for="formula">Equação científica de cálculo:</label>
+      <p id="ajudaFormula" class="help-text">A equação de Mifflin-St Jeor é a fórmula preditiva recomendada pela Academy of Nutrition and Dietetics para adultos. Você também pode comparar com Harris-Benedict ou Katch-McArdle.</p>
+      <select id="formula" name="formula" aria-describedby="ajudaFormula">
+        <option value="mifflin" selected>Mifflin-St Jeor (1990 — Recomendada pela AND/ADA)</option>
+        <option value="harris">Harris-Benedict Revisada (Roza &amp; Shizgal, 1984)</option>
+        <option value="katch">Katch-McArdle (Baseada em Massa Magra / BF%)</option>
+      </select>
+    </div>
+
+    <!-- Percentual de Gordura Corporal (Opcional) -->
+    <div class="form-group" id="grupoGordura">
+      <label for="gordura">Percentual de gordura corporal (% BF — opcional):</label>
+      <p id="ajudaGordura" class="help-text">Necessário apenas caso utilize a equação Katch-McArdle ou deseje maior precisão na estimativa de massa magra.</p>
+      <input
+        type="text"
+        id="gordura"
+        name="gordura"
+        inputmode="decimal"
+        placeholder="Ex: 18"
+        autocomplete="off"
+        aria-describedby="ajudaGordura"
+      >
+    </div>
+
+    <p id="erroTmb" class="tool-error-message" role="alert" aria-live="assertive" hidden></p>
+
+    <div class="tool-actions-primary">
+      <button type="submit" id="btnCalcularTmb" class="btn btn-primary">Calcular Metabolismo Basal</button>
+      <button type="button" id="btnLimparTmb" class="btn btn-secondary">Limpar</button>
+    </div>
+  </form>
+</div>
+
+<!-- Seção de Resultados -->
+<section id="resultadoTmb" class="tool-result-section" aria-live="polite" hidden>
+  <div class="card tool-result-card">
+    <div class="result-header">
+      <h2 class="tool-result-title">Sua Taxa Metabólica Basal Estimada</h2>
+      <span id="resFormulaBadge" class="status-badge">Mifflin-St Jeor</span>
+    </div>
+
+    <!-- Grid de Destaques Principais -->
+    <div class="result-grid">
+      <div class="result-highlight-item">
+        <span class="result-label">Metabolismo Basal (TMB)</span>
+        <strong id="resTmbPrincipal" class="result-value">0 kcal</strong>
+        <span class="result-subtext">gasto mínimo em repouso por dia</span>
+      </div>
+
+      <div class="result-highlight-item">
+        <span class="result-label">Gasto Horário em Repouso</span>
+        <strong id="resTmbHora" class="result-value">0 kcal/h</strong>
+        <span class="result-subtext">consumo energético basal contínuo</span>
+      </div>
+    </div>
+
+    <!-- Comparativo entre Fórmulas Científicas -->
+    <div class="result-detail-card">
+      <h3 class="result-detail-title">Comparativo entre Equações Científicas</h3>
+      <div class="result-grid">
+        <div class="result-item">
+          <span class="result-label">Mifflin-St Jeor (1990):</span>
+          <strong id="resMifflin" class="result-value-inline">—</strong>
+        </div>
+        <div class="result-item">
+          <span class="result-label">Harris-Benedict Revisada (1984):</span>
+          <strong id="resHarris" class="result-value-inline">—</strong>
+        </div>
+        <div id="resKatchItem" class="result-item" hidden>
+          <span class="result-label">Katch-McArdle (Massa Magra):</span>
+          <strong id="resKatch" class="result-value-inline">—</strong>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tabela de Estimativa por Nível de Atividade Física -->
+    <div class="result-detail-card">
+      <h3 class="result-detail-title">Estimativa de Gasto Calórico por Nível de Atividade</h3>
+      <p class="help-text">Ao adicionar a movimentação física diária à sua TMB, obtém-se o Gasto Energético Total (GET / TDEE) estimado pelos multiplicadores práticos de nível de atividade física (PAL):</p>
+      <div class="table-responsive">
+        <table id="tabelaAtividadesTmb" class="tool-data-table">
+          <thead>
+            <tr>
+              <th scope="col">Nível de Atividade Física</th>
+              <th scope="col">Fator (PAL)</th>
+              <th scope="col">Gasto Total Estimado</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Preenchido via JavaScript -->
+          </tbody>
+        </table>
+      </div>
+      <p class="table-subtext">Quer aprofundar seu plano de calorias e déficit/superávit? Conheça também nossa <a href="{{ROOT_PREFIX}}tools/saude/gasto-calorico-diario.html">Calculadora de Gasto Calórico Diário</a>.</p>
+    </div>
+
+    <!-- Ações do Resultado: Copiar, Compartilhar, Imprimir -->
+    <div class="tool-result-actions-wrapper">
+      <div id="acoesResultadoTmb" class="tool-actions-container"></div>
+      <p id="statusAcoesTmb" class="sr-only" role="status" aria-live="polite"></p>
+    </div>
+  </div>
+</section>
+
+<!-- Conteúdo Educativo e Complementar -->
+<section class="tool-content-section">
+  <h2>O que é a Taxa Metabólica Basal (TMB)?</h2>
+  <p>A <strong>Taxa Metabólica Basal (TMB)</strong> — ou <em>Basal Metabolic Rate (BMR)</em> em inglês — é a mensuração da menor cota calórica necessária para manter vivo um organismo animal ou humano em estado de repouso físico e mental completo, em ambiente térmico neutro (sem esforço para suar ou tremer) e em estado pós-absortivo (após jejum alimentar de 10 a 12 horas).</p>
+  <p>Na prática do dia a dia, a TMB responde por cerca de <strong>60% a 75% de todo o gasto energético diário</strong> de um adulto sedentário ou moderadamente ativo. Os órgãos que mais consomem calorias metabolicamente em repouso são:</p>
+  <ul>
+    <li><strong>Fígado:</strong> consome cerca de 27% da TMB;</li>
+    <li><strong>Cérebro:</strong> consome cerca de 19% da TMB;</li>
+    <li><strong>Músculo esquelético:</strong> consome cerca de 18% da TMB em repouso;</li>
+    <li><strong>Rins:</strong> consomem cerca de 10% da TMB;</li>
+    <li><strong>Coração:</strong> consome cerca de 7% da TMB;</li>
+    <li><strong>Demais tecidos e gordura:</strong> respondem pelos 19% restantes.</li>
+  </ul>
+
+  <h2>Equações Científicas Utilizadas</h2>
+  <p>A medição 100% exata da TMB só é possível em laboratório clínico por meio de <em>calorimetria indireta</em> (medição das trocas de oxigênio e dióxido de carbono pela respiração). Na prática clínica diária, utilizam-se equações preditivas validadas estatisticamente em amplas amostras populacionais:</p>
+
+  <h3>1. Equação de Mifflin-St Jeor (1990) — Recomendada pela AND</h3>
+  <p>Desenvolvida em 1990 por Mark D. Mifflin e colaboradores, esta equação preditiva é apontada por revisões sistemáticas da <em>Academy of Nutrition and Dietetics</em> como a mais confiável para adultos eutróficos e com sobrepeso:</p>
+  <ul>
+    <li><strong>Homens:</strong> <code>TMB = (10 × Peso em kg) + (6,25 × Altura em cm) - (5 × Idade em anos) + 5</code></li>
+    <li><strong>Mulheres:</strong> <code>TMB = (10 × Peso em kg) + (6,25 × Altura em cm) - (5 × Idade em anos) - 161</code></li>
+  </ul>
+
+  <h3>2. Equação de Harris-Benedict Revisada (Roza &amp; Shizgal, 1984)</h3>
+  <p>A fórmula original criada em 1919 pelo Laboratório de Nutrição Carnegie foi revisada por Roza e Shizgal em 1984 para atualizar os coeficientes antropométricos modernos:</p>
+  <ul>
+    <li><strong>Homens:</strong> <code>TMB = 88,362 + (13,397 × Peso) + (4,799 × Altura) - (5,677 × Idade)</code></li>
+    <li><strong>Mulheres:</strong> <code>TMB = 447,593 + (9,247 × Peso) + (3,098 × Altura) - (4,330 × Idade)</code></li>
+  </ul>
+
+  <h3>3. Equação de Katch-McArdle (1996)</h3>
+  <p>Diferente das anteriores, a fórmula de Katch-McArdle baseia-se exclusivamente na <strong>massa livre de gordura</strong> (massa magra). Por isso, é altamente precisa para atletas e praticantes de musculação que possuem composição corporal detalhada obtida por bioimpedância ou dobras cutâneas:</p>
+  <ul>
+    <li><code>Massa Magra (kg) = Peso × (1 - (% Gordura / 100))</code></li>
+    <li><code>TMB = 370 + (21,6 × Massa Magra em kg)</code></li>
+  </ul>
+
+  <h2>Diferença entre TMB e Gasto Calórico Total (GET)</h2>
+  <p>É crucial não confundir a TMB com o seu gasto calórico total diário:</p>
+  <ul>
+    <li><strong>TMB:</strong> consumo em repouso absoluto, sem sair da cama;</li>
+    <li><strong>Efeito Térmico dos Alimentos (ETA):</strong> energia gasta para digerir e absorver nutrientes (cerca de 10% do total);</li>
+    <li><strong>Atividade Física (EAT e NEAT):</strong> energia gasta em exercícios planejados (musculação, corrida) e em atividades espontâneas da rotina (subir escadas, caminhar, trabalhar em pé);</li>
+    <li><strong>GET (Gasto Energético Total):</strong> a soma de todos os fatores acima. É o número que define se você vai engordar, emagrecer ou manter o peso.</li>
+  </ul>
+
+  <h2>Aviso Importante e Limitações</h2>
+  <p>As fórmulas matemáticas fornecem estimativas com margem de variação estatística média de 5% a 10%. Variáveis individuais como disfunções tireoidianas (hipo ou hipertireoidismo), uso de certos medicamentos, temperatura ambiente extrema, estresse metabólico e histórico de dietas restritivas prolongadas afetam a taxa metabólica real. Dietas com restrição calórica severa próxima ou abaixo da TMB exigem planejamento e acompanhamento de um profissional médico ou nutricionista para evitar perda de massa magra e deficiências nutricionais.</p>
+
+  <h2>Perguntas Frequentes (FAQ)</h2>
+  <div class="faq-accordion">
+    <h3>Posso comer menos calorias do que a minha TMB para emagrecer mais rápido?</h3>
+    <p>Consumir menos calorias do que a sua TMB por períodos prolongados pode induzir o corpo a uma adaptação termogênica defensiva (popularmente chamada de &quot;metabolismo lento&quot;), desacelerando o gasto calórico, causando perda acentuada de massa muscular, fadiga crônica, alterações hormonais e queda de imunidade. O déficit calórico seguro deve incidir sobre o seu gasto total diário (GET), e não sobre a TMB.</p>
+
+    <h3>A TMB diminui com a idade?</h3>
+    <p>Sim. A partir dos 30 a 40 anos, há uma tendência biológica de redução da massa muscular (sarcopenia) e da atividade celular, reduzindo a TMB em cerca de 1% a 2% por década caso a pessoa não pratique exercícios de força (como musculação) e não mantenha boa ingestão proteica.</p>
+
+    <h3>Como aumentar a minha Taxa Metabólica Basal?</h3>
+    <p>A estratégia mais eficaz para aumentar permanentemente a TMB é o <strong>ganho de massa muscular magra</strong>. O tecido muscular é metabolicamente muito mais ativo do que o tecido adiposo, demandando mais calorias mesmo quando você está em repouso ou dormindo.</p>
+  </div>
+</section>
