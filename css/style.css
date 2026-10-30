@@ -3786,10 +3786,12 @@ main.container {
   color: #1e2a38;
 }
 
+.table-responsive,
 .mei-projection-table-wrapper {
   width: 100%;
   max-width: 100%;
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
   margin-bottom: 16px;
   border: 1px solid #dbe3ea;
   border-radius: 10px;
