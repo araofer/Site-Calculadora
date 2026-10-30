@@ -29,9 +29,9 @@ pageScripts: <script type="module" src="{{ROOT_PREFIX}}js/tools/horas-extras.js"
       <button type="button" class="tool-btn tool-btn-secondary" data-action="clear">Limpar</button>
     </div>
 
-    <p id="mensagem-erro" style="color: #c00; margin-top: 15px; display: none; font-weight: bold;"></p>
+    <p id="mensagem-erro" role="alert" style="color: #c00; margin-top: 15px; display: none; font-weight: bold;"></p>
 
-    <div id="resultado-container" style="margin-top: 20px; display: none;">
+    <div id="resultado-container" aria-live="polite" style="margin-top: 20px; display: none;">
       <h3 id="resultado" style="color: #008080;"></h3>
       <div id="detalhes" style="font-size: 0.95em; color: #444; margin-top: 10px; line-height: 1.6;"></div>
     </div>

@@ -11,10 +11,13 @@ pageScripts: <script type="module" src="{{ROOT_PREFIX}}js/tools/combustivel.js">
 
   <div style="margin:20px 0;" class="card">
     <h2>Calcular consumo e custo</h2>
+    <label for="distancia">Distância a percorrer (km):</label><br>
     <input type="number" id="distancia" placeholder="Distância (km) Ex: 300">
     <br><br>
+    <label for="consumo">Consumo médio do veículo (km/l):</label><br>
     <input type="number" id="consumo" placeholder="Consumo (km/l) Ex: 12">
     <br><br>
+    <label for="preco">Preço do combustível por litro (R$):</label><br>
     <input type="number" id="preco" placeholder="Preço do combustível (Ex: 5.49)">
 
     <div class="tool-actions">
@@ -22,7 +25,7 @@ pageScripts: <script type="module" src="{{ROOT_PREFIX}}js/tools/combustivel.js">
       <button type="button" class="tool-btn tool-btn-secondary" data-action="clear">Limpar</button>
     </div>
 
-    <h3 id="resultado" style="margin-top: 20px; color: #008080;"></h3>
+    <h3 id="resultado" aria-live="polite" style="margin-top: 20px; color: #008080;"></h3>
   </div>
 
   <section class="content">
