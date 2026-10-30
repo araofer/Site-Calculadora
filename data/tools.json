@@ -1698,5 +1698,49 @@
       "https://www.febrasgo.org.br/",
       "https://www.acog.org/clinical/clinical-guidance/committee-opinion/articles/2017/05/methods-for-estimating-the-due-date"
     ]
+  },
+  {
+    "id": "conversor-unidades",
+    "slug": "conversor-unidades",
+    "name": "Conversor de Unidades Online Grátis",
+    "category": "Utilidades",
+    "categorySlug": "utilidades",
+    "audience": "universal",
+    "description": "Converta facilmente medidas de comprimento, massa, temperatura, área, volume e velocidade com alta precisão e fórmulas científicas explicadas.",
+    "url": "/tools/utilidades/conversor-unidades.html",
+    "status": "published",
+    "formulaStatus": "verified",
+    "implementation": "factory",
+    "features": {
+      "chart": false,
+      "table": false,
+      "pdf": false,
+      "copy": true,
+      "share": true,
+      "print": true,
+      "favorite": true,
+      "article": false
+    },
+    "keywords": [
+      "conversor de unidades",
+      "conversor de medidas",
+      "conversor de temperatura",
+      "conversor de comprimento",
+      "conversor de peso",
+      "converter km em metros",
+      "converter libras em kg",
+      "converter celsius em fahrenheit"
+    ],
+    "related": [
+      "comparador-precos",
+      "combustivel",
+      "regra-de-tres"
+    ],
+    "shortName": "Conversor de Unidades",
+    "sourceReferences": [
+      "https://www.bipm.org/en/measurement-units/",
+      "https://www.nist.gov/pml/owm/metric-si/unit-conversion",
+      "https://www.gov.br/inmetro/pt-br"
+    ]
   }
 ]

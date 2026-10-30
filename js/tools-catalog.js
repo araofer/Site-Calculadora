@@ -1813,6 +1813,46 @@ const TOOLS_CATALOG = [
         "imc"
       ],
       "status": "published"
+    },
+    {
+      "id": "conversor-unidades",
+      "slug": "conversor-unidades",
+      "nome": "Conversor de Unidades Online Grátis",
+      "name": "Conversor de Unidades Online Grátis",
+      "categoria": "Utilidades",
+      "category": "Utilidades",
+      "categorySlug": "utilidades",
+      "descricao": "Converta facilmente medidas de comprimento, massa, temperatura, área, volume e velocidade com alta precisão e fórmulas científicas explicadas.",
+      "description": "Converta facilmente medidas de comprimento, massa, temperatura, área, volume e velocidade com alta precisão e fórmulas científicas explicadas.",
+      "url": "tools/utilidades/conversor-unidades.html",
+      "termos": [
+        "conversor de unidades",
+        "conversor de medidas",
+        "conversor de temperatura",
+        "conversor de comprimento",
+        "conversor de peso",
+        "converter km em metros",
+        "converter libras em kg",
+        "converter celsius em fahrenheit"
+      ],
+      "keywords": [
+        "conversor de unidades",
+        "conversor de medidas",
+        "conversor de temperatura",
+        "conversor de comprimento",
+        "conversor de peso",
+        "converter km em metros",
+        "converter libras em kg",
+        "converter celsius em fahrenheit"
+      ],
+      "destaque": false,
+      "featured": false,
+      "related": [
+        "comparador-precos",
+        "combustivel",
+        "regra-de-tres"
+      ],
+      "status": "published"
     }
   ];
 

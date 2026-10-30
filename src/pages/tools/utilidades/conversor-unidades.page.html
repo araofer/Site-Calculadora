@@ -1,0 +1,139 @@
+---
+title: Conversor de Unidades Online Grátis | Calculadora Master
+description: Converta facilmente medidas de comprimento, massa, temperatura, área, volume e velocidade com alta precisão e fórmulas científicas explicadas.
+keywords: conversor de unidades, conversor de medidas, converter km em metros, converter libras em kg, converter celsius em fahrenheit, conversor online
+canonical: https://www.calculadoramaster.com/tools/utilidades/conversor-unidades.html
+layout: tool
+pageScripts: <script type="module" src="{{ROOT_PREFIX}}js/tools/conversor-unidades.js"></script>
+---
+
+<h1>Conversor de Unidades</h1>
+<p>Converta medidas de comprimento, massa, temperatura, área, volume e velocidade com rapidez e máxima precisão, aplicando fatores exatos do Sistema Internacional e fórmulas científicas consolidadas.</p>
+
+<div class="card tool-calculator-card">
+  <h2 class="tool-form-title">Escolha as unidades para conversão</h2>
+
+  <form id="formConversorUnidades" novalidate>
+    <div class="form-group">
+      <label for="categoriaConversor">Categoria de medida:</label>
+      <select id="categoriaConversor" name="categoriaConversor" aria-describedby="ajudaCategoria">
+        <option value="comprimento" selected>Comprimento</option>
+        <option value="massa">Massa (peso)</option>
+        <option value="temperatura">Temperatura</option>
+        <option value="area">Área</option>
+        <option value="volume">Volume</option>
+        <option value="velocidade">Velocidade</option>
+      </select>
+      <p id="ajudaCategoria">Selecione a grandeza física que você deseja converter.</p>
+    </div>
+
+    <div class="form-group">
+      <label for="valorOrigem">Valor a converter:</label>
+      <input
+        type="text"
+        id="valorOrigem"
+        name="valorOrigem"
+        inputmode="decimal"
+        placeholder="Ex: 100"
+        autocomplete="off"
+        aria-describedby="ajudaValorOrigem"
+      >
+      <p id="ajudaValorOrigem">Digite o valor numérico. Aceita vírgula ou ponto como separador decimal.</p>
+    </div>
+
+    <div class="form-group">
+      <label for="unidadeOrigem">De (unidade de origem):</label>
+      <select id="unidadeOrigem" name="unidadeOrigem" aria-label="Unidade de origem"></select>
+    </div>
+
+    <div class="form-group" style="margin-bottom: 1rem;">
+      <button type="button" id="btnInverter" class="tool-btn tool-btn-secondary" style="width: auto;">
+        ⇄ Inverter unidades
+      </button>
+    </div>
+
+    <div class="form-group">
+      <label for="unidadeDestino">Para (unidade de destino):</label>
+      <select id="unidadeDestino" name="unidadeDestino" aria-label="Unidade de destino"></select>
+    </div>
+
+    <div class="tool-actions">
+      <button type="submit" id="btnConverter" class="tool-btn tool-btn-primary">Converter</button>
+      <button type="button" id="btnLimpar" class="tool-btn tool-btn-secondary">Limpar</button>
+    </div>
+  </form>
+
+  <p id="erroConversor" role="alert" aria-live="assertive" hidden></p>
+
+  <section id="resultadoConversor" aria-live="polite" aria-atomic="true" hidden>
+    <h2 class="tool-result-title">Resultado da conversão</h2>
+
+    <div class="card tool-result-card">
+      <p>Valor convertido:
+        <strong id="valorConvertidoResultado" style="font-size: 1.35rem; color: #008080;"></strong>
+      </p>
+      <p id="detalheConversaoResultado" style="margin-top: 0.5rem;"></p>
+      <p id="formulaConversaoResultado" style="font-size: 0.9rem; color: #555;"></p>
+    </div>
+
+    <div class="tool-actions result-actions">
+      <button type="button" id="btnCopiar" class="tool-btn tool-btn-secondary" hidden>Copiar resultado</button>
+      <button type="button" id="btnCompartilhar" class="tool-btn tool-btn-secondary" hidden>Compartilhar link</button>
+      <button type="button" id="btnImprimir" class="tool-btn tool-btn-secondary" hidden>Imprimir</button>
+    </div>
+  </section>
+
+  <p id="statusConversor" class="result-action-status" role="status" aria-live="polite"></p>
+</div>
+
+<section class="content">
+  <h2>Como funcionam as conversões de unidades?</h2>
+  <p>A conversão de medidas permite relacionar padrões métricos e consuetudinários de uma mesma grandeza. Enquanto o Sistema Internacional de Unidades (SI) estabelece o metro, o quilograma e o segundo como referências primárias mundiais, os sistemas tradicionais (como o customary americano e o imperial britânico) continuam recorrentes em áreas como comércio internacional, aviação, tecnologia e culinária.</p>
+
+  <h2>Grandezas e unidades suportadas</h2>
+  <ul>
+    <li><strong>Comprimento:</strong> Quilômetro (km), Metro (m), Centímetro (cm), Milímetro (mm), Milha internacional (mi = 1.609,344 m), Jarda (yd = 0,9144 m), Pé (ft = 0,3048 m) e Polegada (in = 0,0254 m).</li>
+    <li><strong>Massa:</strong> Tonelada métrica (t = 1.000 kg), Quilograma (kg), Grama (g), Miligrama (mg), Libra internacional (lb = 0,45359237 kg) e Onça internacional (oz = 0,028349523125 kg).</li>
+    <li><strong>Temperatura:</strong> Graus Celsius (°C), Fahrenheit (°F) e Kelvin (K), com suporte completo a temperaturas negativas válidas e validação rigorosa de zero absoluto (-273,15 °C).</li>
+    <li><strong>Área:</strong> Quilômetro quadrado (km²), Hectare (ha = 10.000 m²), Metro quadrado (m²), Centímetro quadrado (cm²), Milímetro quadrado (mm²), Pé quadrado (ft² = 0,09290304 m²) e Acre internacional (ac = 4.046,8564224 m²).</li>
+    <li><strong>Volume:</strong> Metro cúbico (m³), Litro (L), Mililitro (mL), Centímetro cúbico (cm³), Galão líquido americano (US gal = 3,785411784 L), Quarto líquido americano (US qt = 0,946352946 L) e Xícara americana (US cup = 0,2365882365 L). Todas as medidas americanas são identificadas claramente para evitar confusão com medidas imperiais do Reino Unido.</li>
+    <li><strong>Velocidade:</strong> Metros por segundo (m/s), Quilômetros por hora (km/h, onde 36 km/h = 10 m/s), Milhas por hora (mph = 0,44704 m/s), Pés por segundo (ft/s = 0,3048 m/s) e Nós marítimos internacionais (kn = 1.852/3.600 m/s).</li>
+  </ul>
+
+  <h2>Fórmulas de Conversão de Temperatura</h2>
+  <p>Ao contrário de grandezas que usam simples fatores multiplicativos proporcionais, as escalas termométricas possuem pontos de congelamento e deslocamentos próprios:</p>
+  <ul>
+    <li><strong>Celsius para Fahrenheit:</strong> °F = (°C × 9/5) + 32</li>
+    <li><strong>Fahrenheit para Celsius:</strong> °C = (°F - 32) × 5/9</li>
+    <li><strong>Celsius para Kelvin:</strong> K = °C + 273,15</li>
+    <li><strong>Kelvin para Celsius:</strong> °C = K - 273,15</li>
+  </ul>
+
+  <section class="related-tools">
+    <h2>Você também pode precisar</h2>
+    <div class="related-tools-grid">
+      <article class="tool-card">
+        <div class="tool-card-header"><span class="tool-card-category">Utilidades</span></div>
+        <h3 class="tool-card-title">Comparador de Preços por Unidade</h3>
+        <p class="tool-card-desc">Compare preços de embalagens por kg, litro, metro ou unidade.</p>
+        <div class="tool-card-footer"><a href="comparador-precos.html" class="tool-card-btn">Calcular agora &rarr;</a></div>
+      </article>
+      <article class="tool-card">
+        <div class="tool-card-header"><span class="tool-card-category">Utilidades</span></div>
+        <h3 class="tool-card-title">Calculadora de Combustível</h3>
+        <p class="tool-card-desc">Compare etanol e gasolina e calcule o consumo por viagem.</p>
+        <div class="tool-card-footer"><a href="combustivel.html" class="tool-card-btn">Calcular agora &rarr;</a></div>
+      </article>
+      <article class="tool-card">
+        <div class="tool-card-header"><span class="tool-card-category">Matemática</span></div>
+        <h3 class="tool-card-title">Regra de Três Simples</h3>
+        <p class="tool-card-desc">Calcule proporções diretas e inversas de forma rápida.</p>
+        <div class="tool-card-footer"><a href="../matematica/regra-de-tres.html" class="tool-card-btn">Calcular agora &rarr;</a></div>
+      </article>
+    </div>
+  </section>
+
+  <p class="tool-return-link">
+    👉 <a href="{{ROOT_PREFIX}}conversores.html">Voltar para os conversores e utilidades</a>
+  </p>
+</section>
