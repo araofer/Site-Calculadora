@@ -1,198 +1,201 @@
 # Como Adicionar uma Nova Ferramenta no Calculadora Master
 
-Este guia descreve o fluxo padrão e escalável para adicionar uma nova calculadora ou utilitário ao projeto **Calculadora Master**.
-
-O objetivo desta arquitetura é garantir que a **ferramenta número 16** e a **ferramenta número 100** sigam exatamente as mesmas regras de integridade, SEO, acessibilidade e performance.
+Este guia descreve o fluxo oficial para adicionar uma nova calculadora ou utilitário ao projeto **Calculadora Master**, em conformidade com o motor SSG (`scripts/build-html.js`) e com `docs/CONVENCAO_CALCULADORAS.md`.
 
 ---
 
 ## Sumário do Fluxo
 
-1. [Criar a página HTML da ferramenta](#1-criar-a-página-html-da-ferramenta)
-2. [Implementar o JavaScript da ferramenta](#2-implementar-o-javascript-da-ferramenta)
-3. [Cadastrar no `data/tools.json`](#3-cadastrar-no-datatoolsjson)
-4. [Definir ferramentas relacionadas](#4-definir-ferramentas-relacionadas)
-5. [Executar a validação automatizada](#5-executar-a-validação-automatizada)
-6. [Gerar catálogo JS e sitemap](#6-gerar-catálogo-js-e-sitemap)
-7. [Testes funcionais e de SEO](#7-testes-funcionais-e-de-seo)
-8. [Commit e submissão](#8-commit-e-submissão)
+1. [Criar a página-fonte em `src/pages/`](#1-criar-a-página-fonte-em-srcpages)
+2. [Implementar o módulo JavaScript em `js/tools/`](#2-implementar-o-módulo-javascript-em-jstools)
+3. [Criar o teste automatizado em `tests/`](#3-criar-o-teste-automatizado-em-tests)
+4. [Cadastrar no `data/tools.json`](#4-cadastrar-no-datatoolsjson)
+5. [Gerar catálogo, sitemap e páginas estáticas (SSG)](#5-gerar-catálogo-sitemap-e-páginas-estáticas-ssg)
+6. [Auditoria e validação automatizada](#6-auditoria-e-validação-automatizada)
 
 ---
 
-## 1. Criar a página HTML da ferramenta
+## 1. Criar a página-fonte em `src/pages/`
 
-Crie o arquivo HTML na pasta correspondente à categoria física em `tools/`:
+Crie o arquivo na pasta correspondente à categoria em `src/pages/tools/<categoria>/<slug>.page.html`:
 
-- `tools/financas/<slug>.html`
-- `tools/trabalhista/<slug>.html`
-- `tools/saude/<slug>.html`
-- `tools/utilidades/<slug>.html`
+- `src/pages/tools/financas/<slug>.page.html`
+- `src/pages/tools/trabalhista/<slug>.page.html`
+- `src/pages/tools/matematica/<slug>.page.html`
+- `src/pages/tools/saude/<slug>.page.html`
+- `src/pages/tools/utilidades/<slug>.page.html`
 
 ### Padrão Estrutural Obrigatório
 
-A página deve conter:
-- **Metatags de SEO**: `title`, `meta description`, `canonical` apontando para a URL pública final.
-- **Folha de estilos**: `<link rel="stylesheet" href="../../css/style.css">`.
-- **Header padronizado**: Navegação com logo e links institucionais.
-- **Conteúdo principal semântico**:
-  ```html
-  <main class="container">
-    <h1>Título da Ferramenta</h1>
-    <p>Descrição introdutória clara e concisa.</p>
+A página utiliza **Frontmatter YAML** no topo e o layout compartilhado `layout: tool` (definido em `src/layouts/tool.html`). O layout compartilhado injeta automaticamente o cabeçalho, navegação, botão de favoritar, consentimento de cookies, rodapé e recursos globais.
 
-    <div class="box-card">
-      <h2>Calcular agora</h2>
-      <!-- Formulário e campos de entrada -->
-      <!-- Botão de cálculo com estilo padronizado -->
-      <!-- Contêiner de resultado acessível -->
+```html
+---
+title: Nome da Ferramenta Online Grátis | Calculadora Master
+description: Descrição clara e persuasiva do que a ferramenta resolve em até 160 caracteres.
+keywords: palavra-chave 1, palavra-chave 2, termo de busca
+canonical: https://www.calculadoramaster.com/tools/<categoria>/<slug>.html
+layout: tool
+pageScripts: <script type="module" src="{{ROOT_PREFIX}}js/tools/<slug>.js"></script>
+---
+
+<h1>Nome da Ferramenta</h1>
+<p>Introdução concisa explicando o objetivo do cálculo.</p>
+
+<div class="card tool-calculator-card">
+  <h2 class="tool-form-title">Informe seus dados</h2>
+
+  <form id="formExemplo">
+    <div class="form-group">
+      <label for="campoPrincipal">Valor principal (R$):</label>
+      <input type="text" id="campoPrincipal" name="campoPrincipal"
+        inputmode="numeric" autocomplete="off" placeholder="1.000,00" required>
     </div>
 
-    <section class="content">
-      <!-- Artigo explicativo, fórmulas, dicas e FAQs para SEO -->
+    <div class="form-group">
+      <label for="campoAliquota">Taxa ou percentual (%):</label>
+      <input type="number" id="campoAliquota" name="campoAliquota"
+        min="0" max="100" step="0.01" placeholder="10" aria-describedby="ajudaAliquota" required>
+      <p id="ajudaAliquota">Texto descritivo de ajuda para preenchimento.</p>
+    </div>
 
-      <!-- Seção de ferramentas relacionadas -->
-      <section class="related-tools">
-        <h2>Você também pode precisar</h2>
-        <div class="related-tools-grid">
-          <!-- Cards estáticos de 1 a 4 ferramentas relacionadas -->
-        </div>
-      </section>
+    <div class="tool-actions">
+      <button type="submit" class="tool-btn tool-btn-primary">Calcular</button>
+      <button type="button" id="btnLimpar" class="tool-btn tool-btn-secondary">Limpar</button>
+    </div>
+  </form>
 
-      <p style="margin-top: 30px;">
-        👉 <a href="../../index.html">Voltar para página inicial</a>
+  <p id="erroExemplo" role="alert" aria-live="assertive" hidden></p>
+
+  <section id="resultadoExemplo" aria-live="polite" aria-atomic="true" hidden>
+    <h2 class="tool-result-title">Seu resultado estimado</h2>
+
+    <div class="card tool-result-card">
+      <p>Total calculado:
+        <strong id="valorResultado">R$ 0,00</strong>
       </p>
-    </section>
-  </main>
-  ```
-- **Footer**: Incluindo links para Termos, Privacidade e Cookies.
-- **Scripts utilitários**: `cookie-consent.js`, `header-auth.js` e script de toggle do menu mobile.
+    </div>
+
+    <div class="tool-actions result-actions">
+      <button type="button" id="btnCopiar" class="tool-btn tool-btn-secondary" hidden>Copiar resultado</button>
+      <button type="button" id="btnCompartilhar" class="tool-btn tool-btn-secondary" hidden>Compartilhar link</button>
+      <button type="button" id="btnImprimir" class="tool-btn tool-btn-secondary" hidden>Imprimir</button>
+    </div>
+  </section>
+</div>
+
+<section class="content">
+  <h2>Como funciona o cálculo</h2>
+  <p>Explicação didática das fórmulas, legislação e regras aplicáveis.</p>
+
+  <section class="related-tools">
+    <h2>Você também pode precisar</h2>
+    <div class="related-tools-grid">
+      <!-- Cards estáticos de ferramentas relacionadas -->
+    </div>
+  </section>
+
+  <p class="tool-return-link">
+    👉 <a href="{{ROOT_PREFIX}}index.html">Voltar para a página inicial</a>
+  </p>
+</section>
+```
 
 ---
 
-## 2. Implementar o JavaScript da ferramenta
+## 2. Implementar o módulo JavaScript em `js/tools/`
 
-Ao criar o script da calculadora:
-- **Segurança**: Nunca utilize dados não tratados diretamente com `innerHTML`. Use `textContent` ou `document.createElement()`.
-- **Formatação Brasileira**: Valores monetários devem seguir o formato `R$ 1.250,00` e números decimais com vírgula.
-- **Tratamento de Erros**: Verifique valores nulos, vazios ou `NaN` antes de executar divisões ou exponenciações.
-- **Reset**: Inclua uma função para limpar campos e resetar o resultado.
+Crie `js/tools/<slug>.js` como módulo ES nativo:
+
+- **Funções puras desacopladas**: Separe os cálculos e regras matemáticas da manipulação de DOM para permitir testes de unidade isolados.
+- **Segurança e XSS**: Nunca injete dados diretamente com `innerHTML`. Use `textContent` ou criação explícita de elementos (`document.createElement`).
+- **Ações compartilhadas**: Importe `createResultActions` de `../core/result-actions.js` para gerenciar a cópia, compartilhamento e impressão dos resultados.
+- **Formatação**: Utilize `Intl.NumberFormat('pt-BR', ...)` ou utilitários em `js/core/currency.js`.
+- **Acessibilidade**: Ative/desative a exibição com a propriedade `.hidden` (não use estilos inline com `display: none` direto). Limpe estados de erro ao recalcular ou resetar.
 
 ---
 
-## 3. Cadastrar no `data/tools.json`
+## 3. Criar o teste automatizado em `tests/`
 
-Abra `data/tools.json` e adicione a entrada da nova ferramenta no array:
+Crie `tests/<slug>.test.js` utilizando o test runner nativo do Node.js (`node:test` e `node:assert/strict`):
+
+```javascript
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { calcularExemplo } from '../js/tools/<slug>.js';
+
+test('cálculo regular com entradas válidas', () => {
+  const res = calcularExemplo({ valor: 1000, taxa: 10 });
+  assert.equal(res.valido, true);
+  assert.equal(res.total, 1100);
+});
+
+test('validação de limites e entradas inválidas', () => {
+  assert.equal(calcularExemplo({ valor: -10 }).valido, false);
+});
+```
+
+---
+
+## 4. Cadastrar no `data/tools.json`
+
+Adicione a nova entrada ao array de ferramentas:
 
 ```json
 {
-  "id": "minha-nova-ferramenta",
-  "slug": "minha-nova-ferramenta",
-  "name": "Calculadora Exemplo",
+  "id": "minha-ferramenta",
+  "slug": "minha-ferramenta",
+  "name": "Nome da Ferramenta",
   "category": "Financeiro",
   "categorySlug": "financas",
-  "description": "Explicação curta e persuasiva do que a ferramenta resolve em uma frase.",
-  "url": "/tools/financas/minha-nova-ferramenta.html",
+  "description": "Explicação concisa do que a ferramenta resolve em uma frase.",
+  "url": "/tools/financas/minha-ferramenta.html",
   "keywords": [
     "termo 1",
     "termo 2",
-    "sinônimo",
-    "busca comum"
+    "sinônimo"
   ],
   "related": [
-    "id-ferramenta-relacionada-1",
-    "id-ferramenta-relacionada-2"
+    "ferramenta-relacionada-1",
+    "ferramenta-relacionada-2"
   ],
   "featured": false,
   "status": "published"
 }
 ```
 
-### Categorias Oficiais Permitidas:
-- `Financeiro` (slug: `financas`)
-- `Trabalhista` (slug: `trabalhista`)
-- `Matemática` (slug: `matematica`)
-- `Saúde` (slug: `saude`)
-- `Conversores` (slug: `conversores`)
-- `Utilidades` (slug: `utilidades`)
-
-### Status Permitidos:
-- `published`: Ferramenta ativa, indexável no sitemap e disponível na busca.
-- `draft`: Em desenvolvimento, não incluída no sitemap público.
-- `deprecated`: Descontinuada ou redirecionada.
+### Regras de Cadastro:
+- **Categorias Permitidas**: `Financeiro` (`financas`), `Trabalhista` (`trabalhista`), `Matemática` (`matematica`), `Saúde` (`saude`), `Utilidades` (`utilidades`).
+- **Related**: No máximo 4 IDs de ferramentas existentes no catálogo; nunca recomende a própria ferramenta.
+- **Status**: `published` para ferramentas públicas; `draft` durante o desenvolvimento.
 
 ---
 
-## 4. Definir ferramentas relacionadas
+## 5. Gerar catálogo, sitemap e páginas estáticas (SSG)
 
-- No máximo **4 ferramentas relacionadas**.
-- Devem apontar para IDs que **realmente existem** no `data/tools.json`.
-- **Nunca recomende a própria ferramenta**.
-- As relações devem fazer sentido prático para o usuário (ex: Financiamento de Carro ➔ Combustível, Juros, Financiamento de Imóvel).
-
----
-
-## 5. Executar a validação automatizada
-
-Antes de gerar os artefatos, execute o validador:
+Execute os comandos do pipeline:
 
 ```bash
-npm run validate:tools
-```
-
-O script checará automaticamente:
-- Se todos os campos obrigatórios estão preenchidos.
-- Se o ID e slug são únicos.
-- Se o arquivo HTML físico realmente existe no caminho informado.
-- Se os IDs em `related` existem e não contêm auto-recomendação.
-- Se o limite de 4 relacionados é respeitado.
-- Se categoria e status são válidos.
-
----
-
-## 6. Gerar catálogo JS e sitemap
-
-Com a validação aprovada, execute o pipeline de compilação de dados:
-
-```bash
+# Valida tools.json e gera o sitemap.xml e catálogo JS
 npm run build:data
-```
 
-Esse comando único irá:
-1. Validar `data/tools.json`.
-2. Compilar `js/tools-catalog.js` (mantendo retrocompatibilidade total com a Busca Universal da Home).
-3. Atualizar `sitemap.xml` (incluindo a nova URL no mapa do site).
-4. Reexecutar a validação final.
+# Compila as páginas HTML a partir de src/pages/ para dist/
+npm run build:prod
+```
 
 ---
 
-## 7. Testes funcionais e de SEO
+## 6. Auditoria e validação automatizada
 
-Abra o projeto e verifique:
-1. **Busca da Home**: Digite o nome da ferramenta ou suas palavras-chave no campo de busca de `index.html`. O card deve aparecer e o link deve abrir a página correta.
-2. **Página da Ferramenta**: Faça simulações com números válidos, números negativos, zeros e campos em branco.
-3. **Seção de Relacionados**: Verifique se os cards aparecem corretos visualmente e se os links clicáveis funcionam.
-4. **Responsividade**: Teste as larguras de tela 320px, 375px, 768px e 1200px.
-
----
-
-## 8. Commit e submissão
-
-Verifique os arquivos alterados com:
+Antes de submeter, valide a integridade total do build:
 
 ```bash
-git status
-git diff --stat
-```
+# 1. Executa a suíte de testes unitários
+npm test
 
-Arquivos esperados modificados/criados:
-- `tools/<categoria>/<nova-ferramenta>.html`
-- `data/tools.json`
-- `js/tools-catalog.js`
-- `sitemap.xml`
+# 2. Executa a auditoria completa de produção (SEO, assets, equivalência, integridade)
+npm run audit:prod
 
-Faça o commit seguindo o padrão convencional do projeto:
-
-```bash
-git add data/tools.json js/tools-catalog.js sitemap.xml tools/<categoria>/<nova-ferramenta>.html
-git commit -m "feat: adiciona calculadora de <nome-da-ferramenta>"
+# 3. Executa a verificação SSG integrada
+npm run verify:ssg
 ```

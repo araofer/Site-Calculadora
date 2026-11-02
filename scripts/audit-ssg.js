@@ -90,8 +90,8 @@ async function runAudit() {
     });
     const toolsMatch = buildDataOutput.match(/(\d+)\s+ferramentas validadas/);
     const sitemapMatch = buildDataOutput.match(/sitemap\.xml gerado com sucesso contendo (\d+) URLs/);
-    summary.toolsDataCount = toolsMatch ? toolsMatch[1] : '15';
-    summary.sitemapCount = sitemapMatch ? sitemapMatch[1] : '40';
+    summary.toolsDataCount = toolsMatch ? toolsMatch[1] : String(TOOL_PAGES.length);
+    summary.sitemapCount = sitemapMatch ? sitemapMatch[1] : '0';
     summary.buildData = 'PASS';
   } catch (err) {
     summary.buildData = 'FAIL';
@@ -117,12 +117,12 @@ async function runAudit() {
     const ssgSiteMatch = ssgSiteOutput.match(/Build SSG concluído com sucesso: (\d+) página\(s\) gerada\(s\)/);
     summary.pagesCount = ssgSiteMatch ? parseInt(ssgSiteMatch[1], 10) : 0;
 
-    if (toolsCount === 15 && summary.pagesCount === 43) {
+    if (toolsCount === TOOL_PAGES.length && summary.pagesCount === SITE_PAGES.length) {
       summary.ssgPages = 'PASS';
     } else {
       summary.ssgPages = 'FAIL';
       allOk = false;
-      console.error(`Contagem incorreta de páginas: tools=${toolsCount} (esperado 15), site=${summary.pagesCount} (esperado 43)`);
+      console.error(`Contagem incorreta de páginas: tools=${toolsCount} (esperado ${TOOL_PAGES.length}), site=${summary.pagesCount} (esperado ${SITE_PAGES.length})`);
     }
   } catch (err) {
     summary.ssgPages = 'FAIL';
@@ -172,7 +172,7 @@ async function runAudit() {
     console.error('Erro na validação ESM:', err.message);
   }
 
-  // 5. Verificação de integridade das 43 páginas geradas e ausência de placeholders
+  // 5. Verificação de integridade das páginas geradas (SITE_PAGES) e ausência de placeholders
   try {
     let pagesOk = true;
     for (const page of SITE_PAGES) {
