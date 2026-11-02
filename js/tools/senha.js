@@ -99,6 +99,7 @@ export function setupGeradorSenha() {
   const btnGerar = document.querySelector('[data-action="generate"]');
   const btnLimpar = document.querySelector('[data-action="clear"]');
   const btnCopiar = document.querySelector('[data-action="copy"]');
+  const elErro = document.getElementById("mensagem-erro");
 
   function atualizarLabel() {
     if (tamanhoEl && valTamanhoEl) {
@@ -112,6 +113,10 @@ export function setupGeradorSenha() {
     }
     if (msgCopiadoEl) {
       msgCopiadoEl.style.display = "none";
+    }
+    if (elErro) {
+      elErro.textContent = "";
+      elErro.style.display = "none";
     }
   }
 
@@ -144,8 +149,17 @@ export function setupGeradorSenha() {
     });
 
     if (!res.valido) {
-      alert(res.erro);
+      if (elErro) {
+        elErro.textContent = res.erro;
+        elErro.style.display = "block";
+      }
+      if (areaResultadoEl) areaResultadoEl.style.display = "none";
       return;
+    }
+
+    if (elErro) {
+      elErro.textContent = "";
+      elErro.style.display = "none";
     }
 
     if (senhaGeradaEl) senhaGeradaEl.innerText = res.senha;

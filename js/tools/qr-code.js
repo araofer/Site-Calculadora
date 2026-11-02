@@ -76,19 +76,36 @@ export function setupQRCode() {
   const btnGerar = document.querySelector('[data-action="generate"]');
   const btnLimpar = document.querySelector('[data-action="clear"]');
   const btnDownload = document.querySelector('[data-action="download"]') || document.getElementById("btnDownload");
+  const elErro = document.getElementById("mensagem-erro");
 
   if (!inputTexto || !qrcodeContainer || !areaResultado) {
     return;
   }
 
+  const exibirErro = (msg) => {
+    if (elErro) {
+      elErro.textContent = msg;
+      elErro.style.display = "block";
+    }
+    areaResultado.style.display = "none";
+  };
+
+  const limparErro = () => {
+    if (elErro) {
+      elErro.textContent = "";
+      elErro.style.display = "none";
+    }
+  };
+
   const executarGeracao = () => {
     const validacao = validarDadosQRCode(inputTexto.value);
 
     if (!validacao.valido) {
-      alert(validacao.erro);
+      exibirErro(validacao.erro);
       return;
     }
 
+    limparErro();
     qrcodeContainer.innerHTML = "";
     areaResultado.style.display = "block";
 
@@ -119,6 +136,7 @@ export function setupQRCode() {
     inputTexto.value = "";
     qrcodeContainer.innerHTML = "";
     areaResultado.style.display = "none";
+    limparErro();
   };
 
   if (btnGerar) {

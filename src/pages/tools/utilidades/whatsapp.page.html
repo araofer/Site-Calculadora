@@ -23,7 +23,9 @@ pageScripts: <script type="module" src="{{ROOT_PREFIX}}js/tools/whatsapp.js"></s
       <button type="button" class="tool-btn tool-btn-secondary" data-action="clear">Limpar</button>
     </div>
 
-    <div id="resultado-area" style="margin-top: 25px; display: none;">
+    <p id="mensagem-erro" role="alert" aria-live="assertive" style="color: #c00; margin-top: 15px; display: none; font-weight: bold;"></p>
+
+    <div id="resultado-area" aria-live="polite" style="margin-top: 25px; display: none;">
         <p><strong>Seu link pronto:</strong></p>
         <div id="link-box" style="background: #f4f4f4; padding: 15px; border-radius: 5px; border: 1px dashed #25D366; word-break: break-all; color: #075E54; font-family: monospace;"></div>
         <br>

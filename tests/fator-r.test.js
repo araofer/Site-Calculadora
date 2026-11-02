@@ -582,6 +582,9 @@ test('19. Integração DOM: cálculo, limpeza e geração do texto de compartilh
     const res = tool.executarCalculo();
     assert.equal(res.ok, true);
     assert.equal(res.data.anexoEnquadrado, ANEXOS_FATOR_R.ANEXO_III);
+    assert.equal(mockRoot.querySelector('#btnCopiarFR').hidden, false);
+    assert.equal(mockRoot.querySelector('#btnCompartilharFR').hidden, false);
+    assert.equal(mockRoot.querySelector('#btnImprimirFR').hidden, false);
 
     const copyText = buildCopyText(res);
     assert.match(copyText, /Calculadora Fator R/);
@@ -593,6 +596,9 @@ test('19. Integração DOM: cálculo, limpeza e geração do texto de compartilh
     assert.ok(btnLimparHandler);
     btnLimparHandler();
     assert.equal(mockRoot.querySelector('#resultadoFatorR').hidden, true);
+    assert.equal(mockRoot.querySelector('#btnCopiarFR').hidden, true);
+    assert.equal(mockRoot.querySelector('#btnCompartilharFR').hidden, true);
+    assert.equal(mockRoot.querySelector('#btnImprimirFR').hidden, true);
   } finally {
     globalThis.window = prevWindow;
     globalThis.document = prevDocument;

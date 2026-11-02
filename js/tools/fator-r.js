@@ -1080,6 +1080,9 @@ export function setupTool(root) {
         painelErro.hidden = false;
       }
       if (painelResultado) painelResultado.hidden = true;
+      if (btnCopiar) btnCopiar.hidden = true;
+      if (btnCompartilhar) btnCompartilhar.hidden = true;
+      if (btnImprimir) btnImprimir.hidden = true;
       return null;
     }
 
@@ -1118,6 +1121,9 @@ export function setupTool(root) {
     }
 
     if (painelResultado) painelResultado.hidden = false;
+    if (btnCopiar) btnCopiar.hidden = false;
+    if (btnCompartilhar) btnCompartilhar.hidden = false;
+    if (btnImprimir) btnImprimir.hidden = false;
 
     // Inicializa botões de ação (copiar, compartilhar, imprimir)
     createResultActions({
@@ -1156,6 +1162,9 @@ export function setupTool(root) {
       if (selModoReceita) selModoReceita.value = MODOS_ENTRADA_RECEITA.CONSOLIDADA;
       atualizarVisibilidade();
       if (painelResultado) painelResultado.hidden = true;
+      if (btnCopiar) btnCopiar.hidden = true;
+      if (btnCompartilhar) btnCompartilhar.hidden = true;
+      if (btnImprimir) btnImprimir.hidden = true;
       if (painelErro) {
         painelErro.hidden = true;
         painelErro.textContent = '';

@@ -18,10 +18,10 @@ pageScripts: <script type="module" src="{{ROOT_PREFIX}}js/tools/senha.js"></scri
     </div>
 
     <div style="text-align: left; display: inline-block;">
-        <label><input type="checkbox" id="maiusculas" checked> Incluir Letras Maiúsculas (A-Z)</label><br>
-        <label><input type="checkbox" id="minusculas" checked> Incluir Letras Minúsculas (a-z)</label><br>
-        <label><input type="checkbox" id="numeros" checked> Incluir Números (0-9)</label><br>
-        <label><input type="checkbox" id="especiais" checked> Incluir Símbolos (!@#$%&*)</label>
+        <input type="checkbox" id="maiusculas" checked> <label for="maiusculas">Incluir Letras Maiúsculas (A-Z)</label><br>
+        <input type="checkbox" id="minusculas" checked> <label for="minusculas">Incluir Letras Minúsculas (a-z)</label><br>
+        <input type="checkbox" id="numeros" checked> <label for="numeros">Incluir Números (0-9)</label><br>
+        <input type="checkbox" id="especiais" checked> <label for="especiais">Incluir Símbolos (!@#$%&*)</label>
     </div>
 
     <div class="tool-actions">
@@ -29,7 +29,9 @@ pageScripts: <script type="module" src="{{ROOT_PREFIX}}js/tools/senha.js"></scri
       <button type="button" class="tool-btn tool-btn-secondary" data-action="clear">Resetar</button>
     </div>
 
-    <div id="resultado-area" style="margin-top: 25px; display: none;">
+    <p id="mensagem-erro" role="alert" aria-live="assertive" style="color: #c00; margin-top: 15px; display: none; font-weight: bold;"></p>
+
+    <div id="resultado-area" aria-live="polite" style="margin-top: 25px; display: none;">
         <div style="background: #f4f4f4; padding: 15px; border-radius: 5px; border: 1px dashed #008080; font-family: monospace; font-size: 1.2em; word-break: break-all;" id="senha-gerada"></div>
         <br>
         <button type="button" style="background-color: #007bff;" data-action="copy">Copiar Senha</button>

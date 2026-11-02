@@ -58,11 +58,28 @@ export function setupWhatsApp() {
   const btnLimpar = document.querySelector('[data-action="clear"]');
   const btnCopiar = document.querySelector('[data-action="copy"]');
 
+  const elErro = document.getElementById("mensagem-erro");
+
   if (!inputNumero || !inputMensagem || !areaResultado || !linkBox) {
     return;
   }
 
   let timeoutCopiado = null;
+
+  const exibirErro = (msg) => {
+    if (elErro) {
+      elErro.textContent = msg;
+      elErro.style.display = "block";
+    }
+    areaResultado.style.display = "none";
+  };
+
+  const limparErro = () => {
+    if (elErro) {
+      elErro.textContent = "";
+      elErro.style.display = "none";
+    }
+  };
 
   const executarGeracao = () => {
     const res = gerarLinkWhatsApp({
@@ -71,9 +88,11 @@ export function setupWhatsApp() {
     });
 
     if (!res.valido) {
-      alert(res.erro);
+      exibirErro(res.erro);
       return;
     }
+
+    limparErro();
 
     // Atribuição estritamente segura sem interpretar HTML
     linkBox.innerText = res.url;
@@ -129,6 +148,7 @@ export function setupWhatsApp() {
     if (msgCopiado) {
       msgCopiado.style.display = "none";
     }
+    limparErro();
   };
 
   if (btnGerar) {

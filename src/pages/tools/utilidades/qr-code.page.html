@@ -20,7 +20,9 @@ pageScripts: <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/
       <button type="button" class="tool-btn tool-btn-secondary" data-action="clear">Limpar</button>
     </div>
 
-    <div id="resultado-area" style="margin-top: 30px; display: none; text-align: center;">
+    <p id="mensagem-erro" role="alert" aria-live="assertive" style="color: #c00; margin-top: 15px; display: none; font-weight: bold;"></p>
+
+    <div id="resultado-area" aria-live="polite" style="margin-top: 30px; display: none; text-align: center;">
         <div id="qrcode" style="display: inline-block; padding: 15px; background: white; border: 1px solid #ddd;"></div>
         <br><br>
         <button id="btnDownload" type="button" data-action="download" style="background-color: #28a745;">Baixar QR Code (PNG)</button>
