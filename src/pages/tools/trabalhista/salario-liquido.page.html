@@ -1,0 +1,300 @@
+---
+title: Calculadora de Salário Líquido 2026 CLT Online | Calculadora Master
+description: Calcule o salário líquido a partir do salário bruto com descontos de INSS 2026 (eSocial), IRRF com Lei 15.270/2025, vale-transporte e dependentes.
+keywords: calculadora salario liquido, salario liquido 2026, calculo inss 2026 esocial, irrf lei 15270, desconto vale-transporte clt, holerite online, descontos em folha clt
+canonical: https://www.calculadoramaster.com/tools/trabalhista/salario-liquido.html
+layout: tool
+pageScripts: <script type="module" src="{{ROOT_PREFIX}}js/tools/salario-liquido.js"></script>
+---
+
+<h1>Calculadora de Salário Líquido CLT</h1>
+<p>Descubra exatamente quanto você receberá no final do mês a partir do seu salário bruto, calculando os descontos oficiais de INSS (com a metodologia de truncamento por faixa do eSocial para 2026), Imposto de Renda Retido na Fonte (IRRF atualizado com a Lei nº 15.270/2025), vale-transporte, pensão alimentícia judicial, previdência privada (PGBL) e outros descontos em folha.</p>
+
+<div class="card" style="background-color: #f0f7f6; border-left: 4px solid #008080; padding: 16px; margin: 20px 0;">
+  <p style="margin: 0; font-size: 0.95em; color: #222;">
+    <strong>Aviso sobre vínculo único:</strong> Esta calculadora simula o holerite para <strong>um único vínculo empregatício</strong> sob as regras da Consolidação das Leis do Trabalho (CLT) na competência de <strong>2026</strong>. Trabalhadores com múltiplos vínculos simultâneos devem atentar para tratamentos distintos: para o <strong>INSS</strong>, as remunerações de todas as fontes devem ser somadas a cada mês para aplicação das faixas e do teto legal do RGPS, mediante declaração formal aos empregadores; já para o <strong>IRRF</strong>, cada fonte pagadora retém o imposto mensalmente de forma autônoma sobre os rendimentos que individualmente paga, consolidando-se todas as rendas tributáveis na Declaração de Ajuste Anual (sendo facultado ao trabalhador solicitar retenção complementar mensal à fonte pagadora quando aplicável, para atenuar o saldo no ajuste anual).
+  </p>
+</div>
+
+<div class="card tool-calculator-card">
+  <h2 class="tool-form-title">Dados do Holerite</h2>
+
+  <form id="formSalarioLiquido">
+    <div class="form-group">
+      <label for="remuneracaoBruta">Remuneração bruta total mensal (R$):</label>
+      <input type="text" id="remuneracaoBruta" name="remuneracaoBruta"
+        inputmode="numeric" autocomplete="off" placeholder="5.000,00" aria-describedby="ajudaRemuneracao" required>
+      <p id="ajudaRemuneracao">Informe o salário contratual bruto somado a eventuais adicionais tributáveis (horas extras, adicional noturno, comissões, DSR, insalubridade ou periculosidade).</p>
+    </div>
+
+    <div class="form-group">
+      <label for="dependentes">Número de dependentes (IRRF):</label>
+      <input type="number" id="dependentes" name="dependentes"
+        min="0" max="50" step="1" placeholder="0" aria-describedby="ajudaDependentes">
+      <p id="ajudaDependentes">Cada dependente legal (cônjuge, filhos até 21 anos ou até 24 se universitários) confere dedução legal de R$ 189,59/mês na base do Imposto de Renda.</p>
+    </div>
+
+    <div class="form-group">
+      <label for="pensaoAlimenticia">Pensão alimentícia judicial descontada em folha (R$):</label>
+      <input type="text" id="pensaoAlimenticia" name="pensaoAlimenticia"
+        inputmode="numeric" autocomplete="off" placeholder="0,00" aria-describedby="ajudaPensao">
+      <p id="ajudaPensao">Informe apenas o valor fixado por decisão judicial ou acordo homologado descontado diretamente na folha de pagamento. Reduz a base do IRRF.</p>
+    </div>
+
+    <div class="form-group">
+      <label for="previdenciaPrivada">Previdência complementar — PGBL em folha (R$):</label>
+      <input type="text" id="previdenciaPrivada" name="previdenciaPrivada"
+        inputmode="numeric" autocomplete="off" placeholder="0,00" aria-describedby="ajudaPgbl">
+      <p id="ajudaPgbl">Apenas planos do tipo PGBL (ou FAPI/Previdência Fechada) descontados em folha são dedutíveis da base do IRRF. Planos do tipo VGBL <strong>não</strong> são dedutíveis.</p>
+    </div>
+
+    <div class="form-group">
+      <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-weight: 600;">
+        <input type="checkbox" id="optanteVT" name="optanteVT" style="width: auto; margin: 0;">
+        <span>Optante pelo benefício do Vale-Transporte</span>
+      </label>
+    </div>
+
+    <div id="containerCamposVT" hidden style="background-color: #fbfbfb; border: 1px solid #e2e8f0; border-radius: 6px; padding: 16px; margin-bottom: 20px;">
+      <h3 style="font-size: 1rem; margin-top: 0; margin-bottom: 12px; color: #008080;">Parâmetros do Vale-Transporte</h3>
+      <div class="form-group">
+        <label for="salarioBasicoVT">Salário básico contratual para VT (R$):</label>
+        <input type="text" id="salarioBasicoVT" name="salarioBasicoVT"
+          inputmode="numeric" autocomplete="off" placeholder="5.000,00" aria-describedby="ajudaSalarioVT">
+        <p id="ajudaSalarioVT">O desconto legal do VT incide exclusivamente sobre o salário básico contratual (excluídos comissões, adicionais e gratificações), limitado a 6% (Decreto nº 10.854/2021, art. 110).</p>
+      </div>
+
+      <div class="form-group">
+        <label for="custoRealVT">Gasto real mensal com as passagens (R$):</label>
+        <input type="text" id="custoRealVT" name="custoRealVT"
+          inputmode="numeric" autocomplete="off" placeholder="250,00" aria-describedby="ajudaCustoVT">
+        <p id="ajudaCustoVT">Custo efetivo das tarifas de transporte fornecidas pelo empregador. O desconto não pode ultrapassar o custo real do benefício.</p>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="outrosDescontos">Outros descontos autorizados em folha (R$):</label>
+      <input type="text" id="outrosDescontos" name="outrosDescontos"
+        inputmode="numeric" autocomplete="off" placeholder="0,00" aria-describedby="ajudaOutros">
+      <p id="ajudaOutros">Coparticipação em plano de saúde/odontológico, seguro de vida, adiantamento salarial (vale), coparticipação em vale-refeição ou mensalidade sindical. Não deduzem da base do IRRF.</p>
+    </div>
+
+    <div class="tool-actions">
+      <button type="submit" id="btnCalcular" class="tool-btn tool-btn-primary">Calcular Salário Líquido</button>
+      <button type="button" id="btnLimpar" class="tool-btn tool-btn-secondary">Limpar</button>
+    </div>
+  </form>
+
+  <p id="mensagem-erro" role="alert" style="color: #c00; margin-top: 15px; font-weight: bold;" hidden></p>
+
+  <section id="resultadoSalarioLiquido" aria-live="polite" aria-atomic="true" hidden>
+    <h2 class="tool-result-title">Demonstrativo do Salário Líquido (Holerite)</h2>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin: 20px 0;">
+      <div class="card tool-result-card" style="border-top: 4px solid #008080;">
+        <p style="margin: 0; font-size: 0.9em; color: #555;">Salário Líquido Estimado:</p>
+        <strong id="resumoSalarioLiquido" style="font-size: 1.6em; color: #008080; display: block; margin: 8px 0;">R$ 0,00</strong>
+        <span style="font-size: 0.85em; color: #666;">Valor creditado na conta</span>
+      </div>
+
+      <div class="card tool-result-card" style="border-top: 4px solid #d9534f;">
+        <p style="margin: 0; font-size: 0.9em; color: #555;">Total de Descontos:</p>
+        <strong id="resumoTotalDescontos" style="font-size: 1.6em; color: #d9534f; display: block; margin: 8px 0;">R$ 0,00</strong>
+        <span style="font-size: 0.85em; color: #666;">INSS, IRRF, VT e outros</span>
+      </div>
+
+      <div class="card tool-result-card" style="border-top: 4px solid #f0ad4e;">
+        <p style="margin: 0; font-size: 0.9em; color: #555;">Percentual de Descontos:</p>
+        <strong id="resumoPercDescontos" style="font-size: 1.6em; color: #333; display: block; margin: 8px 0;">0,00%</strong>
+        <span style="font-size: 0.85em; color: #666;">Sobre o salário bruto</span>
+      </div>
+    </div>
+
+    <h3 style="margin-top: 25px; margin-bottom: 12px; font-size: 1.15rem; color: #333;">Detalhamento de Proventos e Descontos</h3>
+    <div class="mei-projection-table-wrapper">
+      <table class="mei-projection-table">
+        <thead>
+          <tr>
+            <th scope="col">Descrição da Rubrica</th>
+            <th scope="col">Referência / Alíquota</th>
+            <th scope="col">Proventos (R$)</th>
+            <th scope="col">Descontos (R$)</th>
+          </tr>
+        </thead>
+        <tbody id="tabelaDetalhamentoCorpo"></tbody>
+      </table>
+    </div>
+
+    <h3 style="margin-top: 25px; margin-bottom: 12px; font-size: 1.15rem; color: #333;">Composição Progressiva do INSS (eSocial MOS S-1.3)</h3>
+    <div class="mei-projection-table-wrapper">
+      <table class="mei-projection-table">
+        <thead>
+          <tr>
+            <th scope="col">Faixa Previdenciária</th>
+            <th scope="col">Alíquota Nominal</th>
+            <th scope="col">Base Tributável na Faixa</th>
+            <th scope="col">Contribuição Truncada</th>
+          </tr>
+        </thead>
+        <tbody id="tabelaFaixasInssCorpo"></tbody>
+      </table>
+    </div>
+
+    <div id="containerAvisosResultado" style="margin-top: 15px;"></div>
+
+    <div class="tool-actions result-actions" style="margin-top: 25px;">
+      <button type="button" id="btnCopiar" class="tool-btn tool-btn-secondary">Copiar resultado</button>
+      <button type="button" id="btnCompartilhar" class="tool-btn tool-btn-secondary">Compartilhar link</button>
+      <button type="button" id="btnImprimir" class="tool-btn tool-btn-secondary">Imprimir demonstrativo</button>
+      <span id="statusAcoes" class="sr-only" aria-live="polite"></span>
+    </div>
+  </section>
+</div>
+
+<section class="content">
+  <h2>Como calcular o salário líquido em 2026</h2>
+  <p>O <strong>salário líquido</strong> é o valor financeiro que o trabalhador contratado sob o regime da CLT efetivamente recebe em sua conta bancária após a aplicação de todas as deduções obrigatórias por lei e descontos contratuais autorizados sobre a sua remuneração bruta.</p>
+
+  <p>A fórmula geral do salário líquido é expressa da seguinte forma:</p>
+  <p style="background: #f8fafc; padding: 12px 16px; border-left: 4px solid #008080; font-family: monospace; font-size: 1.05em;">
+    Salário Líquido = Remuneração Bruta − INSS − IRRF − Vale-Transporte − Pensão Judicial − Previdência PGBL − Outros Descontos
+  </p>
+
+  <h2>1. Como funciona o desconto do INSS em 2026 (eSocial MOS S-1.3)</h2>
+  <p>Desde a Reforma da Previdência (Emenda Constitucional nº 103/2019), a contribuição dos segurados empregados ao Regime Geral de Previdência Social (RGPS) é calculada de forma <strong>progressiva</strong>, dividida em quatro faixas de remuneração. O trabalhador paga a alíquota de cada faixa apenas sobre a parcela do salário que se enquadra dentro dela.</p>
+
+  <p>Para a competência de 2026, com o salário mínimo nacional fixado em <strong>R$ 1.621,00</strong> e o teto máximo do RGPS estabelecido em <strong>R$ 8.475,55</strong>, as faixas e alíquotas oficiais são as seguintes:</p>
+
+  <div class="mei-projection-table-wrapper">
+    <table class="mei-projection-table">
+      <thead>
+        <tr>
+          <th scope="col">Faixa</th>
+          <th scope="col">Faixa Salarial de Contribuição (R$)</th>
+          <th scope="col">Alíquota Nominal</th>
+          <th scope="col">Contribuição Máxima Truncada da Faixa (R$)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1ª Faixa</td>
+          <td>Até R$ 1.621,00</td>
+          <td>7,5%</td>
+          <td>R$ 121,57</td>
+        </tr>
+        <tr>
+          <td>2ª Faixa</td>
+          <td>De R$ 1.621,01 até R$ 2.902,84</td>
+          <td>9,0%</td>
+          <td>R$ 115,36</td>
+        </tr>
+        <tr>
+          <td>3ª Faixa</td>
+          <td>De R$ 2.902,85 até R$ 4.354,27</td>
+          <td>12,0%</td>
+          <td>R$ 174,17</td>
+        </tr>
+        <tr>
+          <td>4ª Faixa</td>
+          <td>De R$ 4.354,28 até R$ 8.475,55 (Teto)</td>
+          <td>14,0%</td>
+          <td>R$ 576,97</td>
+        </tr>
+        <tr style="font-weight: bold; background-color: #f8fafc;">
+          <td colspan="3">Teto Máximo de Contribuição ao INSS (Soma dos Tetos das Faixas)</td>
+          <td>R$ 988,07</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p><strong>Metodologia oficial de truncamento do eSocial:</strong> Conforme estabelecido no Manual de Orientação do eSocial (MOS S-1.3, item 5.2, página 132), o cálculo da contribuição previdenciária mensal de cada faixa progressiva é truncado em duas casas decimais com descarte dos centavos fracionários antes da consolidação do total. Por esse motivo, a soma dos tetos das quatro faixas resulta no teto oficial de <strong>R$ 988,07</strong> (R$ 121,57 + R$ 115,36 + R$ 174,17 + R$ 576,97), e qualquer salário igual ou superior a R$ 8.475,55 sofre o desconto fixo máximo correspondente.</p>
+
+  <h2>2. Como funciona o IRRF em 2026 e a Lei nº 15.270/2025</h2>
+  <p>O cálculo do Imposto de Renda Retido na Fonte mensal segue a tabela progressiva oficial da Receita Federal do Brasil, com inovações fundamentais trazidas pela <strong>Lei nº 15.270/2025</strong> para 2026:</p>
+
+  <ol style="padding-left: 20px; line-height: 1.8;">
+    <li><strong>Apuração da Base de Cálculo:</strong> Do salário bruto, subtrai-se a dedução mais vantajosa para o empregado entre o <em>Desconto Simplificado Mensal</em> (R$ 607,20) e as <em>Deduções Legais</em> (INSS retido + R$ 189,59 por dependente + pensão alimentícia judicial + previdência complementar PGBL).</li>
+    <li><strong>Aplicação da Tabela Progressiva:</strong> A base de cálculo é enquadrada na tabela do IRRF com alíquotas de 0%, 7,5%, 15%, 22,5% e 27,5% e parcela a deduzir.</li>
+    <li><strong>Redução Mensal da Lei nº 15.270/2025:</strong>
+      <ul>
+        <li><strong>Rendimentos até R$ 5.000,00:</strong> Isenção total de IRRF (imposto devido = R$ 0,00).</li>
+        <li><strong>Rendimentos entre R$ 5.000,01 e R$ 7.350,00:</strong> Aplica-se a redução gradual calculada pela fórmula oficial <code>Redução = R$ 978,62 − (0,133145 × Salário Bruto)</code>, abatendo diretamente o imposto apurado na tabela.</li>
+        <li><strong>Rendimentos acima de R$ 7.350,00:</strong> O imposto apurado na tabela progressiva é recolhido integralmente, sem redução adicional.</li>
+      </ul>
+    </li>
+  </ol>
+
+  <h2>3. Regras legais do Vale-Transporte (CLT e Decreto nº 10.854/2021)</h2>
+  <p>O vale-transporte é regulado pela Lei nº 7.418/1985 e pelo Decreto nº 10.854/2021 (art. 110):</p>
+  <ul>
+    <li>O benefício é opcional para o empregado que utiliza transporte público coletivo em seu deslocamento residência-trabalho.</li>
+    <li>O desconto em folha é de no máximo <strong>6% sobre o salário básico contratual</strong> (sem inclusão de horas extras, gratificações ou adicionais).</li>
+    <li>Caso o gasto real com as passagens fornecidas pela empresa seja inferior a 6% do salário básico, o desconto será limitado ao <strong>custo real das passagens</strong>.</li>
+    <li>O valor do vale-transporte <strong>não</strong> é deduzido da base de cálculo do INSS nem do IRRF.</li>
+  </ul>
+
+  <h2>4. Diferença entre PGBL e VGBL na folha de pagamento</h2>
+  <p>Somente contribuições para planos de previdência complementar do tipo <strong>PGBL</strong> (Plano Gerador de Benefício Livre) ou planos fechados de previdência privada patrocinados descontados em folha podem ser deduzidos da base de cálculo do IRRF (respeitado o limite fiscal anual de 12% da renda bruta tributável na declaração de ajuste anual). Planos do tipo <strong>VGBL</strong> (Vida Gerador de Benefício Livre) são classificados como seguro de pessoas com cobertura por sobrevivência e <strong>não conferem dedução</strong> na folha nem na declaração anual.</p>
+
+  <h2>Perguntas Frequentes (FAQ)</h2>
+
+  <h3>Quem ganha até R$ 5.000,00 paga Imposto de Renda em 2026?</h3>
+  <p>Não. Com a entrada em vigor da Lei nº 15.270/2025, os trabalhadores com remuneração mensal bruta de até R$ 5.000,00 estão totalmente isentos de retenção de IRRF na fonte.</p>
+
+  <h3>O que acontece se eu tiver mais de um emprego CLT (múltiplos vínculos)?</h3>
+  <p>Quem mantém dois ou mais contratos de trabalho concomitantes sob a CLT está sujeito a tratamentos legais e operacionais diferentes para a Previdência Social e para o Imposto de Renda:</p>
+  <ul>
+    <li><strong>INSS (Previdência Social):</strong> As remunerações de todos os empregos devem ser somadas no mês para enquadramento nas faixas progressivas e respeito ao teto máximo de contribuição (R$ 8.475,55 em 2026). Para cumprir a Instrução Normativa RFB nº 2.110/2022, o empregado deve apresentar mensalmente ao empregador secundário uma declaração formal indicando a remuneração recebida e a contribuição já descontada na empresa principal. Se o teto já tiver sido atingido no vínculo principal, a empresa secundária não deve efetuar desconto de INSS, prevenindo bitributação e recolhimento indevido.</li>
+    <li><strong>IRRF (Imposto de Renda Retido na Fonte):</strong> A retenção mensal na fonte é efetuada normalmente por cada fonte pagadora de maneira isolada, considerando apenas a remuneração que ela própria paga ao trabalhador, sem comunicação com a outra empresa.</li>
+    <li><strong>Declaração de Ajuste Anual (DAA):</strong> Na declaração anual de IRPF, todos os rendimentos tributáveis de todas as fontes são consolidados em base única. Como as parcelas dedutíveis ou faixas iniciais foram aplicadas em cada holerite separadamente, a junção das rendas eleva a alíquota efetiva média e costuma gerar saldo de imposto a pagar no ajuste anual.</li>
+    <li><strong>Retenção complementar mensal (facultativa):</strong> O trabalhador tem a faculdade legal de solicitar por escrito a uma de suas fontes pagadoras que proceda a uma retenção complementar voluntária de IRRF na folha mensal, quando desejar antecipar o recolhimento e atenuar o saldo devedor na declaração anual. Esse procedimento é uma opção facultada ao contribuinte, não sendo uma imposição obrigatória da fonte pagadora.</li>
+  </ul>
+
+  <h3>O FGTS é descontado do salário do trabalhador?</h3>
+  <p>Não. O Fundo de Garantia do Tempo de Serviço (FGTS), correspondente a 8% da remuneração bruta do trabalhador na regra geral da CLT, é uma obrigação patronal exclusiva do empregador e <strong>nunca pode ser descontado</strong> do salário do empregado.</p>
+
+  <h2>Aviso legal e institucional</h2>
+  <div class="card" style="background-color: #f9f9f9; border-left: 4px solid #008080; padding: 15px; margin: 15px 0;">
+    <p style="margin: 0; font-size: 0.9em; line-height: 1.6;">
+      Esta ferramenta é um simulador educativo e de referência rápida. As estimativas apresentadas baseiam-se nos dados informados pelo usuário e nos parâmetros normativos vigentes para 2026. Convenções coletivas de trabalho, acordos de categoria, planos de saúde empresariais com tabelas de coparticipação específicas e decisões judiciais individuais podem estabelecer condições particulares. Para orientações jurídicas ou contábeis formais, consulte o departamento de recursos humanos da sua empresa ou um profissional habilitado.
+    </p>
+  </div>
+
+  <!-- FERRAMENTAS RELACIONADAS -->
+  <section class="related-tools">
+    <h2>Você também pode precisar</h2>
+    <div class="related-tools-grid">
+      <article class="tool-card">
+        <div class="tool-card-header">
+          <span class="tool-card-category">Trabalhista</span>
+        </div>
+        <h3 class="tool-card-title">Calculadora de Horas Extras</h3>
+        <p class="tool-card-description">Estime o valor da sua hora normal, hora extra com adicional de 50%, 100% ou personalizado.</p>
+        <a href="{{ROOT_PREFIX}}tools/trabalhista/horas-extras.html" class="tool-card-link">Acessar ferramenta →</a>
+      </article>
+
+      <article class="tool-card">
+        <div class="tool-card-header">
+          <span class="tool-card-category">Financeiro</span>
+        </div>
+        <h3 class="tool-card-title">Calculadora de Valor da Hora</h3>
+        <p class="tool-card-description">Calcule quanto cobrar por hora para cobrir suas despesas pessoais e metas profissionais.</p>
+        <a href="{{ROOT_PREFIX}}tools/financas/valor-hora.html" class="tool-card-link">Acessar ferramenta →</a>
+      </article>
+
+      <article class="tool-card">
+        <div class="tool-card-header">
+          <span class="tool-card-category">Matemática</span>
+        </div>
+        <h3 class="tool-card-title">Calculadora de Porcentagem</h3>
+        <p class="tool-card-description">Faça cálculos de aumentos percentuais, descontos e variações de maneira simples.</p>
+        <a href="{{ROOT_PREFIX}}tools/financas/porcentagem.html" class="tool-card-link">Acessar ferramenta →</a>
+      </article>
+    </div>
+  </section>
+
+  <p class="tool-return-link">
+    👉 <a href="{{ROOT_PREFIX}}index.html">Voltar para a página inicial</a>
+  </p>
+</section>

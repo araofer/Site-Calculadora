@@ -1853,6 +1853,48 @@ const TOOLS_CATALOG = [
         "regra-de-tres"
       ],
       "status": "published"
+    },
+    {
+      "id": "salario-liquido",
+      "slug": "salario-liquido",
+      "nome": "Calculadora de Salário Líquido CLT",
+      "name": "Calculadora de Salário Líquido CLT",
+      "categoria": "Trabalhista",
+      "category": "Trabalhista",
+      "categorySlug": "trabalhista",
+      "descricao": "Calcule o salário líquido a partir do salário bruto com descontos de INSS 2026 (eSocial), IRRF com Lei 15.270/2025, vale-transporte e dependentes.",
+      "description": "Calcule o salário líquido a partir do salário bruto com descontos de INSS 2026 (eSocial), IRRF com Lei 15.270/2025, vale-transporte e dependentes.",
+      "url": "tools/trabalhista/salario-liquido.html",
+      "termos": [
+        "calculadora salario liquido",
+        "salario liquido 2026",
+        "calculo salario liquido clt",
+        "inss 2026 esocial",
+        "irrf 2026 lei 15270",
+        "desconto inss salario",
+        "desconto irrf folha",
+        "desconto vale transporte clt",
+        "holerite clt online"
+      ],
+      "keywords": [
+        "calculadora salario liquido",
+        "salario liquido 2026",
+        "calculo salario liquido clt",
+        "inss 2026 esocial",
+        "irrf 2026 lei 15270",
+        "desconto inss salario",
+        "desconto irrf folha",
+        "desconto vale transporte clt",
+        "holerite clt online"
+      ],
+      "destaque": false,
+      "featured": false,
+      "related": [
+        "horas-extras",
+        "valor-hora",
+        "porcentagem"
+      ],
+      "status": "published"
     }
   ];
 

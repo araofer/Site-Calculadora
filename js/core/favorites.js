@@ -58,7 +58,8 @@ export const VALID_TOOL_IDS = new Set([
   'estimativa-hidratacao',
   'ritmo-corrida-zonas-frequencia-cardiaca',
   'idade-gestacional-data-parto',
-  'conversor-unidades'
+  'conversor-unidades',
+  'salario-liquido'
 ]);
 
 let memoryFavorites = null;

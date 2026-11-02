@@ -1742,5 +1742,53 @@
       "https://www.nist.gov/pml/owm/metric-si/unit-conversion",
       "https://www.gov.br/inmetro/pt-br"
     ]
+  },
+  {
+    "id": "salario-liquido",
+    "slug": "salario-liquido",
+    "name": "Calculadora de Salário Líquido CLT",
+    "category": "Trabalhista",
+    "categorySlug": "trabalhista",
+    "audience": "brasil",
+    "description": "Calcule o salário líquido a partir do salário bruto com descontos de INSS 2026 (eSocial), IRRF com Lei 15.270/2025, vale-transporte e dependentes.",
+    "url": "/tools/trabalhista/salario-liquido.html",
+    "status": "published",
+    "formulaStatus": "verified",
+    "implementation": "factory",
+    "features": {
+      "chart": false,
+      "table": true,
+      "pdf": false,
+      "copy": true,
+      "share": true,
+      "print": true,
+      "favorite": true,
+      "article": false
+    },
+    "keywords": [
+      "calculadora salario liquido",
+      "salario liquido 2026",
+      "calculo salario liquido clt",
+      "inss 2026 esocial",
+      "irrf 2026 lei 15270",
+      "desconto inss salario",
+      "desconto irrf folha",
+      "desconto vale transporte clt",
+      "holerite clt online"
+    ],
+    "related": [
+      "horas-extras",
+      "valor-hora",
+      "porcentagem"
+    ],
+    "shortName": "Salário Líquido",
+    "sourceReferences": [
+      "https://www.gov.br/inss/pt-br/direitos-e-deveres/inscricao-e-contribuicao/tabela-de-contribuicao-mensal",
+      "https://www.gov.br/esocial/pt-br/documentacao-tecnica/manuais/mos-s-1-3-consolidada-ate-a-no-s-1-3-08-2026.pdf",
+      "https://www.gov.br/receitafederal/pt-br/assuntos/meu-imposto-de-renda/tabelas/2026",
+      "https://www.planalto.gov.br/ccivil_03/_ato2023-2026/2025/lei/l15270.htm",
+      "https://www.planalto.gov.br/ccivil_03/leis/l7418.htm",
+      "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/decreto/d10854.htm"
+    ]
   }
 ]
