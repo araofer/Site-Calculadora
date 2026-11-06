@@ -1895,6 +1895,49 @@ const TOOLS_CATALOG = [
         "porcentagem"
       ],
       "status": "published"
+    },
+    {
+      "id": "custo-km-lucro-corrida",
+      "slug": "custo-km-lucro-corrida",
+      "nome": "Calculadora de Custo por Quilômetro e Lucro por Corrida",
+      "name": "Calculadora de Custo por Quilômetro e Lucro por Corrida",
+      "categoria": "Financeiro",
+      "category": "Financeiro",
+      "categorySlug": "financas",
+      "descricao": "Calcule o custo real por quilômetro e o lucro líquido por corrida para motoristas de aplicativo (Uber, 99) e entregadores. Considere combustível, desgaste e retorno vazio.",
+      "description": "Calcule o custo real por quilômetro e o lucro líquido por corrida para motoristas de aplicativo (Uber, 99) e entregadores. Considere combustível, desgaste e retorno vazio.",
+      "url": "tools/financas/custo-km-lucro-corrida.html",
+      "termos": [
+        "custo por km",
+        "lucro por corrida",
+        "calculadora uber",
+        "calculadora 99",
+        "calculadora motoboy",
+        "custo quilometro rodado",
+        "lucro motorista aplicativo",
+        "desgaste veiculo km",
+        "reserva manutencao carro"
+      ],
+      "keywords": [
+        "custo por km",
+        "lucro por corrida",
+        "calculadora uber",
+        "calculadora 99",
+        "calculadora motoboy",
+        "custo quilometro rodado",
+        "lucro motorista aplicativo",
+        "desgaste veiculo km",
+        "reserva manutencao carro"
+      ],
+      "destaque": false,
+      "featured": false,
+      "related": [
+        "combustivel",
+        "preco-servico",
+        "mei-ou-autonomo",
+        "horas-extras"
+      ],
+      "status": "published"
     }
   ];
 

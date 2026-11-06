@@ -59,7 +59,8 @@ export const VALID_TOOL_IDS = new Set([
   'ritmo-corrida-zonas-frequencia-cardiaca',
   'idade-gestacional-data-parto',
   'conversor-unidades',
-  'salario-liquido'
+  'salario-liquido',
+  'custo-km-lucro-corrida'
 ]);
 
 let memoryFavorites = null;

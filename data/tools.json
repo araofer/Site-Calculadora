@@ -1790,5 +1790,50 @@
       "https://www.planalto.gov.br/ccivil_03/leis/l7418.htm",
       "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/decreto/d10854.htm"
     ]
+  },
+  {
+    "id": "custo-km-lucro-corrida",
+    "slug": "custo-km-lucro-corrida",
+    "name": "Calculadora de Custo por Quilômetro e Lucro por Corrida",
+    "category": "Financeiro",
+    "categorySlug": "financas",
+    "audience": "brasil",
+    "description": "Calcule o custo real por quilômetro e o lucro líquido por corrida para motoristas de aplicativo (Uber, 99) e entregadores. Considere combustível, desgaste e retorno vazio.",
+    "url": "/tools/financas/custo-km-lucro-corrida.html",
+    "status": "published",
+    "formulaStatus": "verified",
+    "implementation": "factory",
+    "features": {
+      "chart": false,
+      "table": true,
+      "pdf": false,
+      "copy": true,
+      "share": true,
+      "print": true,
+      "favorite": true,
+      "article": false
+    },
+    "keywords": [
+      "custo por km",
+      "lucro por corrida",
+      "calculadora uber",
+      "calculadora 99",
+      "calculadora motoboy",
+      "custo quilometro rodado",
+      "lucro motorista aplicativo",
+      "desgaste veiculo km",
+      "reserva manutencao carro"
+    ],
+    "related": [
+      "combustivel",
+      "preco-servico",
+      "mei-ou-autonomo",
+      "horas-extras"
+    ],
+    "shortName": "Custo por Km e Lucro por Corrida",
+    "sourceReferences": [
+      "https://www.gov.br/anp/pt-br",
+      "https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13640.htm"
+    ]
   }
 ]
