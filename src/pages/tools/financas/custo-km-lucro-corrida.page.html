@@ -1,0 +1,264 @@
+---
+title: Calculadora de Custo por Quilômetro e Lucro por Corrida | Calculadora Master
+description: Calcule o custo real por quilômetro e o lucro líquido por corrida para motoristas de aplicativo (Uber, 99) e entregadores. Considere combustível, desgaste e retorno vazio.
+keywords: custo por km, lucro por corrida, calculadora uber, calculadora 99, calculadora motoboy, custo quilometro rodado, lucro motorista aplicativo, desgaste veiculo km, reserva manutencao carro
+canonical: https://www.calculadoramaster.com/tools/financas/custo-km-lucro-corrida.html
+layout: tool
+pageScripts: <script type="module" src="{{ROOT_PREFIX}}js/tools/custo-km-lucro-corrida.js"></script>
+---
+
+<h1>Calculadora de Custo por Quilômetro e Lucro por Corrida</h1>
+<p>Calcule a rentabilidade real de cada corrida ou entrega para motoristas de aplicativo e entregadores autônomos. Descubra o custo por km rodado, o consumo de combustível, o impacto do retorno vazio e a reserva necessária para manutenção e depreciação do seu veículo.</p>
+
+<div class="card tool-calculator-card">
+  <h2 class="tool-form-title">Dados da Corrida e do Veículo</h2>
+
+  <!-- Presets Ilustrativos de Veículo -->
+  <div class="form-group">
+    <label id="labelPresets">Preenchimento rápido de referências iniciais:</label>
+    <div class="tool-preset-group" role="group" aria-labelledby="labelPresets">
+      <button type="button" id="presetCarro" class="tool-preset-btn">
+        🚗 Carro (10 km/L)
+      </button>
+      <button type="button" id="presetMoto" class="tool-preset-btn">
+        🏍️ Moto (35 km/L)
+      </button>
+    </div>
+    <p class="form-help-text">
+      *Os atalhos preenchem apenas o consumo médio de referência (km/L). Os custos de desgaste (manutenção, pneus e depreciação) e despesas adicionais devem ser informados ou personalizados por você. Todos os campos continuam 100% editáveis.
+    </p>
+  </div>
+
+  <form id="formCorrida" novalidate>
+    <!-- Modalidade de Taxas do App -->
+    <fieldset class="form-group">
+      <legend id="legendModalidadeTaxa">Como você deseja informar o ganho da corrida?</legend>
+      <div class="radio-group" role="radiogroup" aria-labelledby="legendModalidadeTaxa">
+        <label for="modTaxaBruto">
+          <input type="radio" id="modTaxaBruto" name="modalidadeTaxa" value="bruto" checked>
+          <span>Informar valor bruto e descontar taxas do app</span>
+        </label>
+        <label for="modTaxaLiquido">
+          <input type="radio" id="modTaxaLiquido" name="modalidadeTaxa" value="liquido">
+          <span>Informar valor já líquido (já descontado pelo app)</span>
+        </label>
+      </div>
+      <p id="ajudaModalidadeTaxa" class="form-help-text">Selecione se o aplicativo já informa o valor líquido transferido a você ou se você informará a tarifa bruta e a porcentagem retida.</p>
+    </fieldset>
+
+    <!-- Receita da Corrida -->
+    <div class="form-group">
+      <label for="valorReceita" id="labelValorReceita">Valor bruto da corrida no app (R$):</label>
+      <input type="text" id="valorReceita" name="valorReceita" inputmode="numeric" placeholder="40,00" required aria-describedby="ajudaValorReceita">
+      <p id="ajudaValorReceita" class="form-help-text">Informe o valor total pago pelo passageiro ou ofertado pelo aplicativo.</p>
+    </div>
+
+    <!-- Grupo de Taxas do App (Oculto na modalidade Líquido) -->
+    <div id="grupoTaxasApp">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="taxaPercentual">Comissão percentual da plataforma (%):</label>
+          <input type="text" id="taxaPercentual" name="taxaPercentual" inputmode="decimal" placeholder="20,0" aria-describedby="ajudaTaxaPerc">
+          <p id="ajudaTaxaPerc" class="form-help-text">Taxa retida pela Uber, 99, iFood, etc. (ex: 20%).</p>
+        </div>
+        <div class="form-group">
+          <label for="taxaFixa">Taxa fixa da plataforma (R$) (opcional):</label>
+          <input type="text" id="taxaFixa" name="taxaFixa" inputmode="numeric" placeholder="0,00" aria-describedby="ajudaTaxaFixa">
+          <p id="ajudaTaxaFixa" class="form-help-text">Taxa fixa cobrada por corrida (se houver).</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Distâncias (Corrida e Retorno Vazio) -->
+    <div class="form-row">
+      <div class="form-group">
+        <label for="distanciaCorrida">Distância da corrida / entrega (km):</label>
+        <input type="text" id="distanciaCorrida" name="distanciaCorrida" inputmode="decimal" placeholder="12,0" required aria-describedby="ajudaDistCorrida">
+        <p id="ajudaDistCorrida" class="form-help-text">Quilômetros rodados com o passageiro ou carga.</p>
+      </div>
+      <div class="form-group">
+        <label for="distanciaRetorno">Deslocamento / Retorno vazio (km) (opcional):</label>
+        <input type="text" id="distanciaRetorno" name="distanciaRetorno" inputmode="decimal" placeholder="3,0" aria-describedby="ajudaDistRetorno">
+        <p id="ajudaDistRetorno" class="form-help-text">Km rodados para buscar cliente ou voltar de área sem demanda.</p>
+      </div>
+    </div>
+
+    <!-- Combustível -->
+    <div class="form-row">
+      <div class="form-group">
+        <label for="consumoVeiculo">Consumo médio do veículo (km/L):</label>
+        <input type="text" id="consumoVeiculo" name="consumoVeiculo" inputmode="decimal" placeholder="10,0" required aria-describedby="ajudaConsumo">
+        <p id="ajudaConsumo" class="form-help-text">Quantos quilômetros seu carro ou moto roda com 1 litro.</p>
+      </div>
+      <div class="form-group">
+        <label for="precoCombustivel">Preço do combustível (R$/L):</label>
+        <input type="text" id="precoCombustivel" name="precoCombustivel" inputmode="numeric" placeholder="6,00" required aria-describedby="ajudaPrecoComb">
+        <p id="ajudaPrecoComb" class="form-help-text">Preço pago por litro (gasolina, etanol ou diesel).</p>
+      </div>
+    </div>
+
+    <!-- Custos de Desgaste por Quilômetro -->
+    <fieldset class="form-group">
+      <legend>Desgaste veicular e outras despesas (R$/km):</legend>
+      <div class="form-row form-row-compact">
+        <div class="form-group">
+          <label for="custoManutencaoKm">Manutenção (R$/km):</label>
+          <input type="text" id="custoManutencaoKm" name="custoManutencaoKm" inputmode="decimal" placeholder="0,15" aria-describedby="ajudaManut">
+          <p id="ajudaManut" class="form-help-text">Óleo, filtros, pastilhas.</p>
+        </div>
+        <div class="form-group">
+          <label for="custoPneusKm">Pneus (R$/km):</label>
+          <input type="text" id="custoPneusKm" name="custoPneusKm" inputmode="decimal" placeholder="0,05" aria-describedby="ajudaPneus">
+          <p id="ajudaPneus" class="form-help-text">Desgaste da borracha.</p>
+        </div>
+        <div class="form-group">
+          <label for="custoDepreciacaoKm">Depreciação (R$/km):</label>
+          <input type="text" id="custoDepreciacaoKm" name="custoDepreciacaoKm" inputmode="decimal" placeholder="0,15" aria-describedby="ajudaDeprec">
+          <p id="ajudaDeprec" class="form-help-text">Perda de valor do veículo.</p>
+        </div>
+        <div class="form-group">
+          <label for="outrasDespesas">Outras despesas (R$):</label>
+          <input type="text" id="outrasDespesas" name="outrasDespesas" inputmode="numeric" placeholder="0,00" aria-describedby="ajudaOutras">
+          <p id="ajudaOutras" class="form-help-text">Pedágio, estacionamento.</p>
+        </div>
+      </div>
+    </fieldset>
+
+    <div class="tool-actions">
+      <button type="submit" id="btnCalcular" class="tool-btn tool-btn-primary">Calcular Custo e Lucro</button>
+      <button type="button" id="btnLimpar" class="tool-btn tool-btn-secondary">Limpar</button>
+    </div>
+  </form>
+
+  <!-- Mensagem de Erro de Validação -->
+  <div id="erroCorrida" class="alert alert-danger" role="alert" tabindex="-1" hidden></div>
+
+  <!-- Painel de Resultados -->
+  <section id="resultadoCorrida" class="tool-result-card" aria-live="polite" hidden>
+    <h2 class="tool-result-title">Resultado da Corrida</h2>
+
+    <!-- Card Principal: Lucro ou Prejuízo Real -->
+    <div id="cardLucroPrincipal" class="card tool-status-card status-lucro">
+      <div class="tool-status-header">
+        <span id="rotuloLucroPrincipal" class="tool-status-title">Lucro Líquido Real da Corrida:</span>
+        <span id="resBadgeStatus" class="status-badge status-lucro" hidden>Corrida Lucrativa</span>
+      </div>
+      <div id="resLucroReal" class="tool-status-value">R$ 0,00</div>
+      <p>
+        Ganho limpo que sobra para você após pagar o combustível, cobrir o desgaste veicular e deduzir a comissão do aplicativo.
+      </p>
+    </div>
+
+    <!-- Card Educativo: Reserva para Manutenção e Depreciação -->
+    <div class="tool-reserva-card">
+      <h4>Reserva estimada para manutenção e depreciação</h4>
+      <div id="resReservaDesgaste" class="tool-reserva-value">R$ 0,00</div>
+      <p>
+        <strong>Não gaste este valor:</strong> guarde esse dinheiro para a próxima troca de óleo, compra de pneus e manutenção preventiva. Ele já está descontado no cálculo do lucro e compõe o seu custo operacional real.
+      </p>
+    </div>
+
+    <!-- Indicadores Principais -->
+    <div class="tool-metrics-grid">
+      <div class="tool-metric-card">
+        <div class="tool-metric-label">Lucro por Km:</div>
+        <div id="resLucroKm" class="tool-metric-value">R$ 0,00/km</div>
+      </div>
+      <div class="tool-metric-card">
+        <div class="tool-metric-label">Custo por Km:</div>
+        <div id="resCustoKm" class="tool-metric-value">R$ 0,00/km</div>
+      </div>
+      <div class="tool-metric-card">
+        <div class="tool-metric-label">Distância Total:</div>
+        <div id="resDistanciaTotal" class="tool-metric-value">0 km</div>
+      </div>
+      <div class="tool-metric-card">
+        <div class="tool-metric-label">Receita Líquida do App:</div>
+        <div id="resReceitaLiquida" class="tool-metric-value">R$ 0,00</div>
+      </div>
+      <div class="tool-metric-card">
+        <div class="tool-metric-label">Custo Operacional Total:</div>
+        <div id="resCustoOperacional" class="tool-metric-value">R$ 0,00</div>
+      </div>
+      <div class="tool-metric-card">
+        <div class="tool-metric-label">Margem de Lucro Real:</div>
+        <div id="resMargemLucro" class="tool-metric-value">0,0%</div>
+      </div>
+    </div>
+
+    <!-- Tabela de Composição dos Custos -->
+    <h3 class="tool-breakdown-title">Composição Detalhada dos Custos Operacionais</h3>
+    <div class="tool-breakdown-wrapper">
+      <table class="tool-breakdown-table">
+        <tbody>
+          <tr>
+            <td>Combustível consumido no trajeto:</td>
+            <td id="resDetCombustivel">R$ 0,00</td>
+          </tr>
+          <tr>
+            <td>Desgaste de manutenção preventiva:</td>
+            <td id="resDetManutencao">R$ 0,00</td>
+          </tr>
+          <tr>
+            <td>Desgaste de pneus:</td>
+            <td id="resDetPneus">R$ 0,00</td>
+          </tr>
+          <tr>
+            <td>Depreciação estimada do veículo:</td>
+            <td id="resDetDepreciacao">R$ 0,00</td>
+          </tr>
+          <tr>
+            <td>Outras despesas (pedágios / estacionamento):</td>
+            <td id="resDetOutrasDespesas">R$ 0,00</td>
+          </tr>
+          <tr id="linhaDetDescontoApp" class="tool-breakdown-discount" hidden>
+            <td>Comissão total retida pela plataforma:</td>
+            <td id="resDetDescontoApp">R$ 0,00</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Botões de Ação Padronizados -->
+    <div class="tool-actions result-actions">
+      <button type="button" id="btnCopiar" class="tool-btn tool-btn-secondary btn-action-copy">Copiar Resultado</button>
+      <button type="button" id="btnCompartilhar" class="tool-btn tool-btn-secondary btn-action-share">Compartilhar</button>
+      <button type="button" id="btnImprimir" class="tool-btn tool-btn-secondary btn-action-print">Imprimir / Salvar PDF</button>
+    </div>
+    <div id="statusAcoes" class="form-help-text" aria-live="polite"></div>
+  </section>
+</div>
+
+<!-- Conteúdo Informativo e Educativo -->
+<section class="content">
+  <h2>Como calcular o lucro real de uma corrida de aplicativo?</h2>
+  <p>Muitos motoristas de Uber, 99 e entregadores cometem o erro de olhar apenas para o valor do combustível gasto e acreditar que a diferença para o valor da corrida é lucro líquido. No entanto, trabalhar com transporte de passageiros ou encomendas envolve custos invisíveis que se acumulam a cada quilômetro rodado:</p>
+  <ul>
+    <li><strong>Combustível:</strong> É o custo imediato de reposição do tanque, calculado dividindo os quilômetros rodados pelo consumo médio em km/L e multiplicando pelo preço do combustível.</li>
+    <li><strong>Desgaste e Manutenção Preventiva:</strong> Pastilhas de freio, óleo do motor, filtro de combustível, velas e amortecedores têm vida útil proporcional à quilometragem.</li>
+    <li><strong>Pneus:</strong> Um jogo de pneus dura em média de 40.000 a 60.000 km. Dividindo o valor de substituição pela quilometragem, descobre-se o custo exato por km rodado.</li>
+    <li><strong>Depreciação:</strong> Veículos rodando profissionalmente desvalorizam mais rápido devido ao desgaste mecânico e acúmulo de hodômetro.</li>
+    <li><strong>Retorno Vazio:</strong> Aceitar uma corrida lucrativa para um bairro isolado pode gerar prejuízo se você tiver que rodar muitos quilômetros de volta sem nenhum passageiro pagante.</li>
+  </ul>
+
+  <h2>Por que guardar a Reserva de Manutenção e Depreciação?</h2>
+  <p>Ao receber R$ 100,00 em um dia de trabalho, se o desgaste estimado do seu veículo foi de R$ 25,00, esse montante não deve ser utilizado para despesas pessoais. Ele deve ser transferido para uma reserva de manutenção (conta separada ou caixinha de rendimento). Quando chegar o momento de trocar pneus ou fazer a revisão dos freios, o dinheiro já estará disponível sem necessidade de endividamento.</p>
+
+  <h2>Perguntas Frequentes (FAQ)</h2>
+  <details class="tool-faq-item">
+    <summary>Como calcular a distância de retorno vazio?</summary>
+    <p>A distância de retorno vazio corresponde aos quilômetros rodados sem passageiro ou entrega entre o ponto de desembarque e o local onde você normalmente consegue aceitar uma nova corrida com demanda regular.</p>
+  </details>
+  <details class="tool-faq-item">
+    <summary>Qual a diferença entre receita líquida e lucro real?</summary>
+    <p>A receita líquida é o valor que a plataforma transfere para você após descontar a porcentagem dela. O lucro real é o que sobra dessa receita após você pagar o combustível consumido, cobrir o desgaste veicular e pagar eventuais despesas como pedágios.</p>
+  </details>
+  <details class="tool-faq-item">
+    <summary>Como saber se uma corrida dá prejuízo?</summary>
+    <p>Uma corrida dá prejuízo quando o custo operacional total (combustível + desgaste + despesas) é maior do que o valor líquido pago pela plataforma. Nossa calculadora destaca corridas com prejuízo em vermelho, alertando para trajetos que não valem a pena financeiramente.</p>
+  </details>
+
+  <p class="tool-return-link">
+    👉 <a href="{{ROOT_PREFIX}}index.html">Voltar para a página inicial</a>
+  </p>
+</section>
