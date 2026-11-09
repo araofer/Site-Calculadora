@@ -4013,3 +4013,369 @@ main.container {
   background-color: #f1f5f9;
   color: #334155;
 }
+
+.status-badge.status-lucro {
+  background-color: #dcfce7;
+  color: #166534;
+}
+
+.status-badge.status-equilibrio {
+  background-color: #f1f5f9;
+  color: #334155;
+}
+
+.status-badge.status-prejuizo {
+  background-color: #fee2e2;
+  color: #991b1b;
+}
+
+/* ===================================================== */
+/* CARDS DE STATUS DE RESULTADO (FINANCEIRO / GERAL)     */
+/* ===================================================== */
+.tool-status-card {
+  padding: 16px;
+  margin-bottom: 20px;
+  border-left: 6px solid #2f855a;
+  background-color: #f7fafc;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+  display: block;
+  text-align: left;
+}
+
+.tool-status-card.status-lucro {
+  border-left-color: #2f855a;
+  background-color: #f0fdf4;
+}
+
+.tool-status-card.status-lucro .tool-status-value {
+  color: #2f855a;
+}
+
+.tool-status-card.status-equilibrio {
+  border-left-color: #718096;
+  background-color: #f8fafc;
+}
+
+.tool-status-card.status-equilibrio .tool-status-value {
+  color: #4a5568;
+}
+
+.tool-status-card.status-prejuizo {
+  border-left-color: #c53030;
+  background-color: #fff5f5;
+}
+
+.tool-status-card.status-prejuizo .tool-status-value {
+  color: #c53030;
+}
+
+
+/* ===================================================== */
+/* COMPONENTES COMPARTILHADOS — FORMULÁRIO E CALCULADORAS */
+/* ===================================================== */
+
+/* Rótulos e textos de ajuda */
+.form-help-text {
+  font-size: 0.88rem;
+  color: #64748b;
+  line-height: 1.45;
+  margin-top: 4px;
+}
+
+/* Fieldset e Grupos de Seleção (Radio Buttons) */
+fieldset.form-group {
+  border: 0;
+  padding: 0;
+  margin: 0 0 18px 0;
+}
+
+fieldset.form-group legend {
+  font-weight: 600;
+  font-size: 15px;
+  color: #1e2a38;
+  margin-bottom: 8px;
+  padding: 0;
+}
+
+.radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 6px 0 8px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.radio-group label {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background-color: #f9fafb;
+  cursor: pointer;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 1.4;
+  color: #1f2937;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.radio-group label:hover {
+  border-color: #9ca3af;
+  background-color: #f3f4f6;
+}
+
+.radio-group input[type="radio"],
+.form-group .radio-group input[type="radio"] {
+  display: inline-block !important;
+  width: 18px !important;
+  min-width: 18px !important;
+  max-width: 18px !important;
+  height: 18px !important;
+  min-height: 18px !important;
+  margin: 2px 0 0 0 !important;
+  padding: 0 !important;
+  cursor: pointer;
+  flex-shrink: 0;
+  accent-color: #1e2a38;
+}
+
+.radio-group label span {
+  flex: 1;
+}
+
+/* Linhas de Formulário (Form Rows) */
+.form-row {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  flex-wrap: wrap;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.form-row .form-group {
+  flex: 1 1 200px;
+  min-width: 0;
+}
+
+.form-row-compact .form-group {
+  flex: 1 1 130px;
+  min-width: 0;
+}
+
+@media (max-width: 600px) {
+  .form-row {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .form-row .form-group,
+  .form-row-compact .form-group {
+    flex: 1 1 100%;
+    width: 100%;
+  }
+}
+
+/* Presets de Preenchimento Rápido */
+.tool-preset-group {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 6px;
+  margin-bottom: 4px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.tool-preset-btn {
+  flex: 1 1 140px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 10px 16px;
+  background-color: #f8fafc;
+  color: #1e2a38;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.2;
+  cursor: pointer;
+  box-sizing: border-box;
+  text-align: center;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.tool-preset-btn:hover {
+  background-color: #f1f5f9;
+  border-color: #94a3b8;
+  color: #0f172a;
+}
+
+.tool-preset-btn:focus-visible {
+  outline: 2px solid #008080;
+  outline-offset: 2px;
+}
+
+.tool-preset-btn:active {
+  background-color: #e2e8f0;
+}
+
+/* Card Educativo de Reserva */
+.tool-reserva-card {
+  padding: 16px;
+  border-left: 6px solid #0284c7;
+  margin-bottom: 20px;
+  background-color: #f0f9ff;
+  border-radius: 8px;
+  text-align: left;
+  box-sizing: border-box;
+}
+
+.tool-reserva-card h4 {
+  margin: 0 0 6px 0;
+  color: #0369a1;
+  font-size: 1.05rem;
+}
+
+.tool-reserva-value {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #0284c7;
+  margin-bottom: 6px;
+}
+
+.tool-reserva-card p {
+  margin: 0;
+  font-size: 0.88rem;
+  color: #334155;
+  line-height: 1.45;
+}
+
+/* Grade de Métricas e Indicadores */
+.tool-metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 14px;
+  margin-bottom: 20px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.tool-metric-card {
+  padding: 14px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background-color: #ffffff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  box-sizing: border-box;
+  text-align: left;
+}
+
+.tool-metric-label {
+  font-size: 0.85rem;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.tool-metric-value {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin-top: 4px;
+}
+
+@media (max-width: 480px) {
+  .tool-metrics-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .tool-metric-card {
+    padding: 10px;
+  }
+
+  .tool-metric-value {
+    font-size: 1.15rem;
+  }
+}
+
+/* Tabela de Detalhamento de Custos */
+.tool-breakdown-wrapper {
+  overflow-x: auto;
+  margin-bottom: 20px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.tool-breakdown-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.92rem;
+  box-sizing: border-box;
+}
+
+.tool-breakdown-table td {
+  padding: 10px 0;
+  border-bottom: 1px solid #e2e8f0;
+  color: #334155;
+}
+
+.tool-breakdown-table td:last-child {
+  text-align: right;
+  font-weight: 600;
+}
+
+.tool-breakdown-discount td:last-child {
+  color: #c53030;
+}
+
+/* Accordion FAQ */
+.tool-faq-item {
+  margin-bottom: 12px;
+  padding: 10px 14px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  box-sizing: border-box;
+}
+
+.tool-faq-item summary {
+  font-weight: 600;
+  cursor: pointer;
+  color: #1e293b;
+}
+
+.tool-faq-item p {
+  margin-top: 8px;
+  color: #475569;
+  line-height: 1.5;
+}
+
+.tool-status-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tool-status-title {
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: #1e293b;
+}
+
+.tool-status-card p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #475569;
+  line-height: 1.45;
+}
