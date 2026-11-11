@@ -1,0 +1,197 @@
+---
+title: Calculadora de Taxa da Maquininha: Débito, Crédito e Parcelado | Calculadora Master
+description: Calcule as taxas da maquininha de cartão no débito, crédito à vista e parcelado. Descubra o valor líquido a receber ou quanto cobrar para repassar a taxa.
+keywords: calculadora taxa maquininha, taxa maquininha cartao, calcular taxa cartao, repassar taxa maquininha, gross up maquininha, calcular parcelamento maquininha, quanto cobrar maquininha
+canonical: https://www.calculadoramaster.com/tools/financas/taxa-maquininha.html
+layout: tool
+pageScripts: <script type="module" src="{{ROOT_PREFIX}}js/tools/taxa-maquininha.js"></script>
+---
+
+<h1>Calculadora de Taxa da Maquininha</h1>
+<p>Calcule os descontos de taxas de cartão no débito, crédito à vista e parcelado de 2x a 12x. Descubra quanto cairá líquido na sua conta bancária ou calcule exatamente quanto cobrar na máquina para repassar a taxa ao cliente via gross-up.</p>
+
+<div class="card tool-calculator-card">
+  <h2 class="tool-form-title">Dados da Transação</h2>
+
+  <form id="formMaquininha" novalidate>
+    <fieldset class="form-group">
+      <legend id="legendObjetivo">O que você deseja calcular?</legend>
+      <div class="radio-group" role="radiogroup" aria-labelledby="legendObjetivo">
+        <label for="objDireto">
+          <input type="radio" id="objDireto" name="objetivo" value="direto" checked>
+          <span>Descontar taxa da venda (Valor líquido a receber)</span>
+        </label>
+        <label for="objInverso">
+          <input type="radio" id="objInverso" name="objetivo" value="inverso">
+          <span>Repassar taxa ao cliente (Quanto cobrar na máquina)</span>
+        </label>
+      </div>
+      <p id="ajudaObjetivo">Escolha se deseja apurar o desconto sobre um valor fixado ou descobrir o preço a cobrar para receber o líquido desejado.</p>
+    </fieldset>
+
+    <fieldset class="form-group">
+      <legend id="legendModalidade">Modalidade de pagamento:</legend>
+      <div class="radio-group" role="radiogroup" aria-labelledby="legendModalidade">
+        <label for="modDebito">
+          <input type="radio" id="modDebito" name="modalidade" value="debito">
+          <span>Débito</span>
+        </label>
+        <label for="modCreditoVista">
+          <input type="radio" id="modCreditoVista" name="modalidade" value="credito_vista" checked>
+          <span>Crédito à vista (1x)</span>
+        </label>
+        <label for="modCreditoParcelado">
+          <input type="radio" id="modCreditoParcelado" name="modalidade" value="credito_parcelado">
+          <span>Crédito parcelado (2x a 12x)</span>
+        </label>
+      </div>
+      <p id="ajudaModalidade">Selecione o formato de pagamento da venda.</p>
+    </fieldset>
+
+    <div class="form-group" id="grupoParcelas" hidden>
+      <label for="numeroParcelas">Número de parcelas:</label>
+      <select id="numeroParcelas" name="numeroParcelas" aria-describedby="ajudaParcelas">
+        <option value="2">2x</option>
+        <option value="3">3x</option>
+        <option value="4">4x</option>
+        <option value="5">5x</option>
+        <option value="6">6x</option>
+        <option value="7">7x</option>
+        <option value="8">8x</option>
+        <option value="9">9x</option>
+        <option value="10">10x</option>
+        <option value="11">11x</option>
+        <option value="12">12x</option>
+      </select>
+      <p id="ajudaParcelas">Informe a quantidade de parcelas acordada com o cliente.</p>
+    </div>
+
+    <div class="form-group">
+      <label for="valorPrincipal" id="labelValorPrincipal">Valor total da venda a ser cobrado (R$):</label>
+      <input type="text" id="valorPrincipal" name="valorPrincipal"
+        inputmode="numeric" autocomplete="off" placeholder="100,00" aria-describedby="ajudaValorPrincipal" required>
+      <p id="ajudaValorPrincipal">Informe o preço cobrado do cliente na maquininha de cartão.</p>
+    </div>
+
+    <div class="form-group">
+      <label for="taxaPercentual">Taxa percentual da maquininha (%):</label>
+      <input type="text" id="taxaPercentual" name="taxaPercentual"
+        inputmode="decimal" autocomplete="off" placeholder="3,19" aria-describedby="ajudaTaxaPercentual" required>
+      <p id="ajudaTaxaPercentual">Taxa total aplicada pela sua adquirente para a modalidade e prazo escolhidos (exemplo: 1,99% débito, 3,49% crédito ou 12,50% parcelado).</p>
+    </div>
+
+    <div class="form-group">
+      <label for="tarifaFixa">Tarifa fixa por transação (R$) (opcional):</label>
+      <input type="text" id="tarifaFixa" name="tarifaFixa"
+        inputmode="numeric" autocomplete="off" placeholder="0,00" aria-describedby="ajudaTarifaFixa">
+      <p id="ajudaTarifaFixa">Taxa fixa em reais cobrada por transação pelo seu plano de maquininha (se não houver, deixe em branco ou 0,00).</p>
+    </div>
+
+    <div class="tool-actions">
+      <button type="submit" id="btnCalcular" class="tool-btn tool-btn-primary">Calcular taxa</button>
+      <button type="button" id="btnLimpar" class="tool-btn tool-btn-secondary">Limpar</button>
+    </div>
+  </form>
+
+  <p id="erroMaquininha" role="alert" aria-live="assertive" hidden></p>
+
+  <section id="resultadoMaquininha" aria-live="polite" aria-atomic="true" hidden>
+    <h2 class="tool-result-title">Resultado da Transação</h2>
+
+    <div class="card tool-result-card">
+      <p>Valor cobrado na maquininha:
+        <strong id="resValorCobrado">R$ 0,00</strong>
+      </p>
+      <p>Desconto total das taxas da maquininha:
+        <strong id="resDescontoTaxa" style="color: #d9534f;">R$ 0,00 (0,00%)</strong>
+      </p>
+      <p>Valor líquido a receber:
+        <strong id="resValorLiquido" style="color: #008080; font-size: 1.3em;">R$ 0,00</strong>
+      </p>
+    </div>
+
+    <div id="cardParcelamento" class="card tool-result-card" hidden>
+      <h3 class="tool-result-title">Detalhamento das Parcelas</h3>
+      <p>Cliente paga no cartão:
+        <strong id="resParcelaCliente">0x de R$ 0,00</strong>
+      </p>
+      <p>Líquido estimado por parcela:
+        <strong id="resParcelaVendedor">~R$ 0,00 por parcela</strong>
+      </p>
+      <p style="font-size: 0.9em; color: #666; margin-top: 6px;">Nota: Em planos com antecipação (recebimento em 1 dia ou na hora), o valor líquido total é creditado integralmente no prazo contratado com a adquirente.</p>
+    </div>
+
+    <div class="tool-actions result-actions">
+      <button type="button" id="btnCopiar" class="tool-btn tool-btn-secondary" hidden>Copiar resultado</button>
+      <button type="button" id="btnCompartilhar" class="tool-btn tool-btn-secondary" hidden>Compartilhar</button>
+      <button type="button" id="btnImprimir" class="tool-btn tool-btn-secondary" hidden>Imprimir</button>
+    </div>
+    <p id="statusAcoes" class="result-action-status" role="status" aria-live="polite"></p>
+  </section>
+</div>
+
+<section class="content">
+  <h2>Como funciona o cálculo de taxa da maquininha de cartão</h2>
+  <p>Quando você realiza uma venda na maquininha, a empresa adquirente retém uma porcentagem sobre o valor da transação e, em alguns contratos, uma tarifa fixa por operação (MDR - <em>Merchant Discount Rate</em>). O cálculo direto da taxa e do valor líquido recebido segue a fórmula:</p>
+  <p><strong>Desconto total (R$) = (Valor da venda × Taxa percentual / 100) + Tarifa fixa</strong></p>
+  <p><strong>Valor líquido recebido (R$) = Valor da venda - Desconto total</strong></p>
+
+  <h2>Como repassar a taxa da maquininha corretamente (Gross-up)</h2>
+  <p>Um dos erros mais frequentes cometidos por comerciantes e prestadores de serviço é tentar repassar a taxa somando a porcentagem diretamente sobre o preço à vista. Veja por que isso gera prejuízo:</p>
+  <ul>
+    <li>Se você deseja receber <strong>R$ 100,00</strong> e a taxa da máquina é de <strong>10%</strong>, somar 10% resulta em R$ 110,00.</li>
+    <li>Porém, ao passar R$ 110,00 na máquina, a operadora desconta 10% sobre os R$ 110,00 cobrados, o que equivale a <strong>R$ 11,00</strong> de desconto.</li>
+    <li>Com isso, você recebe apenas <strong>R$ 99,00</strong> (ficando R$ 1,00 abaixo do valor desejado).</li>
+  </ul>
+  <p>Para repassar a taxa sem perder nenhum centavo, utiliza-se a fórmula matemática de <strong>gross-up</strong> (margem por dentro), onde a taxa incide sobre o preço final:</p>
+  <p><strong>Valor a cobrar na máquina = (Valor líquido desejado + Tarifa fixa) / (1 - Taxa percentual / 100)</strong></p>
+  <p>No mesmo exemplo, dividindo R$ 100,00 por (1 - 0,10) = R$ 100,00 / 0,90, o valor correto a cobrar é <strong>R$ 111,11</strong>. Ao passar R$ 111,11, a maquininha desconta R$ 11,11 e você recebe exatamente os seus R$ 100,00 líquidos.</p>
+
+  <h2>Diferenças entre Débito, Crédito à Vista e Parcelado</h2>
+  <ul>
+    <li><strong>Débito:</strong> A taxa costuma ser a menor do mercado (geralmente entre 1,0% e 2,0%) e o dinheiro cai na conta em 1 dia útil ou imediatamente.</li>
+    <li><strong>Crédito à vista:</strong> Taxa intermediária (geralmente entre 3,0% e 5,0%), com recebimento em 1 dia ou em 30 dias conforme o plano da máquina.</li>
+    <li><strong>Crédito parcelado (2x a 12x):</strong> Possui taxa crescente de acordo com o número de parcelas. Em planos com antecipação (recebimento em 1 dia), a adquirente desconta o custo do parcelamento e adianta todo o montante líquido ao vendedor.</li>
+  </ul>
+
+  <h2>Perguntas frequentes sobre taxa de maquininha</h2>
+  <h3>É permitido cobrar preço diferente no cartão e no dinheiro?</h3>
+  <p>Sim. A Lei Federal nº 13.455/2017 autoriza expressamente a diferenciação de preços de bens e serviços oferecidos ao público em função do prazo ou do instrumento de pagamento utilizado (dinheiro, PIX, débito ou crédito), desde que o lojista informe os preços de forma visível e clara ao consumidor.</p>
+
+  <h3>O que é a tarifa fixa por transação?</h3>
+  <p>Algumas empresas de pagamentos cobram, além da porcentagem, uma taxa fixa em reais por cada venda aprovada (por exemplo, R$ 0,40 ou R$ 0,60 por transação). Nossa calculadora permite adicionar essa taxa para garantir 100% de precisão nos cálculos.</p>
+
+  <h3>Como saber qual taxa percentual digitar na calculadora?</h3>
+  <p>Consulte a tabela de taxas no aplicativo ou painel da sua maquininha de cartão. Selecione a modalidade da venda (débito, crédito ou a quantidade exata de parcelas) e informe a taxa percentual final que sua operadora cobra para aquela quantidade de parcelas.</p>
+
+  <section class="related-tools">
+    <h2>Você também pode precisar</h2>
+    <div class="related-tools-grid">
+      <div class="card tool-card">
+        <h3>Calculadora de Preço de Serviço</h3>
+        <p>Precifique seus serviços cobrindo custos fixos, variáveis, impostos e margem de lucro.</p>
+        <a href="{{ROOT_PREFIX}}tools/financas/preco-servico.html" class="tool-btn tool-btn-secondary">Acessar</a>
+      </div>
+      <div class="card tool-card">
+        <h3>Calculadora de Margem e Markup</h3>
+        <p>Descubra o markup ideal e a margem de lucro real sobre seus produtos e serviços.</p>
+        <a href="{{ROOT_PREFIX}}tools/financas/margem-markup.html" class="tool-btn tool-btn-secondary">Acessar</a>
+      </div>
+      <div class="card tool-card">
+        <h3>Calculadora MEI ou Autônomo</h3>
+        <p>Compare custos tributários, emissão de notas e encargos entre PF e PJ.</p>
+        <a href="{{ROOT_PREFIX}}tools/financas/mei-ou-autonomo.html" class="tool-btn tool-btn-secondary">Acessar</a>
+      </div>
+      <div class="card tool-card">
+        <h3>Calculadora de Desconto</h3>
+        <p>Calcule porcentagens de desconto à vista e compare condições promocionais.</p>
+        <a href="{{ROOT_PREFIX}}tools/financas/desconto.html" class="tool-btn tool-btn-secondary">Acessar</a>
+      </div>
+    </div>
+  </section>
+
+  <p class="tool-return-link">
+    👉 <a href="{{ROOT_PREFIX}}financeira.html">Voltar para ferramentas Financeiras</a> |
+    <a href="{{ROOT_PREFIX}}index.html">Página inicial</a>
+  </p>
+</section>

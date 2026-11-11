@@ -1792,6 +1792,92 @@
     ]
   },
   {
+    "id": "comissao-vendas",
+    "slug": "comissao-vendas",
+    "name": "Calculadora de Comissão de Vendas",
+    "category": "Trabalhista",
+    "categorySlug": "trabalhista",
+    "audience": "brasil",
+    "description": "Calcule a comissão de vendas e a remuneração bruta estimada para profissionais CLT e autônomos ou PJ com percentuais e valores fixos.",
+    "url": "/tools/trabalhista/comissao-vendas.html",
+    "status": "published",
+    "formulaStatus": "verified",
+    "implementation": "factory",
+    "features": {
+      "chart": false,
+      "table": false,
+      "pdf": false,
+      "copy": true,
+      "share": true,
+      "print": true,
+      "favorite": true,
+      "article": false
+    },
+    "keywords": [
+      "calculadora de comissao",
+      "comissao de vendas",
+      "calcular comissao",
+      "comissao clt",
+      "comissao representante comercial",
+      "comissao autonomo pj",
+      "porcentagem de comissao"
+    ],
+    "related": [
+      "salario-liquido",
+      "horas-extras",
+      "mei-ou-autonomo",
+      "valor-hora"
+    ],
+    "shortName": "Comissão de Vendas",
+    "sourceReferences": [
+      "https://www.planalto.gov.br/ccivil_03/decreto-lei/del5452.htm",
+      "https://www.planalto.gov.br/ccivil_03/leis/l4886.htm"
+    ]
+  },
+  {
+    "id": "taxa-maquininha",
+    "slug": "taxa-maquininha",
+    "name": "Calculadora de Taxa da Maquininha",
+    "category": "Financeiro",
+    "categorySlug": "financas",
+    "audience": "brasil",
+    "description": "Calcule as taxas da maquininha de cartão no débito, crédito à vista e parcelado. Descubra o valor líquido a receber ou quanto cobrar para repassar a taxa.",
+    "url": "/tools/financas/taxa-maquininha.html",
+    "status": "published",
+    "formulaStatus": "verified",
+    "implementation": "factory",
+    "features": {
+      "chart": false,
+      "table": false,
+      "pdf": false,
+      "copy": true,
+      "share": true,
+      "print": true,
+      "favorite": true,
+      "article": false
+    },
+    "keywords": [
+      "calculadora taxa maquininha",
+      "taxa maquininha cartao",
+      "calcular taxa cartao",
+      "repassar taxa maquininha",
+      "gross up maquininha",
+      "calcular parcelamento maquininha",
+      "quanto cobrar maquininha"
+    ],
+    "related": [
+      "preco-servico",
+      "margem-markup",
+      "mei-ou-autonomo",
+      "desconto"
+    ],
+    "shortName": "Taxa da Maquininha",
+    "sourceReferences": [
+      "https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2017/lei/l13455.htm",
+      "https://www.bcb.gov.br"
+    ]
+  },
+  {
     "id": "custo-km-lucro-corrida",
     "slug": "custo-km-lucro-corrida",
     "name": "Calculadora de Custo por Quilômetro e Lucro por Corrida",

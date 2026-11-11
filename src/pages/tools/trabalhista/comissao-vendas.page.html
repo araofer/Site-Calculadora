@@ -1,0 +1,162 @@
+---
+title: Calculadora de Comissão de Vendas CLT e PJ | Calculadora Master
+description: Calcule a comissão de vendas e a remuneração bruta estimada para profissionais CLT e autônomos ou PJ com percentuais e valores fixos.
+keywords: calculadora de comissao, comissao de vendas, calcular comissao, comissao clt, comissao representante comercial, comissao autonomo pj, porcentagem de comissao
+canonical: https://www.calculadoramaster.com/tools/trabalhista/comissao-vendas.html
+layout: tool
+pageScripts: <script type="module" src="{{ROOT_PREFIX}}js/tools/comissao-vendas.js"></script>
+---
+
+<h1>Calculadora de Comissão de Vendas</h1>
+<p>Calcule a comissão de vendas e a remuneração bruta estimada para profissionais comissionados sob regime CLT ou para autônomos, prestadores de serviços e representantes comerciais (PJ), com taxa percentual e valor fixo contratual.</p>
+
+<div class="card tool-calculator-card">
+  <h2 class="tool-form-title">Dados da Venda e Comissão</h2>
+
+  <form id="formComissao" novalidate>
+    <fieldset class="form-group">
+      <legend id="legendPerfil">Perfil profissional:</legend>
+      <div class="radio-group" role="radiogroup" aria-labelledby="legendPerfil">
+        <label for="perfilClt">
+          <input type="radio" id="perfilClt" name="perfil" value="clt" checked>
+          <span>CLT Comissionado</span>
+        </label>
+        <label for="perfilAutonomoPj">
+          <input type="radio" id="perfilAutonomoPj" name="perfil" value="autonomo_pj">
+          <span>Autônomo / PJ / Representante</span>
+        </label>
+      </div>
+      <p id="ajudaPerfil">Selecione o regime de contratação para contextualizar os avisos e orientações legais do cálculo.</p>
+    </fieldset>
+
+    <div class="form-group">
+      <label for="valorVendas" id="labelValorVendas">Total de vendas considerado para comissão (R$):</label>
+      <input type="text" id="valorVendas" name="valorVendas"
+        inputmode="numeric" autocomplete="off" placeholder="50.000,00" aria-describedby="ajudaValorVendas" required>
+      <p id="ajudaValorVendas">Informe o valor total das vendas elegíveis para apuração de comissão no período.</p>
+    </div>
+
+    <div class="form-group">
+      <label for="taxaComissao">Taxa de comissão (%):</label>
+      <input type="text" id="taxaComissao" name="taxaComissao"
+        inputmode="decimal" autocomplete="off" placeholder="5,00" aria-describedby="ajudaTaxaComissao" required>
+      <p id="ajudaTaxaComissao">Percentual acordado em contrato aplicado sobre as vendas (exemplo: 3,5% ou 5%).</p>
+    </div>
+
+    <div class="form-group">
+      <label for="valorFixo" id="labelValorFixo">Salário fixo contratual (R$) (opcional):</label>
+      <input type="text" id="valorFixo" name="valorFixo"
+        inputmode="numeric" autocomplete="off" placeholder="0,00" aria-describedby="ajudaValorFixo">
+      <p id="ajudaValorFixo">Salário base fixo contratual garantido na carteira (se não houver fixo, deixe em branco ou 0,00).</p>
+    </div>
+
+    <div class="tool-actions">
+      <button type="submit" id="btnCalcular" class="tool-btn tool-btn-primary">Calcular comissão</button>
+      <button type="button" id="btnLimpar" class="tool-btn tool-btn-secondary">Limpar</button>
+    </div>
+  </form>
+
+  <p id="erroComissao" role="alert" aria-live="assertive" hidden></p>
+
+  <section id="resultadoComissao" aria-live="polite" aria-atomic="true" hidden>
+    <h2 class="tool-result-title">Resultado Estimado</h2>
+
+    <div class="card tool-result-card">
+      <p>Comissão calculada:
+        <strong id="resValorComissao">R$ 0,00</strong>
+      </p>
+      <p><span id="labelResFixo">Valor fixo informado</span>:
+        <strong id="resValorFixo">R$ 0,00</strong>
+      </p>
+      <p>Remuneração bruta estimada:
+        <strong id="resRemuneracaoBruta">R$ 0,00</strong>
+      </p>
+      <p>Participação da comissão na remuneração:
+        <strong id="resParticipacaoComissao">0,0%</strong>
+      </p>
+    </div>
+
+    <div id="avisoClt" class="card tool-result-card" hidden>
+      <h3 class="tool-result-title">Aviso sobre remuneração CLT</h3>
+      <p>O resultado representa uma <strong>estimativa de remuneração bruta</strong> e não contempla reflexos legais obrigatórios como DSR (Descanso Semanal Remunerado sobre comissões), médias para férias proporcionais com 1/3, 13º salário e FGTS, nem os descontos em folha de INSS e IRRF.</p>
+      <p>Para estimar os descontos oficiais de INSS e Imposto de Renda a partir da remuneração bruta, utilize a <a href="{{ROOT_PREFIX}}tools/trabalhista/salario-liquido.html">Calculadora de Salário Líquido CLT</a>.</p>
+    </div>
+
+    <div id="avisoAutonomoPj" class="card tool-result-card" hidden>
+      <h3 class="tool-result-title">Aviso sobre faturamento Autônomo / PJ</h3>
+      <p>O resultado corresponde ao <strong>faturamento bruto</strong> da prestação de serviços ou representação comercial. Este cálculo não deduz tributos devidos pela pessoa jurídica (como DAS do MEI, Simples Nacional ou Lucro Presumido), retenções de IRPF/Carnê-Leão ou INSS de contribuinte individual, nem despesas operacionais da atividade.</p>
+      <p>Para avaliar a carga tributária entre atuar como pessoa física ou abrir empresa, utilize a <a href="{{ROOT_PREFIX}}tools/financas/mei-ou-autonomo.html">Calculadora MEI ou Autônomo</a>.</p>
+    </div>
+
+    <div class="tool-actions result-actions">
+      <button type="button" id="btnCopiar" class="tool-btn tool-btn-secondary" hidden>Copiar resultado</button>
+      <button type="button" id="btnCompartilhar" class="tool-btn tool-btn-secondary" hidden>Compartilhar</button>
+      <button type="button" id="btnImprimir" class="tool-btn tool-btn-secondary" hidden>Imprimir</button>
+    </div>
+    <p id="statusAcoes" class="result-action-status" role="status" aria-live="polite"></p>
+  </section>
+</div>
+
+<section class="content">
+  <h2>Como funciona o cálculo de comissão de vendas</h2>
+  <p>A comissão de vendas é a remuneração variável paga a um profissional com base no volume comercial gerado em determinado período. Em modelos diretos, aplica-se a taxa percentual acordada sobre o montante vendido considerado elegível:</p>
+  <p><strong>Comissão (R$) = Total de vendas elegíveis × (Taxa de comissão / 100)</strong></p>
+  <p>Quando há previsão contratual de valor fixo, a remuneração bruta total do período resulta da soma entre o valor fixo garantido e a comissão acumulada:</p>
+  <p><strong>Remuneração bruta estimada = Valor fixo + Comissão calculada</strong></p>
+
+  <h2>Diferenças entre comissionamento CLT e contratação PJ ou autônoma</h2>
+  <p>Embora a equação percentual seja idêntica, a natureza jurídica e as implicações financeiras diferem substancialmente conforme o perfil de contratação:</p>
+  <ul>
+    <li><strong>Trabalhador CLT (Empregado):</strong> O comissionista CLT tem direito ao piso salarial ou salário mínimo da categoria mesmo quando as vendas forem baixas. Sobre o valor das comissões incidem obrigatoriamente reflexos trabalhistas, como o Descanso Semanal Remunerado (DSR), além de compor as médias de férias, décimo terceiro e FGTS. Do total bruto apurado em folha são descontados INSS e IRRF.</li>
+    <li><strong>Representante Comercial / Autônomo / PJ:</strong> O profissional atua com autonomia jurídica e recebe honorários ou comissões mediante emissão de nota fiscal (PJ) ou RPA (autônomo). Não há reflexos celetistas nem depósitos de FGTS. Os tributos (Simples Nacional, DAS-MEI, Carnê-Leão e INSS autônomo) são de responsabilidade do próprio prestador de serviços.</li>
+  </ul>
+
+  <h2>Exemplo prático de apuração</h2>
+  <p>Considere um vendedor com taxa de comissão de 4,00%, salário fixo de R$ 2.000,00 e volume de vendas de R$ 60.000,00 no mês:</p>
+  <ul>
+    <li><strong>Comissão direta:</strong> R$ 60.000,00 × 4% = R$ 2.400,00</li>
+    <li><strong>Remuneração bruta estimada:</strong> R$ 2.000,00 (fixo) + R$ 2.400,00 (comissão) = R$ 4.400,00</li>
+    <li><strong>Participação da comissão:</strong> (R$ 2.400,00 / R$ 4.400,00) × 100 = 54,5% da remuneração bruta total</li>
+  </ul>
+
+  <h2>Perguntas frequentes sobre comissão de vendas</h2>
+  <h3>O que é o DSR sobre comissão?</h3>
+  <p>Para trabalhadores com carteira assinada (CLT), o Descanso Semanal Remunerado (DSR) sobre comissões é um direito legal (Súmula 27 do TST). Ele compensa os domingos e feriados com base na média diária das comissões recebidas nos dias úteis trabalhados no mês.</p>
+
+  <h3>O que fazer se o vendedor não atingir vendas suficientes?</h3>
+  <p>Na contratação CLT, o empregado não pode receber valor inferior ao salário mínimo nacional ou ao piso regional da categoria estabelecido em convenção coletiva, devendo o empregador complementar a diferença quando necessário.</p>
+
+  <h3>A taxa de comissão incide sobre o frete e impostos?</h3>
+  <p>A base de cálculo da comissão depende exclusivamente do contrato formalizado entre as partes ou da convenção coletiva de trabalho. Em muitos setores, deduzem-se devoluções, cancelamentos e descontos concedidos antes da aplicação da alíquota.</p>
+
+  <section class="related-tools">
+    <h2>Você também pode precisar</h2>
+    <div class="related-tools-grid">
+      <div class="card tool-card">
+        <h3>Calculadora de Salário Líquido CLT</h3>
+        <p>Calcule o valor líquido a receber com os descontos oficiais de INSS e Imposto de Renda.</p>
+        <a href="{{ROOT_PREFIX}}tools/trabalhista/salario-liquido.html" class="tool-btn tool-btn-secondary">Acessar</a>
+      </div>
+      <div class="card tool-card">
+        <h3>Calculadora de Horas Extras</h3>
+        <p>Calcule o valor da hora normal, adicional de hora extra e reflexo em folha.</p>
+        <a href="{{ROOT_PREFIX}}tools/trabalhista/horas-extras.html" class="tool-btn tool-btn-secondary">Acessar</a>
+      </div>
+      <div class="card tool-card">
+        <h3>Calculadora MEI ou Autônomo</h3>
+        <p>Compare os custos tributários e vantagens entre ser MEI ou trabalhar como autônomo.</p>
+        <a href="{{ROOT_PREFIX}}tools/financas/mei-ou-autonomo.html" class="tool-btn tool-btn-secondary">Acessar</a>
+      </div>
+      <div class="card tool-card">
+        <h3>Calculadora de Valor da Hora</h3>
+        <p>Descubra quanto cobrar por hora de trabalho considerando sua renda desejada e custos.</p>
+        <a href="{{ROOT_PREFIX}}tools/financas/valor-hora.html" class="tool-btn tool-btn-secondary">Acessar</a>
+      </div>
+    </div>
+  </section>
+
+  <p class="tool-return-link">
+    👉 <a href="{{ROOT_PREFIX}}trabalhista.html">Voltar para ferramentas Trabalhistas</a> |
+    <a href="{{ROOT_PREFIX}}index.html">Página inicial</a>
+  </p>
+</section>

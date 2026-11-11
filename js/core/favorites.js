@@ -60,6 +60,8 @@ export const VALID_TOOL_IDS = new Set([
   'idade-gestacional-data-parto',
   'conversor-unidades',
   'salario-liquido',
+  'comissao-vendas',
+  'taxa-maquininha',
   'custo-km-lucro-corrida'
 ]);
 
