@@ -290,4 +290,7 @@ test('HTML: conformidade de acessibilidade e convenções', () => {
   assert.match(paginaTaxaMaquininha, /id="btnCompartilhar"/);
   assert.match(paginaTaxaMaquininha, /id="btnImprimir"/);
   assert.match(paginaTaxaMaquininha, /id="btnLimpar"/);
+
+  // Ausência de estilos inline
+  assert.doesNotMatch(paginaTaxaMaquininha, /style\s*=\s*["'][^"']*["']/);
 });
