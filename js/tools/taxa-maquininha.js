@@ -245,7 +245,7 @@ export function getResultSections(dados) {
   }
 
   const notaMetodologia = ehInverso
-    ? 'Cálculo por gross-up: o valor cobrado garante o recebimento integral do valor desejado após a dedução das taxas da adquirente.'
+    ? 'Cálculo estimativo por gross-up: estima o valor a cobrar para aproximar o recebimento líquido desejado, conforme a taxa percentual e a tarifa fixa informadas. O resultado pode variar conforme as regras contratuais e os arredondamentos da operadora.'
     : 'Cálculo direto: deduz a taxa percentual contratada e eventual tarifa fixa do montante total transacionado.';
 
   sections.push({ label: 'Metodologia', value: notaMetodologia });

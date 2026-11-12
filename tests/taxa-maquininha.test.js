@@ -261,6 +261,29 @@ test('getResultSections: gera estrutura correta e formatação em Reais', () => 
   assert.ok(mapa['Metodologia'].includes('Cálculo direto'));
 });
 
+test('getResultSections (inverso): metodologia expressa estimativa e rejeita garantia absoluta de recebimento', () => {
+  const calc = calcularTaxaMaquininha({
+    objetivo: 'inverso',
+    modalidade: 'credito_vista',
+    valor: '100,00',
+    taxaPercentual: '10',
+    tarifaFixa: '0,50'
+  });
+
+  const secoes = getResultSections(calc.data);
+  const mapa = Object.fromEntries(secoes.map(s => [s.label, s.value]));
+
+  // Linguagem de estimativa
+  assert.match(mapa['Metodologia'], /estimat|estima o valor/i);
+  // Menciona taxa e tarifa informadas
+  assert.match(mapa['Metodologia'], /taxa percentual e a tarifa fixa informadas/i);
+  // Ressalva de regras contratuais e arredondamentos
+  assert.match(mapa['Metodologia'], /regras contratuais e os arredondamentos da operadora/i);
+  // Impede retorno de afirmação absoluta de garantia de recebimento integral
+  assert.doesNotMatch(mapa['Metodologia'], /garante o recebimento integral/i);
+  assert.doesNotMatch(mapa['Metodologia'], /garante 100%/i);
+});
+
 /* ==========================================================================
  * 6. Conformidade da Página HTML (Layout, Acessibilidade e SEO)
  * ========================================================================== */
