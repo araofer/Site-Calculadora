@@ -1,6 +1,6 @@
 ---
 title: Calculadora de Taxa da Maquininha: Débito, Crédito e Parcelado | Calculadora Master
-description: Calcule as taxas da maquininha de cartão no débito, crédito à vista e parcelado. Descubra o valor líquido a receber ou quanto cobrar para repassar a taxa.
+description: Simule as taxas da maquininha de cartão no débito, crédito à vista e parcelado. Estime o valor líquido aproximado a receber ou quanto cobrar para repassar a taxa.
 keywords: calculadora taxa maquininha, taxa maquininha cartao, calcular taxa cartao, repassar taxa maquininha, gross up maquininha, calcular parcelamento maquininha, quanto cobrar maquininha
 canonical: https://www.calculadoramaster.com/tools/financas/taxa-maquininha.html
 layout: tool
@@ -8,7 +8,7 @@ pageScripts: <script type="module" src="{{ROOT_PREFIX}}js/tools/taxa-maquininha.
 ---
 
 <h1>Calculadora de Taxa da Maquininha</h1>
-<p>Calcule os descontos de taxas de cartão no débito, crédito à vista e parcelado de 2x a 12x. Descubra quanto cairá líquido na sua conta bancária ou calcule exatamente quanto cobrar na máquina para repassar a taxa ao cliente via gross-up.</p>
+<p>Simule os descontos de taxas de cartão no débito, crédito à vista e parcelado de 2x a 12x. Estime o valor líquido aproximado a receber ou calcule uma estimativa de quanto cobrar na máquina para repassar a taxa ao cliente via gross-up (cálculo por dentro).</p>
 
 <div class="card tool-calculator-card">
   <h2 class="tool-form-title">Dados da Transação</h2>
@@ -143,15 +143,16 @@ pageScripts: <script type="module" src="{{ROOT_PREFIX}}js/tools/taxa-maquininha.
     <li>Porém, ao passar R$ 110,00 na máquina, a operadora desconta 10% sobre os R$ 110,00 cobrados, o que equivale a <strong>R$ 11,00</strong> de desconto.</li>
     <li>Com isso, você recebe apenas <strong>R$ 99,00</strong> (ficando R$ 1,00 abaixo do valor desejado).</li>
   </ul>
-  <p>Para repassar a taxa sem perder nenhum centavo, utiliza-se a fórmula matemática de <strong>gross-up</strong> (margem por dentro), onde a taxa incide sobre o preço final:</p>
+  <p>Para repassar o custo das taxas na precificação, utiliza-se a metodologia matemática de <strong>gross-up</strong> (cálculo por dentro), na qual a taxa percentual incide sobre o valor final cobrado:</p>
   <p><strong>Valor a cobrar na máquina = (Valor líquido desejado + Tarifa fixa) / (1 - Taxa percentual / 100)</strong></p>
-  <p>No mesmo exemplo, dividindo R$ 100,00 por (1 - 0,10) = R$ 100,00 / 0,90, o valor correto a cobrar é <strong>R$ 111,11</strong>. Ao passar R$ 111,11, a maquininha desconta R$ 11,11 e você recebe exatamente os seus R$ 100,00 líquidos.</p>
+  <p>Em uma simulação com valor líquido pretendido de R$ 100,00 e taxa de 10% (sem tarifa fixa), dividindo R$ 100,00 por (1 - 0,10) = R$ 100,00 / 0,90, a estimativa calculada a cobrar é de <strong>R$ 111,11</strong>. Ao aplicar o desconto teórico de 10% sobre R$ 111,11 (R$ 11,11), obtém-se o valor líquido pretendido de R$ 100,00. Contudo, cabe ressaltar que o valor efetivamente creditado pode apresentar pequenas variações decorrentes de regras contratuais da operadora, tarifas de liquidação, critérios de arredondamento por parcela ou custos de antecipação de recebíveis.</p>
 
   <h2>Diferenças entre Débito, Crédito à Vista e Parcelado</h2>
+  <p>As faixas de taxas descritas abaixo constituem meras referências ilustrativas de mercado, não representando tarifas fixas, universais ou garantidas pelas empresas adquirentes:</p>
   <ul>
-    <li><strong>Débito:</strong> A taxa costuma ser a menor do mercado (geralmente entre 1,0% e 2,0%) e o dinheiro cai na conta em 1 dia útil ou imediatamente.</li>
-    <li><strong>Crédito à vista:</strong> Taxa intermediária (geralmente entre 3,0% e 5,0%), com recebimento em 1 dia ou em 30 dias conforme o plano da máquina.</li>
-    <li><strong>Crédito parcelado (2x a 12x):</strong> Possui taxa crescente de acordo com o número de parcelas. Em planos com antecipação (recebimento em 1 dia), a adquirente desconta o custo do parcelamento e adianta todo o montante líquido ao vendedor.</li>
+    <li><strong>Débito:</strong> Costuma apresentar percentuais menores (tipicamente entre 1,0% e 2,0% em referências de mercado), com prazo de liquidação habitualmente em 1 dia útil ou imediato, segundo o plano contratado.</li>
+    <li><strong>Crédito à vista:</strong> Apresenta taxas intermediárias (frequentemente entre 3,0% e 5,0% como referência ilustrativa), com recebimento no fluxo (30 dias) ou antecipado (1 dia útil), a depender das condições da credenciadora.</li>
+    <li><strong>Crédito parcelado (2x a 12x):</strong> Possui taxa progressiva conforme o número de parcelas. Em planos com antecipação automática, a operadora deduz os custos de intermediação e de antecipação, disponibilizando o montante líquido total no prazo contratado.</li>
   </ul>
 
   <h2>Perguntas frequentes sobre taxa de maquininha</h2>
@@ -159,10 +160,10 @@ pageScripts: <script type="module" src="{{ROOT_PREFIX}}js/tools/taxa-maquininha.
   <p>Sim. A Lei Federal nº 13.455/2017 autoriza expressamente a diferenciação de preços de bens e serviços oferecidos ao público em função do prazo ou do instrumento de pagamento utilizado (dinheiro, PIX, débito ou crédito), desde que o lojista informe os preços de forma visível e clara ao consumidor.</p>
 
   <h3>O que é a tarifa fixa por transação?</h3>
-  <p>Algumas empresas de pagamentos cobram, além da porcentagem, uma taxa fixa em reais por cada venda aprovada (por exemplo, R$ 0,40 ou R$ 0,60 por transação). Nossa calculadora permite adicionar essa taxa para garantir 100% de precisão nos cálculos.</p>
+  <p>Algumas empresas de meios de pagamento cobram, além do percentual de intermediação (MDR), uma tarifa fixa em reais por cada transação aprovada (como R$ 0,40 ou R$ 0,60, dependendo do contrato). Nossa calculadora permite incluir essa tarifa fixa na simulação para aproximar o cálculo das condições comerciais contratadas junto à adquirente.</p>
 
   <h3>Como saber qual taxa percentual digitar na calculadora?</h3>
-  <p>Consulte a tabela de taxas no aplicativo ou painel da sua maquininha de cartão. Selecione a modalidade da venda (débito, crédito ou a quantidade exata de parcelas) e informe a taxa percentual final que sua operadora cobra para aquela quantidade de parcelas.</p>
+  <p>Consulte a tabela de tarifas vigente no aplicativo ou painel da sua operadora de maquininha de cartão. Selecione a modalidade da venda (débito, crédito ou a quantidade exata de parcelas) e informe a taxa percentual total que sua credenciadora aplica para a operação, verificando também se há tarifas fixas por transação, custos de antecipação ou regras contratuais específicas de arredondamento.</p>
 
   <section class="related-tools">
     <h2>Você também pode precisar</h2>

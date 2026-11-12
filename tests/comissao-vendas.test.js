@@ -298,3 +298,31 @@ test('HTML da ferramenta: estrutura acessível sem estilos inline', () => {
   assert.match(paginaComissao, /id="btnImprimir"/);
   assert.match(paginaComissao, /id="statusAcoes"/);
 });
+
+/* ==========================================================================
+ * 7. Verificação Editorial: Avisos de Limitação e Complementação Salarial
+ * ========================================================================== */
+
+test('HTML da ferramenta: avisos de limitação e clareza sobre ausência de complementação salarial', () => {
+  // Aviso de que não calcula complementação salarial
+  assert.match(paginaComissao, /não calcula eventual complementação salarial/i);
+  assert.match(paginaComissao, /salário mínimo nacional ou o piso salarial/i);
+
+  // Garantias legais CLT presentes
+  assert.match(paginaComissao, /garantias legais e normativas/i);
+
+  // Menção a reflexos e deduções que não integram o cálculo direto
+  assert.match(paginaComissao, /DSR \(Descanso Semanal Remunerado sobre comissões\)/i);
+  assert.match(paginaComissao, /médias para férias/i);
+  assert.match(paginaComissao, /13º salário/i);
+  assert.match(paginaComissao, /FGTS/i);
+  assert.match(paginaComissao, /INSS/i);
+  assert.match(paginaComissao, /IRRF/i);
+
+  // Orientação de conferência com enquadramento e convenção coletiva
+  assert.match(paginaComissao, /enquadramento sindical/i);
+  assert.match(paginaComissao, /convenção ou acordo coletivo/i);
+
+  // Coerência na FAQ
+  assert.match(paginaComissao, /não calculando complementações salariais automáticas/i);
+});

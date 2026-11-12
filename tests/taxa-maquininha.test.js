@@ -294,3 +294,32 @@ test('HTML: conformidade de acessibilidade e convenções', () => {
   // Ausência de estilos inline
   assert.doesNotMatch(paginaTaxaMaquininha, /style\s*=\s*["'][^"']*["']/);
 });
+
+/* ==========================================================================
+ * 7. Verificação Editorial: Linguagem de Estimativa e Ausência de Absolutos
+ * ========================================================================== */
+
+test('HTML: linguagem de estimativa e ausência de afirmações absolutas de precisão', () => {
+  // Ausência de afirmações absolutas de precisão ou garantia de recebimento
+  assert.doesNotMatch(paginaTaxaMaquininha, /garante 100% de precisão nos cálculos/i);
+  assert.doesNotMatch(paginaTaxaMaquininha, /recebe exatamente os seus/i);
+  assert.doesNotMatch(paginaTaxaMaquininha, /calcule exatamente quanto cobrar/i);
+  assert.doesNotMatch(paginaTaxaMaquininha, /sem perder nenhum centavo/i);
+
+  // Presença de linguagem de estimativa e simulação
+  assert.match(paginaTaxaMaquininha, /Simule os descontos de taxas/i);
+  assert.match(paginaTaxaMaquininha, /Estime o valor líquido aproximado a receber/i);
+  assert.match(paginaTaxaMaquininha, /estimativa calculada a cobrar/i);
+
+  // Ressalva sobre variações contratuais, arredondamentos e antecipação
+  assert.match(paginaTaxaMaquininha, /regras contratuais da operadora/i);
+  assert.match(paginaTaxaMaquininha, /antecipação de recebíveis/i);
+  assert.match(paginaTaxaMaquininha, /critérios de arredondamento/i);
+
+  // Faixas identificadas como referências ilustrativas
+  assert.match(paginaTaxaMaquininha, /meras referências ilustrativas de mercado/i);
+
+  // Preservação da nota de parcelamento e gross-up
+  assert.match(paginaTaxaMaquininha, /gross-up/i);
+  assert.match(paginaTaxaMaquininha, /class="tool-result-note"/);
+});

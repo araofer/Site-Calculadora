@@ -78,8 +78,8 @@ pageScripts: <script type="module" src="{{ROOT_PREFIX}}js/tools/comissao-vendas.
 
     <div id="avisoClt" class="card tool-result-card" hidden>
       <h3 class="tool-result-title">Aviso sobre remuneração CLT</h3>
-      <p>O resultado representa uma <strong>estimativa de remuneração bruta</strong> e não contempla reflexos legais obrigatórios como DSR (Descanso Semanal Remunerado sobre comissões), médias para férias proporcionais com 1/3, 13º salário e FGTS, nem os descontos em folha de INSS e IRRF.</p>
-      <p>Para estimar os descontos oficiais de INSS e Imposto de Renda a partir da remuneração bruta, utilize a <a href="{{ROOT_PREFIX}}tools/trabalhista/salario-liquido.html">Calculadora de Salário Líquido CLT</a>.</p>
+      <p>O resultado representa uma <strong>estimativa de remuneração bruta</strong> baseada exclusivamente nos valores informados (salário fixo e comissão sobre vendas). Esta ferramenta não calcula eventual complementação salarial necessária para atingir o salário mínimo nacional ou o piso salarial da categoria, nem contempla reflexos legais como DSR (Descanso Semanal Remunerado sobre comissões), médias para férias proporcionais com 1/3, 13º salário e FGTS, ou os descontos de folha (INSS e IRRF).</p>
+      <p>A conferência dos valores finais deve considerar o enquadramento sindical, os acordos ou convenções coletivas e as condições contratuais aplicáveis ao trabalhador. Para estimar os descontos oficiais de INSS e Imposto de Renda a partir da remuneração bruta, utilize a <a href="{{ROOT_PREFIX}}tools/trabalhista/salario-liquido.html">Calculadora de Salário Líquido CLT</a>.</p>
     </div>
 
     <div id="avisoAutonomoPj" class="card tool-result-card" hidden>
@@ -107,7 +107,7 @@ pageScripts: <script type="module" src="{{ROOT_PREFIX}}js/tools/comissao-vendas.
   <h2>Diferenças entre comissionamento CLT e contratação PJ ou autônoma</h2>
   <p>Embora a equação percentual seja idêntica, a natureza jurídica e as implicações financeiras diferem substancialmente conforme o perfil de contratação:</p>
   <ul>
-    <li><strong>Trabalhador CLT (Empregado):</strong> O comissionista CLT tem direito ao piso salarial ou salário mínimo da categoria mesmo quando as vendas forem baixas. Sobre o valor das comissões incidem obrigatoriamente reflexos trabalhistas, como o Descanso Semanal Remunerado (DSR), além de compor as médias de férias, décimo terceiro e FGTS. Do total bruto apurado em folha são descontados INSS e IRRF.</li>
+    <li><strong>Trabalhador CLT (Empregado):</strong> O comissionista CLT conta com garantias legais e normativas que asseguram remuneração não inferior ao salário mínimo nacional ou ao piso salarial de sua categoria profissional, mesmo quando as vendas do período forem baixas ou inexistentes (hipótese em que cabe complementação patronal, cálculo este não efetuado por esta ferramenta). Sobre o valor das comissões incidem obrigatoriamente reflexos trabalhistas, como o Descanso Semanal Remunerado (DSR), além de compor as médias de férias com 1/3, 13º salário e FGTS. Do total bruto apurado em folha são descontados INSS e IRRF, devendo a conferência exata considerar as cláusulas da convenção ou acordo coletivo aplicável.</li>
     <li><strong>Representante Comercial / Autônomo / PJ:</strong> O profissional atua com autonomia jurídica e recebe honorários ou comissões mediante emissão de nota fiscal (PJ) ou RPA (autônomo). Não há reflexos celetistas nem depósitos de FGTS. Os tributos (Simples Nacional, DAS-MEI, Carnê-Leão e INSS autônomo) são de responsabilidade do próprio prestador de serviços.</li>
   </ul>
 
@@ -124,7 +124,8 @@ pageScripts: <script type="module" src="{{ROOT_PREFIX}}js/tools/comissao-vendas.
   <p>Para trabalhadores com carteira assinada (CLT), o Descanso Semanal Remunerado (DSR) sobre comissões é um direito legal (Súmula 27 do TST). Ele compensa os domingos e feriados com base na média diária das comissões recebidas nos dias úteis trabalhados no mês.</p>
 
   <h3>O que fazer se o vendedor não atingir vendas suficientes?</h3>
-  <p>Na contratação CLT, o empregado não pode receber valor inferior ao salário mínimo nacional ou ao piso regional da categoria estabelecido em convenção coletiva, devendo o empregador complementar a diferença quando necessário.</p>
+  <p>Na contratação sob regime CLT, o empregado tem direito a garantias legais que impedem o recebimento de remuneração inferior ao salário mínimo nacional ou ao piso salarial fixado em convenção ou acordo coletivo de trabalho, incumbindo ao empregador arcar com eventual complementação da remuneração.</p>
+  <p>Importante: esta calculadora realiza unicamente a apuração matemática entre o salário fixo e as comissões informadas, não calculando complementações salariais automáticas nem verificando pisos de categorias. A apuração definitiva deve levar em conta o enquadramento profissional e as normas coletivas vigentes.</p>
 
   <h3>A taxa de comissão incide sobre o frete e impostos?</h3>
   <p>A base de cálculo da comissão depende exclusivamente do contrato formalizado entre as partes ou da convenção coletiva de trabalho. Em muitos setores, deduzem-se devoluções, cancelamentos e descontos concedidos antes da aplicação da alíquota.</p>
