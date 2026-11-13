@@ -186,9 +186,9 @@ test('SSG Piloto - Caminhos relativos de CSS, JS e imagens estão consistentes',
  * TESTES - SSG MULTIPÁGINA (7 FERRAMENTAS FINANCEIRAS)
  * ================================================== */
 
-test('SSG Multipage - buildPages compila com sucesso as 51 ferramentas do catálogo oficial', () => {
+test('SSG Multipage - buildPages compila com sucesso as 53 ferramentas do catálogo oficial', () => {
   const results = buildPages();
-  assert.equal(results.length, 51, 'Devem ser geradas exatamente 51 páginas de ferramentas no total');
+  assert.equal(results.length, 53, 'Devem ser geradas exatamente 53 páginas de ferramentas no total');
 
   const expectedPaths = [
     'tools/financas/desconto.html',
@@ -237,7 +237,8 @@ test('SSG Multipage - buildPages compila com sucesso as 51 ferramentas do catál
     'tools/saude/idade-gestacional-data-parto.html',
     'tools/utilidades/conversor-unidades.html',
     'tools/trabalhista/salario-liquido.html',
-    'tools/financas/custo-km-lucro-corrida.html'
+    'tools/trabalhista/comissao-vendas.html',
+    'tools/financas/taxa-maquininha.html'
   ];
 
   expectedPaths.forEach(expectedRel => {
@@ -538,13 +539,13 @@ test('SSG Multipage - Ausência de placeholders {{...}} em todas as 15 páginas 
   }
 });
 
-test('SSG Multipage - Todos os 66 assets obrigatórios são copiados para dist-pilot', () => {
-  assert.equal(DEFAULT_ASSETS.length, 66, 'Devem existir exatamente 66 assets declarados no lote de ferramentas');
+test('SSG Multipage - Todos os 68 assets obrigatórios são copiados para dist-pilot', () => {
+  assert.equal(DEFAULT_ASSETS.length, 68, 'Devem existir exatamente 68 assets declarados no lote de ferramentas');
   assert.equal(FINANCEIRO_ASSETS.length, 22, 'FINANCEIRO_ASSETS deve conter 22 assets');
   assert.equal(SAUDE_ASSETS.length, 2, 'SAUDE_ASSETS deve conter 2 assets');
   assert.equal(TRABALHISTA_ASSETS.length, 1, 'TRABALHISTA_ASSETS deve conter 1 asset');
   assert.equal(UTILIDADES_ASSETS.length, 5, 'UTILIDADES_ASSETS deve conter 5 assets');
-  assert.equal(TOOL_ASSETS.length, 66, 'TOOL_ASSETS deve conter 66 assets');
+  assert.equal(TOOL_ASSETS.length, 68, 'TOOL_ASSETS deve conter 68 assets');
   assert.equal(new Set(TOOL_ASSETS.map(asset => asset.dest)).size, TOOL_ASSETS.length, 'TOOL_ASSETS não deve conter destinos duplicados');
 
   for (const item of DEFAULT_ASSETS) {
@@ -699,10 +700,10 @@ test('SSG Multipage - Contrato estrutural e ordem dos elementos em .nav-containe
   }
 });
 
-test('SSG Site - buildPages(SITE_PAGES) compila 85 páginas e copia os assets do site', () => {
+test('SSG Site - buildPages(SITE_PAGES) compila 87 páginas e copia os assets do site', () => {
   const results = buildPages(SITE_PAGES, { assets: SITE_ASSETS });
-  assert.equal(results.length, 85, 'SITE_PAGES deve gerar 85 páginas (51 ferramentas + Home + favoritos + 5 categorias + 18 blog + 9 institucionais)');
-  assert.equal(SITE_ASSETS.length, 102, 'SITE_ASSETS deve conter exatamente 102 assets');
+  assert.equal(results.length, 87, 'SITE_PAGES deve gerar 87 páginas (53 ferramentas + Home + favoritos + 5 categorias + 18 blog + 9 institucionais)');
+  assert.equal(SITE_ASSETS.length, 104, 'SITE_ASSETS deve conter exatamente 104 assets');
 
   for (const page of SITE_PAGES) {
     const fullPath = path.join(ROOT_DIR, 'dist-pilot', page.relativeOutputPath);
@@ -835,7 +836,8 @@ test('SSG Site - Páginas de categorias: testes parametrizados de integridade, m
       h1: 'Calculadoras Trabalhistas',
       expectedCards: [
         'tools/trabalhista/horas-extras.html',
-        'tools/trabalhista/salario-liquido.html'
+        'tools/trabalhista/salario-liquido.html',
+        'tools/trabalhista/comissao-vendas.html'
       ]
     }
   ];
@@ -928,7 +930,7 @@ test('SSG Categoria - /financeira.html inclui Orçamento Doméstico e preserva a
   assert.ok(gridSectionMatch, 'Deve existir section category-tools');
   const cardMatches = gridSectionMatch[1].match(/<a\s+[^>]*class="card"[^>]*>/g);
   assert.ok(cardMatches, 'Devem existir cards na categoria');
-  assert.equal(cardMatches.length, 26, 'financeira.html deve conter exatamente 26 cards após adicionar Calculadora de Custo por Quilômetro e Lucro por Corrida');
+  assert.equal(cardMatches.length, 27, 'financeira.html deve conter exatamente 27 cards após adicionar Calculadora de Custo por Quilômetro e Lucro por Corrida');
 
   // 5. Nenhuma ferramenta de outra categoria presente
   assert.equal(html.includes('tools/saude/imc.html'), false, 'Não deve conter ferramentas de saúde');
@@ -1003,7 +1005,7 @@ test('SSG Home - /index.html inclui ferramentas Factory na seção Todas as Ferr
   assert.ok(gridSectionMatch, 'Deve existir container tools-cards-grid');
   const cardMatches = gridSectionMatch[1].match(/<article\s+class="tool-card">/g);
   assert.ok(cardMatches, 'Devem existir cards na grade Todas as Ferramentas');
-  assert.equal(cardMatches.length, 52, 'index.html deve conter exatamente 52 cards na grade Todas as Ferramentas (51 ferramentas + meus-carros)');
+  assert.equal(cardMatches.length, 54, 'index.html deve conter exatamente 54 cards na grade Todas as Ferramentas (53 ferramentas + meus-carros)');
 });
 
 test('SSG Categoria - /conversores.html inclui as novas ferramentas na categoria Utilidades', () => {
@@ -1360,7 +1362,7 @@ test('SSG Institucional - Validação detalhada das 7 páginas: metadados, canon
 
 test('PROD - build gera páginas, assets e arquivos públicos em dist/', () => {
   const result = buildPages(SITE_PAGES, { outputDir: PROD_OUTPUT_DIR, assets: SITE_ASSETS });
-  assert.equal(result.length, 85, 'build:prod deve compilar exatamente 85 páginas');
+  assert.equal(result.length, 87, 'build:prod deve compilar exatamente 87 páginas');
 
   for (const page of SITE_PAGES) {
     const pagePath = path.join(PROD_OUTPUT_DIR, page.relativeOutputPath);
@@ -1498,9 +1500,9 @@ test('PROD - dist/js/core/favorites.js existe após o build e corresponde ao arq
   assert.equal(prodContent, sourceContent, 'dist/js/core/favorites.js deve corresponder exatamente ao arquivo-fonte');
 });
 
-test('SSG Multipage - Todas as 51 calculadoras contêm exatamente um botão de favorito com atributos corretos e carregam favorites.js', () => {
+test('SSG Multipage - Todas as 53 calculadoras contêm exatamente um botão de favorito com atributos corretos e carregam favorites.js', () => {
   const toolsData = JSON.parse(fs.readFileSync(path.join(ROOT_DIR, 'data', 'tools.json'), 'utf-8'));
-  assert.equal(TOOL_PAGES.length, 51, 'Devem existir 51 TOOL_PAGES');
+  assert.equal(TOOL_PAGES.length, 53, 'Devem existir 53 TOOL_PAGES');
   assert.equal(new Set(TOOL_PAGES.map(page => page.relativeOutputPath)).size, TOOL_PAGES.length, 'TOOL_PAGES não deve conter caminhos duplicados');
 
   for (const page of TOOL_PAGES) {
@@ -1597,14 +1599,14 @@ test('SSG Cache Busting - FAVORITES_VERSION corresponde ao hash de js/core/favor
   assert.equal(getFavoritesVersion(), expectedHash);
 });
 
-test('SSG Cache Busting - Todas as 85 páginas usam a mesma versão de style.css, assets e caminhos CSS válidos', () => {
+test('SSG Cache Busting - Todas as 87 páginas usam a mesma versão de style.css, assets e caminhos CSS válidos', () => {
   const results = buildPages(SITE_PAGES, { assets: SITE_ASSETS });
 
-  // 10. 85 páginas continuam
-  assert.equal(results.length, 85, 'SITE_PAGES deve compilar exatamente 85 páginas');
+  // 10. 87 páginas continuam
+  assert.equal(results.length, 87, 'SITE_PAGES deve compilar exatamente 87 páginas');
 
-  // 11. 102 assets continuam
-  assert.equal(SITE_ASSETS.length, 102, 'SITE_ASSETS deve permanecer exatamente com 102 assets');
+  // 11. 104 assets continuam
+  assert.equal(SITE_ASSETS.length, 104, 'SITE_ASSETS deve permanecer exatamente com 104 assets');
 
   // 4. todas as 64 páginas usam a mesma versão
   for (const page of SITE_PAGES) {
