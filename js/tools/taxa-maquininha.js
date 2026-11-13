@@ -56,6 +56,85 @@ export function parseTaxaPercentual(valor) {
   return Number.isFinite(num) ? num : NaN;
 }
 
+export const TEXTO_AVISO_PARCELA_ZERADA =
+  'A simulação resultou em uma ou mais parcelas de R$ 0,00. Embora a soma corresponda matematicamente ao valor total, essa distribuição pode não ser aceita comercialmente pela operadora. Consulte as condições do seu plano antes de realizar a venda.';
+
+/**
+ * Verifica se a distribuição das parcelas contém pelo menos uma parcela igual a R$ 0,00.
+ *
+ * @param {Object} parcelamento Objeto retornado por distribuirParcelas
+ * @returns {boolean}
+ */
+export function temParcelasZeradas(parcelamento) {
+  if (!parcelamento || !Array.isArray(parcelamento.parcelasDetalhadas)) {
+    return false;
+  }
+  return parcelamento.parcelasDetalhadas.some((valor) => valor === 0);
+}
+
+/**
+ * Distribui um valor monetário total em parcelas inteiras em centavos,
+ * garantindo que a soma de todas as parcelas feche estritamente igual ao total.
+ *
+ * @param {number} valorTotal Valor monetário total
+ * @param {number} numParcelas Quantidade de parcelas (> 0)
+ * @returns {{
+ *   temAjusteCentavos: boolean,
+ *   qtdParcelasBase: number,
+ *   valorParcelaBase: number,
+ *   qtdParcelasAjustadas: number,
+ *   valorParcelaAjustada: number,
+ *   parcelasDetalhadas: number[],
+ *   somaParcelas: number,
+ *   textoParcelas: string
+ * }}
+ */
+export function distribuirParcelas(valorTotal, numParcelas) {
+  const parcelas = Math.max(1, Math.floor(Number(numParcelas) || 1));
+  const totalCentavos = Math.round((Number(valorTotal) || 0) * 100);
+
+  const centavosBase = Math.floor(totalCentavos / parcelas);
+  const restoCentavos = totalCentavos % parcelas;
+
+  const qtdBase = parcelas - restoCentavos;
+  const qtdAjustada = restoCentavos;
+
+  const valorParcelaBase = arredondarMoeda(centavosBase / 100);
+  const valorParcelaAjustada = arredondarMoeda((centavosBase + 1) / 100);
+
+  const parcelasDetalhadas = [];
+  for (let i = 0; i < qtdBase; i++) {
+    parcelasDetalhadas.push(valorParcelaBase);
+  }
+  for (let i = 0; i < qtdAjustada; i++) {
+    parcelasDetalhadas.push(valorParcelaAjustada);
+  }
+
+  const somaCentavos = (qtdBase * centavosBase) + (qtdAjustada * (centavosBase + 1));
+  const somaParcelas = arredondarMoeda(somaCentavos / 100);
+
+  let textoParcelas = '';
+  if (restoCentavos === 0) {
+    textoParcelas = `${parcelas}x de ${formatBRL(valorParcelaBase, true)}`;
+  } else {
+    const textoBase = `${qtdBase} ${qtdBase === 1 ? 'parcela' : 'parcelas'} de ${formatBRL(valorParcelaBase, true)}`;
+    const textoAjustado = `${qtdAjustada} ${qtdAjustada === 1 ? 'parcela' : 'parcelas'} de ${formatBRL(valorParcelaAjustada, true)}`;
+    textoParcelas = `${textoBase} e ${textoAjustado}`;
+  }
+
+  return {
+    temAjusteCentavos: restoCentavos > 0,
+    qtdParcelasBase: qtdBase,
+    valorParcelaBase,
+    qtdParcelasAjustadas: qtdAjustada,
+    valorParcelaAjustada,
+    parcelasDetalhadas,
+    somaParcelas,
+    textoParcelas,
+    temParcelasZeradas: parcelasDetalhadas.some((v) => v === 0)
+  };
+}
+
 /**
  * Executa o cálculo da taxa da maquininha e valores resultantes.
  * Função pura e desacoplada do DOM para testes automatizados.
@@ -174,6 +253,7 @@ export function calcularTaxaMaquininha(params = {}) {
   }
 
   // Métricas de parcelas
+  const parcelamentoCobrado = distribuirParcelas(valorCobrado, parcelas);
   const valorParcelaCobrada = arredondarMoeda(valorCobrado / parcelas);
   const valorParcelaLiquida = arredondarMoeda(valorLiquido / parcelas);
 
@@ -197,6 +277,8 @@ export function calcularTaxaMaquininha(params = {}) {
       valorLiquido,
       valorParcelaCobrada,
       valorParcelaLiquida,
+      parcelamentoCobrado,
+      temParcelasZeradas: modalidade === 'credito_parcelado' && temParcelasZeradas(parcelamentoCobrado),
       taxaEfetivaTotal
     }
   };
@@ -238,10 +320,19 @@ export function getResultSections(dados) {
   );
 
   if (ehParcelado) {
+    const textoCliente = dados.parcelamentoCobrado?.textoParcelas
+      || `${dados.parcelas}x de ${formatBRL(dados.valorParcelaCobrada, true)}`;
     sections.push({
       label: 'Parcelamento',
-      value: `Cliente paga ${dados.parcelas}x de ${formatBRL(dados.valorParcelaCobrada, true)} | Vendedor recebe líquido ~${formatBRL(dados.valorParcelaLiquida, true)} por parcela`
+      value: `Cliente paga: ${textoCliente} | Líquido estimado por parcela: ~${formatBRL(dados.valorParcelaLiquida, true)} (média aproximada)`
     });
+
+    if (temParcelasZeradas(dados.parcelamentoCobrado)) {
+      sections.push({
+        label: 'Aviso sobre parcelamento',
+        value: TEXTO_AVISO_PARCELA_ZERADA
+      });
+    }
   }
 
   const notaMetodologia = ehInverso
@@ -293,6 +384,7 @@ export function setupTool() {
   const cardParcelamento = document.getElementById('cardParcelamento');
   const resParcelaCliente = document.getElementById('resParcelaCliente');
   const resParcelaVendedor = document.getElementById('resParcelaVendedor');
+  const avisoParcelaZerada = document.getElementById('avisoParcelaZerada');
 
   // Botões e status de ação
   const btnCopiar = document.getElementById('btnCopiar');
@@ -383,6 +475,9 @@ export function setupTool() {
     if (cardParcelamento) {
       cardParcelamento.hidden = true;
     }
+    if (avisoParcelaZerada) {
+      avisoParcelaZerada.hidden = true;
+    }
     if (statusAcoes) {
       statusAcoes.textContent = '';
     }
@@ -434,6 +529,9 @@ export function setupTool() {
       if (resultadoContainer) {
         resultadoContainer.hidden = true;
       }
+      if (avisoParcelaZerada) {
+        avisoParcelaZerada.hidden = true;
+      }
       ultimoResultado = null;
       return;
     }
@@ -454,13 +552,22 @@ export function setupTool() {
     if (cardParcelamento) {
       if (ultimoResultado.modalidade === 'credito_parcelado') {
         if (resParcelaCliente) {
-          resParcelaCliente.textContent = `${ultimoResultado.parcelas}x de ${formatBRL(ultimoResultado.valorParcelaCobrada, true)}`;
+          resParcelaCliente.textContent = ultimoResultado.parcelamentoCobrado?.textoParcelas
+            || `${ultimoResultado.parcelas}x de ${formatBRL(ultimoResultado.valorParcelaCobrada, true)}`;
         }
         if (resParcelaVendedor) {
-          resParcelaVendedor.textContent = `~${formatBRL(ultimoResultado.valorParcelaLiquida, true)} por parcela`;
+          resParcelaVendedor.textContent = `~${formatBRL(ultimoResultado.valorParcelaLiquida, true)} por parcela (média aproximada)`;
+        }
+        if (avisoParcelaZerada) {
+          const deveExibirAviso = temParcelasZeradas(ultimoResultado.parcelamentoCobrado);
+          avisoParcelaZerada.textContent = TEXTO_AVISO_PARCELA_ZERADA;
+          avisoParcelaZerada.hidden = !deveExibirAviso;
         }
         cardParcelamento.hidden = false;
       } else {
+        if (avisoParcelaZerada) {
+          avisoParcelaZerada.hidden = true;
+        }
         cardParcelamento.hidden = true;
       }
     }
