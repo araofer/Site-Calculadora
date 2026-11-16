@@ -468,6 +468,18 @@ export function setupTool(root = (typeof document !== 'undefined' ? document : n
 
   let ultimoResultado = null;
 
+  function invalidarResultado() {
+    ultimoResultado = null;
+    if (painelResultado) painelResultado.hidden = true;
+    if (containerErro) {
+      containerErro.hidden = true;
+      containerErro.textContent = '';
+    }
+    if (statusAcoes) {
+      statusAcoes.textContent = '';
+    }
+  }
+
   function atualizarVisibilidadeCampos() {
     const tipo = selectTipo ? selectTipo.value : DEFAULTS.tipoElemento;
 
@@ -484,15 +496,20 @@ export function setupTool(root = (typeof document !== 'undefined' ? document : n
 
   selectTipo?.addEventListener('change', () => {
     atualizarVisibilidadeCampos();
-    if (painelResultado) painelResultado.hidden = true;
-    if (containerErro) {
-      containerErro.hidden = true;
-      containerErro.textContent = '';
-    }
-    if (statusAcoes) {
-      statusAcoes.textContent = '';
-    }
+    invalidarResultado();
   });
+
+  function onFormInput(e) {
+    if (e && e.target && (e.target.tagName === 'BUTTON' || e.target.type === 'button' || e.target.type === 'submit')) {
+      return;
+    }
+    invalidarResultado();
+  }
+
+  if (typeof form.addEventListener === 'function') {
+    form.addEventListener('input', onFormInput);
+    form.addEventListener('change', onFormInput);
+  }
 
   const actions = createResultActions({
     title: 'Calculadora de Volume de Concreto — Calculadora Master',
@@ -615,16 +632,7 @@ export function setupTool(root = (typeof document !== 'undefined' ? document : n
     if (selectTipo) selectTipo.value = DEFAULTS.tipoElemento;
     if (inputMargem) inputMargem.value = String(DEFAULTS.margemPerda);
     atualizarVisibilidadeCampos();
-    ultimoResultado = null;
-
-    if (painelResultado) painelResultado.hidden = true;
-    if (containerErro) {
-      containerErro.hidden = true;
-      containerErro.textContent = '';
-    }
-    if (statusAcoes) {
-      statusAcoes.textContent = '';
-    }
+    invalidarResultado();
   });
 
   atualizarVisibilidadeCampos();
@@ -632,7 +640,8 @@ export function setupTool(root = (typeof document !== 'undefined' ? document : n
   const instance = {
     form,
     actions,
-    getUltimoResultado: () => ultimoResultado
+    getUltimoResultado: () => ultimoResultado,
+    invalidarResultado
   };
   form._toolInstance = instance;
   return instance;

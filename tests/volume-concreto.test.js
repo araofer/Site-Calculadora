@@ -430,10 +430,14 @@ class MockDomElement {
   }
 
   async dispatchEvent(evt) {
-    const type = typeof evt === 'string' ? evt : evt.type;
-    const handlers = this.listeners.get(type) || [];
+    const eventObj = typeof evt === 'string' ? { type: evt, target: this } : evt;
+    if (!eventObj.target) eventObj.target = this;
+    const handlers = this.listeners.get(eventObj.type) || [];
     for (const h of handlers) {
-      await h(evt);
+      await h(eventObj);
+    }
+    if (this.parentNode && typeof this.parentNode.dispatchEvent === 'function') {
+      await this.parentNode.dispatchEvent(eventObj);
     }
   }
 
@@ -519,6 +523,12 @@ function buildMockDom() {
   getOrCreate('saidaVolumePerda', 'strong');
   getOrCreate('saidaMemoriaCalculo', 'span');
   getOrCreate('listaAvisosTecnicos', 'ul');
+
+  for (const [id, el] of elements.entries()) {
+    if (id !== 'formVolumeConcreto' && !id.startsWith('resultado') && !id.startsWith('erro') && !id.startsWith('status') && !id.startsWith('saida') && id !== 'listaAvisosTecnicos') {
+      el.parentNode = form;
+    }
+  }
 
   const doc = {
     getElementById: (id) => elements.get(id) || null,
@@ -885,6 +895,133 @@ test('Volume de Concreto - 21. URL compartilhada é estritamente a URL canônica
     assert.equal(sharedPayload.url, 'https://www.calculadoramaster.com/tools/utilidades/volume-concreto.html');
     assert.doesNotMatch(sharedPayload.url, /127\.0\.0\.1/);
     assert.doesNotMatch(sharedPayload.url, /localhost/);
+  } finally {
+    if (originalNavigator) Object.defineProperty(globalThis, 'navigator', originalNavigator); else delete globalThis.navigator;
+    if (originalWindow) Object.defineProperty(globalThis, 'window', originalWindow); else delete globalThis.window;
+    if (originalDocument) Object.defineProperty(globalThis, 'document', originalDocument); else delete globalThis.document;
+  }
+});
+
+test('Volume de Concreto - 22. Invalidação de resultado ao alterar dimensões ou margem de perdas', async () => {
+  const { doc, elements } = buildMockDom();
+
+  let copyCount = 0;
+  let shareCount = 0;
+  let printCount = 0;
+
+  const originalNavigator = Object.getOwnPropertyDescriptor(globalThis, 'navigator');
+  const originalWindow = Object.getOwnPropertyDescriptor(globalThis, 'window');
+  const originalDocument = Object.getOwnPropertyDescriptor(globalThis, 'document');
+
+  try {
+    Object.defineProperty(globalThis, 'navigator', {
+      configurable: true,
+      value: {
+        clipboard: {
+          writeText: async () => { copyCount++; }
+        },
+        share: async () => { shareCount++; }
+      }
+    });
+
+    Object.defineProperty(globalThis, 'window', {
+      configurable: true,
+      value: {
+        location: {
+          origin: 'https://www.calculadoramaster.com',
+          href: 'https://www.calculadoramaster.com/tools/utilidades/volume-concreto.html'
+        },
+        print: () => { printCount++; }
+      }
+    });
+
+    Object.defineProperty(globalThis, 'document', {
+      configurable: true,
+      value: doc
+    });
+
+    const inst = setupTool(doc);
+
+    // 1. Cálculo inicial válido
+    elements.get('comprimentoLaje').value = '6';
+    elements.get('larguraLaje').value = '4';
+    elements.get('espessuraLaje').value = '10';
+    elements.get('margemPerda').value = '5';
+
+    await elements.get('formVolumeConcreto').dispatchEvent({
+      type: 'submit',
+      preventDefault() {}
+    });
+
+    assert.equal(elements.get('resultadoVolumeConcreto').hidden, false);
+    assert.ok(inst.getUltimoResultado());
+    assert.equal(inst.getUltimoResultado().valido, true);
+
+    // Copiar funciona após cálculo válido
+    await elements.get('copiarVolumeConcreto').click();
+    assert.equal(copyCount, 1);
+    assert.equal(elements.get('statusVolumeConcreto').textContent, 'Resultado copiado.');
+
+    // 2. Alterar uma dimensão oculta o resultado e limpa status e resultado memorizado
+    elements.get('comprimentoLaje').value = '8';
+    await elements.get('comprimentoLaje').dispatchEvent({ type: 'input' });
+
+    assert.equal(elements.get('resultadoVolumeConcreto').hidden, true, 'Painel deve ficar oculto ao alterar dimensão');
+    assert.equal(inst.getUltimoResultado(), null, 'ultimoResultado deve ser invalidado');
+    assert.equal(elements.get('statusVolumeConcreto').textContent, '', 'Status de ações deve ser limpo');
+
+    // 3. Copiar, compartilhar e imprimir não devem ser executados com resultado invalidado
+    await elements.get('copiarVolumeConcreto').click();
+    assert.equal(copyCount, 1, 'Copiar não deve disparar após invalidação');
+
+    await elements.get('compartilharVolumeConcreto').click();
+    assert.equal(shareCount, 0, 'Compartilhar não deve disparar após invalidação');
+
+    elements.get('imprimirVolumeConcreto').click();
+    assert.equal(printCount, 0, 'Imprimir não deve disparar após invalidação');
+
+    // 4. Um novo cálculo válido reapresenta normalmente o novo resultado
+    await elements.get('formVolumeConcreto').dispatchEvent({
+      type: 'submit',
+      preventDefault() {}
+    });
+
+    assert.equal(elements.get('resultadoVolumeConcreto').hidden, false, 'Novo cálculo deve exibir painel de resultado');
+    assert.ok(inst.getUltimoResultado());
+    assert.equal(inst.getUltimoResultado().valido, true);
+    assertApprox(inst.getUltimoResultado().volumeBase, 3.2);
+
+    await elements.get('copiarVolumeConcreto').click();
+    assert.equal(copyCount, 2, 'Copiar deve funcionar novamente após novo cálculo');
+
+    // 5. Alterar a margem de perdas também invalida o resultado
+    elements.get('margemPerda').value = '10';
+    await elements.get('margemPerda').dispatchEvent({ type: 'input' });
+
+    assert.equal(elements.get('resultadoVolumeConcreto').hidden, true, 'Painel deve ficar oculto ao alterar margem');
+    assert.equal(inst.getUltimoResultado(), null, 'ultimoResultado deve ser invalidado ao alterar margem');
+
+    await elements.get('copiarVolumeConcreto').click();
+    assert.equal(copyCount, 2, 'Copiar não deve disparar após alterar margem');
+
+    // 6. Recalcular e validar que o botão Limpar continua funcionando e invalidando
+    await elements.get('formVolumeConcreto').dispatchEvent({
+      type: 'submit',
+      preventDefault() {}
+    });
+    assert.equal(elements.get('resultadoVolumeConcreto').hidden, false);
+    elements.get('statusVolumeConcreto').textContent = 'Resultado copiado.';
+
+    await elements.get('limparVolumeConcreto').click();
+    assert.equal(elements.get('resultadoVolumeConcreto').hidden, true);
+    assert.equal(inst.getUltimoResultado(), null);
+    assert.equal(elements.get('statusVolumeConcreto').textContent, '');
+    assert.equal(elements.get('tipoElemento').value, DEFAULTS.tipoElemento);
+    assert.equal(elements.get('margemPerda').value, String(DEFAULTS.margemPerda));
+
+    // 7. Não há listeners duplicados ao reinicializar setupTool
+    const inst2 = setupTool(doc);
+    assert.equal(inst2, inst);
   } finally {
     if (originalNavigator) Object.defineProperty(globalThis, 'navigator', originalNavigator); else delete globalThis.navigator;
     if (originalWindow) Object.defineProperty(globalThis, 'window', originalWindow); else delete globalThis.window;
