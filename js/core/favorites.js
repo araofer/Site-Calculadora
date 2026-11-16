@@ -60,7 +60,8 @@ export const VALID_TOOL_IDS = new Set([
   'idade-gestacional-data-parto',
   'conversor-unidades',
   'salario-liquido',
-  'custo-km-lucro-corrida'
+  'custo-km-lucro-corrida',
+  'volume-concreto'
 ]);
 
 let memoryFavorites = null;
