@@ -1,0 +1,354 @@
+---
+title: Calculadora de Volume de Concreto Online Grátis | m³ e Litros - Calculadora Master
+description: Calcule o volume de concreto em m³ e litros para lajes, pisos, vigas e pilares. Aplique margem de perdas de 0% a 30% e obtenha a memória de cálculo completa.
+keywords: calculadora de concreto, calculadora de volume de concreto, metros cubicos concreto, calcular m3 concreto laje, concreto para viga, concreto para pilar, concreto usinado m3, calcular litros concreto
+canonical: https://www.calculadoramaster.com/tools/utilidades/volume-concreto.html
+layout: tool
+pageScripts: <script type="module" src="{{ROOT_PREFIX}}js/tools/volume-concreto.js"></script>
+---
+
+<h1>Calculadora de Volume de Concreto</h1>
+<p>Estime com precisão a quantidade de concreto em metros cúbicos (m³) e litros para lajes, pisos, vigas e pilares, com margem de perdas configurável e memória de cálculo detalhada para sua obra.</p>
+
+<div class="card tool-calculator-card">
+  <h2 class="tool-form-title">Informe os dados da estrutura</h2>
+
+  <form id="formVolumeConcreto" novalidate>
+    <div class="form-group">
+      <label for="tipoElemento">Tipo de estrutura:</label>
+      <p id="ajudaTipoElemento">Selecione o formato estrutural que deseja calcular.</p>
+      <select id="tipoElemento" name="tipoElemento" aria-describedby="ajudaTipoElemento">
+        <option value="laje">Laje maciça</option>
+        <option value="piso">Piso / Contrapiso / Radier</option>
+        <option value="viga">Viga retangular</option>
+        <option value="pilar_retangular">Pilar retangular ou quadrado</option>
+        <option value="pilar_circular">Pilar circular / Estaca cilíndrica</option>
+      </select>
+    </div>
+
+    <!-- Campos para Laje e Piso -->
+    <div id="camposLajePiso">
+      <div class="form-group">
+        <label for="comprimentoLaje">Comprimento (m):</label>
+        <p id="ajudaComprimentoLaje">Extensão longitudinal da laje ou piso em metros.</p>
+        <input
+          type="text"
+          id="comprimentoLaje"
+          name="comprimentoLaje"
+          inputmode="decimal"
+          placeholder="Ex: 6,00"
+          autocomplete="off"
+          aria-describedby="ajudaComprimentoLaje"
+        >
+      </div>
+
+      <div class="form-group">
+        <label for="larguraLaje">Largura (m):</label>
+        <p id="ajudaLarguraLaje">Largura total da superfície em metros.</p>
+        <input
+          type="text"
+          id="larguraLaje"
+          name="larguraLaje"
+          inputmode="decimal"
+          placeholder="Ex: 4,00"
+          autocomplete="off"
+          aria-describedby="ajudaLarguraLaje"
+        >
+      </div>
+
+      <div class="form-group">
+        <label for="espessuraLaje">Espessura (cm):</label>
+        <p id="ajudaEspessuraLaje">Altura da camada de concreto em centímetros (ex.: 10 para 10 cm = 0,10 m).</p>
+        <input
+          type="text"
+          id="espessuraLaje"
+          name="espessuraLaje"
+          inputmode="decimal"
+          placeholder="Ex: 10"
+          autocomplete="off"
+          aria-describedby="ajudaEspessuraLaje"
+        >
+      </div>
+    </div>
+
+    <!-- Campos para Viga retangular -->
+    <div id="camposViga" hidden>
+      <div class="form-group">
+        <label for="quantidadeViga">Quantidade de vigas idênticas:</label>
+        <p id="ajudaQuantidadeViga">Número de vigas com as mesmas dimensões.</p>
+        <input
+          type="number"
+          id="quantidadeViga"
+          name="quantidadeViga"
+          inputmode="numeric"
+          min="1"
+          max="10000"
+          step="1"
+          value="1"
+          aria-describedby="ajudaQuantidadeViga"
+        >
+      </div>
+
+      <div class="form-group">
+        <label for="comprimentoViga">Comprimento da viga (m):</label>
+        <p id="ajudaComprimentoViga">Vão linear da viga em metros.</p>
+        <input
+          type="text"
+          id="comprimentoViga"
+          name="comprimentoViga"
+          inputmode="decimal"
+          placeholder="Ex: 5,00"
+          autocomplete="off"
+          aria-describedby="ajudaComprimentoViga"
+        >
+      </div>
+
+      <div class="form-group">
+        <label for="larguraViga">Largura da base da viga (cm):</label>
+        <p id="ajudaLarguraViga">Espessura horizontal da viga em centímetros (ex.: 15 para 15 cm).</p>
+        <input
+          type="text"
+          id="larguraViga"
+          name="larguraViga"
+          inputmode="decimal"
+          placeholder="Ex: 15"
+          autocomplete="off"
+          aria-describedby="ajudaLarguraViga"
+        >
+      </div>
+
+      <div class="form-group">
+        <label for="alturaViga">Altura da viga (cm):</label>
+        <p id="ajudaAlturaViga">Dimensão vertical da seção da viga em centímetros (ex.: 30 para 30 cm).</p>
+        <input
+          type="text"
+          id="alturaViga"
+          name="alturaViga"
+          inputmode="decimal"
+          placeholder="Ex: 30"
+          autocomplete="off"
+          aria-describedby="ajudaAlturaViga"
+        >
+      </div>
+    </div>
+
+    <!-- Campos para Pilar retangular -->
+    <div id="camposPilarRetangular" hidden>
+      <div class="form-group">
+        <label for="quantidadePilarRet">Quantidade de pilares idênticos:</label>
+        <p id="ajudaQuantidadePilarRet">Número de pilares com a mesma seção e altura.</p>
+        <input
+          type="number"
+          id="quantidadePilarRet"
+          name="quantidadePilarRet"
+          inputmode="numeric"
+          min="1"
+          max="10000"
+          step="1"
+          value="1"
+          aria-describedby="ajudaQuantidadePilarRet"
+        >
+      </div>
+
+      <div class="form-group">
+        <label for="lado1PilarRet">Lado 1 da seção (cm):</label>
+        <p id="ajudaLado1PilarRet">Primeira dimensão da seção transversal em centímetros (ex.: 20 para 20 cm).</p>
+        <input
+          type="text"
+          id="lado1PilarRet"
+          name="lado1PilarRet"
+          inputmode="decimal"
+          placeholder="Ex: 20"
+          autocomplete="off"
+          aria-describedby="ajudaLado1PilarRet"
+        >
+      </div>
+
+      <div class="form-group">
+        <label for="lado2PilarRet">Lado 2 da seção (cm):</label>
+        <p id="ajudaLado2PilarRet">Segunda dimensão da seção transversal em centímetros (ex.: 20 para 20 cm).</p>
+        <input
+          type="text"
+          id="lado2PilarRet"
+          name="lado2PilarRet"
+          inputmode="decimal"
+          placeholder="Ex: 20"
+          autocomplete="off"
+          aria-describedby="ajudaLado2PilarRet"
+        >
+      </div>
+
+      <div class="form-group">
+        <label for="alturaPilarRet">Altura do pilar (m):</label>
+        <p id="ajudaAlturaPilarRet">Pé-direito ou altura útil do pilar em metros (ex.: 2,80).</p>
+        <input
+          type="text"
+          id="alturaPilarRet"
+          name="alturaPilarRet"
+          inputmode="decimal"
+          placeholder="Ex: 2,80"
+          autocomplete="off"
+          aria-describedby="ajudaAlturaPilarRet"
+        >
+      </div>
+    </div>
+
+    <!-- Campos para Pilar circular / Estaca -->
+    <div id="camposPilarCircular" hidden>
+      <div class="form-group">
+        <label for="quantidadePilarCirc">Quantidade de peças cilíndricas:</label>
+        <p id="ajudaQuantidadePilarCirc">Número de pilares ou estacas idênticas.</p>
+        <input
+          type="number"
+          id="quantidadePilarCirc"
+          name="quantidadePilarCirc"
+          inputmode="numeric"
+          min="1"
+          max="10000"
+          step="1"
+          value="1"
+          aria-describedby="ajudaQuantidadePilarCirc"
+        >
+      </div>
+
+      <div class="form-group">
+        <label for="diametroPilarCirc">Diâmetro da seção (cm):</label>
+        <p id="ajudaDiametroPilarCirc">Diâmetro circular da peça em centímetros (ex.: 30 para 30 cm = 0,30 m). Considera seção cilíndrica constante, sem bases alargadas ou variações de diâmetro.</p>
+        <input
+          type="text"
+          id="diametroPilarCirc"
+          name="diametroPilarCirc"
+          inputmode="decimal"
+          placeholder="Ex: 30"
+          autocomplete="off"
+          aria-describedby="ajudaDiametroPilarCirc"
+        >
+      </div>
+
+      <div class="form-group">
+        <label for="alturaPilarCirc">Altura ou profundidade (m):</label>
+        <p id="ajudaAlturaPilarCirc">Comprimento longitudinal do pilar ou profundidade da estaca em metros.</p>
+        <input
+          type="text"
+          id="alturaPilarCirc"
+          name="alturaPilarCirc"
+          inputmode="decimal"
+          placeholder="Ex: 3,00"
+          autocomplete="off"
+          aria-describedby="ajudaAlturaPilarCirc"
+        >
+      </div>
+    </div>
+
+    <!-- Margem de perdas padronizada (0 a 30%) -->
+    <div class="form-group">
+      <label for="margemPerda">Margem de perdas (%):</label>
+      <p id="ajudaMargemPerda">Sugestão inicial de 5% para perdas usuais em fôrmas, terreno e sobras (editável de 0% a 30%). Não é uma recomendação técnica universal.</p>
+      <input
+        type="number"
+        id="margemPerda"
+        name="margemPerda"
+        min="0"
+        max="30"
+        step="0.5"
+        value="5"
+        inputmode="decimal"
+        aria-describedby="ajudaMargemPerda"
+        required
+      >
+    </div>
+
+    <div class="tool-actions">
+      <button type="submit" class="tool-btn tool-btn-primary">Calcular volume</button>
+      <button type="button" id="limparVolumeConcreto" class="tool-btn tool-btn-secondary">Limpar</button>
+    </div>
+  </form>
+
+  <p id="erroVolumeConcreto" role="alert" aria-live="assertive" hidden></p>
+
+  <section id="resultadoVolumeConcreto" aria-live="polite" aria-atomic="true" hidden>
+    <h2 class="tool-result-title">Estimativa de Volume de Concreto</h2>
+
+    <div class="card tool-result-card">
+      <p>Volume total estimado (com perdas): <strong id="saidaVolumeTotal">0,00 m³</strong></p>
+      <p>Volume equivalente em litros: <strong id="saidaVolumeLitros">0 L</strong></p>
+      <p>Volume nominal (sem perdas): <strong id="saidaVolumeBase">0,00 m³</strong></p>
+      <p>Adicional de perdas: <strong id="saidaVolumePerda">0,00 m³ (5%)</strong></p>
+      <p>Memória de cálculo: <span id="saidaMemoriaCalculo"></span></p>
+    </div>
+
+    <div class="tool-result-note">
+      <strong>Observações e avisos técnicos:</strong>
+      <ul id="listaAvisosTecnicos"></ul>
+    </div>
+
+    <div class="tool-actions result-actions">
+      <button type="button" id="copiarVolumeConcreto" class="tool-btn tool-btn-secondary">Copiar resultado</button>
+      <button type="button" id="compartilharVolumeConcreto" class="tool-btn tool-btn-secondary">Compartilhar</button>
+      <button type="button" id="imprimirVolumeConcreto" class="tool-btn tool-btn-secondary">Imprimir</button>
+    </div>
+
+    <p id="statusVolumeConcreto" class="result-action-status" role="status" aria-live="polite"></p>
+  </section>
+</div>
+
+<section class="content">
+  <h2>Como calcular o volume de concreto?</h2>
+  <p>O volume de concreto para elementos da construção civil é obtido pela multiplicação das três dimensões geométricas do elemento (comprimento, largura e altura ou espessura). Como os pedidos em usinas concreteiras são realizados em metros cúbicos (m³), todas as medidas lineares devem ser convertidas para metros antes da multiplicação final.</p>
+
+  <h3>Fórmulas por tipo de estrutura</h3>
+  <ul>
+    <li><strong>Lajes e pisos:</strong> Comprimento (m) × Largura (m) × Espessura (convertida de cm para m dividindo por 100).</li>
+    <li><strong>Vigas retangulares:</strong> Quantidade × Comprimento (m) × Largura (cm ÷ 100) × Altura (cm ÷ 100).</li>
+    <li><strong>Pilares retangulares ou quadrados:</strong> Quantidade × Lado 1 (cm ÷ 100) × Lado 2 (cm ÷ 100) × Altura (m).</li>
+    <li><strong>Pilares circulares e estacas cilíndricas:</strong> Quantidade × π × (Diâmetro em cm ÷ 200)² × Altura (m), considerando seção cilíndrica constante.</li>
+  </ul>
+
+  <h3>Como funciona a margem de perdas?</h3>
+  <p>Durante a concretagem, pequenas variações de espessura de fôrmas de madeira, irregularidades de escavação, sobras retidas na tubulação e no mangote da bomba podem consumir um volume extra. Esta calculadora sugere inicialmente 5% de margem, mas permite ajuste livre entre 0% e 30% conforme as características e o método construtivo de cada obra.</p>
+
+  <h3>Interseções entre estruturas e projeto estrutural</h3>
+  <p>Ao planejar a compra total para a obra, lembre-se de que a calculadora analisa cada elemento de forma isolada e <strong>não desconta automaticamente os nós de sobreposição</strong> (como o encontro entre vigas e pilares, ou a espessura da laje sobre as vigas). Além disso, esta ferramenta tem finalidade exclusivamente orçamentária e volumétrica, não substituindo o dimensionamento estrutural e o cálculo de ferragens por profissional habilitado.</p>
+
+  <section class="related-tools">
+    <h2>Você também pode precisar</h2>
+    <div class="related-tools-grid">
+      <article class="tool-card">
+        <div class="tool-card-header">
+          <span class="tool-card-category">Utilidades</span>
+        </div>
+        <h3 class="tool-card-title">Calculadora de Orçamento de Pedreiro</h3>
+        <p class="tool-card-desc">Estime custos de mão de obra de pedreiro por metro quadrado ou diária para serviços de alvenaria e acabamento.</p>
+        <div class="tool-card-footer">
+          <a href="{{ROOT_PREFIX}}tools/utilidades/orcamento-pedreiro.html" class="tool-card-link">Acessar ferramenta</a>
+        </div>
+      </article>
+
+      <article class="tool-card">
+        <div class="tool-card-header">
+          <span class="tool-card-category">Utilidades</span>
+        </div>
+        <h3 class="tool-card-title">Calculadora de Pisos e Revestimentos</h3>
+        <p class="tool-card-desc">Calcule a quantidade de caixas e peças de pisos e azulejos com margem de recorte e desperdício.</p>
+        <div class="tool-card-footer">
+          <a href="{{ROOT_PREFIX}}tools/utilidades/pisos-revestimentos.html" class="tool-card-link">Acessar ferramenta</a>
+        </div>
+      </article>
+
+      <article class="tool-card">
+        <div class="tool-card-header">
+          <span class="tool-card-category">Utilidades</span>
+        </div>
+        <h3 class="tool-card-title">Calculadora de Tinta</h3>
+        <p class="tool-card-desc">Estime a quantidade de litros e embalagens de tinta para pintar paredes e tetos sem desperdício.</p>
+        <div class="tool-card-footer">
+          <a href="{{ROOT_PREFIX}}tools/utilidades/tinta.html" class="tool-card-link">Acessar ferramenta</a>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <p class="tool-return-link">
+    👉 <a href="{{ROOT_PREFIX}}index.html">Voltar para a página inicial</a>
+  </p>
+</section>
