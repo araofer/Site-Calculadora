@@ -135,7 +135,8 @@ test('7. buildCopyText e formatResult: sem undefined, null ou NaN', () => {
   }
 });
 
-test('8. setupTool: inicializa DOM e calcula DUM e USG', () => {
+test('8. setupTool: inicializa DOM e calcula DUM e USG', (t) => {
+  t.mock.timers.enable({ apis: ['Date'], now: new Date('2026-06-11T12:00:00Z') });
   const prevDoc = globalThis.document;
   const prevWin = globalThis.window;
 
@@ -219,6 +220,7 @@ test('8. setupTool: inicializa DOM e calcula DUM e USG', () => {
     assert.equal(resDpp.textContent, '08/10/2026');
     assert.equal(elementos.get('resultadoGestacao').hidden, false);
   } finally {
+    t.mock.timers.reset();
     globalThis.document = prevDoc;
     globalThis.window = prevWin;
   }
