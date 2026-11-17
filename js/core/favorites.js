@@ -62,7 +62,8 @@ export const VALID_TOOL_IDS = new Set([
   'salario-liquido',
   'comissao-vendas',
   'taxa-maquininha',
-  'custo-km-lucro-corrida'
+  'custo-km-lucro-corrida',
+  'volume-concreto'
 ]);
 
 let memoryFavorites = null;

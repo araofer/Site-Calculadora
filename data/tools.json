@@ -1921,5 +1921,45 @@
       "https://www.gov.br/anp/pt-br",
       "https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13640.htm"
     ]
+  },
+  {
+    "id": "volume-concreto",
+    "slug": "volume-concreto",
+    "name": "Calculadora de Volume de Concreto",
+    "category": "Utilidades",
+    "categorySlug": "utilidades",
+    "audience": "brasil",
+    "description": "Calcule o volume de concreto em m³ e litros para lajes, pisos, vigas e pilares com margem de perdas e memória de cálculo.",
+    "url": "/tools/utilidades/volume-concreto.html",
+    "status": "published",
+    "formulaStatus": "verified",
+    "implementation": "factory",
+    "features": {
+      "chart": false,
+      "table": false,
+      "pdf": false,
+      "copy": true,
+      "share": true,
+      "print": true,
+      "favorite": true,
+      "article": false
+    },
+    "keywords": [
+      "calculadora de concreto",
+      "calculadora de volume de concreto",
+      "metros cubicos concreto",
+      "calcular m3 concreto",
+      "concreto para laje",
+      "concreto para viga",
+      "concreto para pilar",
+      "concreto usinado m3",
+      "calcular litros concreto"
+    ],
+    "related": [
+      "orcamento-pedreiro",
+      "pisos-revestimentos",
+      "tinta"
+    ],
+    "shortName": "Volume de Concreto"
   }
 ]

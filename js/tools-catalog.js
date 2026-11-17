@@ -2016,6 +2016,48 @@ const TOOLS_CATALOG = [
         "horas-extras"
       ],
       "status": "published"
+    },
+    {
+      "id": "volume-concreto",
+      "slug": "volume-concreto",
+      "nome": "Calculadora de Volume de Concreto",
+      "name": "Calculadora de Volume de Concreto",
+      "categoria": "Utilidades",
+      "category": "Utilidades",
+      "categorySlug": "utilidades",
+      "descricao": "Calcule o volume de concreto em m³ e litros para lajes, pisos, vigas e pilares com margem de perdas e memória de cálculo.",
+      "description": "Calcule o volume de concreto em m³ e litros para lajes, pisos, vigas e pilares com margem de perdas e memória de cálculo.",
+      "url": "tools/utilidades/volume-concreto.html",
+      "termos": [
+        "calculadora de concreto",
+        "calculadora de volume de concreto",
+        "metros cubicos concreto",
+        "calcular m3 concreto",
+        "concreto para laje",
+        "concreto para viga",
+        "concreto para pilar",
+        "concreto usinado m3",
+        "calcular litros concreto"
+      ],
+      "keywords": [
+        "calculadora de concreto",
+        "calculadora de volume de concreto",
+        "metros cubicos concreto",
+        "calcular m3 concreto",
+        "concreto para laje",
+        "concreto para viga",
+        "concreto para pilar",
+        "concreto usinado m3",
+        "calcular litros concreto"
+      ],
+      "destaque": false,
+      "featured": false,
+      "related": [
+        "orcamento-pedreiro",
+        "pisos-revestimentos",
+        "tinta"
+      ],
+      "status": "published"
     }
   ];
 
