@@ -82,7 +82,7 @@ async function runProdAudit() {
 
   // 1. Execução de testes automatizados (npm test)
   try {
-    const testOutput = execSync('node --test tests/*.test.js', {
+    const testOutput = execSync('node --test --test-concurrency=1 tests/*.test.js', {
       cwd: ROOT_DIR,
       encoding: 'utf-8',
       stdio: ['pipe', 'pipe', 'pipe']
