@@ -558,7 +558,7 @@ function injectHomeToolCards(content, factoryTools) {
           <h3 class="tool-card-title">${escapedName}</h3>
           <p class="tool-card-desc">${escapedDesc}</p>
           <div class="tool-card-footer">
-            <a href="{{ROOT_PREFIX}}${safeUrl}" class="tool-card-btn">Calcular agora &rarr;</a>
+            <a href="{{ROOT_PREFIX}}${safeUrl}" class="tool-card-btn" aria-label="Calcular ${escapedName} agora">Calcular agora &rarr;</a>
           </div>
         </article>`;
   }).join('\n\n');

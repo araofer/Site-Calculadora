@@ -1,13 +1,13 @@
 ---
-title: Calculadora de Custo por Quilômetro e Lucro por Corrida | Calculadora Master
-description: Calcule o custo real por quilômetro e o lucro líquido por corrida para motoristas de aplicativo (Uber, 99) e entregadores. Considere combustível, desgaste e retorno vazio.
+title: Calculadora de Custo por KM e Lucro por Corrida | Calculadora Master
+description: Calcule o custo real por km e o lucro líquido por corrida para motoristas de app (Uber, 99). Considere combustível, desgaste do veículo e retorno vazio.
 keywords: custo por km, lucro por corrida, calculadora uber, calculadora 99, calculadora motoboy, custo quilometro rodado, lucro motorista aplicativo, desgaste veiculo km, reserva manutencao carro
 canonical: https://www.calculadoramaster.com/tools/financas/custo-km-lucro-corrida.html
 layout: tool
 pageScripts: <script type="module" src="{{ROOT_PREFIX}}js/tools/custo-km-lucro-corrida.js"></script>
 ---
 
-<h1>Calculadora de Custo por Quilômetro e Lucro por Corrida</h1>
+<h1>Calculadora de Custo por KM e Lucro por Corrida</h1>
 <p>Calcule a rentabilidade real de cada corrida ou entrega para motoristas de aplicativo e entregadores autônomos. Descubra o custo por km rodado, o consumo de combustível, o impacto do retorno vazio e a reserva necessária para manutenção e depreciação do seu veículo.</p>
 
 <div class="card tool-calculator-card">
@@ -151,7 +151,7 @@ pageScripts: <script type="module" src="{{ROOT_PREFIX}}js/tools/custo-km-lucro-c
 
     <!-- Card Educativo: Reserva para Manutenção e Depreciação -->
     <div class="tool-reserva-card">
-      <h4>Reserva estimada para manutenção e depreciação</h4>
+      <h3 class="tool-reserva-title">Reserva estimada para manutenção e depreciação</h3>
       <div id="resReservaDesgaste" class="tool-reserva-value">R$ 0,00</div>
       <p>
         <strong>Não gaste este valor:</strong> guarde esse dinheiro para a próxima troca de óleo, compra de pneus e manutenção preventiva. Ele já está descontado no cálculo do lucro e compõe o seu custo operacional real.
@@ -258,7 +258,57 @@ pageScripts: <script type="module" src="{{ROOT_PREFIX}}js/tools/custo-km-lucro-c
     <p>Uma corrida dá prejuízo quando o custo operacional total (combustível + desgaste + despesas) é maior do que o valor líquido pago pela plataforma. Nossa calculadora destaca corridas com prejuízo em vermelho, alertando para trajetos que não valem a pena financeiramente.</p>
   </details>
 
+    <section class="related-tools">
+    <h2>Você também pode precisar</h2>
+    <div class="related-tools-grid">
+      <article class="tool-card">
+        <div class="tool-card-header">
+          <span class="tool-card-category">Utilidades</span>
+        </div>
+        <h3 class="tool-card-title">Calculadora de Combustível</h3>
+        <p class="tool-card-desc">Compare álcool vs gasolina e calcule o consumo médio e custo por quilômetro.</p>
+        <div class="tool-card-footer">
+          <a href="{{ROOT_PREFIX}}tools/utilidades/combustivel.html" class="tool-card-btn">Calcular agora &rarr;</a>
+        </div>
+      </article>
+
+      <article class="tool-card">
+        <div class="tool-card-header">
+          <span class="tool-card-category">Financeiro</span>
+        </div>
+        <h3 class="tool-card-title">Calculadora de Preço de Serviço</h3>
+        <p class="tool-card-desc">Calcule quanto cobrar cobrindo custos fixos, variáveis, deslocamento e margem de lucro.</p>
+        <div class="tool-card-footer">
+          <a href="{{ROOT_PREFIX}}tools/financas/preco-servico.html" class="tool-card-btn">Calcular agora &rarr;</a>
+        </div>
+      </article>
+
+      <article class="tool-card">
+        <div class="tool-card-header">
+          <span class="tool-card-category">Financeiro</span>
+        </div>
+        <h3 class="tool-card-title">Calculadora MEI ou Autônomo</h3>
+        <p class="tool-card-desc">Compare a carga tributária entre atuar como pessoa física autônoma ou abrir MEI.</p>
+        <div class="tool-card-footer">
+          <a href="{{ROOT_PREFIX}}tools/financas/mei-ou-autonomo.html" class="tool-card-btn">Calcular agora &rarr;</a>
+        </div>
+      </article>
+
+      <article class="tool-card">
+        <div class="tool-card-header">
+          <span class="tool-card-category">Trabalhista</span>
+        </div>
+        <h3 class="tool-card-title">Calculadora de Horas Extras</h3>
+        <p class="tool-card-desc">Calcule o valor da hora de trabalho e compare o ganho CLT com corridas por aplicativo.</p>
+        <div class="tool-card-footer">
+          <a href="{{ROOT_PREFIX}}tools/trabalhista/horas-extras.html" class="tool-card-btn">Calcular agora &rarr;</a>
+        </div>
+      </article>
+    </div>
+  </section>
+
   <p class="tool-return-link">
-    👉 <a href="{{ROOT_PREFIX}}index.html">Voltar para a página inicial</a>
+    👉 <a href="{{ROOT_PREFIX}}financeira.html">Voltar para ferramentas Financeiras</a> |
+    <a href="{{ROOT_PREFIX}}index.html">Página inicial</a>
   </p>
 </section>
