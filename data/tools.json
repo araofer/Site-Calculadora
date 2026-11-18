@@ -20,9 +20,10 @@
       "banco de horas"
     ],
     "related": [
+      "salario-liquido",
+      "comissao-vendas",
       "porcentagem",
-      "desconto",
-      "juros"
+      "desconto"
     ],
     "featured": true,
     "status": "published"
@@ -185,9 +186,9 @@
     ],
     "related": [
       "lucro",
+      "taxa-maquininha",
       "porcentagem",
-      "desconto",
-      "juros"
+      "desconto"
     ],
     "featured": false,
     "status": "published",
@@ -330,8 +331,8 @@
       "viagem"
     ],
     "related": [
+      "custo-km-lucro-corrida",
       "financiamento-carro",
-      "dividir-conta",
       "desconto"
     ],
     "featured": false,
@@ -603,7 +604,12 @@
       "lucro",
       "precificação"
     ],
-    "related": []
+    "related": [
+      "taxa-maquininha",
+      "preco-servico",
+      "lucro",
+      "desconto"
+    ]
   },
   {
     "id": "orcamento-domestico",
@@ -812,7 +818,12 @@
       "caixas de piso",
       "metragem de revestimento"
     ],
-    "related": [],
+    "related": [
+      "volume-concreto",
+      "orcamento-pedreiro",
+      "preco-servico",
+      "tinta"
+    ],
     "shortName": "Pisos e Revestimentos"
   },
   {
@@ -880,8 +891,10 @@
       "orçamento reforma"
     ],
     "related": [
+      "volume-concreto",
       "pisos-revestimentos",
-      "tinta"
+      "tinta",
+      "preco-servico"
     ],
     "shortName": "Orçamento de Pedreiro"
   },
@@ -1778,6 +1791,7 @@
     ],
     "related": [
       "horas-extras",
+      "comissao-vendas",
       "valor-hora",
       "porcentagem"
     ],
@@ -1841,7 +1855,7 @@
     "category": "Financeiro",
     "categorySlug": "financas",
     "audience": "brasil",
-    "description": "Calcule as taxas da maquininha de cartão no débito, crédito à vista e parcelado. Descubra o valor líquido a receber ou quanto cobrar para repassar a taxa.",
+    "description": "Simule as taxas da maquininha de cartão no débito, crédito e parcelado. Descubra o valor líquido a receber ou quanto cobrar para repassar a taxa no gross-up.",
     "url": "/tools/financas/taxa-maquininha.html",
     "status": "published",
     "formulaStatus": "verified",
@@ -1880,11 +1894,11 @@
   {
     "id": "custo-km-lucro-corrida",
     "slug": "custo-km-lucro-corrida",
-    "name": "Calculadora de Custo por Quilômetro e Lucro por Corrida",
+    "name": "Calculadora de Custo por KM e Lucro por Corrida",
     "category": "Financeiro",
     "categorySlug": "financas",
     "audience": "brasil",
-    "description": "Calcule o custo real por quilômetro e o lucro líquido por corrida para motoristas de aplicativo (Uber, 99) e entregadores. Considere combustível, desgaste e retorno vazio.",
+    "description": "Calcule o custo real por km e o lucro líquido por corrida para motoristas de app (Uber, 99). Considere combustível, desgaste do veículo e retorno vazio.",
     "url": "/tools/financas/custo-km-lucro-corrida.html",
     "status": "published",
     "formulaStatus": "verified",
@@ -1925,7 +1939,7 @@
   {
     "id": "volume-concreto",
     "slug": "volume-concreto",
-    "name": "Calculadora de Volume de Concreto",
+    "name": "Calculadora de Volume de Concreto (m³ e Litros)",
     "category": "Utilidades",
     "categorySlug": "utilidades",
     "audience": "brasil",

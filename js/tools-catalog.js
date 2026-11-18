@@ -43,9 +43,10 @@ const TOOLS_CATALOG = [
       "destaque": true,
       "featured": true,
       "related": [
+        "salario-liquido",
+        "comissao-vendas",
         "porcentagem",
-        "desconto",
-        "juros"
+        "desconto"
       ],
       "status": "published"
     },
@@ -297,9 +298,9 @@ const TOOLS_CATALOG = [
       "featured": false,
       "related": [
         "lucro",
+        "taxa-maquininha",
         "porcentagem",
-        "desconto",
-        "juros"
+        "desconto"
       ],
       "status": "published"
     },
@@ -502,8 +503,8 @@ const TOOLS_CATALOG = [
       "destaque": false,
       "featured": false,
       "related": [
+        "custo-km-lucro-corrida",
         "financiamento-carro",
-        "dividir-conta",
         "desconto"
       ],
       "status": "published"
@@ -813,7 +814,12 @@ const TOOLS_CATALOG = [
       ],
       "destaque": false,
       "featured": false,
-      "related": [],
+      "related": [
+        "taxa-maquininha",
+        "preco-servico",
+        "lucro",
+        "desconto"
+      ],
       "status": "published"
     },
     {
@@ -1014,7 +1020,12 @@ const TOOLS_CATALOG = [
       ],
       "destaque": false,
       "featured": false,
-      "related": [],
+      "related": [
+        "volume-concreto",
+        "orcamento-pedreiro",
+        "preco-servico",
+        "tinta"
+      ],
       "status": "published"
     },
     {
@@ -1078,8 +1089,10 @@ const TOOLS_CATALOG = [
       "destaque": false,
       "featured": false,
       "related": [
+        "volume-concreto",
         "pisos-revestimentos",
-        "tinta"
+        "tinta",
+        "preco-servico"
       ],
       "status": "published"
     },
@@ -1891,6 +1904,7 @@ const TOOLS_CATALOG = [
       "featured": false,
       "related": [
         "horas-extras",
+        "comissao-vendas",
         "valor-hora",
         "porcentagem"
       ],
@@ -1943,8 +1957,8 @@ const TOOLS_CATALOG = [
       "categoria": "Financeiro",
       "category": "Financeiro",
       "categorySlug": "financas",
-      "descricao": "Calcule as taxas da maquininha de cartão no débito, crédito à vista e parcelado. Descubra o valor líquido a receber ou quanto cobrar para repassar a taxa.",
-      "description": "Calcule as taxas da maquininha de cartão no débito, crédito à vista e parcelado. Descubra o valor líquido a receber ou quanto cobrar para repassar a taxa.",
+      "descricao": "Simule as taxas da maquininha de cartão no débito, crédito e parcelado. Descubra o valor líquido a receber ou quanto cobrar para repassar a taxa no gross-up.",
+      "description": "Simule as taxas da maquininha de cartão no débito, crédito e parcelado. Descubra o valor líquido a receber ou quanto cobrar para repassar a taxa no gross-up.",
       "url": "tools/financas/taxa-maquininha.html",
       "termos": [
         "calculadora taxa maquininha",
@@ -1977,13 +1991,13 @@ const TOOLS_CATALOG = [
     {
       "id": "custo-km-lucro-corrida",
       "slug": "custo-km-lucro-corrida",
-      "nome": "Calculadora de Custo por Quilômetro e Lucro por Corrida",
-      "name": "Calculadora de Custo por Quilômetro e Lucro por Corrida",
+      "nome": "Calculadora de Custo por KM e Lucro por Corrida",
+      "name": "Calculadora de Custo por KM e Lucro por Corrida",
       "categoria": "Financeiro",
       "category": "Financeiro",
       "categorySlug": "financas",
-      "descricao": "Calcule o custo real por quilômetro e o lucro líquido por corrida para motoristas de aplicativo (Uber, 99) e entregadores. Considere combustível, desgaste e retorno vazio.",
-      "description": "Calcule o custo real por quilômetro e o lucro líquido por corrida para motoristas de aplicativo (Uber, 99) e entregadores. Considere combustível, desgaste e retorno vazio.",
+      "descricao": "Calcule o custo real por km e o lucro líquido por corrida para motoristas de app (Uber, 99). Considere combustível, desgaste do veículo e retorno vazio.",
+      "description": "Calcule o custo real por km e o lucro líquido por corrida para motoristas de app (Uber, 99). Considere combustível, desgaste do veículo e retorno vazio.",
       "url": "tools/financas/custo-km-lucro-corrida.html",
       "termos": [
         "custo por km",
@@ -2020,8 +2034,8 @@ const TOOLS_CATALOG = [
     {
       "id": "volume-concreto",
       "slug": "volume-concreto",
-      "nome": "Calculadora de Volume de Concreto",
-      "name": "Calculadora de Volume de Concreto",
+      "nome": "Calculadora de Volume de Concreto (m³ e Litros)",
+      "name": "Calculadora de Volume de Concreto (m³ e Litros)",
       "categoria": "Utilidades",
       "category": "Utilidades",
       "categorySlug": "utilidades",

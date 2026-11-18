@@ -4239,7 +4239,9 @@ fieldset.form-group legend {
   box-sizing: border-box;
 }
 
-.tool-reserva-card h4 {
+.tool-reserva-card h3,
+.tool-reserva-card h4,
+.tool-reserva-title {
   margin: 0 0 6px 0;
   color: #0369a1;
   font-size: 1.05rem;
